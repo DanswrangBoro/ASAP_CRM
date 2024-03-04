@@ -144,6 +144,17 @@
                         </div>
                     </div>
                 </nav>
+                {% if request.GET.success_message %}
+                    <div class="alert alert-success text-center" id="successMessage">
+                        {{ request.GET.success_message }}
+                    </div>
+                    <script>
+                        // Automatically close the success message after 1 second
+                        setTimeout(function () {
+                            document.getElementById('successMessage').style.display = 'none';
+                        }, 3000);
+                    </script>
+                {% endif %}
                 <h1 class="text-center mt-5">CRM Dashboard - New Bookings</h1>
                 <div class="row justify-content-end">
                     <div class="col-md-2 float-right">
@@ -208,10 +219,20 @@
                 <div id="refundForm" class="container hidden">
                     <!-- Refund form content -->
                     <h2 class="mb-4">Refund Form</h2>
+                        <!-- Refund form content -->
+                    <h2 class="mb-4">Refund Form</h2>
+                    <!-- In your 'booking' template -->
+                    {% comment %} {% if request.GET.success_message %}
+                        <div class="alert alert-success">
+                            {{ request.GET.success_message }}
+                        </div>
+                    {% endif %} {% endcomment %}
+                    <form id="refundForm" method="post" action="{% url 'crmApp:submit_refund_form' %}">
+                    {% csrf_token %}
                     <div style="display: flex; flex-wrap: wrap;">
                         <div class="mb-3 me-3" style="flex: 1;">
                             <label for="bookingId" class="form-label"><i class="bi bi-hash"></i> Booking ID</label>
-                            <input type="text" class="form-control" id="bookingId" name="bookingId" onchange="fetchPassengerName()">
+                            <input type="text" class="form-control" id="bookingId" name="bookingId" onchange="fetchPassengerData()">
                         </div>
                         <div class="mb-3 me-3" style="flex: 1;">
                             <label for="passengerName" class="form-label"><i class="bi bi-person"></i> Passenger Name</label>
@@ -223,7 +244,7 @@
                         </div>
                         <div class="mb-3 me-3" style="flex: 1;">
                             <label for="email" class="form-label"><i class="bi bi-envelope"></i> Email</label>
-                            <input type="email" class="form-control" id="email" name="email">
+                            <input type="email" class="form-control" id="email" name="email" >
                         </div>
                         <div class="mb-3 me-3" style="flex: 1;">
                             <label for="refundType" class="form-label"><i class="bi bi-arrow-repeat"></i> Refund Type</label>
@@ -245,6 +266,7 @@
                             <button type="submit" class="btn btn-primary" style="margin-top: 32px;">Submit</button>
                         </div>
                     </div>
+                    </form>
                 </div>
                 
                 
@@ -449,36 +471,46 @@
             tripTypeSelect.addEventListener('change', handleTripTypeChange);
         });
     </script>
-    <script>
-        function fetchPassengerName() {
-            var bookingId = document.getElementById('bookingId').value;
-            if (bookingId.trim() !== '') {
-                fetch(`/fetch_passenger_name/?booking_id=${bookingId}`)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
+         <script>
+            // Function to fetch passenger data
+            function fetchPassengerData() {
+                // Get the value from the "Booking ID" field
+                var bookingId = document.getElementById('bookingId').value;
+        
+                // Check if "Booking ID" has a value
+                if (bookingId) {
+                    // Make an AJAX request to the server endpoint with the booking ID
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('GET', '/fetch_passenger_data/?booking_id=' + bookingId, true);
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState == 4) {
+                            if (xhr.status == 200) {
+                                // Parse the JSON response
+                                var data = JSON.parse(xhr.responseText);
+        
+                                // Update form fields with the retrieved data
+                                document.getElementById('bookingId').value = data.booking_id;
+                                document.getElementById('passengerName').value = data.passenger_name;
+                                document.getElementById('phoneNumber').value = data.phone_number;
+                                document.getElementById('email').value = data.email;
+                            } else {
+                                console.error('Error fetching passenger data:', xhr.status, xhr.statusText);
+                                // Handle the error, e.g., show an alert to the user
+                            }
                         }
-                        return response.json();
-                    })
-                    .then(data => {
-                        if (data.passenger_name) {
-                            document.getElementById('passengerName').value = data.passenger_name;
-                            document.getElementById('phoneNumber').value = data.phone_number;
-                            document.getElementById('email').value = data.email;
-                        } else {
-                            document.getElementById('passengerName').value = '';
-                            document.getElementById('phoneNumber').value = '';
-                            document.getElementById('email').value = '';
-                            alert('Passenger name not found for the provided booking ID');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('There was a problem with the fetch operation:', error);
-                        alert('An error occurred while fetching passenger name');
-                    });
+                    };
+                    xhr.send();
+                }
             }
-        }  
+        
+            // Add an event listener for the "Booking ID" field
+            document.getElementById('bookingId').addEventListener('input', fetchPassengerData);
         </script>
+        
+        
+        
+        
+        
         
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-eMNCOe7tC1doHpGoJtKh7z7lGz7fuP4F8nfdFvAOA6Gg/z6Y5J6XqqyGXYM2ntXU" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-pzjw8f+ua7Kw1TIq0v8FqFjcJ6pajs/rfdfs3SO+kD4Ck5BdPtF+to8xMp9MvcJ4" crossorigin="anonymous"></script>
