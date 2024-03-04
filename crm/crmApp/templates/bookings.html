@@ -222,6 +222,10 @@
                             <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber">
                         </div>
                         <div class="mb-3 me-3" style="flex: 1;">
+                            <label for="email" class="form-label"><i class="bi bi-envelope"></i> Email</label>
+                            <input type="email" class="form-control" id="email" name="email">
+                        </div>
+                        <div class="mb-3 me-3" style="flex: 1;">
                             <label for="refundType" class="form-label"><i class="bi bi-arrow-repeat"></i> Refund Type</label>
                             <select class="form-select" id="refundType" name="refundType">
                                 <option value="" disabled>Refund type</option>
@@ -459,8 +463,12 @@
                     .then(data => {
                         if (data.passenger_name) {
                             document.getElementById('passengerName').value = data.passenger_name;
+                            document.getElementById('phoneNumber').value = data.phone_number;
+                            document.getElementById('email').value = data.email;
                         } else {
                             document.getElementById('passengerName').value = '';
+                            document.getElementById('phoneNumber').value = '';
+                            document.getElementById('email').value = '';
                             alert('Passenger name not found for the provided booking ID');
                         }
                     })
@@ -469,7 +477,7 @@
                         alert('An error occurred while fetching passenger name');
                     });
             }
-        }
+        }  
         </script>
         
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-eMNCOe7tC1doHpGoJtKh7z7lGz7fuP4F8nfdFvAOA6Gg/z6Y5J6XqqyGXYM2ntXU" crossorigin="anonymous"></script>

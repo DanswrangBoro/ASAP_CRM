@@ -80,12 +80,18 @@ def update_booking_status(request):
 def fetch_passenger_name(request):
     if request.method == 'GET':
         booking_id = request.GET.get('booking_id')
-        print(booking_id)
         try:
             booking = Booking.objects.get(booking_id=booking_id)
             passenger_name = booking.passenger_name
-            return JsonResponse({'passenger_name': passenger_name})
+            phone_number = booking.phone_number
+            email = booking.email
+            return JsonResponse({
+                'passenger_name': passenger_name,
+                'phone_number': phone_number,
+                'email': email
+            })
         except Booking.DoesNotExist:
             return JsonResponse({'error': 'Booking ID not found'}, status=404)
+
 
 # =============================================(retrieve customer name using booking id)==========================
