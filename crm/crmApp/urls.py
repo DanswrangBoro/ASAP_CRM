@@ -1,7 +1,7 @@
 from django.urls import path
 from . import views
 from .views import update_booking_status
-from .views import fetch_passenger_name
+from .views import fetch_passenger_data,submit_refund_form
 
 app_name = 'crmApp'
 
@@ -17,7 +17,8 @@ urlpatterns = [
     path('cancellation/', views.cancellation, name='cancellation'),
     path('ecredit/', views.ecredit, name='ecredit'),
     path('update_booking_status/', update_booking_status, name='update_booking_status'),
-    path('fetch_passenger_name/', fetch_passenger_name, name='fetch_passenger_name'),
+    path('fetch_passenger_data/', fetch_passenger_data, name='fetch_passenger_data'),
+    path('submit_refund_form/', submit_refund_form, name='submit_refund_form'),
 ]
 
 
