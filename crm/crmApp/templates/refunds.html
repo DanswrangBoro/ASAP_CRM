@@ -3,6 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Font Awesome -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+<!-- Bootstrap CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Bootstrap JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOu805FkTduG2Fj5z0x6Gl0iXQrQlOQ0gMf5.C3f5z7A" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2aOt/Q==" crossorigin="anonymous" />
     <title>CRM Dashboard</title>
@@ -141,45 +151,86 @@
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th>Refund ID</th>
+                                <th>Booking Id</th>
                                 <th>Customer Name</th>
-                                <th>Booking ID</th>
+                                <th>Phone Number</th>
+                                <th>Email</th>
                                 <th>Refund Amount</th>
-                                <th>Refund Date</th>
+                                <th>Refund Reason</th>
                                 <th>Status</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
+                            {% for r in refund %}
                             <tr>
-                                <td>1</td>
-                                <td>John Doe</td>
-                                <td>1234567890</td>
-                                <td>$50</td>
-                                <td>2024-02-28</td>
-                                <td>Processed</td>
+                                <td>{{ r.booking_id }}</td>
+                                <td>{{ r.passenger_name }}</td>
+                                <td>{{ r.phone_number }}</td>
+                                <td>{{ r.email }}</td>
+                                <td><b>$</b> {{ r.refund_amount }}</td>
+                                <td>{{ r.refund_reason }}</td>
+                                <td>{{ r.status }}</td>
+                                <td>
+                                    <form method="POST" action="{% url 'crmApp:update_refund_status' %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="booking_id" value="{{ r.booking_id }}">
+                                        <select name="status" onchange="this.form.submit()">
+                                            <option value="pending" {% if r.status == 'pending' %} selected {% endif %}>Pending</option>
+                                            <option value="inprocess" {% if r.status == 'inprocess' %} selected {% endif %}>In Process</option>
+                                            <option value="confirmed" {% if r.status == 'confirmed' %} selected {% endif %}>Confirmed</option>
+                                            <option value="cancelled" {% if r.status == 'cancelled' %} selected {% endif %}>Cancel</option>
+                                        </select>
+                                    </form>
+                                </td> 
+                                <td>
+                                    <!-- Button trigger modal -->
+                                    <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#bookingDetailsModal{{ r.booking_id }}">
+                                        <i class="fa-solid fa-eye" style="cursor: pointer"></i>
+                                    </button>
+                                </td>                               
                             </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Jane Smith</td>
-                                <td>2345678901</td>
-                                <td>$100</td>
-                                <td>2024-03-01</td>
-                                <td>Pending</td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>Michael Johnson</td>
-                                <td>3456789012</td>
-                                <td>$150</td>
-                                <td>2024-03-02</td>
-                                <td>Processed</td>
-                            </tr>
+                            <div class="modal fade" id="bookingDetailsModal{{ r.booking_id }}" tabindex="-1" aria-labelledby="bookingDetailsModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="bookingDetailsModalLabel">Booking Details</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            {% for b in booking %}
+                                                {%if b.booking_id == r.booking_id %}
+                                                    <p><strong>Booking ID:</strong> {{ booking.booking_id }}</p>
+                                                    <p><strong>Passenger Name:</strong> {{ b.passenger_name }}</p>
+                                                    <p><strong>Phone Number:</strong> {{ b.phone_number }}</p>
+                                                    <p><strong>Email:</strong> {{ b.email }}</p>
+                                                    <p><strong>Flight Details:</strong> {{ b.flight_details }}</p>
+                                                    <p><strong>Trip Type:</strong> {{ b.trip_type }}</p>
+                                                    <p><strong>Reference ID:</strong> {{ b.reference_id }}</p>
+                                                    <p><strong>Departure:</strong> {{ b.departure }}</p>
+                                                    <p><strong>Departure Date:</strong> {{ b.departure_date }}</p>
+                                                    <p><strong>Arrival:</strong> {{ b.arrival }}</p>
+                                                    <p><strong>Arrival Date:</strong> {{ b.arrival_date }}</p>
+                                                    <p><strong>Number of Passengers:</strong> {{ b.num_passengers }}</p>
+                                                    <p><strong>Price:</strong> ${{ b.price }}</p>
+                                                    <p><strong>Status:</strong> {{ b.status }}</p>
+                                                {% endif %}
+                                            {% endfor %}
+                                            {% comment %} {% else %}
+                                                <p>No record found for Booking Id: <b>{{r.booking_id}}</b></p>
+                                            {% endcomment %}                                        
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+                            {% endfor %}
                         </tbody>
+                        
                     </table>
+                    <hr>
                 </div>
-                
-                
-                
             </main>
         </div>
     </div>

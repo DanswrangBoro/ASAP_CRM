@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOu805FkTduG2Fj5z0x6Gl0iXQrQlOQ0gMf5.C3f5z7A" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2aOt/Q==" crossorigin="anonymous" />
     <title>CRM Dashboard</title>
@@ -135,8 +136,88 @@
                             </ul>
                         </div>
                     </div>
+                    <!-- Example using a form (optional) -->
+                    <form action="{% url 'crmApp:logout' %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit">Logout</button>
+                    </form>
                 </nav>
-                <h1 class="text-center mt-5">CRM Dashboard - Total Users (5)</h1>
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-success text-center" role="alert" style="display: block;" id="success-message">
+                            {{ message }}
+                        </div>
+                        <script>
+                            setTimeout(function() {
+                                var successMessage = document.getElementById('success-message');
+                                if (successMessage) {
+                                    successMessage.style.display = 'none';
+                                }
+                            }, 3000); // Hide after 3 seconds (3000 milliseconds)
+                        </script>
+                    {% endfor %}
+                {% endif %}
+            
+
+                <h1 class="text-center mt-5">CRM Dashboard - Total Users ({{ users|length }})</h1>
+                <!-- Add button with Font Awesome icon -->
+                <!-- Add "Create User" button with Font Awesome icon -->
+                <button class="btn btn-primary float-right mr-3 mb-3" id="createUserBtn">
+                    <i class="fas fa-user-plus"></i> Create User
+                </button>
+
+                <!-- User creation form -->
+                <div id="createUserModal" class="modal" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title"><i class="fas fa-user-plus"></i> Create User</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="post" action="{% url 'crmApp:create_user' %}">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="userName"><i class="fas fa-user"></i> User Name</label>
+                                    <input type="text" class="form-control" id="userName" name="userName" placeholder="Enter user name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="email"><i class="fas fa-envelope"></i> Email</label>
+                                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter email">
+                                </div>
+                                <div class="form-group">
+                                    <label for="phoneNumber"><i class="fas fa-phone"></i> Phone Number</label>
+                                    <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="Enter phone number">
+                                </div>
+                                <div class="form-group">
+                                    <label for="role"><i class="fas fa-user-tag"></i> Role</label>
+                                    <select class="form-control" id="role" name="role">
+                                        <option value="manager">Manager</option>
+                                        <option value="agent">Agent</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="team"><i class="fas fa-users"></i> Team</label>
+                                    <input type="text" class="form-control" id="team" name="team" placeholder="Enter team">
+                                </div>
+                                <div class="form-group">
+                                    <label for="password"><i class="fas fa-lock"></i> Password</label>
+                                    <input type="password" class="form-control" id="password" name="password" placeholder="Enter password">
+                                </div>
+                                <div class="form-group">
+                                    <label for="confirmPassword"><i class="fas fa-lock"></i> Confirm Password</label>
+                                    <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm password">
+                                </div>
+                                <button type="submit" class="btn btn-primary"><i class="fas fa-check"></i> Submit</button>
+                            </form>
+                            
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card">
@@ -151,66 +232,65 @@
                                                 <th>User ID</th>
                                                 <th>Name</th>
                                                 <th>Email</th>
+                                                <th>Phone Number</th>
                                                 <th>Role</th>
-                                                <th>Action</th>
+                                                <th>Team</th>
+                                                <th>Password</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            {% for u in users %}
                                             <tr>
-                                                <td>1</td>
-                                                <td>John Doe</td>
-                                                <td>john@example.com</td>
-                                                <td>Admin</td>
+                                                <td>{{ u.id }}</td>
+                                                <td>{{ u.user_name }}</td>
+                                                <td>{{ u.email }}</td>
+                                                <td>{{ u.phone_number }}</td>
+                                                <td>{{ u.role }}</td>
+                                                <td>{{ u.team }}</td>
+                                                <td>{{ u.password }}</td>
                                                 <td>
-                                                    <button class="btn btn-primary btn-sm">View</button>
+                                                    <button class="btn btn-primary btn-sm view-btn">View</button>
                                                     <button class="btn btn-info btn-sm">Edit</button>
-                                                    <button class="btn btn-danger btn-sm">Block</button>
+                                                    <form action="{% url 'crmApp:block_user' u.id %}" method="post">
+                                                        {% csrf_token %}
+                                                        <button type="submit" class="btn btn-danger btn-sm">
+                                                            {% if u.blocked %}
+                                                                Unblock
+                                                            {% else %}
+                                                                Block
+                                                            {% endif %}
+                                                        </button>
+                                                    </form>
                                                 </td>
                                             </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>Jane Smith</td>
-                                                <td>jane@example.com</td>
-                                                <td>User</td>
-                                                <td>
-                                                    <button class="btn btn-primary btn-sm">View</button>
-                                                    <button class="btn btn-info btn-sm">Edit</button>
-                                                    <button class="btn btn-danger btn-sm">Block</button>
+                                            <tr class="privilege-form" style="display: none;">
+                                                <td colspan="7">
+                                                    <form>
+                                                        <input type="hidden" name="user_id" value="{{ u.id }}">
+                                                        <div class="form-group">
+                                                            <label for="privileges">Privileges:</label>
+                                                            <select class="form-control" id="privileges">
+                                                                <option value="assign order">Assign Orders</option>
+                                                                <option value="add order">Add Orders</option>
+                                                                <option value="view order">View Order</option>
+                                                                <option value="generate invoice">Generate Invoice</option>
+                                                                <option value="add user">Add User</option>
+                                                                <option value="delete user">Delete User</option>
+                                                                <option value="edit user">Edit User</option>
+                                                                <option value="view user">View User</option>
+                                                                <option value="delete orders">Delete Orders</option>
+                                                                <!-- Add more privileges as needed -->
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="selected-privileges">Selected Privileges:</label>
+                                                            <ul id="selected-privileges" class="selected-privileges"></ul> <!-- Change input field to ul -->
+                                                        </div>
+                                                        <button type="submit" class="btn btn-primary">Save</button>
+                                                    </form>
                                                 </td>
-                                            </tr>
-                                            <tr>
-                                                <td>3</td>
-                                                <td>Michael Johnson</td>
-                                                <td>michael@example.com</td>
-                                                <td>User</td>
-                                                <td>
-                                                    <button class="btn btn-primary btn-sm">View</button>
-                                                    <button class="btn btn-info btn-sm">Edit</button>
-                                                    <button class="btn btn-danger btn-sm">Block</button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>4</td>
-                                                <td>Sarah Williams</td>
-                                                <td>sarah@example.com</td>
-                                                <td>User</td>
-                                                <td>
-                                                    <button class="btn btn-primary btn-sm">View</button>
-                                                    <button class="btn btn-info btn-sm">Edit</button>
-                                                    <button class="btn btn-danger btn-sm">Block</button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>5</td>
-                                                <td>David Brown</td>
-                                                <td>david@example.com</td>
-                                                <td>User</td>
-                                                <td>
-                                                    <button class="btn btn-primary btn-sm">View</button>
-                                                    <button class="btn btn-info btn-sm">Edit</button>
-                                                    <button class="btn btn-danger btn-sm">Block</button>
-                                                </td>
-                                            </tr>
+                                            </tr>                                            
+                                            {% endfor %}
                                         </tbody>
                                     </table>
                                 </div>
@@ -223,6 +303,69 @@
             </main>
         </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // jQuery to show the modal when "Create User" button is clicked
+        $(document).ready(function(){
+          $('#createUserBtn').click(function(){
+            $('#createUserModal').modal('show');
+          });
+        });
+      </script>
+      <script>
+        document.querySelectorAll('.view-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                const form = this.closest('tr').nextElementSibling;
+                form.style.display = form.style.display === 'none' ? 'table-row' : 'none';
+            });
+        });
+    
+        // Add event listener to the privileges select element
+        document.querySelectorAll('.privilege-form select').forEach(select => {
+            select.addEventListener('change', function () {
+                // Get selected privileges
+                const selectedOptions = Array.from(this.selectedOptions).map(option => option.value);
+    
+                // Get the ul to append list items
+                const ul = this.parentElement.nextElementSibling.querySelector('#selected-privileges');
+    
+                // Clear the input field before adding new list items
+    
+                // Add each selected privilege as a list item
+                selectedOptions.forEach(option => {
+                    const li = document.createElement('li');
+                    li.textContent = option;
+                    ul.appendChild(li);
+                });
+            });
+    
+            // Submit event handler for the form
+            select.closest('form').addEventListener('submit', function (event) {
+                event.preventDefault(); // Prevent form submission
+    
+                // Retrieve user ID
+                const userId = this.querySelector('input[name="user_id"]').value;
+    
+                // Retrieve selected privileges
+                const selectedOptions = Array.from(select.selectedOptions).map(option => option.value);
+    
+                // Optional: You can process the selected privileges here (e.g., send them to the server via AJAX)
+    
+                // Reset form
+                select.selectedIndex = -1;
+                const ul = this.parentElement.nextElementSibling.querySelector('#selected-privileges');
+                ul.innerHTML = ''; // Clear existing list items
+                this.style.display = 'none';
+            });
+        });
+    </script>
+    
+    
+    
+    
+    
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-eMNCOe7tC1doHpGoJtKh7z7lGz7fuP4F8nfdFvAOA6Gg/z6Y5J6XqqyGXYM2ntXU" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-pzjw8f+ua7Kw1TIq0v8FqFjcJ6pajs/rfdfs3SO+kD4Ck5BdPtF+to8xMp9MvcJ4" crossorigin="anonymous"></script>
 </body>
