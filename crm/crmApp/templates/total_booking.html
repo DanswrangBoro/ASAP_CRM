@@ -138,7 +138,7 @@
                     </div>
                 </nav>
                 <h1 class="text-center mt-5">CRM Dashboard - Total Booking</h1>
-                <div class="row">
+                <div class="container">
                     <div class="col-md-4">
                         <div class="card">
                             <div class="card-header">
@@ -150,7 +150,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-8">
+                    <div class="col-md-16 mt-3">
                         <div class="card">
                             <div class="card-header">
                                 <h5 class="card-title">Total Bookings Overview</h5>
@@ -162,13 +162,11 @@
                                             <tr>
                                                 <th>Booking ID</th>
                                                 <th>Passenger Name</th>
+                                                <th>Phone Number</th>
+                                                <th>Email</th>
                                                 <th>Flight Details</th>
                                                 <th>Trip Type</th>
-                                                <th>Lead Agent</th>
-                                                <th>Booking Date</th>
-                                                <th>Status</th>
-                                                <th>Booking Number</th>
-                                                <th>Trip Type</th>
+                                                <th>Reference id</th>
                                                 <th>Departure</th>
                                                 <th>Departure Date</th>
                                                 <th>Arrival</th>
@@ -176,71 +174,54 @@
                                                 <th>No. of Passengers</th>
                                                 <th>Price</th>
                                                 <th>Status</th>
+                                                <th>Change status</th>
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>1234567890</td>
-                                                <td>John Doe</td>
-                                                <td>Flight XY123 (Economy), JFK to LAX</td>
-                                                <td>One-way</td>
-                                                <td>Agent A</td>
-                                                <td>2024-02-28</td>
-                                                <td>Confirmed</td>
-                                                <td>Booking123</td>
-                                                <td>One-way</td>
-                                                <td>JFK</td>
-                                                <td>2024-02-28</td>
-                                                <td>LAX</td>
-                                                <td>2024-02-28</td>
-                                                <td>1</td>
-                                                <td>$100</td>
+                                            {% for o in original %}
+                                            {% if o.status == 'inprocess' or o.status == 'rejected' or o.status == 'confirmed'%}
+                                            <tr id="row_{{ o.booking_id }}">
+                                                <td>{{ o.booking_id }}</td>
+                                                <td>{{ o.passenger_name }}</td>
+                                                <td>{{ o.phone_number }}</td>
+                                                <td>{{ o.email }}</td>
+                                                <td>{{ o.flight_details }}</td>
+                                                <td>{{ o.trip_type }}</td>
+                                                <td>{{ o.reference_id }}</td>
+                                                <td>{{ o.departure }}</td>
+                                                <td>{{ o.departure_date }}</td>
+                                                <td>{{ o.arrival }}</td>
+                                                <td>{{ o.arrival_date }}</td>
+                                                <td>{{ o.num_passengers }}</td>
+                                                <td>{{ o.price }}</td>
+                                                <td>{{ o.status }}</td>
                                                 <td>
-                                                    Cancelled
+                                                    <form id="booking_status_form_{{ o.booking_id }}" method="POST" action="{% url 'crmApp:update_booking_status' %}">
+                                                        {% csrf_token %}
+                                                        <input type="hidden" name="booking_id" value="{{ o.booking_id }}">
+                                                        <select name="status" onchange="submitForm('{{ o.booking_id }}')">
+                                                            <option value="inprocess" {% if o.status == 'inprocess' %} selected {% endif %}>In Process</option>
+                                                            <option value="confirmed" {% if o.status == 'confirmed' %} selected {% endif %}>Confirmed</option>
+                                                            <option value="pending" {% if o.status == 'pending' %} selected {% endif %}>Pending</option>
+                                                            <option value="rejected" {% if o.status == 'rejected' %} selected {% endif %}>Reject</option>
+                                                        </select> 
+                                                    </form>
+                                                </td>
+                                                <td>
+                                                    <a href="{% url 'crmApp:booking' %}"><button class="btn btn-info btn-sm">Edit</button></a>
+                                                    <form id="delete_form_{{ o.booking_id }}" method="POST" action="{% url 'crmApp:delete_booking' %}">
+                                                        {% csrf_token %}
+                                                        <input type="hidden" name="booking_id" value="{{ o.booking_id }}">
+                                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirmDelete()">Delete</button>
+                                                    </form>
                                                 </td>
                                             </tr>
-                                            <tr>
-                                                <td>2345678901</td>
-                                                <td>Jane Smith</td>
-                                                <td>Flight AB456 (Business), LAX to JFK</td>
-                                                <td>Round-trip</td>
-                                                <td>Agent B</td>
-                                                <td>2024-02-29</td>
-                                                <td>Pending</td>
-                                                <td>Booking234</td>
-                                                <td>Round-trip</td>
-                                                <td>LAX</td>
-                                                <td>2024-02-29</td>
-                                                <td>JFK</td>
-                                                <td>2024-03-01</td>
-                                                <td>2</td>
-                                                <td>$200</td>
-                                                <td>
-                                                    Rejected
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>3456789012</td>
-                                                <td>Michael Johnson</td>
-                                                <td>Flight CD789 (First Class), SFO to ORD</td>
-                                                <td>Round-trip</td>
-                                                <td>Agent C</td>
-                                                <td>2024-03-01</td>
-                                                <td>Confirmed</td>
-                                                <td>Booking345</td>
-                                                <td>Round-trip</td>
-                                                <td>SFO</td>
-                                                <td>2024-03-01</td>
-                                                <td>ORD</td>
-                                                <td>2024-03-02</td>
-                                                <td>1</td>
-                                                <td>$300</td>
-                                                <td>
-                                                    Sold
-                                                </td>
-                                            </tr>
+                                            {% endif %}
+                                            {% endfor %}
                                         </tbody>
                                     </table>
+                                    
                                     
                                 </div>
                             </div>
@@ -253,10 +234,24 @@
             </main>
         </div>
     </div>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        function submitForm(bookingId) {
+            var form = document.getElementById('booking_status_form_' + bookingId);
+            form.submit();
+        }
+    </script>
+    <script>
+        function confirmDelete() {
+            return confirm("Are you sure you want to delete this booking?");
+        }
+        
+        function confirmReject() {
+            return confirm("Are you sure you want to reject this booking?");
+        }
+    </script>
+    <script>
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-eMNCOe7tC1doHpGoJtKh7z7lGz7fuP4F8nfdFvAOA6Gg/z6Y5J6XqqyGXYM2ntXU" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-pzjw8f+ua7Kw1TIq0v8FqFjcJ6pajs/rfdfs3SO+kD4Ck5BdPtF+to8xMp9MvcJ4" crossorigin="anonymous"></script>
 </body>

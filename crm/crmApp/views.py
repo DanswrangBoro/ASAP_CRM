@@ -130,7 +130,11 @@ def flight_book(request):
     return render(request, "base.html", context)
 
 def total_booking(request):
-    return render(request,"total_booking.html")
+    original = Booking.objects.all()
+    context = {
+        "original" : original
+    }
+    return render(request,"total_booking.html", context)
 
 def total_user(request):
     user_data = User.objects.all()  # Fetch all User objects
@@ -159,7 +163,8 @@ def chargeback(request):
     return render(request,"chargeback.html")
 
 def rejected(request):
-    return render(request,"rejected.html")
+    rejected_bookings = Booking.objects.filter(status='rejected')
+    return render(request, "rejected.html", {'rejected_bookings': rejected_bookings})
 
 def mco(request):
     return render(request,"mco.html")
@@ -170,6 +175,10 @@ def cancellation(request):
 def ecredit(request):
     return render(request,"ecredit.html")
 
+# ==============================================( update booking status )==================================================
+
+from django.utils import timezone
+from datetime import date
 def update_booking_status(request):
     if request.method == 'POST':
         booking_id = request.POST.get('booking_id')
@@ -177,15 +186,28 @@ def update_booking_status(request):
         try:
             booking = Booking.objects.get(booking_id=booking_id)
             booking.status = status
+            if status == 'rejected':
+                # booking.rejection_date = timezone.now()
+                booking.rejection_date = date.today()
             booking.save()
-            # Redirect to the same page or any other appropriate page after updating the status
-            return redirect('crmApp:booking')
+
+            if status == 'rejected':
+                return redirect('crmApp:total_booking')
+            elif status == 'confirmed':
+                return redirect('crmApp:total_booking')
+            elif status == 'inprocess':
+                return redirect('crmApp:total_booking')
+            else:
+                return redirect('crmApp:booking')
         except Booking.DoesNotExist:
             # Handle case where the booking ID does not exist
             pass
+
     # Handle GET requests or any other scenario
     # You can redirect to another page or render a template
     return redirect('crmApp:booking')
+
+# ==============================================( end update booking status )==================================================
 
 
 # =============================================(retrieve customer name using booking id)==========================
@@ -429,7 +451,55 @@ def block_user(request, user_id):
     user.save()
     return redirect('crmApp:total_user')
 
-# ==========================================================retrieve users==========================
+# ==========================================================update users==========================
+from django.http import HttpResponseRedirect
+@csrf_exempt
+@require_POST
+def update_user(request):
+    if request.method == 'POST':
+        user_id = request.POST.get('user_id')
+        user_name = request.POST.get('userName')
+        email = request.POST.get('email')
+        phone_number = request.POST.get('phoneNumber')
+        role = request.POST.get('role')
+        team = request.POST.get('team')
+        password = request.POST.get('password')
+
+        try:
+            # Retrieve the user instance from the database using user_id
+            user = User.objects.get(pk=user_id)
+            # Update user data
+            user.user_name = user_name
+            user.email = email
+            user.phone_number = phone_number
+            user.role = role
+            user.team = team
+            user.password = password
+            # Save the updated user data
+            user.save()
+            return HttpResponseRedirect(reverse('crmApp:total_user') + '?success_message=User updated successfully.')
+        except User.DoesNotExist:
+            return HttpResponseRedirect(reverse('crmApp:total_user') + '?error_message=User not found.')
+    else:
+        return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=400)
 
 
-# ==========================================================retrieve users==========================
+
+# ==========================================================end update users==========================
+
+
+
+# ==========================delete booking status==================
+@csrf_exempt
+@require_POST
+def delete_booking(request):
+    if request.method == 'POST':
+        booking_id = request.POST.get('booking_id')
+        try:
+            booking = Booking.objects.get(booking_id=booking_id)
+            booking.delete()
+        except Booking.DoesNotExist:
+            pass  # Booking not found, do nothing
+    return redirect('crmApp:total_booking')
+
+# ===============================end  delete booking status===================

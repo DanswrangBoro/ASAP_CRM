@@ -66,6 +66,8 @@ class Booking(models.Model):
     num_passengers = models.IntegerField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
     status = models.CharField(max_length=50, default="pending")
+    rejection_date = models.DateTimeField(blank=True, null=True)
+
 
     def __str__(self):
         return self.booking_id
@@ -96,3 +98,16 @@ class User(models.Model):
     team = models.CharField(max_length=100)
     password = models.CharField(max_length=100)
     blocked = models.BooleanField(default=False)  # New field for storing block status
+
+# ===============================================================reject model================================
+    
+class RejectedBooking(models.Model):
+    booking_id = models.ForeignKey(Booking, on_delete=models.CASCADE)
+    customer_name = models.CharField(max_length=100)
+    reason = models.TextField()
+    rejection_date = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Rejected Booking: {self.customer_name}"
+
+#================================================================end reject model=============================
