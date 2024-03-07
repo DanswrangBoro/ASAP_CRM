@@ -25,8 +25,12 @@ urlpatterns = [
     path('flight_results/', views.flight_results, name='flight_results'),
     path('update_refund_status/', update_refund_status, name='update_refund_status'),
     path('create_user/', views.create_user, name='create_user'),
+    path('update_user/', views.update_user, name='update_user'),
     path('block_user/<int:user_id>/', views.block_user, name='block_user'),
     path('logout/', views.logout_view, name='logout'),
+    # path('update_booking_statusT/', views.update_booking_statusT, name='update_booking_statusT'),
+    path('delete_booking/', views.delete_booking, name='delete_booking'),
+
 
 ]
 

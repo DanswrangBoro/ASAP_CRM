@@ -371,6 +371,7 @@
                         </thead>
                         <tbody>
                             {% for ori in original %}
+                            {% if ori.status != 'inprocess' and ori.status != 'confirmed' %}
                             <tr>
                                 <td>{{ ori.booking_id }}</td>
                                 <td>{{ ori.passenger_name }}</td>
@@ -393,7 +394,6 @@
                                         <select name="status" onchange="this.form.submit()">
                                             <option value="pending" {% if ori.status == 'pending' %} selected {% endif %}>Pending</option>
                                             <option value="inprocess" {% if ori.status == 'inprocess' %} selected {% endif %}>In Process</option>
-                                            <option value="confirmed" {% if ori.status == 'confirmed' %} selected {% endif %}>Confirmed</option>
                                         </select>
                                     </form>
                                     <button class="btn btn-primary btn-sm">View</button>
@@ -401,9 +401,11 @@
                                     <button class="btn btn-danger btn-sm">Delete</button>
                                 </td>
                             </tr>
+                            {% endif %}
                             {% endfor %}
                         </tbody>
                     </table>
+                    
                 </div>
                 
                 
