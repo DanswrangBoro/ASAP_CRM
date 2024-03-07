@@ -137,97 +137,33 @@
                         </div>
                     </div>
                 </nav>
-                <h1 class="text-center mt-5">CRM Dashboard</h1>
-<div class="table-responsive mt-3">
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Rejected ID</th>
-                <th>Customer Name</th>
-                <th>Booking ID</th>
-                <th>Reason</th>
-                <th>Date</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>1</td>
-                <td>John Doe</td>
-                <td>1234567890</td>
-                <td>Invalid Payment</td>
-                <td>2024-02-28</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>Jane Smith</td>
-                <td>2345678901</td>
-                <td>Cancelled Booking</td>
-                <td>2024-03-01</td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>Michael Johnson</td>
-                <td>3456789012</td>
-                <td>Overbooked Flight</td>
-                <td>2024-03-02</td>
-            </tr>
-            <tr>
-                <td>4</td>
-                <td>Alice Johnson</td>
-                <td>4567890123</td>
-                <td>Changed Travel Plans</td>
-                <td>2024-03-03</td>
-            </tr>
-            <tr>
-                <td>5</td>
-                <td>Bob Smith</td>
-                <td>5678901234</td>
-                <td>Flight Delay</td>
-                <td>2024-03-04</td>
-            </tr>
-            <tr>
-                <td>6</td>
-                <td>Emma Williams</td>
-                <td>6789012345</td>
-                <td>Medical Emergency</td>
-                <td>2024-03-05</td>
-            </tr>
-            <tr>
-                <td>7</td>
-                <td>David Miller</td>
-                <td>7890123456</td>
-                <td>Unforeseen Circumstances</td>
-                <td>2024-03-06</td>
-            </tr>
-            <tr>
-                <td>8</td>
-                <td>Sarah Brown</td>
-                <td>8901234567</td>
-                <td>Incorrect Destination</td>
-                <td>2024-03-07</td>
-            </tr>
-            <tr>
-                <td>9</td>
-                <td>Michael Davis</td>
-                <td>9012345678</td>
-                <td>Booking Error</td>
-                <td>2024-03-08</td>
-            </tr>
-            <tr>
-                <td>10</td>
-                <td>Emily Taylor</td>
-                <td>0123456789</td>
-                <td>Flight Cancellation</td>
-                <td>2024-03-09</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-
+                <h1 class="text-center mt-5">CRM Dashboard - Flight Search Results</h1>
+                <div id="flightResults"></div>
+                
+                
                 
             </main>
         </div>
     </div>
+    <script>
+        // Parse the flight data JSON string
+        var flights = JSON.parse("{{ flights|escapejs }}");
+        
+        // Access and manipulate the flight data as needed
+        var flightResultsDiv = document.getElementById('flightResults');
+        flights.forEach(function(flight) {
+            var flightInfo = `
+                <div>
+                    <p>Origin: ${flight.origin}</p>
+                    <p>Destination: ${flight.destination}</p>
+                    <p>Departure Date: ${flight.departureDate}</p>
+                    <p>Return Date: ${flight.returnDate}</p>
+                    <p>Price: ${flight.price.total}</p>
+                </div>
+            `;
+            flightResultsDiv.innerHTML += flightInfo;
+        });
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-eMNCOe7tC1doHpGoJtKh7z7lGz7fuP4F8nfdFvAOA6Gg/z6Y5J6XqqyGXYM2ntXU" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-pzjw8f+ua7Kw1TIq0v8FqFjcJ6pajs/rfdfs3SO+kD4Ck5BdPtF+to8xMp9MvcJ4" crossorigin="anonymous"></script>
 </body>
