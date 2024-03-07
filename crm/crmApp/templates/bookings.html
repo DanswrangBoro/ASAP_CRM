@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,6 +11,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOu805FkTduG2Fj5z0x6Gl0iXQrQlOQ0gMf5.C3f5z7A" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2aOt/Q==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="{%  static 'css/base.css'%}">
     <title>CRM Dashboard</title>
     <style>
         .hidden {
@@ -19,7 +22,7 @@
 <body>
     <div class="container-fluid">
         <div class="row">
-            <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+            <nav class="col-md-2 col-12 d-none d-md-block custom-bg-color sidebar">
                 <div class="position-sticky pt-3">
                     <ul class="nav flex-column">
                         <li class="nav-item">
@@ -82,8 +85,9 @@
                 </div>
             </nav>
             
-            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+            <main class="col-md-9 col-lg-10">
+               
+                <nav class="navbar navbar-expand-lg navbar-light custom-bg-color1 border-bottom">
                     <div class="container-fluid">
                         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                             <span class="navbar-toggler-icon"></span>
