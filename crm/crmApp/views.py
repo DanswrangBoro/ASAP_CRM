@@ -120,21 +120,43 @@ def flight_book(request):
 
     # Annual income
     annual_income = Booking.objects.filter(departure_date__year=current_year, status='confirmed').aggregate(annual_income=Sum('price'))['annual_income'] or 0
-
+    userN = request.session.get('userN')
     context = {
         'total_sales': total_sales,
         'monthly_income': monthly_income,
-        'annual_income': annual_income
+        'annual_income': annual_income,
+        'user' : userN
     }
     
     return render(request, "base.html", context)
 
+from decimal import Decimal
+
 def total_booking(request):
-    original = Booking.objects.all()
+    original = Booking.objects.filter(status__in=['inprocess', 'rejected', 'confirmed', 'cancelled'])
+    confirmed_bookings = original.filter(status='confirmed')
+
+    total_price = Decimal(0.0)
+    total_mco = Decimal(0.0)
+    for booking in confirmed_bookings:
+        total_price += Decimal(booking.price)
+        total_mco += Decimal(booking.mco)
+    
+    total_revenue = total_price + total_mco
+    total_price_str = "${:.2f}".format(total_price)  # Formatting total price as a string
+    total_mco_str = "${:.2f}".format(total_mco)  # Formatting total MCO as a string
+    total_revenue_str = "${:.2f}".format(total_revenue)  # Formatting total revenue as a string
+
     context = {
-        "original" : original
+        "original": original,
+        "length": original.count(),
+        "total_price": total_price_str,
+        "total_mco": total_mco_str,
+        "total_revenue": total_revenue_str
     }
-    return render(request,"total_booking.html", context)
+    return render(request, "total_booking.html", context)
+
+
 
 def total_user(request):
     user_data = User.objects.all()  # Fetch all User objects
@@ -167,10 +189,19 @@ def rejected(request):
     return render(request, "rejected.html", {'rejected_bookings': rejected_bookings})
 
 def mco(request):
-    return render(request,"mco.html")
+    mco = Booking.objects.filter(status='confirmed')
+    context = {
+        "mco": mco
+    }
+    return render(request, "mco.html", context)
 
 def cancellation(request):
-    return render(request,"cancellation.html")
+    cancelled_bookings = Booking.objects.filter(status='cancelled')
+    context = {
+        "cancel": cancelled_bookings
+    }
+    return render(request, "cancellation.html", context)
+
 
 def ecredit(request):
     return render(request,"ecredit.html")
@@ -187,8 +218,8 @@ def update_booking_status(request):
             booking = Booking.objects.get(booking_id=booking_id)
             booking.status = status
             if status == 'rejected':
-                # booking.rejection_date = timezone.now()
-                booking.rejection_date = date.today()
+                booking.rejection_date = timezone.now()
+                # booking.rejection_date = date.today()
             booking.save()
 
             if status == 'rejected':
@@ -197,6 +228,8 @@ def update_booking_status(request):
                 return redirect('crmApp:total_booking')
             elif status == 'inprocess':
                 return redirect('crmApp:total_booking')
+            elif status == 'cancelled':
+                return redirect('crmApp:cancellation')
             else:
                 return redirect('crmApp:booking')
         except Booking.DoesNotExist:
@@ -360,6 +393,7 @@ def update_refund_status(request):
 from .models import User
 from django.contrib import messages
 from django.views.decorators.http import require_http_methods
+from django.contrib.auth.hashers import make_password
 
 @csrf_exempt
 @require_http_methods(["GET", "POST"])
@@ -376,31 +410,74 @@ def create_user(request):
         # Check if passwords match
         if password != confirm_password:
             messages.error(request, 'Passwords do not match')
-            return redirect('crmApp:create_user')
+        else:
+            # Hash the password
+            hashed_password = make_password(password)
 
-        # Create user instance
-        new_user = User(
-            user_name=user_name,
-            email=email,
-            phone_number=phone_number,
-            role=role,
-            team=team,
-            password=password
-        )
-        # Save user to database
-        new_user.save()
-        messages.success(request, 'User created successfully')
+            # Create user instance
+            new_user = User(
+                user_name=user_name,
+                email=email,
+                phone_number=phone_number,
+                role=role,
+                team=team,
+                password=hashed_password
+            )
+            try:
+                # Save user to database
+                new_user.save()
+                messages.success(request, 'User created successfully')
+            except Exception as e:
+                # Handle any database or validation errors
+                messages.error(request, f'Failed to create user: {str(e)}')
+
         return redirect('crmApp:create_user')  
 
     return render(request, 'total_users.html')
 
+
 # ==========================================================login===============================
 
-from django.contrib.auth import authenticate, login
+# from django.contrib.auth import authenticate, login
+
+# from django.contrib.auth import authenticate, login
+# from django.shortcuts import render, redirect
+# from django.contrib import messages
+
+# def login_view(request):
+#     error_message = None
+#     if request.method == 'POST':
+#         username = request.POST.get('username')
+#         password = request.POST.get('password')
+#         role = request.POST.get('role')
+#         user = authenticate(request, username=username, password=password)
+#         if user is not None:
+#             if user.is_superuser:
+#                 if role == 'superuser':
+#                     login(request, user)
+#                     return redirect('crmApp:base')  # Redirect to base URL after successful login
+#                 else:
+#                     error_message = 'Invalid role for this user'
+#             elif user.blocked:
+#                 error_message = 'This user is blocked'
+#             else:
+#                 if role == 'manager' and user.role == 'manager':
+#                     login(request, user)
+#                     return redirect('crmApp:base')  # Redirect to base URL after successful login
+#                 elif role == 'agent' and user.role == 'agent':
+#                     login(request, user)
+#                     return redirect('crmApp:base')  # Redirect to base URL after successful login
+#                 else:
+#                     error_message = 'Invalid role for this user'
+#         else:
+#             # Invalid login
+#             error_message = 'Invalid username or password'
+#     return render(request, 'login.html', {'error_message': error_message})
 
 from django.contrib.auth import authenticate, login
+from django.contrib.auth import login
 from django.shortcuts import render, redirect
-from django.contrib import messages
+from .models import User
 
 def login_view(request):
     error_message = None
@@ -408,29 +485,35 @@ def login_view(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
         role = request.POST.get('role')
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            if user.is_superuser:
-                if role == 'superuser':
-                    login(request, user)
-                    return redirect('crmApp:base')  # Redirect to base URL after successful login
-                else:
-                    error_message = 'Invalid role for this user'
-            elif user.blocked:
-                error_message = 'This user is blocked'
+        
+        # Check if the user is a superuser
+        if role == 'superuser':
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                request.session['userN'] = user.username
+                print(request.session['userN'])
+                return redirect('crmApp:base')  # Redirect to base URL after successful login
             else:
-                if role == 'manager' and user.role == 'manager':
-                    login(request, user)
-                    return redirect('crmApp:base')  # Redirect to base URL after successful login
-                elif role == 'agent' and user.role == 'agent':
-                    login(request, user)
-                    return redirect('crmApp:base')  # Redirect to base URL after successful login
-                else:
-                    error_message = 'Invalid role for this user'
+                error_message = 'Invalid username or password'
         else:
-            # Invalid login
-            error_message = 'Invalid username or password'
+            # Check if the user with specified role exists
+            try:
+                user = User.objects.get(user_name=username, role=role, password=password)
+                if user.password == password:
+                    if user.blocked:
+                        error_message = 'This user is blocked'
+                    else:
+                        login(request, user)
+                        request.session['userN'] = user.user_name
+                        return redirect('crmApp:base')  # Redirect to base URL after successful login
+                else:
+                    error_message = 'Invalid password'
+            except User.DoesNotExist:
+                error_message = 'User with specified role not found'
+
     return render(request, 'login.html', {'error_message': error_message})
+
 
 # ==========================================================end login===============================
 # =======================================logout===================
@@ -497,9 +580,42 @@ def delete_booking(request):
         booking_id = request.POST.get('booking_id')
         try:
             booking = Booking.objects.get(booking_id=booking_id)
-            booking.delete()
+            if booking.status == 'cancelled':
+                logger.info(f"Booking with ID {booking_id} is cancelled. Redirecting to cancellation.")
+                booking.delete()
+                return HttpResponseRedirect(reverse('crmApp:cancellation'))
+            else:
+                booking.delete()
+                logger.info(f"Booking with ID {booking_id} is deleted.")
         except Booking.DoesNotExist:
-            pass  # Booking not found, do nothing
+            logger.warning(f"Booking with ID {booking_id} does not exist.")
     return redirect('crmApp:total_booking')
-
 # ===============================end  delete booking status===================
+
+# =========================================================( grant_permission)=============================================
+
+from django.shortcuts import render, redirect
+from django.contrib.auth.models import User
+from django.contrib import messages
+
+def grant_permissions(request):
+    if request.method == 'POST':
+        user_id = request.POST.get('user_id')
+        user = User.objects.get(pk=user_id)
+        privileges = request.POST.getlist('privileges[]')
+        # Here, you would implement your logic to update the user's permissions
+        # For example, you might have a UserProfile model with a ManyToManyField for privileges
+        # userProfile = UserProfile.objects.get(user=user)
+        # userProfile.privileges.clear()
+        # for privilege in privileges:
+        #     userProfile.privileges.add(privilege)
+        # Save the user profile or whatever logic you have
+        
+        messages.success(request, f'Permissions granted successfully for {user.username}')
+        return redirect('some_redirect_view')  # Redirect to a success page or wherever you want to go after granting permissions
+    else:
+        return redirect('some_error_view')  # Redirect to an error page or handle it in your frontend
+
+# Define other views as needed for your application
+
+# ================================================================================end permission===============================

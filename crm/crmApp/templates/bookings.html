@@ -169,7 +169,7 @@
                                 <option value="newBooking" enabled>New Booking</option>
                                 <option value="changes">Changes</option>
                                 <option value="eCredit">E-Credit</option>
-                                <option value="cancellation">Cancellation</option>
+                                {% comment %} <option value="cancellation">Cancellation</option> {% endcomment %}
                                 <option value="refunds">Refunds</option>
                             </select>
                         </div>
@@ -369,13 +369,14 @@
                                 <th>Arrival Date</th>
                                 <th>No. of Passengers</th>
                                 <th>Price</th>
+                                <th>MCO</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for ori in original %}
-                            {% if ori.status != 'inprocess' and ori.status != 'confirmed' %}
+                            {% if ori.status != 'inprocess' and ori.status != 'confirmed' and ori.status != 'rejected' and ori.status != 'cancelled'%}
                             <tr>
                                 <td>{{ ori.booking_id }}</td>
                                 <td>{{ ori.passenger_name }}</td>
@@ -390,6 +391,7 @@
                                 <td>{{ ori.arrival_date }}</td>
                                 <td>{{ ori.num_passengers }}</td>
                                 <td>{{ ori.price }}</td>
+                                <td>{{ ori.mco }}</td>
                                 <td>{{ ori.status }}</td>
                                 <td>
                                     <form method="POST" action="{% url 'crmApp:update_booking_status' %}">

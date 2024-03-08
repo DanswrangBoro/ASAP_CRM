@@ -96,11 +96,14 @@
                     <div class="col-md-4">
                         <div class="card">
                             <div class="card-header">
-                                <h6 class="card-title">Total Bookings</h6>
+                                <h6 class="card-title">Total Booking</h6>
                             </div>
                             <div class="card-body">
-                                <p class="card-text">Total Bookings: 3</p>
-                                <p class="card-text">Total Revenue: $0.00</p>
+
+                                <p class="card-text">Total Bookings: ({{ original|length }}) </p>
+                                <p>Total Revenue (in price): {{ total_price }}</p>
+                                <p>Total Revenue (in mco): {{ total_mco }}</p>
+                                <p class="card-text">Total Revenue (grand): {{ total_revenue }}</p>
                             </div>
                         </div>
                     </div>
@@ -127,6 +130,7 @@
                                                 <th>Arrival Date</th>
                                                 <th>No. of Passengers</th>
                                                 <th>Price</th>
+                                                <th>MCO</th>
                                                 <th>Status</th>
                                                 <th>Change status</th>
                                                 <th>Action</th>
@@ -134,7 +138,6 @@
                                         </thead>
                                         <tbody>
                                             {% for o in original %}
-                                            {% if o.status == 'inprocess' or o.status == 'rejected' or o.status == 'confirmed'%}
                                             <tr id="row_{{ o.booking_id }}">
                                                 <td>{{ o.booking_id }}</td>
                                                 <td>{{ o.passenger_name }}</td>
@@ -149,6 +152,7 @@
                                                 <td>{{ o.arrival_date }}</td>
                                                 <td>{{ o.num_passengers }}</td>
                                                 <td>{{ o.price }}</td>
+                                                <td>{{ o.mco }}</td>
                                                 <td>{{ o.status }}</td>
                                                 <td>
                                                     <form id="booking_status_form_{{ o.booking_id }}" method="POST" action="{% url 'crmApp:update_booking_status' %}">
@@ -159,6 +163,7 @@
                                                             <option value="confirmed" {% if o.status == 'confirmed' %} selected {% endif %}>Confirmed</option>
                                                             <option value="pending" {% if o.status == 'pending' %} selected {% endif %}>Pending</option>
                                                             <option value="rejected" {% if o.status == 'rejected' %} selected {% endif %}>Reject</option>
+                                                            <option value="cancelled" {% if o.status == 'cancelled' %} selected {% endif %}>Cancel</option>
                                                         </select> 
                                                     </form>
                                                 </td>
@@ -171,7 +176,6 @@
                                                     </form>
                                                 </td>
                                             </tr>
-                                            {% endif %}
                                             {% endfor %}
                                         </tbody>
                                     </table>
@@ -204,6 +208,7 @@
             return confirm("Are you sure you want to reject this booking?");
         }
     </script>
+    
     <script>
     </script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-eMNCOe7tC1doHpGoJtKh7z7lGz7fuP4F8nfdFvAOA6Gg/z6Y5J6XqqyGXYM2ntXU" crossorigin="anonymous"></script>
