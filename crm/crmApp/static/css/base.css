@@ -1,4 +1,9 @@
-
+:root{
+    --color-primary: #070F2B;
+    --color-secondary: #1B1A55;
+    --color-accent: #535C91;
+    --color-background: #9290C3;
+}
 
 .nav.flex-column {
     font-size: 14px;
@@ -6,14 +11,17 @@
 
 
 .custom-bg-color {
-    background-color:  #19173C;
-}
+    background: linear-gradient(to bottom, #020024, #090979, #05113d); /* Add linear gradient */
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    color: #fff; /* Set text color to white for better visibility */
+  }
 
 a{
     color:aliceblue;
 }
 .custom-bg-color1{
-    background-color: #1597BB;
+    /* background-color: #1597BB; */
     width:100%;
     color:aliceblue;
 
@@ -21,9 +29,62 @@ a{
 main{
     padding:0 !important;
 }
+/* Base page card CSS */
+
 .col-custom-color{
+    height: 10rem;
+    text-align: center;
+
+}
+.col-custom-color1{
     background-color: #A5D7E8;
 }
+.card-with-background {
+    background: linear-gradient(#c1c1c1,#ffffff); /* Add your desired background color class here */
+    
+    background-size: 100% 100%;
+}
+
+.card-with-background1 {
+    background: linear-gradient(#c0b8b8,#ffffff); /* Add your desired background color class here */
+    
+    background-size: 100% 100%;
+}
+.card-with-background2 {
+    background: linear-gradient( #9d8c8c,#ffffff); /* Add your desired background color class here */
+    background-size: 100% 100%;
+}
+.card-with-background3 {
+    background: linear-gradient( #b2b2c2,#f0eff0); /* Add your desired background color class here */
+    background-size: 100% 100%;
+}
+.card-with-background4 {
+    background: linear-gradient( #4f5575,#e7e7ed); /* Add your desired background color class here */
+    background-size: 100% 100%;
+}
+.card-with-background5 {
+    background: linear-gradient(#9290C3,#f2ccfd); /* Add your desired background color class here */
+    background-size: 100% 100%;
+}
+
+.card-with-background6 {
+    background: linear-gradient(#ffffff,#9e81a7); /* Add your desired background color class here */
+    background-size: 100% 100%;
+}
+.card-with-background7 {
+    background: linear-gradient(#b8b7d3,#f7f3f8); /* Add your desired background color class here */
+    background-size: 100% 100%;
+}
+.card-with-background8 {
+    background: linear-gradient(#ececf3,#eeeaef); /* Add your desired background color class here */
+    background-size: 100% 100%;
+}
+
+.income{
+    height: 30%;
+    width:20%;
+}
+
 span{
     color:red;
 }
@@ -43,16 +104,65 @@ span{
     font-size: 14px;
 }
 .user-icon{
-color:#0f0e20;
+color:white;
 margin:auto;
 }
 
 .online-dot {
     display: inline-block;
-    width: 10px;
-    height: 10px;
+    width: 5px;
+    height: 5px;
     background-color: green; /* Change the color as needed */
     border-radius: 50%;
     margin-left: 5px;
 }
+ul, li{
+    list-style: none!important;
+}
+/* Add a transition effect for a smooth color change and box shadow */
+.nav-link {
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
 
+/* Apply styles on hover */
+.nav-link:hover {
+    background-color: #090979; /* Change to your desired background color */
+    color: #fff; /* Change to your desired text color */
+}
+.glass-effect {
+    border-radius: 10px;
+    padding: 0%;
+    width: 100%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  /* .white-btn {
+    background-color: white;
+    color: black; 
+    
+} */
+
+
+.custom-table{
+ font-size: 0.7rem ;
+}
+.custom-table1{
+    font-size:0.8rem;
+}
+.card-title{
+    margin-bottom:0;
+}
+
+/* Total booking page css */
+
+.col-custom-total{
+    text-align: center;
+    background-color:#0EA293 ;
+}
+
+
+/* Total Users CSS */
+
+.col-custom-color2{
+    background-color: #576CBC;
+}
