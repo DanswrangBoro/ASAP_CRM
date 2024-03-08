@@ -143,95 +143,23 @@
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th>MCO ID</th>
-                                <th>Customer Name</th>
                                 <th>Booking ID</th>
+                                <th>Customer Name</th>
                                 <th>Description</th>
                                 <th>Amount</th>
                                 <th>Date</th>
                             </tr>
                         </thead>
                         <tbody>
+                            {% for m in mco %}
                             <tr>
-                                <td>1</td>
-                                <td>John Doe</td>
-                                <td>1234567890</td>
+                                <td>{{ m.booking_id }}</td>
+                                <td>{{ m.passenger_name }}</td>
                                 <td>Extra Baggage Fee</td>
-                                <td>$50</td>
+                                <td><b>$</b> {{ m.mco }}</td>
                                 <td>2024-02-28</td>
                             </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Jane Smith</td>
-                                <td>2345678901</td>
-                                <td>Seat Upgrade</td>
-                                <td>$30</td>
-                                <td>2024-03-01</td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>Michael Johnson</td>
-                                <td>3456789012</td>
-                                <td>Priority Boarding</td>
-                                <td>$20</td>
-                                <td>2024-03-02</td>
-                            </tr>
-                            <tr>
-                                <td>4</td>
-                                <td>Alice Johnson</td>
-                                <td>4567890123</td>
-                                <td>Meal Option</td>
-                                <td>$15</td>
-                                <td>2024-03-03</td>
-                            </tr>
-                            <tr>
-                                <td>5</td>
-                                <td>Bob Smith</td>
-                                <td>5678901234</td>
-                                <td>Wi-Fi Access</td>
-                                <td>$10</td>
-                                <td>2024-03-04</td>
-                            </tr>
-                            <tr>
-                                <td>6</td>
-                                <td>Emma Williams</td>
-                                <td>6789012345</td>
-                                <td>Entertainment Package</td>
-                                <td>$25</td>
-                                <td>2024-03-05</td>
-                            </tr>
-                            <tr>
-                                <td>7</td>
-                                <td>David Miller</td>
-                                <td>7890123456</td>
-                                <td>Travel Insurance</td>
-                                <td>$40</td>
-                                <td>2024-03-06</td>
-                            </tr>
-                            <tr>
-                                <td>8</td>
-                                <td>Sarah Brown</td>
-                                <td>8901234567</td>
-                                <td>Airport Lounge Access</td>
-                                <td>$50</td>
-                                <td>2024-03-07</td>
-                            </tr>
-                            <tr>
-                                <td>9</td>
-                                <td>Michael Davis</td>
-                                <td>9012345678</td>
-                                <td>Onboard Shopping</td>
-                                <td>$35</td>
-                                <td>2024-03-08</td>
-                            </tr>
-                            <tr>
-                                <td>10</td>
-                                <td>Emily Taylor</td>
-                                <td>0123456789</td>
-                                <td>Car Rental</td>
-                                <td>$60</td>
-                                <td>2024-03-09</td>
-                            </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>

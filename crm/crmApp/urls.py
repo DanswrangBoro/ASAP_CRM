@@ -30,6 +30,8 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
     # path('update_booking_statusT/', views.update_booking_statusT, name='update_booking_statusT'),
     path('delete_booking/', views.delete_booking, name='delete_booking'),
+    path('grant_permissions/', views.grant_permissions, name='grant_permissions'),
+
 
 
 ]
