@@ -1,0 +1,58 @@
+
+
+.nav.flex-column {
+    font-size: 14px;
+}
+
+
+.custom-bg-color {
+    background-color:  #19173C;
+}
+
+a{
+    color:aliceblue;
+}
+.custom-bg-color1{
+    background-color: #1597BB;
+    width:100%;
+    color:aliceblue;
+
+}
+main{
+    padding:0 !important;
+}
+.col-custom-color{
+    background-color: #A5D7E8;
+}
+span{
+    color:red;
+}
+
+
+.profile-section {
+    margin-bottom: 20px;
+}
+
+.profile-icon {
+    width: 70px; /* Adjust the size as needed */
+    height: 70px;
+}
+
+.user-name {
+    color: white;
+    font-size: 14px;
+}
+.user-icon{
+color:#0f0e20;
+margin:auto;
+}
+
+.online-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background-color: green; /* Change the color as needed */
+    border-radius: 50%;
+    margin-left: 5px;
+}
+
