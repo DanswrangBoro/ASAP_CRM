@@ -127,3 +127,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 #added manually
  
+# Specify the custom user model
+AUTH_USER_MODEL = 'crmApp.CustomUser'
+
+# Ensure the authentication backend includes ModelBackend
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+]

@@ -1,275 +1,277 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-                {% if request.GET.success_message %}
-                    <div class="alert alert-success text-center" id="successMessage">
-                        {{ request.GET.success_message }}
-                    </div>
-                    <script>
-                        // Automatically close the success message after 1 second
-                        setTimeout(function () {
-                            document.getElementById('successMessage').style.display = 'none';
-                        }, 3000);
-                    </script>
-                {% endif %}
-                <h1 class="text-center mt-5">CRM <span>Dash</span>board - New Bookings</h1> 
-                <div class="row justify-content-end">
-                    <div class="col-md-2 float-left">
-                        <div class="dropdown">
-                            <select class="form-select form-select-sm btn-primary mt-7" id="actionDropdown">
-                                <option value="newBooking" enabled>New Booking</option>
-                                <option value="changes">Changes</option>
-                                <option value="eCredit">E-Credit</option>
-                                {% comment %} <option value="cancellation">Cancellation</option> {% endcomment %}
-                                <option value="refunds">Refunds</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                
-                <div id="flightBookingForm" class="container hidden custom-flight">
-                    <h2 class="mb-4" style="font-size: 1.2rem; width: 19% ; height: 100%; color: white;"> Flight Booking Form</h2>
-                    <!-- Flight booking form content -->
-                    <form id="flightSearchForm" action="{% url 'crmApp:flight_results' %}" method="GET" >
-                        <div style="display: flex; flex-direction: row; align-items: stretch; font-weight: bold; font-size: 0.7rem; width: 76%;">
-                            <div class="mb-3 me-3" style="flex: 1;">
-                                <label for="tripType" class="form-label"><i class="bi bi-geo-alt"></i> Trip Type</label>
-                                <select class="form-select" id="tripType" name="tripType">
-                                    <option value="oneWay">One Way</option>
-                                    <option value="roundTrip">Round Trip</option>
-                                </select>
-                            </div>
-                            <div class="mb-3 me-3" style="flex: 1;">
-                                <label for="flightClass" class="form-label"><i class="bi bi-geo-alt"></i> Flight Class</label>
-                                <select class="form-select" id="flightClass" name="flightClass">
-                                    <option value="economy">Economy</option>
-                                    <option value="business">Business</option>
-                                    <option value="first">First</option>
-                                </select>
-                            </div>
-                            <div class="mb-3 me-3" style="flex: 1;">
-                                <label for="passengerCount" class="form-label"><i class="bi bi-geo-alt"></i> Passenger Count</label>
-                                <input type="number" class="form-control" id="passengerCount" name="passengerCount" min="1">
-                            </div>
-                        </div>
-                        
-                        <div style="display: flex; flex-wrap: wrap; font-size: 0.7rem; font-weight: bold; ">
-                            <div class="mb-3 me-3" style="flex: 1;">
-                                <label for="fromLocation" class="form-label"><i class="bi bi-geo-alt"></i> From</label>
-                                <input type="text" class="form-control" id="fromLocation" name="fromLocation">
-                                <ul id="fromLocationList" class="location-list"></ul>
-                            </div>
-                            <div class="mb-3 me-3" style="flex: 1;">
-                                <label for="toLocation" class="form-label"><i class="bi bi-geo-alt"></i> To</label>
-                                <input type="text" class="form-control" id="toLocation" name="toLocation">
-                                <ul id="toLocationList" class="location-list"></ul>
-                            </div>
-                            <div class="mb-3 me-3" style="flex: 1;">
-                                <label for="departureDate" class="form-label"><i class="bi bi-calendar3"></i> Departure Date</label>
-                                <input type="date" class="form-control" id="departureDate" name="departureDate">
-                            </div>
-                            <div class="mb-3 me-3" style="flex: 1;" id="returnDateField">
-                                <label for="returnDate" class="form-label"><i class="bi bi-calendar3"></i> Return Date</label>
-                                <input type="date" class="form-control" id="returnDate" name="returnDate">
-                            </div>
-                            <div class="mb-3" style="flex: 1;">
-                                <button type="submit" class="btn btn-primary" style="margin-top: 25px;">Search</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                
-                <div id="refundForm" class="container hidden">
-                    <!-- Refund form content -->
-                    <h2 class="mb-4">Refund Form</h2>
-                        <!-- Refund form content -->
-                    <h2 class="mb-4">Refund Form</h2>
-                    <!-- In your 'booking' template -->
-                    {% comment %} {% if request.GET.success_message %}
-                        <div class="alert alert-success">
-                            {{ request.GET.success_message }}
-                        </div>
-                    {% endif %} {% endcomment %}
-                    <form id="refundForm" method="post" action="{% url 'crmApp:submit_refund_form' %}">
+<style>
+    .hidden {
+        display: none;
+    }
+</style>
+{% if request.GET.success_message %}
+<div class="alert alert-success text-center" id="successMessage">
+    {{ request.GET.success_message }}
+</div>
+<script>
+    // Automatically close the success message after 1 second
+    setTimeout(function () {
+        document.getElementById('successMessage').style.display = 'none';
+    }, 3000);
+</script>
+{% endif %}
+<h1 class="text-center mt-5">CRM <span>Dash</span>board - New Bookings</h1> 
+<div class="row justify-content-end">
+<div class="col-md-2 float-left">
+    <div class="dropdown">
+        <select class="form-select form-select-sm btn-primary mt-7" id="actionDropdown">
+            <option value="newBooking" enabled>New Booking</option>
+            <option value="changes">Changes</option>
+            <option value="eCredit">E-Credit</option>
+            {% comment %} <option value="cancellation">Cancellation</option> {% endcomment %}
+            <option value="refunds">Refunds</option>
+        </select>
+    </div>
+</div>
+</div>
+
+<div id="flightBookingForm" class="container hidden custom-flight">
+<h2 class="mb-4" style="font-size: 1.2rem; width: 19% ; height: 100%; color: white;"> Flight Booking Form</h2>
+<!-- Flight booking form content -->
+<form id="flightSearchForm" action="{% url 'crmApp:flight_results' %}" method="GET" >
+    <div style="display: flex; flex-direction: row; align-items: stretch; font-weight: bold; font-size: 0.7rem; width: 76%;">
+        <div class="mb-3 me-3" style="flex: 1;">
+            <label for="tripType" class="form-label"><i class="bi bi-geo-alt"></i> Trip Type</label>
+            <select class="form-select" id="tripType" name="tripType">
+                <option value="oneWay">One Way</option>
+                <option value="roundTrip">Round Trip</option>
+            </select>
+        </div>
+        <div class="mb-3 me-3" style="flex: 1;">
+            <label for="flightClass" class="form-label"><i class="bi bi-geo-alt"></i> Flight Class</label>
+            <select class="form-select" id="flightClass" name="flightClass">
+                <option value="economy">Economy</option>
+                <option value="business">Business</option>
+                <option value="first">First</option>
+            </select>
+        </div>
+        <div class="mb-3 me-3" style="flex: 1;">
+            <label for="passengerCount" class="form-label"><i class="bi bi-geo-alt"></i> Passenger Count</label>
+            <input type="number" class="form-control" id="passengerCount" name="passengerCount" min="1">
+        </div>
+    </div>
+    
+    <div style="display: flex; flex-wrap: wrap; font-size: 0.7rem; font-weight: bold; ">
+        <div class="mb-3 me-3" style="flex: 1;">
+            <label for="fromLocation" class="form-label"><i class="bi bi-geo-alt"></i> From</label>
+            <input type="text" class="form-control" id="fromLocation" name="fromLocation">
+            <ul id="fromLocationList" class="location-list"></ul>
+        </div>
+        <div class="mb-3 me-3" style="flex: 1;">
+            <label for="toLocation" class="form-label"><i class="bi bi-geo-alt"></i> To</label>
+            <input type="text" class="form-control" id="toLocation" name="toLocation">
+            <ul id="toLocationList" class="location-list"></ul>
+        </div>
+        <div class="mb-3 me-3" style="flex: 1;">
+            <label for="departureDate" class="form-label"><i class="bi bi-calendar3"></i> Departure Date</label>
+            <input type="date" class="form-control" id="departureDate" name="departureDate">
+        </div>
+        <div class="mb-3 me-3" style="flex: 1;" id="returnDateField">
+            <label for="returnDate" class="form-label"><i class="bi bi-calendar3"></i> Return Date</label>
+            <input type="date" class="form-control" id="returnDate" name="returnDate">
+        </div>
+        <div class="mb-3" style="flex: 1;">
+            <button type="submit" class="btn btn-primary" style="margin-top: 25px;">Search</button>
+        </div>
+    </div>
+</form>
+</div>
+
+<div id="refundForm" class="container hidden">
+
+<h2 class="mb-4">Refund Form</h2>
+<!-- In your 'booking' template -->
+{% comment %} {% if request.GET.success_message %}
+    <div class="alert alert-success">
+        {{ request.GET.success_message }}
+    </div>
+{% endif %} {% endcomment %}
+<form id="refundForm" method="post" action="{% url 'crmApp:submit_refund_form' %}">
+{% csrf_token %}
+<div style="display: flex; flex-wrap: wrap; ">
+    <div class="mb-3 me-3" style="flex: 1; ">
+        <label for="bookingId" class="form-label"><i class="bi bi-hash" ></i> Booking ID</label>
+        <input type="text" class="form-control" id="bookingId" name="bookingId" onchange="fetchPassengerData()">
+    </div>
+    <div class="mb-3 me-3" style="flex: 1;">
+        <label for="passengerName" class="form-label"><i class="bi bi-person"></i> Passenger Name</label>
+        <input type="text" class="form-control" id="passengerName" name="passengerName">
+    </div>
+    <div class="mb-3 me-3" style="flex: 1;">
+        <label for="phoneNumber" class="form-label"><i class="bi bi-telephone"></i> Phone Number</label>
+        <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber">
+    </div>
+    <div class="mb-3 me-3" style="flex: 1;">
+        <label for="email" class="form-label"><i class="bi bi-envelope"></i> Email</label>
+        <input type="email" class="form-control" id="email" name="email" >
+    </div>
+    <div class="mb-3 me-3" style="flex: 1;">
+        <label for="refundType" class="form-label"><i class="bi bi-arrow-repeat"></i> Refund Type</label>
+        <select class="form-select" id="refundType" name="refundType">
+            <option value="" disabled>Refund type</option>
+            <option value="full">Full Refund</option>
+            <option value="partial">Partial Refund</option>
+        </select>
+    </div>
+    <div class="mb-3 me-3" style="flex: 1;">
+        <label for="refundAmount" class="form-label"><i class="bi bi-currency-dollar"></i> Refund Amount</label>
+        <input type="text" class="form-control" id="refundAmount" name="refundAmount">
+    </div>
+    <div class="mb-3 me-3" style="flex: 1;">
+        <label for="refundReason" class="form-label"><i class="bi bi-chat-square-dots"></i> Refund Reason</label>
+        <textarea class="form-control" id="refundReason" name="refundReason"></textarea>
+    </div>
+    <div class="mb-3" style="flex: 1;">
+        <button type="submit" class="btn btn-primary" style="margin-top: 32px; background-color: blue!important">Submit</button>
+    </div>
+</div>
+</form>
+</div>
+
+
+<div id="cancellationForm" class="container hidden">
+<!-- Cancellation form content -->
+<h2 class="mb-4">Cancellation Form</h2>
+<div style="display: flex; flex-wrap: wrap;">
+    <div class="mb-3 me-3" style="flex: 1;">
+        <label for="bookingId" class="form-label"><i class="bi bi-hash"></i> Booking ID</label>
+        <input type="text" class="form-control" id="bookingId" name="bookingId">
+    </div>
+    <div class="mb-3 me-3" style="flex: 1;">
+        <label for="passengerName" class="form-label"><i class="bi bi-person"></i> Passenger Name</label>
+        <input type="text" class="form-control" id="passengerName" name="passengerName">
+    </div>
+    <div class="mb-3 me-3" style="flex: 1;">
+        <label for="cancellationReason" class="form-label"><i class="bi bi-chat-square-dots"></i> Cancellation Reason</label>
+        <textarea class="form-control" id="cancellationReason" name="cancellationReason"></textarea>
+    </div>
+    <div class="mb-3" style="flex: 1;">
+        <button type="submit" class="btn btn-primary" style="margin-top: 32px;">Submit</button>
+    </div>
+</div>
+</div>
+<div id="changesForm" class="container hidden">
+<!-- Changes form content -->
+<h2 class="mb-4">Changes Form</h2>
+<div style="display: flex; flex-wrap: wrap">
+    <div class="mb-3 me-3" style="flex: 1;">
+        <label for="bookingId" class="form-label"><i class="bi bi-hash"></i> Booking ID</label>
+        <input type="text" class="form-control" id="bookingId" name="bookingId">
+    </div>
+    <div class="mb-3 me-3" style="flex: 1;">
+        <label for="passengerName" class="form-label"><i class="bi bi-person"></i> Passenger Name</label>
+        <input type="text" class="form-control" id="passengerName" name="passengerName">
+    </div>
+    <div class="mb-3 me-3" style="flex: 1;">
+        <label for="newFlightDetails" class="form-label"><i class="bi bi-clipboard-data"></i> New Flight Details</label>
+        <input type="text" class="form-control" id="newFlightDetails" name="newFlightDetails">
+    </div>
+    <div class="mb-3 me-3" style="flex: 1;">
+        <label for="newDepartureDate" class="form-label"><i class="bi bi-calendar3"></i> New Departure Date</label>
+        <input type="date" class="form-control" id="newDepartureDate" name="newDepartureDate">
+    </div>
+    <div class="mb-3 me-3" style="flex: 1;">
+        <label for="newArrivalDate" class="form-label"><i class="bi bi-calendar3"></i> New Arrival Date</label>
+        <input type="date" class="form-control" id="newArrivalDate" name="newArrivalDate">
+    </div>
+    <div class="mb-3" style="flex: 1;">
+        <button type="submit" class="btn btn-primary" style="margin-top: 32px;">Submit</button>
+    </div>
+</div>
+</div>
+
+<div id="eCreditForm" class="container hidden">
+<!-- E-Credit form content -->
+<h2 class="mb-4">E-Credit Form</h2>
+<div style="display: flex; flex-wrap: wrap">
+    <div class="mb-3 me-3" style="flex: 1;">
+        <label for="creditId" class="form-label"><i class="bi bi-credit-card"></i> Credit ID</label>
+        <input type="text" class="form-control" id="creditId" name="creditId">
+    </div>
+    <div class="mb-3 me-3" style="flex: 1;">
+        <label for="amount" class="form-label"><i class="bi bi-currency-dollar"></i> Amount</label>
+        <input type="text" class="form-control" id="amount" name="amount">
+    </div>
+    <div class="mb-3 me-3" style="flex: 1;">
+        <label for="expirationDate" class="form-label"><i class="bi bi-calendar3"></i> Expiration Date</label>
+        <input type="date" class="form-control" id="expirationDate" name="expirationDate">
+    </div>
+    <div class="mb-3" style="flex: 1;">
+        <button type="submit" class="btn btn-primary" style="margin-top: 32px;">Submit</button>
+    </div>
+</div>
+</div>
+                          
+<div class="table-responsive">
+<table class="table table-striped" style="font-size: 0.7rem;">
+    <thead>
+        <tr>
+            <th>Booking ID</th>
+            <th>Passenger Name</th>
+            <th>Phone Number</th>
+            <th>Email ID</th>
+            <th>Flight Details</th>
+            <th>Trip Type</th>
+            <th>Ref id</th>
+            <th>Departure City</th>
+            <th>Departure Date</th>
+            <th>Arrival City</th>
+            <th>Arrival Date</th>
+            <th>No. of Passengers</th>
+            <th>Price</th>
+            <th>MCO</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for ori in original %}
+        {% if ori.status != 'inprocess' and ori.status != 'confirmed' and ori.status != 'rejected' and ori.status != 'cancelled'%}
+        <tr>
+            <td>{{ ori.booking_id }}</td>
+            <td>{{ ori.passenger_name }}</td>
+            <td>{{ ori.phone_number }}</td>
+            <td>{{ ori.email }}</td>
+            <td>{{ ori.flight_details }}</td>
+            <td>{{ ori.trip_type }}</td>
+            <td>{{ ori.reference_id }}</td>
+            <td>{{ ori.departure }}</td>
+            <td>{{ ori.departure_date }}</td>
+            <td>{{ ori.arrival }}</td>
+            <td>{{ ori.arrival_date }}</td>
+            <td>{{ ori.num_passengers }}</td>
+            <td>{{ ori.price }}</td>
+            <td>{{ ori.mco }}</td>
+            <td>{{ ori.status }}</td>
+            <td>
+                <form method="POST" action="{% url 'crmApp:update_booking_status' %}">
                     {% csrf_token %}
-                    <div style="display: flex; flex-wrap: wrap; ">
-                        <div class="mb-3 me-3" style="flex: 1; ">
-                            <label for="bookingId" class="form-label"><i class="bi bi-hash" ></i> Booking ID</label>
-                            <input type="text" class="form-control" id="bookingId" name="bookingId" onchange="fetchPassengerData()">
-                        </div>
-                        <div class="mb-3 me-3" style="flex: 1;">
-                            <label for="passengerName" class="form-label"><i class="bi bi-person"></i> Passenger Name</label>
-                            <input type="text" class="form-control" id="passengerName" name="passengerName">
-                        </div>
-                        <div class="mb-3 me-3" style="flex: 1;">
-                            <label for="phoneNumber" class="form-label"><i class="bi bi-telephone"></i> Phone Number</label>
-                            <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber">
-                        </div>
-                        <div class="mb-3 me-3" style="flex: 1;">
-                            <label for="email" class="form-label"><i class="bi bi-envelope"></i> Email</label>
-                            <input type="email" class="form-control" id="email" name="email" >
-                        </div>
-                        <div class="mb-3 me-3" style="flex: 1;">
-                            <label for="refundType" class="form-label"><i class="bi bi-arrow-repeat"></i> Refund Type</label>
-                            <select class="form-select" id="refundType" name="refundType">
-                                <option value="" disabled>Refund type</option>
-                                <option value="full">Full Refund</option>
-                                <option value="partial">Partial Refund</option>
-                            </select>
-                        </div>
-                        <div class="mb-3 me-3" style="flex: 1;">
-                            <label for="refundAmount" class="form-label"><i class="bi bi-currency-dollar"></i> Refund Amount</label>
-                            <input type="text" class="form-control" id="refundAmount" name="refundAmount">
-                        </div>
-                        <div class="mb-3 me-3" style="flex: 1;">
-                            <label for="refundReason" class="form-label"><i class="bi bi-chat-square-dots"></i> Refund Reason</label>
-                            <textarea class="form-control" id="refundReason" name="refundReason"></textarea>
-                        </div>
-                        <div class="mb-3" style="flex: 1;">
-                            <button type="submit" class="btn btn-primary" style="margin-top: 32px; background-color: blue!important">Submit</button>
-                        </div>
-                    </div>
-                    </form>
-                </div>
+                    <input type="hidden" name="booking_id" value="{{ ori.booking_id }}">
+                    <select name="status" onchange="this.form.submit()">
+                        <option value="pending" {% if ori.status == 'pending' %} selected {% endif %}>Pending</option>
+                        <option value="inprocess" {% if ori.status == 'inprocess' %} selected {% endif %}>In Process</option>
+                    </select>
+                </form>
+                <button class="btn btn-primary btn-sm"> View</button>
+                <button class="btn btn-info btn-sm">Edit</button>
+                <button class="btn btn-danger btn-sm">Delete</button>
+            </td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+    </tbody>
+</table>
+
+</div>
                 
-                
-                <div id="cancellationForm" class="container hidden">
-                    <!-- Cancellation form content -->
-                    <h2 class="mb-4">Cancellation Form</h2>
-                    <div style="display: flex; flex-wrap: wrap;">
-                        <div class="mb-3 me-3" style="flex: 1;">
-                            <label for="bookingId" class="form-label"><i class="bi bi-hash"></i> Booking ID</label>
-                            <input type="text" class="form-control" id="bookingId" name="bookingId">
-                        </div>
-                        <div class="mb-3 me-3" style="flex: 1;">
-                            <label for="passengerName" class="form-label"><i class="bi bi-person"></i> Passenger Name</label>
-                            <input type="text" class="form-control" id="passengerName" name="passengerName">
-                        </div>
-                        <div class="mb-3 me-3" style="flex: 1;">
-                            <label for="cancellationReason" class="form-label"><i class="bi bi-chat-square-dots"></i> Cancellation Reason</label>
-                            <textarea class="form-control" id="cancellationReason" name="cancellationReason"></textarea>
-                        </div>
-                        <div class="mb-3" style="flex: 1;">
-                            <button type="submit" class="btn btn-primary" style="margin-top: 32px;">Submit</button>
-                        </div>
-                    </div>
-                </div>
-                <div id="changesForm" class="container hidden">
-                    <!-- Changes form content -->
-                    <h2 class="mb-4">Changes Form</h2>
-                    <div style="display: flex; flex-wrap: wrap">
-                        <div class="mb-3 me-3" style="flex: 1;">
-                            <label for="bookingId" class="form-label"><i class="bi bi-hash"></i> Booking ID</label>
-                            <input type="text" class="form-control" id="bookingId" name="bookingId">
-                        </div>
-                        <div class="mb-3 me-3" style="flex: 1;">
-                            <label for="passengerName" class="form-label"><i class="bi bi-person"></i> Passenger Name</label>
-                            <input type="text" class="form-control" id="passengerName" name="passengerName">
-                        </div>
-                        <div class="mb-3 me-3" style="flex: 1;">
-                            <label for="newFlightDetails" class="form-label"><i class="bi bi-clipboard-data"></i> New Flight Details</label>
-                            <input type="text" class="form-control" id="newFlightDetails" name="newFlightDetails">
-                        </div>
-                        <div class="mb-3 me-3" style="flex: 1;">
-                            <label for="newDepartureDate" class="form-label"><i class="bi bi-calendar3"></i> New Departure Date</label>
-                            <input type="date" class="form-control" id="newDepartureDate" name="newDepartureDate">
-                        </div>
-                        <div class="mb-3 me-3" style="flex: 1;">
-                            <label for="newArrivalDate" class="form-label"><i class="bi bi-calendar3"></i> New Arrival Date</label>
-                            <input type="date" class="form-control" id="newArrivalDate" name="newArrivalDate">
-                        </div>
-                        <div class="mb-3" style="flex: 1;">
-                            <button type="submit" class="btn btn-primary" style="margin-top: 32px;">Submit</button>
-                        </div>
-                    </div>
-                </div>
-                
-                <div id="eCreditForm" class="container hidden">
-                    <!-- E-Credit form content -->
-                    <h2 class="mb-4">E-Credit Form</h2>
-                    <div style="display: flex; flex-wrap: wrap">
-                        <div class="mb-3 me-3" style="flex: 1;">
-                            <label for="creditId" class="form-label"><i class="bi bi-credit-card"></i> Credit ID</label>
-                            <input type="text" class="form-control" id="creditId" name="creditId">
-                        </div>
-                        <div class="mb-3 me-3" style="flex: 1;">
-                            <label for="amount" class="form-label"><i class="bi bi-currency-dollar"></i> Amount</label>
-                            <input type="text" class="form-control" id="amount" name="amount">
-                        </div>
-                        <div class="mb-3 me-3" style="flex: 1;">
-                            <label for="expirationDate" class="form-label"><i class="bi bi-calendar3"></i> Expiration Date</label>
-                            <input type="date" class="form-control" id="expirationDate" name="expirationDate">
-                        </div>
-                        <div class="mb-3" style="flex: 1;">
-                            <button type="submit" class="btn btn-primary" style="margin-top: 32px;">Submit</button>
-                        </div>
-                    </div>
-                </div>
-                                              
-                <div class="table-responsive">
-                    <table class="table table-striped" style="font-size: 0.7rem;">
-                        <thead>
-                            <tr>
-                                <th>Booking ID</th>
-                                <th>Passenger Name</th>
-                                <th>Phone Number</th>
-                                <th>Email ID</th>
-                                <th>Flight Details</th>
-                                <th>Trip Type</th>
-                                <th>Ref id</th>
-                                <th>Departure City</th>
-                                <th>Departure Date</th>
-                                <th>Arrival City</th>
-                                <th>Arrival Date</th>
-                                <th>No. of Passengers</th>
-                                <th>Price</th>
-                                <th>MCO</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for ori in original %}
-                            {% if ori.status != 'inprocess' and ori.status != 'confirmed' and ori.status != 'rejected' and ori.status != 'cancelled'%}
-                            <tr>
-                                <td>{{ ori.booking_id }}</td>
-                                <td>{{ ori.passenger_name }}</td>
-                                <td>{{ ori.phone_number }}</td>
-                                <td>{{ ori.email }}</td>
-                                <td>{{ ori.flight_details }}</td>
-                                <td>{{ ori.trip_type }}</td>
-                                <td>{{ ori.reference_id }}</td>
-                                <td>{{ ori.departure }}</td>
-                                <td>{{ ori.departure_date }}</td>
-                                <td>{{ ori.arrival }}</td>
-                                <td>{{ ori.arrival_date }}</td>
-                                <td>{{ ori.num_passengers }}</td>
-                                <td>{{ ori.price }}</td>
-                                <td>{{ ori.mco }}</td>
-                                <td>{{ ori.status }}</td>
-                                <td>
-                                    <form method="POST" action="{% url 'crmApp:update_booking_status' %}">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="booking_id" value="{{ ori.booking_id }}">
-                                        <select name="status" onchange="this.form.submit()">
-                                            <option value="pending" {% if ori.status == 'pending' %} selected {% endif %}>Pending</option>
-                                            <option value="inprocess" {% if ori.status == 'inprocess' %} selected {% endif %}>In Process</option>
-                                        </select>
-                                    </form>
-                                    <button class="btn btn-primary btn-sm"> View</button>
-                                    <button class="btn btn-info btn-sm">Edit</button>
-                                    <button class="btn btn-danger btn-sm">Delete</button>
-                                </td>
-                            </tr>
-                            {% endif %}
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                    
-                </div>
-                
-                
-            
+
     <script>
         window.addEventListener('DOMContentLoaded', function() {
             var selectElement = document.getElementById('actionDropdown');
@@ -415,4 +417,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-eMNCOe7tC1doHpGoJtKh7z7lGz7fuP4F8nfdFvAOA6Gg/z6Y5J6XqqyGXYM2ntXU" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-pzjw8f+ua7Kw1TIq0v8FqFjcJ6pajs/rfdfs3SO+kD4Ck5BdPtF+to8xMp9MvcJ4" crossorigin="anonymous"></script>
-{% endblock %}
+
+
+    {% endblock %}

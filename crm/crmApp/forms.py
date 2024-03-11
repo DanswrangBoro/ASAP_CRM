@@ -8,3 +8,5 @@ class UserCreationForm(forms.Form):
     team = forms.CharField(max_length=100)
     password = forms.CharField(widget=forms.PasswordInput)
     confirmPassword = forms.CharField(widget=forms.PasswordInput)
+
+
