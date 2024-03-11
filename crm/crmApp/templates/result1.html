@@ -154,6 +154,7 @@
                                     {% for flight in flights %}
                                     <tr>
                                         <td>{{ flight.itineraries.0.segments.0.carrierCode }}</td>
+                                        <td>{{ flight.itineraries.0.segments.0.carrierCode }}</td>
                                         <td>{{ flight.itineraries.0.segments.0.departure.at }}</td>
                                         <td>{{ flight.itineraries.0.segments.0.arrival.at }}</td>
                                         <td>{{ flight.price.total }}</td>

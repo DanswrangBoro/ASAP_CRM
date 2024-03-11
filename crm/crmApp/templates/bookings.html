@@ -115,7 +115,7 @@
                                 <option value="newBooking" enabled>New Booking</option>
                                 <option value="changes">Changes</option>
                                 <option value="eCredit">E-Credit</option>
-                                {% comment %} <option value="cancellation">Cancellation</option> {% endcomment %}
+                                <!-- {% comment %} <option value="cancellation">Cancellation</option> {% endcomment %} -->
                                 <option value="refunds">Refunds</option>
                             </select>
                         </div>
@@ -130,11 +130,13 @@
                             <div class="mb-3 me-3" style="flex: 1;">
                                 <label for="fromLocation" class="form-label"><i class="bi bi-geo-alt"></i> From</label>
                                 <input type="text" class="form-control" id="fromLocation" name="fromLocation">
+                                <input type="hidden" class="form-control" id="from" name="from">
                                 <ul id="fromLocationList" class="location-list"></ul>
                             </div>
                             <div class="mb-3 me-3" style="flex: 1;">
                                 <label for="toLocation" class="form-label"><i class="bi bi-geo-alt"></i> To</label>
                                 <input type="text" class="form-control" id="toLocation" name="toLocation">
+                                <input type="hidden" class="form-control" id="to" name="to">
                                 <ul id="toLocationList" class="location-list"></ul>
                             </div>
                             <div class="mb-3 me-3" style="flex: 1;">
@@ -155,9 +157,10 @@
                             <div class="mb-3 me-3" style="flex: 1;">
                                 <label for="flightClass" class="form-label"><i class="bi bi-geo-alt"></i> Flight Class</label>
                                 <select class="form-select" id="flightClass" name="flightClass">
-                                    <option value="economy">Economy</option>
-                                    <option value="business">Business</option>
-                                    <option value="first">First</option>
+                                    <option value="ECONOMY">Economy</option>
+                                    <option value="PREMIUM ECONOMY">Premium Economy</option>
+                                    <option value="BUSINESS">Business</option>
+                                    <option value="FIRST">First</option>
                                 </select>
                             </div>
                             <div class="mb-3 me-3" style="flex: 1;">
@@ -169,6 +172,7 @@
                             </div>
                         </div>
                     </form>
+                    
                 </div>
                 
                 <div id="refundForm" class="container hidden">
@@ -177,11 +181,11 @@
                         <!-- Refund form content -->
                     <h2 class="mb-4">Refund Form</h2>
                     <!-- In your 'booking' template -->
-                    {% comment %} {% if request.GET.success_message %}
+                    <!-- {% comment %} {% if request.GET.success_message %}
                         <div class="alert alert-success">
                             {{ request.GET.success_message }}
                         </div>
-                    {% endif %} {% endcomment %}
+                    {% endif %} {% endcomment %} -->
                     <form id="refundForm" method="post" action="{% url 'crmApp:submit_refund_form' %}">
                     {% csrf_token %}
                     <div style="display: flex; flex-wrap: wrap;">
@@ -466,45 +470,51 @@
             document.getElementById('bookingId').addEventListener('input', fetchPassengerData);
         </script>
             <script>
-            $(document).ready(function () {
-                $('#fromLocation, #toLocation').on('input', function () {
-                    const inputField = $(this);
-                    const inputVal = inputField.val().trim();
-    
-                    if (inputVal.length >= 3) {
-                        $.ajax({
-                            url: '/get_location_suggestions/',
-                            method: 'GET',
-                            data: {
-                                keyword: inputVal
-                            },
-                            success: function (response) {
-                                const locationList = inputField.attr('id') === 'fromLocation' ? $('#fromLocationList') : $('#toLocationList');
-                                locationList.empty();
-    
-                                response.locations.forEach(function (location) {
-                                    locationList.append(`<li>${location.name} (${location.iataCode}) - ${location.cityName} (${location.airportName})</li>`);
+                    $(document).ready(function () {
+                        $('#fromLocation, #toLocation').on('input', function () {
+                            const inputField = $(this);
+                            const inputVal = inputField.val().trim();
+
+                            if (inputVal.length >= 3) {
+                                $.ajax({
+                                    url: '/get_location_suggestions/',
+                                    method: 'GET',
+                                    data: {
+                                        keyword: inputVal
+                                    },
+                                    success: function (response) {
+                                        const locationList = inputField.attr('id') === 'fromLocation' ? $('#fromLocationList') : $('#toLocationList');
+                                        locationList.empty();
+
+                                        response.locations.forEach(function (location) {
+                                            locationList.append(`<li data-iata="${location.iataCode}">${location.name} (${location.iataCode}) - ${location.cityName} </li>`);
+                                        });
+
+                                        locationList.show();
+                                    },
+                                    error: function (xhr, status, error) {
+                                        console.error('Error fetching locations:', error);
+                                    }
                                 });
-    
-                                locationList.show();
-                            },
-                            error: function (xhr, status, error) {
-                                console.error('Error fetching locations:', error);
+                            } else {
+                                $('.location-list').hide();
                             }
                         });
-                    } else {
+
+                        $(document).on('click', '.location-list li', function () {
+                        const selectedLocation = $(this).text();
+                        const iataCode = $(this).data('iata');
+                        const inputField = $(this).closest('.mb-3').find('input');
+
+                        // Set the value of the input field with the airport name
+                        inputField.val(selectedLocation);
+                        
+                        // Set the value of the hidden input field with the IATA code
+                        inputField.siblings("input[type='hidden']").val(iataCode);
+
                         $('.location-list').hide();
-                    }
-                });
-    
-                $(document).on('click', '.location-list li', function () {
-                    const selectedLocation = $(this).text();
-                    const inputField = $(this).closest('.mb-3').find('input');
-    
-                    inputField.val(selectedLocation);
-                    $('.location-list').hide();
-                });
-            });
+                    });
+                    });
         </script>
         
 
