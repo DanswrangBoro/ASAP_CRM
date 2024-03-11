@@ -33,7 +33,7 @@ def get_location_suggestions(request):
     )
 
     try:
-        response = amadeus.reference_data.locations.get(keyword=keyword, subType='CITY')
+        response = amadeus.reference_data.locations.get(keyword=keyword, subType='AIRPORT')
 
         locations = []
         for location in response.data:
@@ -53,25 +53,75 @@ def get_location_suggestions(request):
 def flight_results(request):
     if request.method == 'GET':
         # Get form data
-        from_location = request.GET.get('fromLocation')
-        to_location = request.GET.get('toLocation')
+        from_location = request.GET.get('from')
+        to_location = request.GET.get('to')
         departure_date = request.GET.get('departureDate')
+        return_date = request.GET.get('returnDate')
+        print("return",return_date)
+        adults = request.GET.get('passengerCount')
+        child = 0
+        infants = 0
+        class_type = request.GET.get('flightClass')
+
+        print("From Location:", from_location)
+        print("To Location:", to_location)
+        print("Departure Date:", departure_date)
+        print("Adults:", adults)
+        print("Child:", child)
+        print("Infants:", infants)
+        print("Class Type:", class_type)
 
         # Query Amadeus for flight data
         try:
-            response = amadeus.shopping.flight_offers_search.get(
+            print("inside try")
+            if return_date == "":
+                response = amadeus.shopping.flight_offers_search.get(
+                originLocationCode="GAU",
+                destinationLocationCode="DEL",
+                departureDate=departure_date,
+                adults=adults,
+                children=child,
+                infants=infants,
+                travelClass=class_type
+                ).data
+                # Store the response as JSON format
+                context = {
+                    "flights" : response
+                }
+                print("something went wrong")
+
+            else:
+                response = amadeus.shopping.flight_offers_search.get(
                 originLocationCode=from_location,
                 destinationLocationCode=to_location,
-                departureDate=departure_date
-            )
-            # Store the response as JSON format
-            response_json = json.dumps(response.data)
+                departureDate=departure_date,
+                adults=adults,
+                children=child,
+                infants=infants,
+                travelClass=class_type
+                ).data
+
+                response_return = amadeus.shopping.flight_offers_search.get(
+                originLocationCode=to_location,
+                destinationLocationCode=from_location,
+                departureDate=return_date,
+                adults=adults,
+                children=child,
+                infants=infants,
+                travelClass=class_type
+                ).data
+                # Store the response as JSON format
+                context = {
+                    "flights" : response,
+                    "flights_return": response_return
+                }
             # Pass the stringified JSON data to the template
-            return render(request, 'result.html', {'flights': response_json})
+            print(context)
+            return render(request, 'result1.html', context)
         except ResponseError as error:
             return render(request, 'error.html', {'error': error})
     else:
-        return render(request, 'result.html')  # Render an empty template for other request methods
+        return render(request, 'result1.html')  # Render an empty template for other request methods
     
 # def flight_results(request):
 #     from_location = request.GET.get('fromLocation', '')
@@ -156,10 +206,14 @@ def total_booking(request):
     }
     return render(request, "total_booking.html", context)
 
+# =================================================================================dashboard======================================
 
+def dashboard(request):
+    return render(request,'dashboard.html')
+# =================================================================================end dashboard==================================
 
 def total_user(request):
-    user_data = User.objects.all()  # Fetch all User objects
+    user_data = CustomUser.objects.all()  # Fetch all User objects
     context = {
         "users": user_data,  # Rename the context variable to avoid confusion
     }
@@ -390,50 +444,77 @@ def update_refund_status(request):
 
 
 # =================================================create user====================================================
-from .models import User
 from django.contrib import messages
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.hashers import make_password
 
-@csrf_exempt
-@require_http_methods(["GET", "POST"])
+# @csrf_exempt
+# @require_http_methods(["GET", "POST"])
+# def create_user(request):
+#     if request.method == 'POST':
+#         user_name = request.POST.get('userName')
+#         email = request.POST.get('email')
+#         phone_number = request.POST.get('phoneNumber')
+#         role = request.POST.get('role')
+#         team = request.POST.get('team')
+#         password = request.POST.get('password')
+#         confirm_password = request.POST.get('confirmPassword')
+
+#         # Check if passwords match
+#         if password != confirm_password:
+#             messages.error(request, 'Passwords do not match')
+#         else:
+#             # Hash the password
+#             hashed_password = make_password(password)
+
+#             # Create user instance
+#             new_user = Person(
+#                 user_name=user_name,
+#                 email=email,
+#                 phone_number=phone_number,
+#                 role=role,
+#                 team=team,
+#                 password=hashed_password
+#             )
+#             try:
+#                 # Save user to database
+#                 new_user.save()
+#                 messages.success(request, 'User created successfully')
+#             except Exception as e:
+#                 # Handle any database or validation errors
+#                 messages.error(request, f'Failed to create user: {str(e)}')
+
+#         return redirect('crmApp:create_user')  
+
+#     return render(request, 'total_users.html')
+
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
+from .forms import UserCreationForm  # Import your form
+from .models import CustomUser # Import your custom user model
+
 def create_user(request):
     if request.method == 'POST':
-        user_name = request.POST.get('userName')
-        email = request.POST.get('email')
-        phone_number = request.POST.get('phoneNumber')
-        role = request.POST.get('role')
-        team = request.POST.get('team')
-        password = request.POST.get('password')
-        confirm_password = request.POST.get('confirmPassword')
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            username = form.cleaned_data['userName']
+            phoneNumber = form.cleaned_data['phoneNumber']
+            role = form.cleaned_data['role']
+            team = form.cleaned_data['team']
+            password = form.cleaned_data['password']
+            confirm_password = form.cleaned_data['confirmPassword']
 
-        # Check if passwords match
-        if password != confirm_password:
-            messages.error(request, 'Passwords do not match')
-        else:
-            # Hash the password
-            hashed_password = make_password(password)
-
-            # Create user instance
-            new_user = User(
-                user_name=user_name,
-                email=email,
-                phone_number=phone_number,
-                role=role,
-                team=team,
-                password=hashed_password
-            )
-            try:
-                # Save user to database
-                new_user.save()
-                messages.success(request, 'User created successfully')
-            except Exception as e:
-                # Handle any database or validation errors
-                messages.error(request, f'Failed to create user: {str(e)}')
-
-        return redirect('crmApp:create_user')  
-
-    return render(request, 'total_users.html')
+            if password == confirm_password:
+                user = CustomUser.objects.create_user(email=email, username=username, phoneNumber=phoneNumber, role=role, team=team, password=password)
+                user.save()
+                return redirect('crmApp:total_user')  # Redirect to login page after user creation
+            else:
+                # Handle password mismatch error
+                pass
+    else:
+        form = UserCreationForm()
+    return render(request, 'total_users.html', {'form': form})
 
 
 # ==========================================================login===============================
@@ -475,9 +556,8 @@ def create_user(request):
 #     return render(request, 'login.html', {'error_message': error_message})
 
 from django.contrib.auth import authenticate, login
-from django.contrib.auth import login
 from django.shortcuts import render, redirect
-from .models import User
+from .models import CustomUser  # Import your custom user model
 
 def login_view(request):
     error_message = None
@@ -493,23 +573,27 @@ def login_view(request):
                 login(request, user)
                 request.session['userN'] = user.username
                 print(request.session['userN'])
-                return redirect('crmApp:base')  # Redirect to base URL after successful login
+                return redirect('crmApp:dashboard')  # Redirect to base URL after successful login
             else:
                 error_message = 'Invalid username or password'
         else:
             # Check if the user with specified role exists
             try:
-                user = User.objects.get(user_name=username, role=role, password=password)
-                if user.password == password:
-                    if user.blocked:
-                        error_message = 'This user is blocked'
+                # Authenticate user using CustomUser model
+                user = authenticate(request, username=username, password=password)
+                if user is not None:
+                    if user.role == role:
+                        if user.is_active:  # Check if user is not blocked
+                            login(request, user)
+                            request.session['userN'] = user.username
+                            return redirect('crmApp:dashboard')  # Redirect to base URL after successful login
+                        else:
+                            error_message = 'This user is blocked'
                     else:
-                        login(request, user)
-                        request.session['userN'] = user.user_name
-                        return redirect('crmApp:base')  # Redirect to base URL after successful login
+                        error_message = 'User with specified role not found'
                 else:
-                    error_message = 'Invalid password'
-            except User.DoesNotExist:
+                    error_message = 'Invalid username or password'
+            except CustomUser.DoesNotExist:
                 error_message = 'User with specified role not found'
 
     return render(request, 'login.html', {'error_message': error_message})
@@ -529,7 +613,7 @@ def logout_view(request):
 # block user========================================================================================
 
 def block_user(request, user_id):
-    user = User.objects.get(pk=user_id)
+    user = CustomUser.objects.get(pk=user_id)
     user.blocked = not user.blocked  # Toggle block status
     user.save()
     return redirect('crmApp:total_user')
@@ -550,7 +634,7 @@ def update_user(request):
 
         try:
             # Retrieve the user instance from the database using user_id
-            user = User.objects.get(pk=user_id)
+            user = CustomUser.objects.get(pk=user_id)
             # Update user data
             user.user_name = user_name
             user.email = email
@@ -561,7 +645,7 @@ def update_user(request):
             # Save the updated user data
             user.save()
             return HttpResponseRedirect(reverse('crmApp:total_user') + '?success_message=User updated successfully.')
-        except User.DoesNotExist:
+        except CustomUser.DoesNotExist:
             return HttpResponseRedirect(reverse('crmApp:total_user') + '?error_message=User not found.')
     else:
         return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=400)
@@ -594,28 +678,5 @@ def delete_booking(request):
 
 # =========================================================( grant_permission)=============================================
 
-from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
-from django.contrib import messages
-
-def grant_permissions(request):
-    if request.method == 'POST':
-        user_id = request.POST.get('user_id')
-        user = User.objects.get(pk=user_id)
-        privileges = request.POST.getlist('privileges[]')
-        # Here, you would implement your logic to update the user's permissions
-        # For example, you might have a UserProfile model with a ManyToManyField for privileges
-        # userProfile = UserProfile.objects.get(user=user)
-        # userProfile.privileges.clear()
-        # for privilege in privileges:
-        #     userProfile.privileges.add(privilege)
-        # Save the user profile or whatever logic you have
-        
-        messages.success(request, f'Permissions granted successfully for {user.username}')
-        return redirect('some_redirect_view')  # Redirect to a success page or wherever you want to go after granting permissions
-    else:
-        return redirect('some_error_view')  # Redirect to an error page or handle it in your frontend
-
-# Define other views as needed for your application
 
 # ================================================================================end permission===============================

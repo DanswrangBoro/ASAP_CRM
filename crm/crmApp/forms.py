@@ -1,17 +1,10 @@
-# In forms.py
 from django import forms
-from .models import User
 
-class UserCreationForm(forms.ModelForm):
-    password = forms.CharField(label='Password', widget=forms.PasswordInput)
-
-    class Meta:
-        model = User
-        fields = ['email', 'user_name', 'phone_number', 'role', 'team', 'password']
-
-    def save(self, commit=True):
-        user = super().save(commit=False)
-        user.set_password(self.cleaned_data["password"])
-        if commit:
-            user.save()
-        return user
+class UserCreationForm(forms.Form):
+    userName = forms.CharField(max_length=100)
+    email = forms.EmailField()
+    phoneNumber = forms.CharField(max_length=15)
+    role = forms.ChoiceField(choices=[('manager', 'Manager'), ('agent', 'Agent')])
+    team = forms.CharField(max_length=100)
+    password = forms.CharField(widget=forms.PasswordInput)
+    confirmPassword = forms.CharField(widget=forms.PasswordInput)
