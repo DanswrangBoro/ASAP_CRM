@@ -33,7 +33,7 @@ def get_location_suggestions(request):
     )
 
     try:
-        response = amadeus.reference_data.locations.get(keyword=keyword, subType='CITY')
+        response = amadeus.reference_data.locations.get(keyword=keyword, subType='AIRPORT')
 
         locations = []
         for location in response.data:
@@ -53,25 +53,72 @@ def get_location_suggestions(request):
 def flight_results(request):
     if request.method == 'GET':
         # Get form data
-        from_location = request.GET.get('fromLocation')
-        to_location = request.GET.get('toLocation')
+        from_location = request.GET.get('from')
+        to_location = request.GET.get('to')
         departure_date = request.GET.get('departureDate')
+        return_date = request.GET.get('returnDate')
+        adults = request.GET.get('passengerCount')
+        child = 0
+        infants = 0
+        class_type = request.GET.get('flightClass')
+
+        print("From Location:", from_location)
+        print("To Location:", to_location)
+        print("Departure Date:", departure_date)
+        print("Adults:", adults)
+        print("Child:", child)
+        print("Infants:", infants)
+        print("Class Type:", class_type)
 
         # Query Amadeus for flight data
         try:
-            response = amadeus.shopping.flight_offers_search.get(
+            if return_date is None:
+                response = amadeus.shopping.flight_offers_search.get(
                 originLocationCode=from_location,
                 destinationLocationCode=to_location,
-                departureDate=departure_date
-            )
-            # Store the response as JSON format
-            response_json = json.dumps(response.data)
+                departureDate=departure_date,
+                adults=adults,
+                children=child,
+                infants=infants,
+                travelClass=class_type
+                ).data
+                # Store the response as JSON format
+                context = {
+                    "flights" : response
+                }
+
+            else:
+                response = amadeus.shopping.flight_offers_search.get(
+                originLocationCode=from_location,
+                destinationLocationCode=to_location,
+                departureDate=departure_date,
+                adults=adults,
+                children=child,
+                infants=infants,
+                travelClass=class_type
+                ).data
+
+                response_return = amadeus.shopping.flight_offers_search.get(
+                originLocationCode=to_location,
+                destinationLocationCode=from_location,
+                departureDate=return_date,
+                adults=adults,
+                children=child,
+                infants=infants,
+                travelClass=class_type
+                ).data
+                # Store the response as JSON format
+                context = {
+                    "flights" : response,
+                    "flights_return": response_return
+                }
             # Pass the stringified JSON data to the template
-            return render(request, 'result.html', {'flights': response_json})
+            print(context)
+            return render(request, 'result1.html', context)
         except ResponseError as error:
             return render(request, 'error.html', {'error': error})
     else:
-        return render(request, 'result.html')  # Render an empty template for other request methods
+        return render(request, 'result1.html')  # Render an empty template for other request methods
     
 # def flight_results(request):
 #     from_location = request.GET.get('fromLocation', '')
