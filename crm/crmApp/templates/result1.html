@@ -6,6 +6,108 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOu805FkTduG2Fj5z0x6Gl0iXQrQlOQ0gMf5.C3f5z7A" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2aOt/Q==" crossorigin="anonymous" />
     <title>CRM Dashboard</title>
+    <style>
+        $Grayscale1: #F4F5F5;
+$SlateDark: #152835;
+$active-color: #3799CF;
+
+html {
+  background-color: $Grayscale1;  
+  margin: 5em;
+  font-family: Roboto-Regular;
+}
+a {
+  color: $active-color;
+}
+
+i.icon {
+  font-style: normal;
+  font-family: "Egencia-Icons";
+}
+.logo {
+  display: inline-block;
+  width: 11%;
+  text-align: center;
+  padding-right: 24px;
+  img {
+    max-width: 50px;
+  }
+}
+.info {
+  display: inline-block;
+  width: 85%;
+  vertical-align: top;
+}
+.air-desc {
+  display: inline-block;
+  width: 30%;
+  vertical-align: top;
+  div{
+   display: inline-block;
+  }
+}
+
+.air-dur {
+  display: inline-block;
+  vertical-align: top;
+  width: 22.5%;
+}
+
+.box {
+  max-width: 700px;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+  padding: 24px;
+  &.lite {
+  }
+}
+
+.airline {
+  font-size: 13px;
+  color: #8D949A;
+  padding-bottom: 9px;
+}
+
+.time {
+  font-size: 21px;
+  .sm {
+    font-size: 13px;
+  }
+}
+
+.time-arrow {
+  font-size: 13px;
+  color: #C6CACD;
+  padding: 0 12px;
+}
+
+.top {
+  font-size: 15px;
+  color: #8D949A;
+  padding-top: 6px;
+}
+
+.bottom {
+  font-size: 13px;
+  color: #AFB4B9;
+  padding-top: 3px;
+}
+.price {
+  font-size: 21px;
+  color: #202D38;
+  margin-top: -3px;
+}
+.text-center {
+  text-align: center;
+}
+
+.box .hover {
+  display: none;
+}
+.box:hover .hover {
+  display: block;
+}
+    </style>
 </head>
 <body>
     <div class="container-fluid">
@@ -140,29 +242,33 @@
                 <div class="container-fluid">
                     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
                         <h1 class="text-center mt-5">Flight Search Results</h1>
-                        <div class="table-responsive mt-3">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Airline</th>
-                                        <th>Departure</th>
-                                        <th>Arrival</th>
-                                        <th>Price</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for flight in flights %}
-                                    <tr>
-                                        <td>{{ flight.itineraries.0.segments.0.carrierCode }}</td>
-                                        <td>{{ flight.itineraries.0.segments.0.carrierCode }}</td>
-                                        <td>{{ flight.itineraries.0.segments.0.departure.at }}</td>
-                                        <td>{{ flight.itineraries.0.segments.0.arrival.at }}</td>
-                                        <td>{{ flight.price.total }}</td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
+                        <div class="container mt-3">
+                            {% for flight in flights %}
+                            <div class="box">
+                                <div class="airline">{{ flight.itineraries.0.segments.0.carrierCode }}</div>
+                                <div class="air-desc">
+                                    <div class="time">{{ flight.itineraries.0.segments.0.departure.at | date:"h:i A" }}<span class="sm">P</span></div>
+                                    <div class="time-arrow">
+                                        <i class="icon"></i>
+                                    </div>
+                                    <div class="time">{{ flight.itineraries.0.segments.0.arrival.at | date:"h:i A" }}<span class="sm">P</span></div>
+                                </div>
+                                <div class="air-dur">
+                                    <div class="top">10h 45m</div>
+                                    <div class="bottom">{{ flight.itineraries.0.segments.0.departure.iataCode }} - {{ flight.itineraries.0.segments.0.arrival.iataCode }}</div>
+                                </div>
+                                <div class="air-dur">
+                                    <div class="top">10h 45m</div>
+                                </div>
+                                <div class="air-dur text-center">
+                                    <div class="price">{{ flight.price.total }}</div>
+                                    <div class="hover bottom">roundtrip</div>
+                                </div>
+                            </div>
+                            <br>
+                            {% endfor %}
                         </div>
+                                                
                     </main>
                 </div>
                 

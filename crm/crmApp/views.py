@@ -228,12 +228,28 @@ def booking(request):
 
 def refund(request):
     refund_data = Refund.objects.all()
-    booking_data = Booking.objects.all()
     context = {
         "refund": refund_data,
-        "booking": booking_data
     }
     return render(request,"refunds.html",context)
+
+from django.http import JsonResponse
+
+def book_view(request):
+    if request.method == 'GET' and 'booking_id' in request.GET:
+        booking_id = request.GET['booking_id']
+        # Retrieve relevant data based on the booking ID
+        # For example:
+        booking = Booking.objects.get(id=booking_id)
+        data = {
+            'passenger_name': booking.passenger_name,
+            'phone_number': booking.phone_number,
+            # Add other relevant fields here
+        }
+        return JsonResponse(data)
+    else:
+        return JsonResponse({'error': 'Invalid request'})
+
 
 def chargeback(request):
     return render(request,"chargeback.html")
