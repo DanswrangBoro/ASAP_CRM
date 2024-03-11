@@ -9,6 +9,7 @@ app_name = 'crmApp'
 urlpatterns = [
     path('', views.login_view, name='login'),  # Assign 'login' as the name for the login view
     path('base/', views.flight_book, name='base'),
+    path('dashboard/', views.dashboard, name='dashboard'),
     path('total_booking/', views.total_booking, name='total_booking'),
     path('total_user/', views.total_user, name='total_user'),
     path('booking/', views.booking, name='booking'),

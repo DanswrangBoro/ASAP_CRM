@@ -1,514 +1,418 @@
+{% extends 'base.html' %}
 {% load static %}
+{% block content %}
+<style>
+    .hidden {
+        display: none;
+    }
+</style>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOu805FkTduG2Fj5z0x6Gl0iXQrQlOQ0gMf5.C3f5z7A" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2aOt/Q==" crossorigin="anonymous" />
-    <link rel="stylesheet" href="{%  static 'css/base.css'%}">
-    <title>CRM Dashboard</title>
-    <style>
-        .hidden {
-            display: none;
-        }
-    </style>
-</head>
-<body>
-    <div class="container-fluid">
-        <div class="row">
-            <nav class="col-md-2 col-12 d-none d-md-block custom-bg-color sidebar">
-                <div class="position-sticky pt-3">
-                    <!-- User information section -->
-                 <div class="user-info-section text-center">
-                     <!-- User icon -->
-                        <i class="fas fa-user-circle fa-3x user-icon"></i>
-                        <!-- User name -->
-                        <p class="user-name p-0 m-0" style="color: white; font-size:0.7rem; margin-block-end:0em"> <span class="online-dot "></span> Loda Boro</p>
-                            <form action="{% url 'crmApp:logout' %}" method="post">
-                                        {% csrf_token %}
-                                    <li class="nav-item">
-                                             <button class="btn white-btn" type="submit"><i class="fa-solid fa-right-from-bracket"></i></button>
-                                    </li>
-                            </form>
-                    </div>
-                    <div class="container glass-effect">
-                        <ul class="nav flex-column">
-                            <li class="nav-item">
-                                <a class="nav-link active" href="{% url 'crmApp:base' %}">
-                                    <i class="fas fa-tachometer-alt mr-2"></i> Dashboard
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'crmApp:total_booking' %}">
-                                    <i class="fas fa-calendar-check mr-2 "></i> Total Bookings
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'crmApp:total_user' %}">
-                                    <i class="fas fa-users mr-2"></i> Total Users
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'crmApp:booking' %}">
-                                    <i class="fas fa-calendar-times mr-2"></i> Bookings
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'crmApp:refund' %}">
-                                    <i class="fas fa-redo-alt mr-2"></i> Refunds
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'crmApp:chargeback' %}">
-                                    <i class="fas fa-ban mr-2"></i> Chargebacks
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'crmApp:rejected' %}">
-                                    <i class="fas fa-times mr-2"></i> Rejected
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'crmApp:mco' %}">
-                                    <i class="fas fa-id-card-alt mr-2"></i> MCO
-                                </a>
-                            </li>
-                            <!-- New links -->
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'crmApp:cancellation' %}">
-                                    <i class="fas fa-times-circle mr-2"></i> Cancellations
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'crmApp:ecredit' %}">
-                                    <i class="fas fa-credit-card mr-2"></i> E-Credit
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    </div>
-                </nav>
-            
-            <main class="col-md-9 ms-sm-auto col-lg-10 px-4">
-                {% if request.GET.success_message %}
-                    <div class="alert alert-success text-center" id="successMessage">
-                        {{ request.GET.success_message }}
-                    </div>
-                    <script>
-                        // Automatically close the success message after 1 second
-                        setTimeout(function () {
-                            document.getElementById('successMessage').style.display = 'none';
-                        }, 3000);
-                    </script>
-                {% endif %}
-                <h1 class="text-center mt-5">CRM <span>Dash</span>board - New Bookings</h1> 
-                <div class="row justify-content-end">
-                    <div class="col-md-2 float-right">
-                        <div class="dropdown">
-                            <select class="form-select form-select-sm" id="actionDropdown">
-                                <option value="newBooking" enabled>New Booking</option>
-                                <option value="changes">Changes</option>
-                                <option value="eCredit">E-Credit</option>
-                                {% comment %} <option value="cancellation">Cancellation</option> {% endcomment %}
-                                <option value="refunds">Refunds</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                
-                <div id="flightBookingForm" class="container hidden">
-                    <h2 class="mb-4">Flight Booking Form</h2>
-                    <!-- Flight booking form content -->
-                    <form id="flightSearchForm" action="{% url 'crmApp:flight_results' %}" method="GET">
-                        <div style="display: flex; flex-wrap: wrap">
-                            <div class="mb-3 me-3" style="flex: 1;">
-                                <label for="fromLocation" class="form-label"><i class="bi bi-geo-alt"></i> From</label>
-                                <input type="text" class="form-control" id="fromLocation" name="fromLocation">
-                                <ul id="fromLocationList" class="location-list"></ul>
-                            </div>
-                            <div class="mb-3 me-3" style="flex: 1;">
-                                <label for="toLocation" class="form-label"><i class="bi bi-geo-alt"></i> To</label>
-                                <input type="text" class="form-control" id="toLocation" name="toLocation">
-                                <ul id="toLocationList" class="location-list"></ul>
-                            </div>
-                            <div class="mb-3 me-3" style="flex: 1;">
-                                <label for="departureDate" class="form-label"><i class="bi bi-calendar3"></i> Departure Date</label>
-                                <input type="date" class="form-control" id="departureDate" name="departureDate">
-                            </div>
-                            <div class="mb-3 me-3" style="flex: 1;" id="returnDateField">
-                                <label for="returnDate" class="form-label"><i class="bi bi-calendar3"></i> Return Date</label>
-                                <input type="date" class="form-control" id="returnDate" name="returnDate">
-                            </div>
-                            <div class="mb-3 me-3" style="flex: 1;">
-                                <label for="tripType" class="form-label"><i class="bi bi-geo-alt"></i> Trip Type</label>
-                                <select class="form-select" id="tripType" name="tripType">
-                                    <option value="oneWay">One Way</option>
-                                    <option value="roundTrip">Round Trip</option>
-                                </select>
-                            </div>
-                            <div class="mb-3 me-3" style="flex: 1;">
-                                <label for="flightClass" class="form-label"><i class="bi bi-geo-alt"></i> Flight Class</label>
-                                <select class="form-select" id="flightClass" name="flightClass">
-                                    <option value="economy">Economy</option>
-                                    <option value="business">Business</option>
-                                    <option value="first">First</option>
-                                </select>
-                            </div>
-                            <div class="mb-3 me-3" style="flex: 1;">
-                                <label for="passengerCount" class="form-label"><i class="bi bi-geo-alt"></i> Passenger Count</label>
-                                <input type="number" class="form-control" id="passengerCount" name="passengerCount" min="1">
-                            </div>
-                            <div class="mb-3" style="flex: 1;">
-                                <button type="submit" class="btn btn-primary" style="margin-top: 32px;">Search</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                
-                <div id="refundForm" class="container hidden">
-                    <!-- Refund form content -->
-                    <h2 class="mb-4">Refund Form</h2>
-                        <!-- Refund form content -->
-                    <h2 class="mb-4">Refund Form</h2>
-                    <!-- In your 'booking' template -->
-                    {% comment %} {% if request.GET.success_message %}
-                        <div class="alert alert-success">
-                            {{ request.GET.success_message }}
-                        </div>
-                    {% endif %} {% endcomment %}
-                    <form id="refundForm" method="post" action="{% url 'crmApp:submit_refund_form' %}">
-                    {% csrf_token %}
-                    <div style="display: flex; flex-wrap: wrap;">
-                        <div class="mb-3 me-3" style="flex: 1;">
-                            <label for="bookingId" class="form-label"><i class="bi bi-hash"></i> Booking ID</label>
-                            <input type="text" class="form-control" id="bookingId" name="bookingId" onchange="fetchPassengerData()">
-                        </div>
-                        <div class="mb-3 me-3" style="flex: 1;">
-                            <label for="passengerName" class="form-label"><i class="bi bi-person"></i> Passenger Name</label>
-                            <input type="text" class="form-control" id="passengerName" name="passengerName">
-                        </div>
-                        <div class="mb-3 me-3" style="flex: 1;">
-                            <label for="phoneNumber" class="form-label"><i class="bi bi-telephone"></i> Phone Number</label>
-                            <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber">
-                        </div>
-                        <div class="mb-3 me-3" style="flex: 1;">
-                            <label for="email" class="form-label"><i class="bi bi-envelope"></i> Email</label>
-                            <input type="email" class="form-control" id="email" name="email" >
-                        </div>
-                        <div class="mb-3 me-3" style="flex: 1;">
-                            <label for="refundType" class="form-label"><i class="bi bi-arrow-repeat"></i> Refund Type</label>
-                            <select class="form-select" id="refundType" name="refundType">
-                                <option value="" disabled>Refund type</option>
-                                <option value="full">Full Refund</option>
-                                <option value="partial">Partial Refund</option>
-                            </select>
-                        </div>
-                        <div class="mb-3 me-3" style="flex: 1;">
-                            <label for="refundAmount" class="form-label"><i class="bi bi-currency-dollar"></i> Refund Amount</label>
-                            <input type="text" class="form-control" id="refundAmount" name="refundAmount">
-                        </div>
-                        <div class="mb-3 me-3" style="flex: 1;">
-                            <label for="refundReason" class="form-label"><i class="bi bi-chat-square-dots"></i> Refund Reason</label>
-                            <textarea class="form-control" id="refundReason" name="refundReason"></textarea>
-                        </div>
-                        <div class="mb-3" style="flex: 1;">
-                            <button type="submit" class="btn btn-primary" style="margin-top: 32px; background-color: blue!important">Submit</button>
-                        </div>
-                    </div>
-                    </form>
-                </div>
-                
-                
-                <div id="cancellationForm" class="container hidden">
-                    <!-- Cancellation form content -->
-                    <h2 class="mb-4">Cancellation Form</h2>
-                    <div style="display: flex; flex-wrap: wrap;">
-                        <div class="mb-3 me-3" style="flex: 1;">
-                            <label for="bookingId" class="form-label"><i class="bi bi-hash"></i> Booking ID</label>
-                            <input type="text" class="form-control" id="bookingId" name="bookingId">
-                        </div>
-                        <div class="mb-3 me-3" style="flex: 1;">
-                            <label for="passengerName" class="form-label"><i class="bi bi-person"></i> Passenger Name</label>
-                            <input type="text" class="form-control" id="passengerName" name="passengerName">
-                        </div>
-                        <div class="mb-3 me-3" style="flex: 1;">
-                            <label for="cancellationReason" class="form-label"><i class="bi bi-chat-square-dots"></i> Cancellation Reason</label>
-                            <textarea class="form-control" id="cancellationReason" name="cancellationReason"></textarea>
-                        </div>
-                        <div class="mb-3" style="flex: 1;">
-                            <button type="submit" class="btn btn-primary" style="margin-top: 32px;">Submit</button>
-                        </div>
-                    </div>
-                </div>
-                <div id="changesForm" class="container hidden">
-                    <!-- Changes form content -->
-                    <h2 class="mb-4">Changes Form</h2>
-                    <div style="display: flex; flex-wrap: wrap">
-                        <div class="mb-3 me-3" style="flex: 1;">
-                            <label for="bookingId" class="form-label"><i class="bi bi-hash"></i> Booking ID</label>
-                            <input type="text" class="form-control" id="bookingId" name="bookingId">
-                        </div>
-                        <div class="mb-3 me-3" style="flex: 1;">
-                            <label for="passengerName" class="form-label"><i class="bi bi-person"></i> Passenger Name</label>
-                            <input type="text" class="form-control" id="passengerName" name="passengerName">
-                        </div>
-                        <div class="mb-3 me-3" style="flex: 1;">
-                            <label for="newFlightDetails" class="form-label"><i class="bi bi-clipboard-data"></i> New Flight Details</label>
-                            <input type="text" class="form-control" id="newFlightDetails" name="newFlightDetails">
-                        </div>
-                        <div class="mb-3 me-3" style="flex: 1;">
-                            <label for="newDepartureDate" class="form-label"><i class="bi bi-calendar3"></i> New Departure Date</label>
-                            <input type="date" class="form-control" id="newDepartureDate" name="newDepartureDate">
-                        </div>
-                        <div class="mb-3 me-3" style="flex: 1;">
-                            <label for="newArrivalDate" class="form-label"><i class="bi bi-calendar3"></i> New Arrival Date</label>
-                            <input type="date" class="form-control" id="newArrivalDate" name="newArrivalDate">
-                        </div>
-                        <div class="mb-3" style="flex: 1;">
-                            <button type="submit" class="btn btn-primary" style="margin-top: 32px;">Submit</button>
-                        </div>
-                    </div>
-                </div>
-                
-                <div id="eCreditForm" class="container hidden">
-                    <!-- E-Credit form content -->
-                    <h2 class="mb-4">E-Credit Form</h2>
-                    <div style="display: flex; flex-wrap: wrap">
-                        <div class="mb-3 me-3" style="flex: 1;">
-                            <label for="creditId" class="form-label"><i class="bi bi-credit-card"></i> Credit ID</label>
-                            <input type="text" class="form-control" id="creditId" name="creditId">
-                        </div>
-                        <div class="mb-3 me-3" style="flex: 1;">
-                            <label for="amount" class="form-label"><i class="bi bi-currency-dollar"></i> Amount</label>
-                            <input type="text" class="form-control" id="amount" name="amount">
-                        </div>
-                        <div class="mb-3 me-3" style="flex: 1;">
-                            <label for="expirationDate" class="form-label"><i class="bi bi-calendar3"></i> Expiration Date</label>
-                            <input type="date" class="form-control" id="expirationDate" name="expirationDate">
-                        </div>
-                        <div class="mb-3" style="flex: 1;">
-                            <button type="submit" class="btn btn-primary" style="margin-top: 32px;">Submit</button>
-                        </div>
-                    </div>
-                </div>
-                                              
-                <div class="table-responsive">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Booking ID</th>
-                                <th>Passenger Name</th>
-                                <th>Phone Number</th>
-                                <th>Email</th>
-                                <th>Flight Details</th>
-                                <th>Trip Type</th>
-                                <th>Reference id</th>
-                                <th>Departure</th>
-                                <th>Departure Date</th>
-                                <th>Arrival</th>
-                                <th>Arrival Date</th>
-                                <th>No. of Passengers</th>
-                                <th>Price</th>
-                                <th>MCO</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for ori in original %}
-                            {% if ori.status != 'inprocess' and ori.status != 'confirmed' and ori.status != 'rejected' and ori.status != 'cancelled'%}
-                            <tr>
-                                <td>{{ ori.booking_id }}</td>
-                                <td>{{ ori.passenger_name }}</td>
-                                <td>{{ ori.phone_number }}</td>
-                                <td>{{ ori.email }}</td>
-                                <td>{{ ori.flight_details }}</td>
-                                <td>{{ ori.trip_type }}</td>
-                                <td>{{ ori.reference_id }}</td>
-                                <td>{{ ori.departure }}</td>
-                                <td>{{ ori.departure_date }}</td>
-                                <td>{{ ori.arrival }}</td>
-                                <td>{{ ori.arrival_date }}</td>
-                                <td>{{ ori.num_passengers }}</td>
-                                <td>{{ ori.price }}</td>
-                                <td>{{ ori.mco }}</td>
-                                <td>{{ ori.status }}</td>
-                                <td>
-                                    <form method="POST" action="{% url 'crmApp:update_booking_status' %}">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="booking_id" value="{{ ori.booking_id }}">
-                                        <select name="status" onchange="this.form.submit()">
-                                            <option value="pending" {% if ori.status == 'pending' %} selected {% endif %}>Pending</option>
-                                            <option value="inprocess" {% if ori.status == 'inprocess' %} selected {% endif %}>In Process</option>
-                                        </select>
-                                    </form>
-                                    <button class="btn btn-primary btn-sm">View</button>
-                                    <button class="btn btn-info btn-sm">Edit</button>
-                                    <button class="btn btn-danger btn-sm">Delete</button>
-                                </td>
-                            </tr>
-                            {% endif %}
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                    
-                </div>
-                
-                
-                
-            </main>
-        </div>
+{% if request.GET.success_message %}
+    <div class="alert alert-success text-center" id="successMessage">
+        {{ request.GET.success_message }}
     </div>
     <script>
-        window.addEventListener('DOMContentLoaded', function() {
-            var selectElement = document.getElementById('actionDropdown');
-            selectElement.value = 'newBooking';
-            var event = new Event('change');
-            selectElement.dispatchEvent(event);
-        });
-    
-        document.getElementById('actionDropdown').addEventListener('change', function() {
-            var selectedOption = this.value;
-            if (selectedOption === 'newBooking') {
-                document.getElementById('flightBookingForm').classList.remove('hidden');
-                document.getElementById('refundForm').classList.add('hidden');
-                document.getElementById('cancellationForm').classList.add('hidden');
-                document.getElementById('changesForm').classList.add('hidden');
-                document.getElementById('eCreditForm').classList.add('hidden');
-            } else if (selectedOption === 'refunds') {
-                document.getElementById('flightBookingForm').classList.add('hidden');
-                document.getElementById('refundForm').classList.remove('hidden');
-                document.getElementById('cancellationForm').classList.add('hidden');
-                document.getElementById('changesForm').classList.add('hidden');
-                document.getElementById('eCreditForm').classList.add('hidden');
-            } else if (selectedOption === 'cancellation') {
-                document.getElementById('flightBookingForm').classList.add('hidden');
-                document.getElementById('refundForm').classList.add('hidden');
-                document.getElementById('cancellationForm').classList.remove('hidden');
-                document.getElementById('changesForm').classList.add('hidden');
-                document.getElementById('eCreditForm').classList.add('hidden');
-            } else if (selectedOption === 'changes') {
-                document.getElementById('flightBookingForm').classList.add('hidden');
-                document.getElementById('refundForm').classList.add('hidden');
-                document.getElementById('cancellationForm').classList.add('hidden');
-                document.getElementById('changesForm').classList.remove('hidden');
-                document.getElementById('eCreditForm').classList.add('hidden');
-            } else if (selectedOption === 'eCredit') {
-                document.getElementById('flightBookingForm').classList.add('hidden');
-                document.getElementById('refundForm').classList.add('hidden');
-                document.getElementById('cancellationForm').classList.add('hidden');
-                document.getElementById('changesForm').classList.add('hidden');
-                document.getElementById('eCreditForm').classList.remove('hidden');
-            }
-        });
+        // Automatically close the success message after 1 second
+        setTimeout(function () {
+            document.getElementById('successMessage').style.display = 'none';
+        }, 3000);
     </script>
-    
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const tripTypeSelect = document.getElementById('tripType');
-            const returnDateField = document.getElementById('returnDateField');
-    
-            // Function to handle trip type change
-            function handleTripTypeChange() {
-                if (tripTypeSelect.value === 'oneWay') {
-                    returnDateField.style.display = 'none';
-                } else {
-                    returnDateField.style.display = 'block';
-                }
-            }
-    
-            // Trigger trip type change event on page load
-            handleTripTypeChange();
-    
-            // Add event listener for trip type change
-            tripTypeSelect.addEventListener('change', handleTripTypeChange);
-        });
-    </script>
-         <script>
-            // Function to fetch passenger data
-            function fetchPassengerData() {
-                // Get the value from the "Booking ID" field
-                var bookingId = document.getElementById('bookingId').value;
-        
-                // Check if "Booking ID" has a value
-                if (bookingId) {
-                    // Make an AJAX request to the server endpoint with the booking ID
-                    var xhr = new XMLHttpRequest();
-                    xhr.open('GET', '/fetch_passenger_data/?booking_id=' + bookingId, true);
-                    xhr.onreadystatechange = function () {
-                        if (xhr.readyState == 4) {
-                            if (xhr.status == 200) {
-                                // Parse the JSON response
-                                var data = JSON.parse(xhr.responseText);
-        
-                                // Update form fields with the retrieved data
-                                document.getElementById('bookingId').value = data.booking_id;
-                                document.getElementById('passengerName').value = data.passenger_name;
-                                document.getElementById('phoneNumber').value = data.phone_number;
-                                document.getElementById('email').value = data.email;
-                            } else {
-                                console.error('Error fetching passenger data:', xhr.status, xhr.statusText);
-                                // Handle the error, e.g., show an alert to the user
-                            }
-                        }
-                    };
-                    xhr.send();
-                }
-            }
-        
-            // Add an event listener for the "Booking ID" field
-            document.getElementById('bookingId').addEventListener('input', fetchPassengerData);
-        </script>
-            <script>
-            $(document).ready(function () {
-                $('#fromLocation, #toLocation').on('input', function () {
-                    const inputField = $(this);
-                    const inputVal = inputField.val().trim();
-    
-                    if (inputVal.length >= 3) {
-                        $.ajax({
-                            url: '/get_location_suggestions/',
-                            method: 'GET',
-                            data: {
-                                keyword: inputVal
-                            },
-                            success: function (response) {
-                                const locationList = inputField.attr('id') === 'fromLocation' ? $('#fromLocationList') : $('#toLocationList');
-                                locationList.empty();
-    
-                                response.locations.forEach(function (location) {
-                                    locationList.append(`<li>${location.name} (${location.iataCode}) - ${location.cityName} (${location.airportName})</li>`);
-                                });
-    
-                                locationList.show();
-                            },
-                            error: function (xhr, status, error) {
-                                console.error('Error fetching locations:', error);
-                            }
-                        });
-                    } else {
-                        $('.location-list').hide();
-                    }
-                });
-    
-                $(document).on('click', '.location-list li', function () {
-                    const selectedLocation = $(this).text();
-                    const inputField = $(this).closest('.mb-3').find('input');
-    
-                    inputField.val(selectedLocation);
-                    $('.location-list').hide();
-                });
-            });
-        </script>
-        
+{% endif %}
+<h1 class="text-center mt-5">CRM <span>Dash</span>board - New Bookings</h1> 
+<div class="row justify-content-end">
+    <div class="col-md-2 float-right">
+        <div class="dropdown">
+            <select class="form-select form-select-sm" id="actionDropdown">
+                <option value="newBooking" enabled>New Booking</option>
+                <option value="changes">Changes</option>
+                <option value="eCredit">E-Credit</option>
+                {% comment %} <option value="cancellation">Cancellation</option> {% endcomment %}
+                <option value="refunds">Refunds</option>
+            </select>
+        </div>
+    </div>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-eMNCOe7tC1doHpGoJtKh7z7lGz7fuP4F8nfdFvAOA6Gg/z6Y5J6XqqyGXYM2ntXU" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-pzjw8f+ua7Kw1TIq0v8FqFjcJ6pajs/rfdfs3SO+kD4Ck5BdPtF+to8xMp9MvcJ4" crossorigin="anonymous"></script>
-</body>
-</html>
+<div id="flightBookingForm" class="container hidden">
+    <h2 class="mb-4">Flight Booking Form</h2>
+    <!-- Flight booking form content -->
+    <form id="flightSearchForm" action="{% url 'crmApp:flight_results' %}" method="GET">
+        <div style="display: flex; flex-wrap: wrap">
+            <div class="mb-3 me-3" style="flex: 1;">
+                <label for="fromLocation" class="form-label"><i class="bi bi-geo-alt"></i> From</label>
+                <input type="text" class="form-control" id="fromLocation" name="fromLocation">
+                <ul id="fromLocationList" class="location-list"></ul>
+            </div>
+            <div class="mb-3 me-3" style="flex: 1;">
+                <label for="toLocation" class="form-label"><i class="bi bi-geo-alt"></i> To</label>
+                <input type="text" class="form-control" id="toLocation" name="toLocation">
+                <ul id="toLocationList" class="location-list"></ul>
+            </div>
+            <div class="mb-3 me-3" style="flex: 1;">
+                <label for="departureDate" class="form-label"><i class="bi bi-calendar3"></i> Departure Date</label>
+                <input type="date" class="form-control" id="departureDate" name="departureDate">
+            </div>
+            <div class="mb-3 me-3" style="flex: 1;" id="returnDateField">
+                <label for="returnDate" class="form-label"><i class="bi bi-calendar3"></i> Return Date</label>
+                <input type="date" class="form-control" id="returnDate" name="returnDate">
+            </div>
+            <div class="mb-3 me-3" style="flex: 1;">
+                <label for="tripType" class="form-label"><i class="bi bi-geo-alt"></i> Trip Type</label>
+                <select class="form-select" id="tripType" name="tripType">
+                    <option value="oneWay">One Way</option>
+                    <option value="roundTrip">Round Trip</option>
+                </select>
+            </div>
+            <div class="mb-3 me-3" style="flex: 1;">
+                <label for="flightClass" class="form-label"><i class="bi bi-geo-alt"></i> Flight Class</label>
+                <select class="form-select" id="flightClass" name="flightClass">
+                    <option value="economy">Economy</option>
+                    <option value="business">Business</option>
+                    <option value="first">First</option>
+                </select>
+            </div>
+            <div class="mb-3 me-3" style="flex: 1;">
+                <label for="passengerCount" class="form-label"><i class="bi bi-geo-alt"></i> Passenger Count</label>
+                <input type="number" class="form-control" id="passengerCount" name="passengerCount" min="1">
+            </div>
+            <div class="mb-3" style="flex: 1;">
+                <button type="submit" class="btn btn-primary" style="margin-top: 32px;">Search</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div id="refundForm" class="container hidden">
+    <!-- Refund form content -->
+    <h2 class="mb-4">Refund Form</h2>
+    <!-- Refund form content -->
+    <h2 class="mb-4">Refund Form</h2>
+    <!-- In your 'booking' template -->
+    {% comment %} {% if request.GET.success_message %}
+    <div class="alert alert-success">
+        {{ request.GET.success_message }}
+    </div>
+    {% endif %} {% endcomment %}
+    <form id="refundForm" method="post" action="{% url 'crmApp:submit_refund_form' %}">
+        {% csrf_token %}
+        <div style="display: flex; flex-wrap: wrap;">
+            <div class="mb-3 me-3" style="flex: 1;">
+                <label for="bookingId" class="form-label"><i class="bi bi-hash"></i> Booking ID</label>
+                <input type="text" class="form-control" id="bookingId" name="bookingId" onchange="fetchPassengerData()">
+            </div>
+            <div class="mb-3 me-3" style="flex: 1;">
+                <label for="passengerName" class="form-label"><i class="bi bi-person"></i> Passenger Name</label>
+                <input type="text" class="form-control" id="passengerName" name="passengerName">
+            </div>
+            <div class="mb-3 me-3" style="flex: 1;">
+                <label for="phoneNumber" class="form-label"><i class="bi bi-telephone"></i> Phone Number</label>
+                <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber">
+            </div>
+            <div class="mb-3 me-3" style="flex: 1;">
+                <label for="email" class="form-label"><i class="bi bi-envelope"></i> Email</label>
+                <input type="email" class="form-control" id="email" name="email" >
+            </div>
+            <div class="mb-3 me-3" style="flex: 1;">
+                <label for="refundType" class="form-label"><i class="bi bi-arrow-repeat"></i> Refund Type</label>
+                <select class="form-select" id="refundType" name="refundType">
+                    <option value="" disabled>Refund type</option>
+                    <option value="full">Full Refund</option>
+                    <option value="partial">Partial Refund</option>
+                </select>
+            </div>
+            <div class="mb-3 me-3" style="flex: 1;">
+                <label for="refundAmount" class="form-label"><i class="bi bi-currency-dollar"></i> Refund Amount</label>
+                <input type="text" class="form-control" id="refundAmount" name="refundAmount">
+            </div>
+            <div class="mb-3 me-3" style="flex: 1;">
+                <label for="refundReason" class="form-label"><i class="bi bi-chat-square-dots"></i> Refund Reason</label>
+                <textarea class="form-control" id="refundReason" name="refundReason"></textarea>
+            </div>
+            <div class="mb-3" style="flex: 1;">
+                <button type="submit" class="btn btn-primary" style="margin-top: 32px; background-color: blue!important">Submit</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<div id="cancellationForm" class="container hidden">
+    <!-- Cancellation form content -->
+    <h2 class="mb-4">Cancellation Form</h2>
+    <div style="display: flex; flex-wrap: wrap;">
+        <div class="mb-3 me-3" style="flex: 1;">
+            <label for="bookingId" class="form-label"><i class="bi bi-hash"></i> Booking ID</label>
+            <input type="text" class="form-control" id="bookingId" name="bookingId">
+        </div>
+        <div class="mb-3 me-3" style="flex: 1;">
+            <label for="passengerName" class="form-label"><i class="bi bi-person"></i> Passenger Name</label>
+            <input type="text" class="form-control" id="passengerName" name="passengerName">
+        </div>
+        <div class="mb-3 me-3" style="flex: 1;">
+            <label for="cancellationReason" class="form-label"><i class="bi bi-chat-square-dots"></i> Cancellation Reason</label>
+            <textarea class="form-control" id="cancellationReason" name="cancellationReason"></textarea>
+        </div>
+        <div class="mb-3" style="flex: 1;">
+            <button type="submit" class="btn btn-primary" style="margin-top: 32px;">Submit</button>
+        </div>
+    </div>
+</div>
+<div id="changesForm" class="container hidden">
+    <!-- Changes form content -->
+    <h2 class="mb-4">Changes Form</h2>
+    <div style="display: flex; flex-wrap: wrap">
+        <div class="mb-3 me-3" style="flex: 1;">
+            <label for="bookingId" class="form-label"><i class="bi bi-hash"></i> Booking ID</label>
+            <input type="text" class="form-control" id="bookingId" name="bookingId">
+        </div>
+        <div class="mb-3 me-3" style="flex: 1;">
+            <label for="passengerName" class="form-label"><i class="bi bi-person"></i> Passenger Name</label>
+            <input type="text" class="form-control" id="passengerName" name="passengerName">
+        </div>
+        <div class="mb-3 me-3" style="flex: 1;">
+            <label for="newFlightDetails" class="form-label"><i class="bi bi-clipboard-data"></i> New Flight Details</label>
+            <input type="text" class="form-control" id="newFlightDetails" name="newFlightDetails">
+        </div>
+        <div class="mb-3 me-3" style="flex: 1;">
+            <label for="newDepartureDate" class="form-label"><i class="bi bi-calendar3"></i> New Departure Date</label>
+            <input type="date" class="form-control" id="newDepartureDate" name="newDepartureDate">
+        </div>
+        <div class="mb-3 me-3" style="flex: 1;">
+            <label for="newArrivalDate" class="form-label"><i class="bi bi-calendar3"></i> New Arrival Date</label>
+            <input type="date" class="form-control" id="newArrivalDate" name="newArrivalDate">
+        </div>
+        <div class="mb-3" style="flex: 1;">
+            <button type="submit" class="btn btn-primary" style="margin-top: 32px;">Submit</button>
+        </div>
+    </div>
+</div>
+
+<div id="eCreditForm" class="container hidden">
+    <!-- E-Credit form content -->
+    <h2 class="mb-4">E-Credit Form</h2>
+    <div style="display: flex; flex-wrap: wrap">
+        <div class="mb-3 me-3" style="flex: 1;">
+            <label for="creditId" class="form-label"><i class="bi bi-credit-card"></i> Credit ID</label>
+            <input type="text" class="form-control" id="creditId" name="creditId">
+        </div>
+        <div class="mb-3 me-3" style="flex: 1;">
+            <label for="amount" class="form-label"><i class="bi bi-currency-dollar"></i> Amount</label>
+            <input type="text" class="form-control" id="amount" name="amount">
+        </div>
+        <div class="mb-3 me-3" style="flex: 1;">
+            <label for="expirationDate" class="form-label"><i class="bi bi-calendar3"></i> Expiration Date</label>
+            <input type="date" class="form-control" id="expirationDate" name="expirationDate">
+        </div>
+        <div class="mb-3" style="flex: 1;">
+            <button type="submit" class="btn btn-primary" style="margin-top: 32px;">Submit</button>
+        </div>
+    </div>
+</div>
+                        
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Booking ID</th>
+                <th>Passenger Name</th>
+                <th>Phone Number</th>
+                <th>Email</th>
+                <th>Flight Details</th>
+                <th>Trip Type</th>
+                <th>Reference id</th>
+                <th>Departure</th>
+                <th>Departure Date</th>
+                <th>Arrival</th>
+                <th>Arrival Date</th>
+                <th>No. of Passengers</th>
+                <th>Price</th>
+                <th>MCO</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ori in original %}
+            {% if ori.status != 'inprocess' and ori.status != 'confirmed' and ori.status != 'rejected' and ori.status != 'cancelled'%}
+            <tr>
+                <td>{{ ori.booking_id }}</td>
+                <td>{{ ori.passenger_name }}</td>
+                <td>{{ ori.phone_number }}</td>
+                <td>{{ ori.email }}</td>
+                <td>{{ ori.flight_details }}</td>
+                <td>{{ ori.trip_type }}</td>
+                <td>{{ ori.reference_id }}</td>
+                <td>{{ ori.departure }}</td>
+                <td>{{ ori.departure_date }}</td>
+                <td>{{ ori.arrival }}</td>
+                <td>{{ ori.arrival_date }}</td>
+                <td>{{ ori.num_passengers }}</td>
+                <td>{{ ori.price }}</td>
+                <td>{{ ori.mco }}</td>
+                <td>{{ ori.status }}</td>
+                <td>
+                    <form method="POST" action="{% url 'crmApp:update_booking_status' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="booking_id" value="{{ ori.booking_id }}">
+                        <select name="status" onchange="this.form.submit()">
+                            <option value="pending" {% if ori.status == 'pending' %} selected {% endif %}>Pending</option>
+                            <option value="inprocess" {% if ori.status == 'inprocess' %} selected {% endif %}>In Process</option>
+                        </select>
+                    </form>
+                    <button class="btn btn-primary btn-sm">View</button>
+                    <button class="btn btn-info btn-sm">Edit</button>
+                    <button class="btn btn-danger btn-sm">Delete</button>
+                </td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<script>
+    window.addEventListener('DOMContentLoaded', function() {
+        var selectElement = document.getElementById('actionDropdown');
+        selectElement.value = 'newBooking';
+        var event = new Event('change');
+        selectElement.dispatchEvent(event);
+    });
+
+    document.getElementById('actionDropdown').addEventListener('change', function() {
+        var selectedOption = this.value;
+        if (selectedOption === 'newBooking') {
+            document.getElementById('flightBookingForm').classList.remove('hidden');
+            document.getElementById('refundForm').classList.add('hidden');
+            document.getElementById('cancellationForm').classList.add('hidden');
+            document.getElementById('changesForm').classList.add('hidden');
+            document.getElementById('eCreditForm').classList.add('hidden');
+        } else if (selectedOption === 'refunds') {
+            document.getElementById('flightBookingForm').classList.add('hidden');
+            document.getElementById('refundForm').classList.remove('hidden');
+            document.getElementById('cancellationForm').classList.add('hidden');
+            document.getElementById('changesForm').classList.add('hidden');
+            document.getElementById('eCreditForm').classList.add('hidden');
+        } else if (selectedOption === 'cancellation') {
+            document.getElementById('flightBookingForm').classList.add('hidden');
+            document.getElementById('refundForm').classList.add('hidden');
+            document.getElementById('cancellationForm').classList.remove('hidden');
+            document.getElementById('changesForm').classList.add('hidden');
+            document.getElementById('eCreditForm').classList.add('hidden');
+        } else if (selectedOption === 'changes') {
+            document.getElementById('flightBookingForm').classList.add('hidden');
+            document.getElementById('refundForm').classList.add('hidden');
+            document.getElementById('cancellationForm').classList.add('hidden');
+            document.getElementById('changesForm').classList.remove('hidden');
+            document.getElementById('eCreditForm').classList.add('hidden');
+        } else if (selectedOption === 'eCredit') {
+            document.getElementById('flightBookingForm').classList.add('hidden');
+            document.getElementById('refundForm').classList.add('hidden');
+            document.getElementById('cancellationForm').classList.add('hidden');
+            document.getElementById('changesForm').classList.add('hidden');
+            document.getElementById('eCreditForm').classList.remove('hidden');
+        }
+    });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const tripTypeSelect = document.getElementById('tripType');
+        const returnDateField = document.getElementById('returnDateField');
+
+        // Function to handle trip type change
+        function handleTripTypeChange() {
+            if (tripTypeSelect.value === 'oneWay') {
+                returnDateField.style.display = 'none';
+            } else {
+                returnDateField.style.display = 'block';
+            }
+        }
+
+        // Trigger trip type change event on page load
+        handleTripTypeChange();
+
+        // Add event listener for trip type change
+        tripTypeSelect.addEventListener('change', handleTripTypeChange);
+    });
+</script>
+     <script>
+        // Function to fetch passenger data
+        function fetchPassengerData() {
+            // Get the value from the "Booking ID" field
+            var bookingId = document.getElementById('bookingId').value;
+    
+            // Check if "Booking ID" has a value
+            if (bookingId) {
+                // Make an AJAX request to the server endpoint with the booking ID
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', '/fetch_passenger_data/?booking_id=' + bookingId, true);
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState == 4) {
+                        if (xhr.status == 200) {
+                            // Parse the JSON response
+                            var data = JSON.parse(xhr.responseText);
+    
+                            // Update form fields with the retrieved data
+                            document.getElementById('bookingId').value = data.booking_id;
+                            document.getElementById('passengerName').value = data.passenger_name;
+                            document.getElementById('phoneNumber').value = data.phone_number;
+                            document.getElementById('email').value = data.email;
+                        } else {
+                            console.error('Error fetching passenger data:', xhr.status, xhr.statusText);
+                            // Handle the error, e.g., show an alert to the user
+                        }
+                    }
+                };
+                xhr.send();
+            }
+        }
+    
+        // Add an event listener for the "Booking ID" field
+        document.getElementById('bookingId').addEventListener('input', fetchPassengerData);
+    </script>
+        <script>
+        $(document).ready(function () {
+            $('#fromLocation, #toLocation').on('input', function () {
+                const inputField = $(this);
+                const inputVal = inputField.val().trim();
+
+                if (inputVal.length >= 3) {
+                    $.ajax({
+                        url: '/get_location_suggestions/',
+                        method: 'GET',
+                        data: {
+                            keyword: inputVal
+                        },
+                        success: function (response) {
+                            const locationList = inputField.attr('id') === 'fromLocation' ? $('#fromLocationList') : $('#toLocationList');
+                            locationList.empty();
+
+                            response.locations.forEach(function (location) {
+                                locationList.append(`<li>${location.name} (${location.iataCode}) - ${location.cityName} (${location.airportName})</li>`);
+                            });
+
+                            locationList.show();
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Error fetching locations:', error);
+                        }
+                    });
+                } else {
+                    $('.location-list').hide();
+                }
+            });
+
+            $(document).on('click', '.location-list li', function () {
+                const selectedLocation = $(this).text();
+                const inputField = $(this).closest('.mb-3').find('input');
+                console.log()
+                inputField.val(selectedLocation);
+                $('.location-list').hide();
+            });
+        });
+    </script>
+    
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-eMNCOe7tC1doHpGoJtKh7z7lGz7fuP4F8nfdFvAOA6Gg/z6Y5J6XqqyGXYM2ntXU" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-pzjw8f+ua7Kw1TIq0v8FqFjcJ6pajs/rfdfs3SO+kD4Ck5BdPtF+to8xMp9MvcJ4" crossorigin="anonymous"></script>
+
+{% endblock %}
