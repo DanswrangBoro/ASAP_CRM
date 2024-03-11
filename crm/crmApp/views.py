@@ -156,7 +156,11 @@ def total_booking(request):
     }
     return render(request, "total_booking.html", context)
 
+# =================================================================================dashboard======================================
 
+def dashboard(request):
+    return render(request,'dashboard.html')
+# =================================================================================end dashboard==================================
 
 def total_user(request):
     user_data = User.objects.all()  # Fetch all User objects
@@ -493,7 +497,7 @@ def login_view(request):
                 login(request, user)
                 request.session['userN'] = user.username
                 print(request.session['userN'])
-                return redirect('crmApp:base')  # Redirect to base URL after successful login
+                return redirect('crmApp:dashboard')  # Redirect to base URL after successful login
             else:
                 error_message = 'Invalid username or password'
         else:
@@ -506,7 +510,7 @@ def login_view(request):
                     else:
                         login(request, user)
                         request.session['userN'] = user.user_name
-                        return redirect('crmApp:base')  # Redirect to base URL after successful login
+                        return redirect('crmApp:dashboard')  # Redirect to base URL after successful login
                 else:
                     error_message = 'Invalid password'
             except User.DoesNotExist:
