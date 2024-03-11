@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, reverse
 from django.http import JsonResponse
-from .models import Booking, Refund
+from .models import Booking, Refund, Person
 from datetime import datetime
 from django.db.models import Sum
 from .models import Refund
@@ -163,7 +163,7 @@ def dashboard(request):
 # =================================================================================end dashboard==================================
 
 def total_user(request):
-    user_data = User.objects.all()  # Fetch all User objects
+    user_data = Person.objects.all()  # Fetch all User objects
     context = {
         "users": user_data,  # Rename the context variable to avoid confusion
     }
@@ -394,7 +394,6 @@ def update_refund_status(request):
 
 
 # =================================================create user====================================================
-from .models import User
 from django.contrib import messages
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.hashers import make_password
@@ -419,7 +418,7 @@ def create_user(request):
             hashed_password = make_password(password)
 
             # Create user instance
-            new_user = User(
+            new_user = Person(
                 user_name=user_name,
                 email=email,
                 phone_number=phone_number,
@@ -481,7 +480,6 @@ def create_user(request):
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import login
 from django.shortcuts import render, redirect
-from .models import User
 
 def login_view(request):
     error_message = None
@@ -503,7 +501,7 @@ def login_view(request):
         else:
             # Check if the user with specified role exists
             try:
-                user = User.objects.get(user_name=username, role=role, password=password)
+                user = Person.objects.get(user_name=username, role=role, password=password)
                 if user.password == password:
                     if user.blocked:
                         error_message = 'This user is blocked'
@@ -513,7 +511,7 @@ def login_view(request):
                         return redirect('crmApp:dashboard')  # Redirect to base URL after successful login
                 else:
                     error_message = 'Invalid password'
-            except User.DoesNotExist:
+            except Person.DoesNotExist:
                 error_message = 'User with specified role not found'
 
     return render(request, 'login.html', {'error_message': error_message})
@@ -599,7 +597,6 @@ def delete_booking(request):
 # =========================================================( grant_permission)=============================================
 
 from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
 from django.contrib import messages
 
 def grant_permissions(request):

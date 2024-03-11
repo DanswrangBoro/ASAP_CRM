@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import Booking, Refund, RejectedBooking
-from .models import User
+from .models import Person
 
 @admin.register(Booking)
 class BookingAdmin(admin.ModelAdmin):
@@ -11,7 +11,7 @@ class BookingAdmin(admin.ModelAdmin):
 class RefundAdmin(admin.ModelAdmin):
     list_display = ['booking_id','passenger_name']
 
-@admin.register(User)
+@admin.register(Person)
 class UserAdmin(admin.ModelAdmin):
     list_display = ('user_name', 'email', 'phone_number', 'role', 'team','password')
 
