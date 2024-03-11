@@ -105,19 +105,19 @@
                             <th>Phone Number</th>
                             <th>Role</th>
                             <th>Team</th>
-                            <th>Password</th>
+                            {% comment %} <th>Password</th> {% endcomment %}
                         </tr>
                     </thead>
                     <tbody>
                         {% for u in users %}
                         <tr>
                             <td>{{ u.id }}</td>
-                            <td>{{ u.user_name }}</td>
+                            <td>{{ u.username }}</td>
                             <td>{{ u.email }}</td>
-                            <td>{{ u.phone_number }}</td>
+                            <td>{{ u.phoneNumber }}</td>
                             <td>{{ u.role }}</td>
                             <td>{{ u.team }}</td>
-                            <td>{{ u.password }}</td>
+                            {% comment %} <td>{{ u.password }}</td> {% endcomment %}
                             <td>
                                 <button class="btn btn-primary btn-sm view-btn">View</button>
                                 <button class="btn btn-info btn-sm edit-btn" data-user-id="{{ u.id }}" data-bs-toggle="modal" data-bs-target="#myModal" data-user-name="{{ u.user_name }}" data-email="{{ u.email }}" data-phone-number="{{ u.phone_number }}" data-role="{{ u.role }}" data-team="{{ u.team }}" data-password="{{ u.password }}">Edit</button>

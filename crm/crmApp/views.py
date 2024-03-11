@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, reverse
 from django.http import JsonResponse
-from .models import Booking, Refund, Person
+from .models import Booking, Refund
 from datetime import datetime
 from django.db.models import Sum
 from .models import Refund
@@ -210,7 +210,7 @@ def dashboard(request):
 # =================================================================================end dashboard==================================
 
 def total_user(request):
-    user_data = Person.objects.all()  # Fetch all User objects
+    user_data = CustomUser.objects.all()  # Fetch all User objects
     context = {
         "users": user_data,  # Rename the context variable to avoid confusion
     }
@@ -445,45 +445,73 @@ from django.contrib import messages
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.hashers import make_password
 
-@csrf_exempt
-@require_http_methods(["GET", "POST"])
+# @csrf_exempt
+# @require_http_methods(["GET", "POST"])
+# def create_user(request):
+#     if request.method == 'POST':
+#         user_name = request.POST.get('userName')
+#         email = request.POST.get('email')
+#         phone_number = request.POST.get('phoneNumber')
+#         role = request.POST.get('role')
+#         team = request.POST.get('team')
+#         password = request.POST.get('password')
+#         confirm_password = request.POST.get('confirmPassword')
+
+#         # Check if passwords match
+#         if password != confirm_password:
+#             messages.error(request, 'Passwords do not match')
+#         else:
+#             # Hash the password
+#             hashed_password = make_password(password)
+
+#             # Create user instance
+#             new_user = Person(
+#                 user_name=user_name,
+#                 email=email,
+#                 phone_number=phone_number,
+#                 role=role,
+#                 team=team,
+#                 password=hashed_password
+#             )
+#             try:
+#                 # Save user to database
+#                 new_user.save()
+#                 messages.success(request, 'User created successfully')
+#             except Exception as e:
+#                 # Handle any database or validation errors
+#                 messages.error(request, f'Failed to create user: {str(e)}')
+
+#         return redirect('crmApp:create_user')  
+
+#     return render(request, 'total_users.html')
+
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
+from .forms import UserCreationForm  # Import your form
+from .models import CustomUser # Import your custom user model
+
 def create_user(request):
     if request.method == 'POST':
-        user_name = request.POST.get('userName')
-        email = request.POST.get('email')
-        phone_number = request.POST.get('phoneNumber')
-        role = request.POST.get('role')
-        team = request.POST.get('team')
-        password = request.POST.get('password')
-        confirm_password = request.POST.get('confirmPassword')
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            username = form.cleaned_data['userName']
+            phoneNumber = form.cleaned_data['phoneNumber']
+            role = form.cleaned_data['role']
+            team = form.cleaned_data['team']
+            password = form.cleaned_data['password']
+            confirm_password = form.cleaned_data['confirmPassword']
 
-        # Check if passwords match
-        if password != confirm_password:
-            messages.error(request, 'Passwords do not match')
-        else:
-            # Hash the password
-            hashed_password = make_password(password)
-
-            # Create user instance
-            new_user = Person(
-                user_name=user_name,
-                email=email,
-                phone_number=phone_number,
-                role=role,
-                team=team,
-                password=hashed_password
-            )
-            try:
-                # Save user to database
-                new_user.save()
-                messages.success(request, 'User created successfully')
-            except Exception as e:
-                # Handle any database or validation errors
-                messages.error(request, f'Failed to create user: {str(e)}')
-
-        return redirect('crmApp:create_user')  
-
-    return render(request, 'total_users.html')
+            if password == confirm_password:
+                user = CustomUser.objects.create_user(email=email, username=username, phoneNumber=phoneNumber, role=role, team=team, password=password)
+                user.save()
+                return redirect('crmApp:total_user')  # Redirect to login page after user creation
+            else:
+                # Handle password mismatch error
+                pass
+    else:
+        form = UserCreationForm()
+    return render(request, 'total_users.html', {'form': form})
 
 
 # ==========================================================login===============================
@@ -525,8 +553,8 @@ def create_user(request):
 #     return render(request, 'login.html', {'error_message': error_message})
 
 from django.contrib.auth import authenticate, login
-from django.contrib.auth import login
 from django.shortcuts import render, redirect
+from .models import CustomUser  # Import your custom user model
 
 def login_view(request):
     error_message = None
@@ -548,17 +576,21 @@ def login_view(request):
         else:
             # Check if the user with specified role exists
             try:
-                user = Person.objects.get(user_name=username, role=role, password=password)
-                if user.password == password:
-                    if user.blocked:
-                        error_message = 'This user is blocked'
+                # Authenticate user using CustomUser model
+                user = authenticate(request, username=username, password=password)
+                if user is not None:
+                    if user.role == role:
+                        if user.is_active:  # Check if user is not blocked
+                            login(request, user)
+                            request.session['userN'] = user.username
+                            return redirect('crmApp:dashboard')  # Redirect to base URL after successful login
+                        else:
+                            error_message = 'This user is blocked'
                     else:
-                        login(request, user)
-                        request.session['userN'] = user.user_name
-                        return redirect('crmApp:dashboard')  # Redirect to base URL after successful login
+                        error_message = 'User with specified role not found'
                 else:
-                    error_message = 'Invalid password'
-            except Person.DoesNotExist:
+                    error_message = 'Invalid username or password'
+            except CustomUser.DoesNotExist:
                 error_message = 'User with specified role not found'
 
     return render(request, 'login.html', {'error_message': error_message})
@@ -578,7 +610,7 @@ def logout_view(request):
 # block user========================================================================================
 
 def block_user(request, user_id):
-    user = User.objects.get(pk=user_id)
+    user = CustomUser.objects.get(pk=user_id)
     user.blocked = not user.blocked  # Toggle block status
     user.save()
     return redirect('crmApp:total_user')
@@ -599,7 +631,7 @@ def update_user(request):
 
         try:
             # Retrieve the user instance from the database using user_id
-            user = User.objects.get(pk=user_id)
+            user = CustomUser.objects.get(pk=user_id)
             # Update user data
             user.user_name = user_name
             user.email = email
@@ -610,7 +642,7 @@ def update_user(request):
             # Save the updated user data
             user.save()
             return HttpResponseRedirect(reverse('crmApp:total_user') + '?success_message=User updated successfully.')
-        except User.DoesNotExist:
+        except CustomUser.DoesNotExist:
             return HttpResponseRedirect(reverse('crmApp:total_user') + '?error_message=User not found.')
     else:
         return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=400)
@@ -643,27 +675,5 @@ def delete_booking(request):
 
 # =========================================================( grant_permission)=============================================
 
-from django.shortcuts import render, redirect
-from django.contrib import messages
-
-def grant_permissions(request):
-    if request.method == 'POST':
-        user_id = request.POST.get('user_id')
-        user = User.objects.get(pk=user_id)
-        privileges = request.POST.getlist('privileges[]')
-        # Here, you would implement your logic to update the user's permissions
-        # For example, you might have a UserProfile model with a ManyToManyField for privileges
-        # userProfile = UserProfile.objects.get(user=user)
-        # userProfile.privileges.clear()
-        # for privilege in privileges:
-        #     userProfile.privileges.add(privilege)
-        # Save the user profile or whatever logic you have
-        
-        messages.success(request, f'Permissions granted successfully for {user.username}')
-        return redirect('some_redirect_view')  # Redirect to a success page or wherever you want to go after granting permissions
-    else:
-        return redirect('some_error_view')  # Redirect to an error page or handle it in your frontend
-
-# Define other views as needed for your application
 
 # ================================================================================end permission===============================
