@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 <style>
     .hidden {
         display: none;
@@ -68,9 +70,10 @@
             <div class="mb-3 me-3" style="flex: 1;">
                 <label for="flightClass" class="form-label"><i class="bi bi-geo-alt"></i> Flight Class</label>
                 <select class="form-select" id="flightClass" name="flightClass">
-                    <option value="economy">Economy</option>
-                    <option value="business">Business</option>
-                    <option value="first">First</option>
+                    <option value="ECONOMY">Economy</option>
+                    <option value="PREMIUM ECONOMY">Business</option>
+                    <option value="FIRST">First</option>
+                    <option value="BUSINESS">Business</option>
                 </select>
             </div>
             <div class="mb-3 me-3" style="flex: 1;">

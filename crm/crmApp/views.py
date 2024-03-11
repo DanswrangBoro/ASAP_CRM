@@ -57,6 +57,7 @@ def flight_results(request):
         to_location = request.GET.get('to')
         departure_date = request.GET.get('departureDate')
         return_date = request.GET.get('returnDate')
+        print("return",return_date)
         adults = request.GET.get('passengerCount')
         child = 0
         infants = 0
@@ -72,10 +73,11 @@ def flight_results(request):
 
         # Query Amadeus for flight data
         try:
-            if return_date is None:
+            print("inside try")
+            if return_date == "":
                 response = amadeus.shopping.flight_offers_search.get(
-                originLocationCode=from_location,
-                destinationLocationCode=to_location,
+                originLocationCode="GAU",
+                destinationLocationCode="DEL",
                 departureDate=departure_date,
                 adults=adults,
                 children=child,
@@ -86,6 +88,7 @@ def flight_results(request):
                 context = {
                     "flights" : response
                 }
+                print("something went wrong")
 
             else:
                 response = amadeus.shopping.flight_offers_search.get(
