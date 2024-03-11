@@ -12,6 +12,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOu805FkTduG2Fj5z0x6Gl0iXQrQlOQ0gMf5.C3f5z7A" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2aOt/Q==" crossorigin="anonymous" />
     <link rel="stylesheet" href="{%  static 'css/base.css'%}">
+    <link rel="stylesheet" href="{% static 'js/flight.js'%}">
     <title>CRM Dashboard</title>
     <style>
         .hidden {
@@ -95,7 +96,7 @@
                     </div>
                 </nav>
             
-            <main class="col-md-9 ms-sm-auto col-lg-10 px-4">
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-2">
                 {% if request.GET.success_message %}
                     <div class="alert alert-success text-center" id="successMessage">
                         {{ request.GET.success_message }}
@@ -109,9 +110,9 @@
                 {% endif %}
                 <h1 class="text-center mt-5">CRM <span>Dash</span>board - New Bookings</h1> 
                 <div class="row justify-content-end">
-                    <div class="col-md-2 float-right">
+                    <div class="col-md-2 float-left">
                         <div class="dropdown">
-                            <select class="form-select form-select-sm" id="actionDropdown">
+                            <select class="form-select form-select-sm btn-primary mt-7" id="actionDropdown">
                                 <option value="newBooking" enabled>New Booking</option>
                                 <option value="changes">Changes</option>
                                 <option value="eCredit">E-Credit</option>
@@ -122,29 +123,11 @@
                     </div>
                 </div>
                 
-                <div id="flightBookingForm" class="container hidden">
-                    <h2 class="mb-4">Flight Booking Form</h2>
+                <div id="flightBookingForm" class="container hidden custom-flight">
+                    <h2 class="mb-4" style="font-size: 1.2rem; width: 19% ; height: 100%; color: white;"> Flight Booking Form</h2>
                     <!-- Flight booking form content -->
-                    <form id="flightSearchForm" action="{% url 'crmApp:flight_results' %}" method="GET">
-                        <div style="display: flex; flex-wrap: wrap">
-                            <div class="mb-3 me-3" style="flex: 1;">
-                                <label for="fromLocation" class="form-label"><i class="bi bi-geo-alt"></i> From</label>
-                                <input type="text" class="form-control" id="fromLocation" name="fromLocation">
-                                <ul id="fromLocationList" class="location-list"></ul>
-                            </div>
-                            <div class="mb-3 me-3" style="flex: 1;">
-                                <label for="toLocation" class="form-label"><i class="bi bi-geo-alt"></i> To</label>
-                                <input type="text" class="form-control" id="toLocation" name="toLocation">
-                                <ul id="toLocationList" class="location-list"></ul>
-                            </div>
-                            <div class="mb-3 me-3" style="flex: 1;">
-                                <label for="departureDate" class="form-label"><i class="bi bi-calendar3"></i> Departure Date</label>
-                                <input type="date" class="form-control" id="departureDate" name="departureDate">
-                            </div>
-                            <div class="mb-3 me-3" style="flex: 1;" id="returnDateField">
-                                <label for="returnDate" class="form-label"><i class="bi bi-calendar3"></i> Return Date</label>
-                                <input type="date" class="form-control" id="returnDate" name="returnDate">
-                            </div>
+                    <form id="flightSearchForm" action="{% url 'crmApp:flight_results' %}" method="GET" >
+                        <div style="display: flex; flex-direction: row; align-items: stretch; font-weight: bold; font-size: 0.7rem; width: 76%;">
                             <div class="mb-3 me-3" style="flex: 1;">
                                 <label for="tripType" class="form-label"><i class="bi bi-geo-alt"></i> Trip Type</label>
                                 <select class="form-select" id="tripType" name="tripType">
@@ -164,8 +147,29 @@
                                 <label for="passengerCount" class="form-label"><i class="bi bi-geo-alt"></i> Passenger Count</label>
                                 <input type="number" class="form-control" id="passengerCount" name="passengerCount" min="1">
                             </div>
+                        </div>
+                        
+                        <div style="display: flex; flex-wrap: wrap; font-size: 0.7rem; font-weight: bold; ">
+                            <div class="mb-3 me-3" style="flex: 1;">
+                                <label for="fromLocation" class="form-label"><i class="bi bi-geo-alt"></i> From</label>
+                                <input type="text" class="form-control" id="fromLocation" name="fromLocation">
+                                <ul id="fromLocationList" class="location-list"></ul>
+                            </div>
+                            <div class="mb-3 me-3" style="flex: 1;">
+                                <label for="toLocation" class="form-label"><i class="bi bi-geo-alt"></i> To</label>
+                                <input type="text" class="form-control" id="toLocation" name="toLocation">
+                                <ul id="toLocationList" class="location-list"></ul>
+                            </div>
+                            <div class="mb-3 me-3" style="flex: 1;">
+                                <label for="departureDate" class="form-label"><i class="bi bi-calendar3"></i> Departure Date</label>
+                                <input type="date" class="form-control" id="departureDate" name="departureDate">
+                            </div>
+                            <div class="mb-3 me-3" style="flex: 1;" id="returnDateField">
+                                <label for="returnDate" class="form-label"><i class="bi bi-calendar3"></i> Return Date</label>
+                                <input type="date" class="form-control" id="returnDate" name="returnDate">
+                            </div>
                             <div class="mb-3" style="flex: 1;">
-                                <button type="submit" class="btn btn-primary" style="margin-top: 32px;">Search</button>
+                                <button type="submit" class="btn btn-primary" style="margin-top: 25px;">Search</button>
                             </div>
                         </div>
                     </form>
@@ -184,9 +188,9 @@
                     {% endif %} {% endcomment %}
                     <form id="refundForm" method="post" action="{% url 'crmApp:submit_refund_form' %}">
                     {% csrf_token %}
-                    <div style="display: flex; flex-wrap: wrap;">
-                        <div class="mb-3 me-3" style="flex: 1;">
-                            <label for="bookingId" class="form-label"><i class="bi bi-hash"></i> Booking ID</label>
+                    <div style="display: flex; flex-wrap: wrap; ">
+                        <div class="mb-3 me-3" style="flex: 1; ">
+                            <label for="bookingId" class="form-label"><i class="bi bi-hash" ></i> Booking ID</label>
                             <input type="text" class="form-control" id="bookingId" name="bookingId" onchange="fetchPassengerData()">
                         </div>
                         <div class="mb-3 me-3" style="flex: 1;">
@@ -299,19 +303,19 @@
                 </div>
                                               
                 <div class="table-responsive">
-                    <table class="table table-striped">
+                    <table class="table table-striped" style="font-size: 0.7rem;">
                         <thead>
                             <tr>
                                 <th>Booking ID</th>
                                 <th>Passenger Name</th>
                                 <th>Phone Number</th>
-                                <th>Email</th>
+                                <th>Email ID</th>
                                 <th>Flight Details</th>
                                 <th>Trip Type</th>
-                                <th>Reference id</th>
-                                <th>Departure</th>
+                                <th>Ref id</th>
+                                <th>Departure City</th>
                                 <th>Departure Date</th>
-                                <th>Arrival</th>
+                                <th>Arrival City</th>
                                 <th>Arrival Date</th>
                                 <th>No. of Passengers</th>
                                 <th>Price</th>
@@ -348,7 +352,7 @@
                                             <option value="inprocess" {% if ori.status == 'inprocess' %} selected {% endif %}>In Process</option>
                                         </select>
                                     </form>
-                                    <button class="btn btn-primary btn-sm">View</button>
+                                    <button class="btn btn-primary btn-sm"> View</button>
                                     <button class="btn btn-info btn-sm">Edit</button>
                                     <button class="btn btn-danger btn-sm">Delete</button>
                                 </td>

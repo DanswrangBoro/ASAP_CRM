@@ -179,12 +179,12 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header  text-center col-custom-color2 mb-0">
-                                <h5 class="card-title">Total Users</h5>
+                                <h5 class="card-title" style="font-size: 0.9rem;">Total Users</h5>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table table-striped">
-                                        <thead>
+                                    <table class="table table-striped " style="width: 100%;">
+                                        <thead style="font-size: 0.8rem; ">
                                             <tr>
                                                 <th>User ID</th>
                                                 <th>Name</th>
@@ -192,10 +192,9 @@
                                                 <th>Phone Number</th>
                                                 <th>Role</th>
                                                 <th>Team</th>
-                                                <th>Password</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody style="font-size: 0.7rem;">
                                             {% for u in users %}
                                             <tr>
                                                 <td>{{ u.id }}</td>
@@ -204,20 +203,22 @@
                                                 <td>{{ u.phone_number }}</td>
                                                 <td>{{ u.role }}</td>
                                                 <td>{{ u.team }}</td>
-                                                <td>{{ u.password }}</td>
                                                 <td>
-                                                    <button class="btn btn-primary btn-sm view-btn">View</button>
-                                                    <button class="btn btn-info btn-sm edit-btn" data-user-id="{{ u.id }}" data-bs-toggle="modal" data-bs-target="#myModal" data-user-name="{{ u.user_name }}" data-email="{{ u.email }}" data-phone-number="{{ u.phone_number }}" data-role="{{ u.role }}" data-team="{{ u.team }}" data-password="{{ u.password }}">Edit</button>
-                                                    <form action="{% url 'crmApp:block_user' u.id %}" method="post">
-                                                        {% csrf_token %}
-                                                        <button type="submit" class="btn btn-danger btn-sm">
-                                                            {% if u.blocked %}
-                                                                Unblock
-                                                            {% else %}
-                                                                Block
-                                                            {% endif %}
-                                                        </button>
-                                                    </form>
+                                                    <div class="d-flex flex-row gap-1">
+                                                        <button class="btn btn-primary btn-sm view-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="View"><i class="fas fa-search"></i></button>
+                                                        <button class="btn btn-info btn-sm edit-btn" data-user-id="{{ u.id }}" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit" data-bs-target="#myModal" data-user-name="{{ u.user_name }}" data-email="{{ u.email }}" data-phone-number="{{ u.phone_number }}" data-role="{{ u.role }}" data-team="{{ u.team }}" data-password="{{ u.password }}"><i class="fas fa-pen"></i></button>
+                                                    
+                                                        <form action="{% url 'crmApp:block_user' u.id %}" method="post">
+                                                            {% csrf_token %}
+                                                            <button type="submit" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="{% if u.blocked %} Unblock {% else %} Block {% endif %}">
+                                                                {% if u.blocked %}
+                                                                    <i class="fas fa-unlock"></i>
+                                                                {% else %}
+                                                                    <i class="fas fa-ban"></i>
+                                                                {% endif %}
+                                                            </button>
+                                                        </form>
+                                                    </div>
                                                 </td>
                                             </tr>
                                             <tr class="privilege-form" style="display: none;">
@@ -284,7 +285,7 @@
                     <div class="modal-content">
                         <!-- Modal Header -->
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Edit User</h5>
+                            <h5 class="modal-title" id="exampleModalLabel"> Edit User</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <!-- Modal Body -->
@@ -415,6 +416,15 @@
             modal.find('#role').val(role);
             modal.find('#team').val(team);
             modal.find('#password').val(password);
+        });
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.7.3/dist/js/bootstrap.min.js"></script>
+    
+    <!-- Initialize Bootstrap tooltips -->
+    <script>
+        $(function () {
+            $('[data-bs-toggle="tooltip"]').tooltip();
         });
     </script>
     

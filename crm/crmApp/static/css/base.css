@@ -3,7 +3,17 @@
     --color-secondary: #1B1A55;
     --color-accent: #535C91;
     --color-background: #9290C3;
+    --color-off-white: 240, 18%, 97%
+    --color-purple: 239, 39%, 45%
+    --color-light-purple: 240, 52%, 94%
+    --color-orange: 13, 94%, 66%
+    --color-dark-orange: 13, 94%, 46%
+    --font-weight-normal: 400
+    --font-weight-medium: 600
+    --font-weight-bold: 700
+    --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1)
 }
+
 
 .nav.flex-column {
     font-size: 14px;
@@ -15,6 +25,7 @@
     padding: 20px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     color: #fff; /* Set text color to white for better visibility */
+    min-height: 100vh;
   }
 
 a{
@@ -40,49 +51,55 @@ main{
     background-color: #A5D7E8;
 }
 .card-with-background {
-    background: linear-gradient(#c1c1c1,#ffffff); /* Add your desired background color class here */
+    background-color: #9FCC2A; /* Add your desired background color class here */
     
     background-size: 100% 100%;
 }
 
 .card-with-background1 {
-    background: linear-gradient(#c0b8b8,#ffffff); /* Add your desired background color class here */
+    background-color: #03A9f4;/* Add your desired background color class here */
     
     background-size: 100% 100%;
 }
 .card-with-background2 {
-    background: linear-gradient( #9d8c8c,#ffffff); /* Add your desired background color class here */
+    background-color:#AB47BC; /* Add your desired background color class here */
     background-size: 100% 100%;
 }
 .card-with-background3 {
-    background: linear-gradient( #b2b2c2,#f0eff0); /* Add your desired background color class here */
+    background-color: #f6a730; /* Add your desired background color class here */
     background-size: 100% 100%;
 }
 .card-with-background4 {
-    background: linear-gradient( #4f5575,#e7e7ed); /* Add your desired background color class here */
+    background-color: #f1721d;/* Add your desired background color class here */
     background-size: 100% 100%;
 }
 .card-with-background5 {
-    background: linear-gradient(#9290C3,#f2ccfd); /* Add your desired background color class here */
+    background-color:rgb(247, 44, 44); /* Add your desired background color class here */
     background-size: 100% 100%;
 }
 
 .card-with-background6 {
-    background: linear-gradient(#ffffff,#9e81a7); /* Add your desired background color class here */
+    background-color: rgb(74, 74, 243); /* Add your desired background color class here */
     background-size: 100% 100%;
 }
 .card-with-background7 {
-    background: linear-gradient(#b8b7d3,#f7f3f8); /* Add your desired background color class here */
+    background: linear-gradient(#c9c9d5,#cabdcd); /* Add your desired background color class here */
     background-size: 100% 100%;
+    font-size: 0.9rem;
 }
 .card-with-background8 {
-    background: linear-gradient(#ececf3,#eeeaef); /* Add your desired background color class here */
+    background: linear-gradient(#c9c9d5,#cabdcd); /* Add your desired background color class here */
     background-size: 100% 100%;
+    font-size: 0.9rem;
+}
+.Title-base{
+    background: linear-gradient(to right, #020024, #090979, #05113d);
 }
 
 .income{
     height: 30%;
     width:20%;
+    opacity: 0.7;
 }
 
 span{
@@ -115,7 +132,12 @@ margin:auto;
     background-color: green; /* Change the color as needed */
     border-radius: 50%;
     margin-left: 5px;
+    margin-right: 5px;
 }
+.btn:hover .tooltip {
+    display: inline-block;
+}
+
 ul, li{
     list-style: none!important;
 }
@@ -126,7 +148,7 @@ ul, li{
 
 /* Apply styles on hover */
 .nav-link:hover {
-    background-color: #090979; /* Change to your desired background color */
+    background-color: #25476A; /* Change to your desired background color */
     color: #fff; /* Change to your desired text color */
 }
 .glass-effect {
@@ -135,6 +157,11 @@ ul, li{
     width: 100%;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
+
+#svgImage {
+    opacity: 0.7; /* Adjust the opacity as needed */
+    transition: opacity 0.3s ease;
+}
 
   /* .white-btn {
     background-color: white;
@@ -149,20 +176,69 @@ ul, li{
 .custom-table1{
     font-size:0.8rem;
 }
+
+/* all table title css */
+
 .card-title{
     margin-bottom:0;
+    color:white;
 }
 
 /* Total booking page css */
 
 .col-custom-total{
     text-align: center;
-    background-color:#0EA293 ;
+    background: linear-gradient(to right, #020024, #090979, #05113d); /* Add linear gradient */
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    color: #fff; /* Set text color to white for better visibility */
 }
-
+.custom-table{
+    font-size: 0.7rem ;
+   }
+.custom-table1{
+       font-size:0.8rem;
+   }
+.card-title{
+       margin-bottom:0;
+   }
 
 /* Total Users CSS */
 
 .col-custom-color2{
-    background-color: #576CBC;
+    background: linear-gradient(to right, #020024, #090979, #05113d); /* Add linear gradient */
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    color: #fff; /* Set text color to white for better visibility */
+
+
+}
+
+/* booking CSS */
+.custom-flight {
+    margin: 0;
+    overflow: hidden;
+    background: radial-gradient(
+      circle,
+      rgb(3, 155, 229) 20%,
+      rgb(1, 51, 75) 120%
+    );
+  }
+
+
+
+  /* charge back CSS */
+
+  .col-custom-charge{
+     background: linear-gradient(to right, #020024, #090979, #05113d);
+  }
+
+  .custom-table-charge{
+    font-size: 0.8rem ;
+   }
+
+   /* Ecredit CSS */
+
+   .btn-hover-zoom:hover {
+    transform: scale(1.1); /* Adjust the scale factor as needed */
 }
