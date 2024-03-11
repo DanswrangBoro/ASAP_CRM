@@ -17,88 +17,83 @@
             <nav class="col-md-2 col-12 d-none d-md-block custom-bg-color sidebar">
                 <div class="position-sticky pt-3">
                     <!-- User information section -->
-                 <div class="user-info-section text-center mb-3">
-                    <!-- User icon -->
-                       <i class="fas fa-user-circle fa-3x user-icon"></i>
-                       <!-- User name -->
-                       <p class="user-name" style="color: white;"> <span class="online-dot"></span>  Your User Name</p>
-                       
-                   </div>
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="{% url 'crmApp:base' %}">
-                                <i class="fas fa-tachometer-alt mr-2"></i> Dashboard
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'crmApp:total_booking' %}">
-                                <i class="fas fa-calendar-check mr-2"></i> Total Bookings
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'crmApp:total_user' %}">
-                                <i class="fas fa-users mr-2"></i> Total Users
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <i class="fas fa-exclamation-triangle mr-2"></i> Status
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'crmApp:booking' %}">
-                                <i class="fas fa-calendar-times mr-2"></i> Bookings
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'crmApp:refund' %}">
-                                <i class="fas fa-redo-alt mr-2"></i> Refunds
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'crmApp:chargeback' %}">
-                                <i class="fas fa-ban mr-2"></i> Chargebacks
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'crmApp:rejected' %}">
-                                <i class="fas fa-times mr-2"></i> Rejected
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'crmApp:mco' %}">
-                                <i class="fas fa-id-card-alt mr-2"></i> MCO
-                            </a>
-                        </li>
-                        <!-- New links -->
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'crmApp:cancellation' %}">
-                                <i class="fas fa-times-circle mr-2"></i> Cancellations
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'crmApp:ecredit' %}">
-                                <i class="fas fa-credit-card mr-2"></i> E-Credit
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <br>
-                <form action="{% url 'crmApp:logout' %}" method="post">
-                    {% csrf_token %}
-                    <li class="nav-item">
-                    <button class="btn btn-danger" type="submit"><i class="fa-solid fa-right-from-bracket"></i>Logout</button>
-                    </li>
-                </form>
-            </nav>
+                 <div class="user-info-section text-center">
+                     <!-- User icon -->
+                        <i class="fas fa-user-circle fa-3x user-icon"></i>
+                        <!-- User name -->
+                        <p class="user-name p-0 m-0" style="color: white; font-size:0.7rem; margin-block-end:0em"> <span class="online-dot "></span> Loda Boro</p>
+                            <form action="{% url 'crmApp:logout' %}" method="post">
+                                        {% csrf_token %}
+                                    <li class="nav-item">
+                                             <button class="btn white-btn" type="submit"><i class="fa-solid fa-right-from-bracket"></i></button>
+                                    </li>
+                            </form>
+                    </div>
+                    <div class="container glass-effect">
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="{% url 'crmApp:base' %}">
+                                    <i class="fas fa-tachometer-alt mr-2"></i> Dashboard
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'crmApp:total_booking' %}">
+                                    <i class="fas fa-calendar-check mr-2 "></i> Total Bookings
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'crmApp:total_user' %}">
+                                    <i class="fas fa-users mr-2"></i> Total Users
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'crmApp:booking' %}">
+                                    <i class="fas fa-calendar-times mr-2"></i> Bookings
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'crmApp:refund' %}">
+                                    <i class="fas fa-redo-alt mr-2"></i> Refunds
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'crmApp:chargeback' %}">
+                                    <i class="fas fa-ban mr-2"></i> Chargebacks
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'crmApp:rejected' %}">
+                                    <i class="fas fa-times mr-2"></i> Rejected
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'crmApp:mco' %}">
+                                    <i class="fas fa-id-card-alt mr-2"></i> MCO
+                                </a>
+                            </li>
+                            <!-- New links -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'crmApp:cancellation' %}">
+                                    <i class="fas fa-times-circle mr-2"></i> Cancellations
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'crmApp:ecredit' %}">
+                                    <i class="fas fa-credit-card mr-2"></i> E-Credit
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    </div>
+                </nav>
             <main class="col-md-9 col-lg-10 px-4">
                 <h1 class="text-center mt-5">CRM <span>Dash</span>board - Total Booking</h1>  <br>
                     <div class="col-md-4">
                         <div class="card">
-                            <div class="card-header">
+                            <div class="card-header col-custom-total mb-0">
                                 <h6 class="card-title">Total Booking</h6>
                             </div>
-                            <div class="card-body">
+                            <div class="card-body custom-table1">
 
                                 <p class="card-text">Total Bookings: ({{ original|length }}) </p>
                                 <p>Total Revenue (in price): {{ total_price }}</p>
@@ -109,30 +104,30 @@
                     </div>
                     <div class="col-md-15">
                         <div class="card">
-                            <div class="card-header">
-                                <h6 class="card-title text-center"><strong>Total Bookings Overview</strong></h6>
+                            <div class="card-header col-custom-total">
+                                <h6 class="card-title text-center">Total Bookings Overview</h6>
                             </div>
-                            <div class="card-body">
+                            <div class="card-body ">
                                 <div class="table-responsive">
-                                    <table class="table table-striped ">
+                                    <table class="table table-striped custom-table ">
                                         <thead>
                                             <tr>
                                                 <th>Booking ID</th>
                                                 <th>Passenger Name</th>
                                                 <th>Phone Number</th>
-                                                <th>Email</th>
+                                                <th>Email ID</th>
                                                 <th>Flight Details</th>
                                                 <th>Trip Type</th>
-                                                <th>Reference id</th>
-                                                <th>Departure</th>
+                                                <th>Ref ID</th>
+                                                <th>Departure City</th>
                                                 <th>Departure Date</th>
-                                                <th>Arrival</th>
+                                                <th>Arrival City</th>
                                                 <th>Arrival Date</th>
                                                 <th>No. of Passengers</th>
                                                 <th>Price</th>
                                                 <th>MCO</th>
+                                                <th>Lead Status</th>
                                                 <th>Status</th>
-                                                <th>Change status</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>

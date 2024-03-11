@@ -1,3 +1,5 @@
+{%load static%}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,139 +8,86 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOu805FkTduG2Fj5z0x6Gl0iXQrQlOQ0gMf5.C3f5z7A" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2aOt/Q==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="{%static 'css/base.css'%}">
     <title>CRM Dashboard</title>
 </head>
 <body>
     <div class="container-fluid">
         <div class="row">
-            <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+            <nav class="col-md-2 col-12 d-none d-md-block custom-bg-color sidebar">
                 <div class="position-sticky pt-3">
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="{% url 'crmApp:base' %}">
-                                <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'crmApp:total_booking' %}">
-                                <i class="fas fa-calendar-check mr-2"></i>Total Bookings
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'crmApp:total_user' %}">
-                                <i class="fas fa-users mr-2"></i>Total Users
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <i class="fas fa-exclamation-triangle mr-2"></i>Status
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'crmApp:booking' %}">
-                                <i class="fas fa-calendar-times mr-2"></i>Bookings
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'crmApp:refund' %}">
-                                <i class="fas fa-redo-alt mr-2"></i>Refunds
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'crmApp:chargeback' %}">
-                                <i class="fas fa-ban mr-2"></i>Chargebacks
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'crmApp:rejected' %}">
-                                <i class="fas fa-times mr-2"></i>Rejected
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'crmApp:mco' %}">
-                                <i class="fas fa-id-card-alt mr-2"></i>MCO
-                            </a>
-                        </li>
-                        <!-- New links -->
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'crmApp:cancellation' %}">
-                                <i class="fas fa-times-circle mr-2"></i>Cancellations
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'crmApp:ecredit' %}">
-                                <i class="fas fa-credit-card mr-2"></i>E-Credit
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-            <main class="col-md-9 col-lg-10">
-               
-                <nav class="navbar navbar-expand-lg navbar-light custom-bg-color1 border-bottom">
-                    <div class="container-fluid">
-                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-                        <div class="collapse navbar-collapse" id="navbarNav">
-                            <ul class="navbar-nav">
-                                <li class="nav-item">
-                                    <a class="nav-link active" aria-current="page" href="#">
-                                        <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{% url 'crmApp:total_booking' %}">
-                                        <i class="fas fa-calendar-check mr-2"></i>Total Bookings
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">
-                                        <i class="fas fa-users mr-2"></i>Total Users
-                                    </a>
-                                </li> 
-                                {% comment %}
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">
-                                        <i class="fas fa-dollar-sign mr-2"></i>Earnings
-                                    </a>
-                                </li>
-                                {% endcomment %}
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">
-                                        <i class="fas fa-exclamation-triangle mr-2"></i>Status
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">
-                                        <i class="fas fa-calendar-times mr-2"></i>Bookings
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">
-                                        <i class="fas fa-redo-alt mr-2"></i>Refunds
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">
-                                        <i class="fas fa-ban mr-2"></i>Chargebacks
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">
-                                        <i class="fas fa-times mr-2"></i>Rejected
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">
-                                        <i class="fas fa-id-card-alt mr-2"></i>MCO
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
+                    <!-- User information section -->
+                 <div class="user-info-section text-center">
+                     <!-- User icon -->
+                        <i class="fas fa-user-circle fa-3x user-icon"></i>
+                        <!-- User name -->
+                        <p class="user-name p-0 m-0" style="color: white; font-size:0.7rem; margin-block-end:0em"> <span class="online-dot "></span> Loda Boro</p>
+                            <form action="{% url 'crmApp:logout' %}" method="post">
+                                        {% csrf_token %}
+                                    <li class="nav-item">
+                                             <button class="btn white-btn" type="submit"><i class="fa-solid fa-right-from-bracket"></i></button>
+                                    </li>
+                            </form>
+                    </div>
+                    <div class="container glass-effect">
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="{% url 'crmApp:base' %}">
+                                    <i class="fas fa-tachometer-alt mr-2"></i> Dashboard
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'crmApp:total_booking' %}">
+                                    <i class="fas fa-calendar-check mr-2 "></i> Total Bookings
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'crmApp:total_user' %}">
+                                    <i class="fas fa-users mr-2"></i> Total Users
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'crmApp:booking' %}">
+                                    <i class="fas fa-calendar-times mr-2"></i> Bookings
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'crmApp:refund' %}">
+                                    <i class="fas fa-redo-alt mr-2"></i> Refunds
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'crmApp:chargeback' %}">
+                                    <i class="fas fa-ban mr-2"></i> Chargebacks
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'crmApp:rejected' %}">
+                                    <i class="fas fa-times mr-2"></i> Rejected
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'crmApp:mco' %}">
+                                    <i class="fas fa-id-card-alt mr-2"></i> MCO
+                                </a>
+                            </li>
+                            <!-- New links -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'crmApp:cancellation' %}">
+                                    <i class="fas fa-times-circle mr-2"></i> Cancellations
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'crmApp:ecredit' %}">
+                                    <i class="fas fa-credit-card mr-2"></i> E-Credit
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                     </div>
                 </nav>
-                <h1 class="text-center mt-5">CRM Dashboard - MCO</h1>
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-4">
+                <h1 class="text-center mt-5">CRM <span>Dash</span>board - MCO</h1>
                 <div class="table-responsive mt-3">
                     <table class="table table-striped">
                         <thead>
