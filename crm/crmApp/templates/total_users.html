@@ -32,9 +32,13 @@
 <h1 class="text-center mt-5">CRM <span>Dash</span>board - Total Users ({{ users|length }})</h1> 
 <!-- Add button with Font Awesome icon -->
 <!-- Add "Create User" button with Font Awesome icon -->
-<button class="btn btn-primary float-right mr-3 mb-3" id="createUserBtn">
-<i class="fas fa-user-plus"></i> Create User
-</button>
+{% if request.user.is_superuser %}
+    <!-- Render the button if the user is a superuser -->
+    <button class="btn btn-primary float-right mr-3 mb-3" id="createUserBtn">
+        <i class="fas fa-user-plus"></i> Create User
+    </button>
+{% endif %}
+
 
 <!-- User creation form -->
 <div id="createUserModal" class="modal" tabindex="-1" role="dialog">
@@ -135,7 +139,7 @@
                         </tr>
                         <tr class="privilege-form" style="display: none;">
                             <td colspan="7">
-                                <form action="{% url 'crmApp:grant_permissions' %}" method="post">
+                                <form action="#" method="post">
                                     {% csrf_token %}
                                     <input type="hidden" name="user_id" value="{{ u.id }}">
                                     <div class="form-group">
