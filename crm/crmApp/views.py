@@ -13,7 +13,7 @@ from amadeus import Client, ResponseError, Location
 import amadeus
 from amadeus import Client as AmadeusClient
 import logging
-
+from .models import CustomUser
 # Configure logging
 logger = logging.getLogger(__name__)
     
@@ -507,7 +507,6 @@ from django.contrib.auth.hashers import make_password
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from .forms import UserCreationForm  # Import your form
-from .models import CustomUser # Import your custom user model
 
 def create_user(request):
     if request.method == 'POST':
@@ -573,7 +572,7 @@ def create_user(request):
 
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
-from .models import CustomUser  # Import your custom user model
+# from .models import Custom  # Import your custom user model
 
 def login_view(request):
     error_message = None
@@ -595,7 +594,7 @@ def login_view(request):
         else:
             # Check if the user with specified role exists
             try:
-                # Authenticate user using CustomUser model
+                # Authenticate user using Custom model
                 user = authenticate(request, username=username, password=password)
                 if user is not None:
                     if user.role == role:

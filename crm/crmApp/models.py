@@ -103,7 +103,7 @@ class Refund(models.Model):
 #         return self.user_name
 
 from django.contrib.auth.models import AbstractUser
-from django.db import models
+# from django.db import models
 
 class CustomUser(AbstractUser):
     phoneNumber = models.CharField(max_length=15)
@@ -130,3 +130,6 @@ class RejectedBooking(models.Model):
         return f"Rejected Booking: {self.customer_name}"
 
 #================================================================end reject model=============================
+    
+class Temp(models.Model):
+    name = models.CharField(max_length = 255)
