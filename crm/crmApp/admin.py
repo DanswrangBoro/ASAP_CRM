@@ -17,7 +17,7 @@ class RejectedBookingAdmin(admin.ModelAdmin):
     list_display = ('booking_id', 'customer_name', 'reason', 'rejection_date')
 
 @admin.register(CustomUser)  # Register Custom model with CustomAdmin
-class CustomAdmin(UserAdmin):
+class CustomUserAdmin(UserAdmin):
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
         ('Personal Info', {'fields': ('email', 'phoneNumber', 'role', 'team')}),
@@ -35,7 +35,7 @@ class CustomAdmin(UserAdmin):
     ordering = ('username',)
 
 # Register the CustomUser model with the CustomUserAdmin
-admin.site.register(CustomUser, CustomUserAdmin)
+# admin.site.register(CustomUser, CustomUserAdmin)
 
 
 
