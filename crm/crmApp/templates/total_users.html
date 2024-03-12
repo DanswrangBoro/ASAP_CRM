@@ -124,15 +124,15 @@
                             {% comment %} <td>{{ u.password }}</td> {% endcomment %}
                             <td>
                                 {% if request.user.is_superuser %}
-                                <button class="btn btn-info btn-sm edit-btn" data-user-id="{{ u.id }}" data-bs-toggle="modal" data-bs-target="#myModal" data-user-name="{{ u.user_name }}" data-email="{{ u.email }}" data-phone-number="{{ u.phone_number }}" data-role="{{ u.role }}" data-team="{{ u.team }}" data-password="{{ u.password }}">Edit</button>
+                                <button class="btn btn-info btn-sm edit-btn" data-user-id="{{ u.id }}" data-bs-toggle="modal" data-bs-target="#myModal" data-user-name="{{ u.user_name }}" data-email="{{ u.email }}" data-phone-number="{{ u.phone_number }}" data-role="{{ u.role }}" data-team="{{ u.team }}" data-password="{{ u.password }}"><i class="fas fa-pen"></i></button>
                                 {% endif %}
                                 <form action="{% url 'crmApp:block_user' u.id %}" method="post">
                                     {% csrf_token %}
                                     <button type="submit" class="btn btn-danger btn-sm">
                                         {% if u.blocked %}
-                                            Unblock
+                                        <i class="fas fa-unlock"></i>
                                         {% else %}
-                                            Block
+                                        <i class="fas fa-ban"></i>
                                         {% endif %}
                                     </button>
                                 </form>
