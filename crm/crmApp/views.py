@@ -13,6 +13,7 @@ from amadeus import Client, ResponseError, Location
 import amadeus
 from amadeus import Client as AmadeusClient
 import logging
+from .models import Sale
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -219,6 +220,15 @@ def total_user(request):
     }
     return render(request, "total_users.html", context)
 
+
+def sales_view(request):
+    agents = CustomUser.objects.filter(role='agent')
+    agent_sales = []
+    for agent in agents:
+        total_sales = Sale.objects.filter(agent=agent).count()
+        agent_sales.append({'agent': agent, 'total_sales': total_sales})
+    return render(request, 'sales.html', {'agent_sales': agent_sales})
+
 def booking(request):
     original = Booking.objects.all()
     context = {
@@ -278,18 +288,35 @@ def ecredit(request):
 
 # ==============================================( update booking status )==================================================
 
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from .models import Booking
 from django.utils import timezone
-from datetime import date
+
+@login_required
 def update_booking_status(request):
     if request.method == 'POST':
         booking_id = request.POST.get('booking_id')
         status = request.POST.get('status')
+        
         try:
             booking = Booking.objects.get(booking_id=booking_id)
+            
+            # Check if the status is being updated to 'inprocess'
+            if status == 'inprocess':
+                # Check if the logged-in user's role is 'agent'
+                if request.user.role == 'agent':
+                    # Assign the currently logged-in user as the lead agent
+                    booking.lead_agent = request.user
+                
+                else:
+                    messages.error(request, 'You do not have permission to update this booking status.')
+                    return redirect('crmApp:sales')
+            
             booking.status = status
             if status == 'rejected':
                 booking.rejection_date = timezone.now()
-                # booking.rejection_date = date.today()
             booking.save()
 
             if status == 'rejected':
@@ -302,13 +329,15 @@ def update_booking_status(request):
                 return redirect('crmApp:cancellation')
             else:
                 return redirect('crmApp:booking')
+        
         except Booking.DoesNotExist:
-            # Handle case where the booking ID does not exist
-            pass
+            messages.error(request, 'The booking does not exist.')
+            return redirect('crmApp:sales')
 
     # Handle GET requests or any other scenario
     # You can redirect to another page or render a template
-    return redirect('crmApp:booking')
+    return redirect('crmApp:sales')
+
 
 # ==============================================( end update booking status )==================================================
 

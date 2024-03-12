@@ -34,6 +34,8 @@ urlpatterns = [
     path('book_view/', views.book_view, name='book_view'),
     # path('generate-invoice/', generate_invoice, name='generate_invoice'),
     # path('invoice-success/', invoice_success, name='invoice_success'),
+    path('sales/', views.sales_view, name='sales'),
+
 ]
 
 

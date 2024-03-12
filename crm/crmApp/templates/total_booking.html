@@ -41,6 +41,7 @@
                             <th>Price</th>
                             <th>MCO</th>
                             <th>Lead Status</th>
+                            <th>Lead Agent</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -63,6 +64,8 @@
                             <td>{{ o.price }}</td>
                             <td>{{ o.mco }}</td>
                             <td>{{ o.status }}</td>
+                            <td>{{ o.lead_agent }}</td>
+
                             <td>
                                 <form id="booking_status_form_{{ o.booking_id }}" method="POST" action="{% url 'crmApp:update_booking_status' %}">
                                     {% csrf_token %}

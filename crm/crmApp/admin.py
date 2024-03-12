@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import Booking, Refund, RejectedBooking
+from .models import Sale
 
 @admin.register(Booking)
 class BookingAdmin(admin.ModelAdmin):
@@ -42,6 +43,11 @@ class CustomUserAdmin(UserAdmin):
 admin.site.register(CustomUser, CustomUserAdmin)
 
 
+class SalesAdmin(admin.ModelAdmin):
+    list_display = ('agent', 'sale_date', 'amount')
+    search_fields = ('agent__username',)  # Enables searching by agent username
 
+# Register your models here.
+admin.site.register(Sale, SalesAdmin)
 
 
