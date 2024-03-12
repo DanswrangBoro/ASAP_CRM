@@ -123,77 +123,21 @@
                             <td>{{ u.team }}</td>
                             {% comment %} <td>{{ u.password }}</td> {% endcomment %}
                             <td>
-                                <div class="d-flex flex-row gap-1">
-                                    <!-- View button with tooltip -->
-                                    <button class="btn btn-primary btn-sm view-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="View"><i class="fas fa-search"></i></button>
-                                
-                                    <!-- Edit button with tooltip -->
-                                    <button class="btn btn-info btn-sm edit-btn" data-user-id="{{ u.id }}" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit" data-bs-target="#myModal" data-user-name="{{ u.user_name }}" data-email="{{ u.email }}" data-phone-number="{{ u.phone_number }}" data-role="{{ u.role }}" data-team="{{ u.team }}" data-password="{{ u.password }}"><i class="fas fa-pen"></i></button>
-                                
-                                    <!-- Block/Unblock button with tooltip -->
-                                    <form action="{% url 'crmApp:block_user' u.id %}" method="post">
-                                        {% csrf_token %}
-                                        <button type="submit" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="{% if u.blocked %} Unblock {% else %} Block {% endif %}">
-                                            {% if u.blocked %}
-                                                <i class="fas fa-unlock"></i>
-                                            {% else %}
-                                                <i class="fas fa-ban"></i>
-                                            {% endif %}
-                                        </button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr class="privilege-form" style="display: none;">
-                            <td colspan="7">
-                                <form action="#" method="post">
+                                {% if request.user.is_superuser %}
+                                <button class="btn btn-info btn-sm edit-btn" data-user-id="{{ u.id }}" data-bs-toggle="modal" data-bs-target="#myModal" data-user-name="{{ u.user_name }}" data-email="{{ u.email }}" data-phone-number="{{ u.phone_number }}" data-role="{{ u.role }}" data-team="{{ u.team }}" data-password="{{ u.password }}">Edit</button>
+                                {% endif %}
+                                <form action="{% url 'crmApp:block_user' u.id %}" method="post">
                                     {% csrf_token %}
-                                    <input type="hidden" name="user_id" value="{{ u.id }}">
-                                    <div class="form-group">
-                                        <label for="privileges">Privileges:</label>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="privileges[]" value="assign_order">
-                                            <label class="form-check-label" for="assign_order">Assign Orders</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="privileges[]" value="add_order">
-                                            <label class="form-check-label" for="add_order">Add Orders</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="privileges[]" value="view_order">
-                                            <label class="form-check-label" for="view_order">View Orders</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="privileges[]" value="generate_invoice">
-                                            <label class="form-check-label" for="generate_invoice">Generate Invoice</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="privileges[]" value="add_user">
-                                            <label class="form-check-label" for="add_user">Add User</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="privileges[]" value="delete_user">
-                                            <label class="form-check-label" for="delete_user">Delete User</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="privileges[]" value="edit_user">
-                                            <label class="form-check-label" for="edit_user">Edit User</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="privileges[]" value="view_user">
-                                            <label class="form-check-label" for="view_user">View User</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="privileges[]" value="delete_orders">
-                                            <label class="form-check-label" for="delete_orders">Delete Orders</label>
-                                        </div>
-                                        <!-- Add more checkboxes for additional privileges as needed -->
-                                    </div>
-                                    
-                                    <button type="submit" class="btn btn-primary">Save</button>
+                                    <button type="submit" class="btn btn-danger btn-sm">
+                                        {% if u.blocked %}
+                                            Unblock
+                                        {% else %}
+                                            Block
+                                        {% endif %}
+                                    </button>
                                 </form>
                             </td>
-                        </tr>                                            
+                        </tr>                  
                         {% endfor %}                                            
                     </tbody>
                 </table>

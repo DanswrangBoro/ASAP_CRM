@@ -32,7 +32,8 @@ urlpatterns = [
     # path('update_booking_statusT/', views.update_booking_statusT, name='update_booking_statusT'),
     path('delete_booking/', views.delete_booking, name='delete_booking'),
     path('book_view/', views.book_view, name='book_view'),
-
+    # path('generate-invoice/', generate_invoice, name='generate_invoice'),
+    # path('invoice-success/', invoice_success, name='invoice_success'),
 ]
 
 

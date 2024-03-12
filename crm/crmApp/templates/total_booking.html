@@ -69,20 +69,24 @@
                                     <input type="hidden" name="booking_id" value="{{ o.booking_id }}">
                                     <select name="status" onchange="submitForm('{{ o.booking_id }}')">
                                         <option value="inprocess" {% if o.status == 'inprocess' %} selected {% endif %}>In Process</option>
+                                        {% if request.user.is_superuser or request.user.role == 'manager' %}
                                         <option value="confirmed" {% if o.status == 'confirmed' %} selected {% endif %}>Confirmed</option>
                                         <option value="pending" {% if o.status == 'pending' %} selected {% endif %}>Pending</option>
                                         <option value="rejected" {% if o.status == 'rejected' %} selected {% endif %}>Reject</option>
                                         <option value="cancelled" {% if o.status == 'cancelled' %} selected {% endif %}>Cancel</option>
+                                        {% endif %}
                                     </select> 
                                 </form>
                             </td>
                             <td>
                                 <a href="{% url 'crmApp:booking' %}"><button class="btn btn-info btn-sm">Edit</button></a>
+                                {% if request.user.is_superuser %}
                                 <form id="delete_form_{{ o.booking_id }}" method="POST" action="{% url 'crmApp:delete_booking' %}">
                                     {% csrf_token %}
                                     <input type="hidden" name="booking_id" value="{{ o.booking_id }}">
                                     <button type="submit" class="btn btn-danger btn-sm" onclick="return confirmDelete()">Delete</button>
                                 </form>
+                                {% endif %}
                             </td>
                         </tr>
                         {% endfor %}
