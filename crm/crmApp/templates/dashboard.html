@@ -3,40 +3,50 @@
 {% block content %}
     <h1 class="text-center mt-5">CRM  <span>Dash</span>board</h1> <br>
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-3  px-1 mt-md-0 mt-1">
             <div class="card shadow-lg col-custom-color card-with-background">
-                <div class="card-body" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <div class="card-body" style="opacity:0.7; display: flex; flex-direction: column; align-items: center; justify-content: center;">
                     <svg class="svg-icon" style="width: 2em; height: 2em; vertical-align: middle; fill: currentColor; overflow: hidden;" viewBox="0 0 1322 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
                         <path d="M330.326304 602.847391l0 421.150389 198.190899 0L528.517203 602.847391l-99.100999-82.587125L330.326304 602.847391 330.326304 602.847391 330.326304 602.847391zM0 1023.99778l198.190899 0L198.190899 701.935072 0 858.839068 0 1023.99778 0 1023.99778 0 1023.99778zM990.965594 503.744173l0 520.253607 198.197558 0L1189.163152 338.58768 990.965594 503.744173 990.965594 503.744173 990.965594 503.744173zM660.648168 710.192009l0 313.805771 198.190899 0L858.839068 611.097669l-156.903996 132.133185L660.648168 710.192009 660.648168 710.192009 660.648168 710.192009zM1321.287459 0 941.419534 0l156.903996 148.6404L693.673696 478.968923 429.413985 255.998335 0 594.579356l0 148.647059 429.418424-338.58768 272.516648 222.970588 487.22808-396.386238 132.126526 123.86515L1321.287459 0 1321.287459 0 1321.287459 0z"  />
                     </svg>
-                    <p class="card-text mt-2">Total Sales <b>$</b> {{ total_sales }}</p>
+                    <p class="card-text mt-2">Total Sales: <b>$</b> {{ total_sales }}</p>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-3  px-1 mt-md-0 mt-1">
             <div class="card shadow-lg col-custom-color card-with-background1">
-                <div class="card-body" style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+                <div class="card-body" style="opacity:0.7; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
             
                     <img src="{% static 'assets/MonthlyIncomeIcon.png' %}" class="income" alt="Income">
             
-                    <p class="card-text mt-2">Monthly Income <b>$</b> {{ monthly_income }}</p>
+                    <p class="card-text mt-2">Monthly Income: <b>$</b> {{ monthly_income }}</p>
             
                 </div>
             </div>
             
         </div>
-        <div class="col-md-3">
+        <div class="col-md-3  px-1 mt-md-0 mt-1">
             <div class="card shadow-lg col-custom-color card-with-background2">
                 <div class="card-body">
-                    <p class="card-text mt-5 ">Total Annual Income <b>$</b> {{ annual_income }}</p>
+                    <p class="card-text mt-5 ">Total Annual Income: <b>$</b> {{ annual_income }}</p>
                 </div>
+            </div>
+        </div>
+        <div class="col-md-3  px-1 mt-md-0 mt-1">
+        <div class="card shadow-lg col-custom-color1 card-with-background7 my-0 py-0">
+            <div class="card-header bg-success">
+                <h6 class="card-title">Best Performer</h6>
+            </div>
+            <div class="card-body">
+                <p class="card-text "><i class="fas fa-user-circle user-icon" style="opacity:0.7; "></i></i>Danswrang Boro<br>Thimpu Sengyung<br>Bhaibab Chetry<br>Mousomi Kakoti<br>Sanjay Singh</p>
             </div>
         </div>
     </div>
-    <div class="row mt-3">
-        <div class="col-md-3">
+    </div>
+    <div class="row mt-2">
+        <div class="col-md-3  px-1 mt-md-0 mt-1">
             <div class="card shadow-lg col-custom-color card-with-background3">
-                <div class="card-body" style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+                <div class="card-body" style="opacity:0.7; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
                     <svg height="2em" width="2em" xmlns="http://www.w3.org/2000/svg">
                         <g fill="none" fill-rule="evenodd">
                             <g fill="#000000">
@@ -46,46 +56,29 @@
                             </g>
                         </g>
                     </svg>
-                    <p class="card-text mt-2">Total Calls <i class="fa-solid fa-phone"></i> 1000</p>
+                    <p class="card-text mt-2">Total Calls: 1000</p>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-3  px-1 mt-md-0 mt-1">
             <div class="card shadow-lg col-custom-color card-with-background4">
                 
                 <div class="card-body">
-                    <p class="card-text mt-5">Total Refund <b>$</b> 5,000</p>
+                    <p class="card-text mt-5">Total Refund: <b>$</b> 5,000</p>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-3  px-1 mt-md-0 mt-1">
             <div class="card shadow-lg col-custom-color card-with-background5">
                 
                 <div class="card-body">
-                    <p class="card-text mt-5">Total Chargeback <b>$</b> 2,000</p>
+                    <p class="card-text mt-5">Total Chargeback: <b>$</b> 2,000</p>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row mt-3">
-        <div class="col-md-3">
-            <div class="card shadow-lg col-custom-color card-with-background6">
-                
-                <div class="card-body">
-                    <p class="card-text mt-5 ">MCO <b>$</b> 100</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card shadow-lg col-custom-color1 card-with-background7">
-                <div class="card-header bg-success">
-                    <h6 class="card-title">Best Performer</h6>
-                </div>
-                <div class="card-body">
-                    <p class="card-text "><i class="fas fa-user-circle user-icon"></i></i>Danswrang Boro<br>Thimpu Sengyung<br>Bhaibab Chetry<br>Mousomi Kakoti<br>Sanjay Singh</p>
-                </div>
-            </div>
-            <div class="card mt-3">
+        <div class="col-md-3  px-1 mt-md-0 mt-1">
+            
+            <div class="card mt-2">
                 <div class="card shadow-lg col-custom-color1 card-with-background8">
                 <div class="card-header bg-success">
                     <h6 class="card-title">Performance Activity</h6>
@@ -102,5 +95,16 @@
             </div>
         </div>
     </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-md-3  px-1 mt-md-0 mt-1">
+            <div class="card shadow-lg col-custom-color card-with-background6">
+                
+                <div class="card-body">
+                    <p class="card-text mt-5 ">MCO: <b>$</b> 100</p>
+                </div>
+            </div>
+        </div>
+        
     </div>
 {% endblock %}

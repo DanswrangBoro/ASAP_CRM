@@ -24,7 +24,7 @@
 <div class="row justify-content-end">
     <div class="col-md-2 float-right">
         <div class="dropdown">
-            <select class="form-select form-select-sm" id="actionDropdown">
+            <select class="form-select form-select-sm btn-primary" id="actionDropdown">
                 <option value="newBooking" enabled>New Booking</option>
                 <option value="changes">Changes</option>
                 <option value="eCredit">E-Credit</option>
@@ -35,11 +35,35 @@
     </div>
 </div>
 
-<div id="flightBookingForm" class="container hidden">
+<div id="flightBookingForm" class="container hidden custom-booking">
     <h2 class="mb-4">Flight Booking Form</h2>
     <!-- Flight booking form content -->
     <form id="flightSearchForm" action="{% url 'crmApp:flight_results' %}" method="GET">
+        <div class="form-row">
+        <div style="display: flex; flex-direction: row; align-items: stretch; width: 76%;">
+            <div class="mb-3 me-3" style="flex: 1;">
+                <label for="tripType" class="form-label"><i class="bi bi-geo-alt"></i> Trip Type</label>
+                <select class="form-select" id="tripType" name="tripType">
+                    <option value="oneWay">One Way</option>
+                    <option value="roundTrip">Round Trip</option>
+                </select>
+            </div>
+            <div class="mb-3 me-3" style="flex: 1;">
+                <label for="flightClass" class="form-label"><i class="bi bi-geo-alt"></i> Flight Class</label>
+                <select class="form-select" id="flightClass" name="flightClass">
+                    <option value="economy">Economy</option>
+                    <option value="business">Business</option>
+                    <option value="first">First</option>
+                </select>
+            </div>
+            <div class="mb-3 me-3" style="flex: 1;">
+                <label for="passengerCount" class="form-label"><i class="bi bi-geo-alt"></i> Passenger Count</label>
+                <input type="number" class="form-control" id="passengerCount" name="passengerCount" min="1">
+            </div>
+        </div>
+        
         <div style="display: flex; flex-wrap: wrap">
+            
             <div class="mb-3 me-3" style="flex: 1;">
                 <label for="fromLocation" class="form-label"><i class="bi bi-geo-alt"></i> From</label>
                 <input type="text" class="form-control" id="fromLocation" name="fromLocation">
@@ -60,26 +84,7 @@
                 <label for="returnDate" class="form-label"><i class="bi bi-calendar3"></i> Return Date</label>
                 <input type="date" class="form-control" id="returnDate" name="returnDate">
             </div>
-            <div class="mb-3 me-3" style="flex: 1;">
-                <label for="tripType" class="form-label"><i class="bi bi-geo-alt"></i> Trip Type</label>
-                <select class="form-select" id="tripType" name="tripType">
-                    <option value="oneWay">One Way</option>
-                    <option value="roundTrip">Round Trip</option>
-                </select>
-            </div>
-            <div class="mb-3 me-3" style="flex: 1;">
-                <label for="flightClass" class="form-label"><i class="bi bi-geo-alt"></i> Flight Class</label>
-                <select class="form-select" id="flightClass" name="flightClass">
-                    <option value="ECONOMY">Economy</option>
-                    <option value="PREMIUM ECONOMY">Business</option>
-                    <option value="FIRST">First</option>
-                    <option value="BUSINESS">Business</option>
-                </select>
-            </div>
-            <div class="mb-3 me-3" style="flex: 1;">
-                <label for="passengerCount" class="form-label"><i class="bi bi-geo-alt"></i> Passenger Count</label>
-                <input type="number" class="form-control" id="passengerCount" name="passengerCount" min="1">
-            </div>
+           
             <div class="mb-3" style="flex: 1;">
                 <button type="submit" class="btn btn-primary" style="margin-top: 32px;">Search</button>
             </div>
@@ -215,7 +220,7 @@
 </div>
                         
 <div class="table-responsive">
-    <table class="table table-striped">
+    <table class="table table-striped custom-table">
         <thead>
             <tr>
                 <th>Booking ID</th>
