@@ -130,6 +130,8 @@ class RejectedBooking(models.Model):
         return f"Rejected Booking: {self.customer_name}"
 
 #================================================================end reject model=============================
-    
-class Temp(models.Model):
-    name = models.CharField(max_length = 255)
+
+# ===============================================================invoice model==================================
+
+
+# ===============================================================end invoice model==================================

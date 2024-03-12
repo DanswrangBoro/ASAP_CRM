@@ -1,5 +1,6 @@
 from django import forms
 
+
 class UserCreationForm(forms.Form):
     userName = forms.CharField(max_length=100)
     email = forms.EmailField()

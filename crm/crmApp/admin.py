@@ -33,3 +33,11 @@ class CustomAdmin(UserAdmin):
     list_display = ('username', 'email', 'phoneNumber', 'role', 'team', 'is_staff')
     search_fields = ('username', 'email', 'phoneNumber', 'role', 'team')
     ordering = ('username',)
+
+# Register the CustomUser model with the CustomUserAdmin
+admin.site.register(CustomUser, CustomUserAdmin)
+
+
+
+
+

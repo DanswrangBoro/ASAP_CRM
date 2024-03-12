@@ -38,7 +38,29 @@
 <div id="flightBookingForm" class="container hidden">
     <h2 class="mb-4">Flight Booking Form</h2>
     <!-- Flight booking form content -->
-    <form id="flightSearchForm" action="{% url 'crmApp:flight_results' %}" method="GET">
+    <form id="flightSearchForm" class="custom-booking" action="{% url 'crmApp:flight_results' %}" method="GET">
+        <div class="row col-md-5">
+            <div class="mb-3 me-3" style="flex: 1;">
+                <label for="tripType" class="form-label"><i class="bi bi-geo-alt"></i> Trip Type</label>
+                <select class="form-select" id="tripType" name="tripType">
+                    <option value="oneWay">One Way</option>
+                    <option value="roundTrip">Round Trip</option>
+                </select>
+            </div>
+            <div class="mb-3 me-3" style="flex: 1;">
+                <label for="flightClass" class="form-label"><i class="bi bi-geo-alt"></i> Flight Class</label>
+                <select class="form-select" id="flightClass" name="flightClass">
+                    <option value="ECONOMY">Economy</option>
+                    <option value="PREMIUM ECONOMY">Business</option>
+                    <option value="FIRST">First</option>
+                    <option value="BUSINESS">Business</option>
+                </select>
+            </div>
+            <div class="mb-3 me-3" style="flex: 1;">
+                <label for="passengerCount" class="form-label"><i class="bi bi-geo-alt"></i> Passenger</label>
+                <input type="number" class="form-control" id="passengerCount" name="passengerCount" min="1">
+            </div>
+        </div>
         <div style="display: flex; flex-wrap: wrap">
             <div class="mb-3 me-3" style="flex: 1;">
                 <label for="fromLocation" class="form-label"><i class="bi bi-geo-alt"></i> From</label>
@@ -60,26 +82,6 @@
                 <label for="returnDate" class="form-label"><i class="bi bi-calendar3"></i> Return Date</label>
                 <input type="date" class="form-control" id="returnDate" name="returnDate">
             </div>
-            <div class="mb-3 me-3" style="flex: 1;">
-                <label for="tripType" class="form-label"><i class="bi bi-geo-alt"></i> Trip Type</label>
-                <select class="form-select" id="tripType" name="tripType">
-                    <option value="oneWay">One Way</option>
-                    <option value="roundTrip">Round Trip</option>
-                </select>
-            </div>
-            <div class="mb-3 me-3" style="flex: 1;">
-                <label for="flightClass" class="form-label"><i class="bi bi-geo-alt"></i> Flight Class</label>
-                <select class="form-select" id="flightClass" name="flightClass">
-                    <option value="ECONOMY">Economy</option>
-                    <option value="PREMIUM ECONOMY">Business</option>
-                    <option value="FIRST">First</option>
-                    <option value="BUSINESS">Business</option>
-                </select>
-            </div>
-            <div class="mb-3 me-3" style="flex: 1;">
-                <label for="passengerCount" class="form-label"><i class="bi bi-geo-alt"></i> Passenger Count</label>
-                <input type="number" class="form-control" id="passengerCount" name="passengerCount" min="1">
-            </div>
             <div class="mb-3" style="flex: 1;">
                 <button type="submit" class="btn btn-primary" style="margin-top: 32px;">Search</button>
             </div>
@@ -87,9 +89,7 @@
     </form>
 </div>
 
-<div id="refundForm" class="container hidden">
-    <!-- Refund form content -->
-    <h2 class="mb-4">Refund Form</h2>
+<div id="refundForm" class="container custom-booking hidden">
     <!-- Refund form content -->
     <h2 class="mb-4">Refund Form</h2>
     <!-- In your 'booking' template -->
@@ -141,7 +141,7 @@
 </div>
 
 
-<div id="cancellationForm" class="container hidden">
+<div id="cancellationForm" class="container custom-booking hidden">
     <!-- Cancellation form content -->
     <h2 class="mb-4">Cancellation Form</h2>
     <div style="display: flex; flex-wrap: wrap;">
@@ -162,7 +162,7 @@
         </div>
     </div>
 </div>
-<div id="changesForm" class="container hidden">
+<div id="changesForm" class="container custom-booking hidden">
     <!-- Changes form content -->
     <h2 class="mb-4">Changes Form</h2>
     <div style="display: flex; flex-wrap: wrap">
@@ -192,7 +192,7 @@
     </div>
 </div>
 
-<div id="eCreditForm" class="container hidden">
+<div id="eCreditForm" class="container custom-booking hidden">
     <!-- E-Credit form content -->
     <h2 class="mb-4">E-Credit Form</h2>
     <div style="display: flex; flex-wrap: wrap">
@@ -214,8 +214,8 @@
     </div>
 </div>
                         
-<div class="table-responsive">
-    <table class="table table-striped">
+<div class="table-responsive mt-5 border">
+    <table class="table table-striped custom-table">
         <thead>
             <tr>
                 <th>Booking ID</th>

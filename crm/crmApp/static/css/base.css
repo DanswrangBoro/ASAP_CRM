@@ -41,44 +41,46 @@ main{
     background-color: #A5D7E8;
 }
 .card-with-background {
-    background: linear-gradient(#c1c1c1,#ffffff); /* Add your desired background color class here */
+    background-color: #03A9F4; /* Add your desired background color class here */
     
     background-size: 100% 100%;
 }
 
 .card-with-background1 {
-    background: linear-gradient(#c0b8b8,#ffffff); /* Add your desired background color class here */
+    background-color: #AB47BC; /* Add your desired background color class here */
     
     background-size: 100% 100%;
 }
 .card-with-background2 {
-    background: linear-gradient( #9d8c8c,#ffffff); /* Add your desired background color class here */
+    background-color: #9FCC2E; /* Add your desired background color class here */
     background-size: 100% 100%;
 }
 .card-with-background3 {
-    background: linear-gradient( #b2b2c2,#f0eff0); /* Add your desired background color class here */
+    background-color: #FA9F1B; /* Add your desired background color class here */
     background-size: 100% 100%;
 }
 .card-with-background4 {
-    background: linear-gradient( #4f5575,#e7e7ed); /* Add your desired background color class here */
+    background-color: #f72d7e; /* Add your desired background color class here */
     background-size: 100% 100%;
 }
 .card-with-background5 {
-    background: linear-gradient(#9290C3,#f2ccfd); /* Add your desired background color class here */
+    background-color: #ef5b47; /* Add your desired background color class here */
     background-size: 100% 100%;
 }
 
 .card-with-background6 {
-    background: linear-gradient(#ffffff,#9e81a7); /* Add your desired background color class here */
+    background-color: #77eef2;/* Add your desired background color class here */
     background-size: 100% 100%;
 }
 .card-with-background7 {
     background: linear-gradient(#b8b7d3,#f7f3f8); /* Add your desired background color class here */
     background-size: 100% 100%;
+    font-size: 0.8rem;
 }
 .card-with-background8 {
     background: linear-gradient(#ececf3,#eeeaef); /* Add your desired background color class here */
     background-size: 100% 100%;
+    font-size: 0.8rem;
 }
 
 .income{
@@ -157,13 +159,41 @@ ul, li{
 /* Total booking page css */
 
 .col-custom-total{
+    color: white;
     text-align: center;
-    background-color:#0EA293 ;
+    background: linear-gradient(to right, #020024, #090979, #05113d);
 }
 
 
 /* Total Users CSS */
 
 .col-custom-color2{
-    background-color: #576CBC;
+    color: white;
+    background: linear-gradient(to right, #020024, #090979, #05113d);
+}
+
+/* Booking CSS */
+.custom-booking {
+    padding: 1%;
+    margin: 0;
+    color: white;
+    overflow: hidden;
+    background: radial-gradient(
+      circle,
+      rgb(3, 155, 229) 20%,
+      rgb(1, 51, 75) 120%
+    );
+  }
+  
+#flightBookingForm {
+    max-width: 1200px; /* Set your desired maximum width */
+    margin: 0 auto; /* Center the form horizontally */
+    padding: 0 15px; /* Add some padding for better readability */
+}
+
+/* Add media queries for responsiveness */
+@media (max-width: 768px) {
+    #flightBookingForm {
+        width: 1%; /* Set your desired width for smaller screens */
+    }
 }
