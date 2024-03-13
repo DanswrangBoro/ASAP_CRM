@@ -76,19 +76,25 @@ def flight_results(request):
         try:
             print("inside try")
             if return_date == "":
-                response = amadeus.shopping.flight_offers_search.get(
-                originLocationCode="GAU",
-                destinationLocationCode="DEL",
-                departureDate=departure_date,
-                adults=adults,
-                children=child,
-                infants=infants,
-                travelClass=class_type
-                ).data
-                # Store the response as JSON format
-                context = {
-                    "flights" : response
-                }
+                # response = amadeus.shopping.flight_offers_search.get(
+                # originLocationCode=from_location,
+                # destinationLocationCode=to_location,
+                # departureDate=departure_date,
+                # adults=adults,
+                # children=child,
+                # infants=infants,
+                # travelClass=class_type
+                # ).data
+                # # Store the response as JSON format
+                # context = {
+                #     "flights" : response,
+                #     "flights1" : json.dumps(response)
+                # }
+                file_path = "temp.txt"
+                # with open(file_path, "w") as file:
+                #     json.dump(context, file, indent= 4)
+                with open(file_path, "r") as file:
+                    context = json.load(file)
                 print("something went wrong")
 
             else:
@@ -619,7 +625,7 @@ def create_user(request):
 
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
-from .models import CustomUser  # Import your custom user model
+# from .models import Custom  # Import your custom user model
 
 def login_view(request):
     error_message = None
@@ -641,7 +647,7 @@ def login_view(request):
         else:
             # Check if the user with specified role exists
             try:
-                # Authenticate user using CustomUser model
+                # Authenticate user using Custom model
                 user = authenticate(request, username=username, password=password)
                 if user is not None:
                     if user.role == role:
