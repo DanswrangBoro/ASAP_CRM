@@ -51,6 +51,22 @@ class MarkupControl(models.Model):
 
         super().save(*args, **kwargs)
 
+from django.contrib.auth.models import AbstractUser
+from django.db import models
+
+class CustomUser(AbstractUser):
+    phoneNumber = models.CharField(max_length=15)
+    role = models.CharField(max_length=20)
+    team = models.CharField(max_length=100)
+    blocked = models.BooleanField(default=False)
+
+    # Add related_name to avoid clash with default User model
+    groups = models.ManyToManyField('auth.Group', related_name='custom_user_set', blank=True, verbose_name='groups')
+    user_permissions = models.ManyToManyField('auth.Permission', related_name='custom_user_set', blank=True, verbose_name='user permissions')
+
+    def __str__(self):
+        return self.username
+
 class Booking(models.Model):
     booking_id = models.CharField(max_length=100)
     passenger_name = models.CharField(max_length=255)
@@ -66,8 +82,9 @@ class Booking(models.Model):
     num_passengers = models.IntegerField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
     status = models.CharField(max_length=50, default="pending")
-    rejection_date = models.DateTimeField(blank=True, null=True)
+    change_date = models.DateTimeField(blank=True, null=True)
     mco = models.CharField(max_length=100, blank=True, null=True)
+    lead_agent = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, related_name='lead_bookings')
 
     def __str__(self):
         return self.booking_id
@@ -102,20 +119,7 @@ class Refund(models.Model):
 #     def __str__(self):
 #         return self.user_name
 
-from django.contrib.auth.models import AbstractUser
-# from django.db import models
 
-class CustomUser(AbstractUser):
-    phoneNumber = models.CharField(max_length=15)
-    role = models.CharField(max_length=20)
-    team = models.CharField(max_length=100)
-
-    # Add related_name to avoid clash with default User model
-    groups = models.ManyToManyField('auth.Group', related_name='custom_user_set', blank=True, verbose_name='groups')
-    user_permissions = models.ManyToManyField('auth.Permission', related_name='custom_user_set', blank=True, verbose_name='user permissions')
-
-    def __str__(self):
-        return self.username
 
 
 # ===============================================================reject model================================
@@ -131,7 +135,14 @@ class RejectedBooking(models.Model):
 
 #================================================================end reject model=============================
 
-# ===============================================================invoice model==================================
+# ===============================================================slaes model==================================
+class Sale(models.Model):
+    agent = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    sale_date = models.DateTimeField()
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    # Add other fields as needed
 
+    def __str__(self):
+        return f"Sale by {self.agent.username} on {self.sale_date}"
 
-# ===============================================================end invoice model==================================
+# ===============================================================sales model==================================

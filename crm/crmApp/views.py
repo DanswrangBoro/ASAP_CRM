@@ -13,7 +13,8 @@ from amadeus import Client, ResponseError, Location
 import amadeus
 from amadeus import Client as AmadeusClient
 import logging
-from .models import CustomUser
+from .models import Sale
+from django.db.models import Sum
 # Configure logging
 logger = logging.getLogger(__name__)
     
@@ -164,32 +165,13 @@ def flight_results(request):
 #         return render(request, 'result.html', {'error': str(e)})
 
 def flight_book(request):
-    # Total sales
-    confirmed_bookings = Booking.objects.filter(status='confirmed')
-    total_sales = confirmed_bookings.aggregate(total_sales=Sum('price'))['total_sales'] or 0
-
-    # Monthly income
-    now = datetime.now()
-    current_month = now.month
-    current_year = now.year
-    monthly_income = Booking.objects.filter(departure_date__month=current_month, departure_date__year=current_year, status='confirmed').aggregate(monthly_income=Sum('price'))['monthly_income'] or 0
-
-    # Annual income
-    annual_income = Booking.objects.filter(departure_date__year=current_year, status='confirmed').aggregate(annual_income=Sum('price'))['annual_income'] or 0
-    userN = request.session.get('userN')
-    context = {
-        'total_sales': total_sales,
-        'monthly_income': monthly_income,
-        'annual_income': annual_income,
-        'user' : userN
-    }
-    
-    return render(request, "base.html", context)
+    return render(request, "base.html")
 
 from decimal import Decimal
 
 def total_booking(request):
     original = Booking.objects.filter(status__in=['inprocess', 'rejected', 'confirmed', 'cancelled'])
+    agents = CustomUser.objects.filter(role='agent')
     confirmed_bookings = original.filter(status='confirmed')
 
     total_price = Decimal(0.0)
@@ -208,14 +190,37 @@ def total_booking(request):
         "length": original.count(),
         "total_price": total_price_str,
         "total_mco": total_mco_str,
-        "total_revenue": total_revenue_str
+        "total_revenue": total_revenue_str,
+        "agents": agents
     }
     return render(request, "total_booking.html", context)
 
 # =================================================================================dashboard======================================
 
 def dashboard(request):
-    return render(request,'dashboard.html')
+       # Total sales
+    confirmed_bookings = Booking.objects.filter(status='confirmed')
+    total_sales = confirmed_bookings.aggregate(total_sales=Sum('price'))['total_sales'] or 0
+
+    print("this is total :",total_sales)
+
+    # Monthly income
+    now = datetime.now()
+    current_month = now.month
+    current_year = now.year
+    monthly_income = Booking.objects.filter(departure_date__month=current_month, departure_date__year=current_year, status='confirmed').aggregate(monthly_income=Sum('price'))['monthly_income'] or 0
+    agent_confirmlist = Booking.objects.filter(status = 'confirmed')
+    # Annual income
+    annual_income = Booking.objects.filter(departure_date__year=current_year, status='confirmed').aggregate(annual_income=Sum('price'))['annual_income'] or 0
+    userN = request.session.get('userN')
+    context = {
+        'total_sales': total_sales,
+        'monthly_income': monthly_income,
+        'annual_income': annual_income,
+        'user' : userN,
+        'confirm_agentlist' : agent_confirmlist
+    }
+    return render(request,'dashboard.html',context)
 # =================================================================================end dashboard==================================
 
 def total_user(request):
@@ -224,6 +229,16 @@ def total_user(request):
         "users": user_data,  # Rename the context variable to avoid confusion
     }
     return render(request, "total_users.html", context)
+
+
+def sales_view(request):
+    confirmed_bookings = Booking.objects.filter(status='confirmed')
+    print(confirmed_bookings)
+    context = {
+        'sale_data': confirmed_bookings
+    }
+
+    return render(request, 'sales.html', context)
 
 def booking(request):
     original = Booking.objects.all()
@@ -284,18 +299,32 @@ def ecredit(request):
 
 # ==============================================( update booking status )==================================================
 
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from .models import Booking
 from django.utils import timezone
-from datetime import date
+
+@login_required
 def update_booking_status(request):
     if request.method == 'POST':
         booking_id = request.POST.get('booking_id')
         status = request.POST.get('status')
+        
         try:
             booking = Booking.objects.get(booking_id=booking_id)
+            
+            if status == 'inprocess':
+                # Check if the logged-in user's role is 'agent', 'manager', or is a superuser
+                if request.user.role in ['agent', 'manager'] or request.user.is_superuser:
+                    # Assign the currently logged-in user as the lead agent
+                    booking.lead_agent = request.user
+                else:
+                    messages.error(request, 'You do not have permission to update this booking status.')
+                    return redirect('crmApp:total_booking')
+            
             booking.status = status
-            if status == 'rejected':
-                booking.rejection_date = timezone.now()
-                # booking.rejection_date = date.today()
+            booking.change_date = timezone.now()
             booking.save()
 
             if status == 'rejected':
@@ -308,16 +337,32 @@ def update_booking_status(request):
                 return redirect('crmApp:cancellation')
             else:
                 return redirect('crmApp:booking')
+        
         except Booking.DoesNotExist:
-            # Handle case where the booking ID does not exist
-            pass
+            messages.error(request, 'The booking does not exist.')
+            return redirect('crmApp:sales')
 
     # Handle GET requests or any other scenario
     # You can redirect to another page or render a template
-    return redirect('crmApp:booking')
+    return redirect('crmApp:sales')
+
 
 # ==============================================( end update booking status )==================================================
+def reassign_lead_agent(request):
+    if request.method == 'POST':
+        booking_id = request.POST.get('booking_id')
+        print(booking_id)
+        new_lead_agent_id = request.POST.get('lead_agent')
 
+        # Fetch booking object
+        booking = Booking.objects.get(booking_id=booking_id)
+
+        # Update lead agent
+        booking.lead_agent_id = new_lead_agent_id
+        booking.save()
+
+        # Redirect to some page or return a response
+        return redirect('crmApp:total_booking')  # Adjust the URL name as per your project
 
 # =============================================(retrieve customer name using booking id)==========================
 
@@ -512,7 +557,8 @@ from django.contrib.auth.hashers import make_password
 
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
-from .forms import UserCreationForm  # Import your form
+from .forms import UserCreationForm
+from .models import CustomUser
 
 def create_user(request):
     if request.method == 'POST':
@@ -529,10 +575,11 @@ def create_user(request):
             if password == confirm_password:
                 user = CustomUser.objects.create_user(email=email, username=username, phoneNumber=phoneNumber, role=role, team=team, password=password)
                 user.save()
-                return redirect('crmApp:total_user')  # Redirect to login page after user creation
+                return redirect('crmApp:total_user')
             else:
-                # Handle password mismatch error
                 pass
+        else:
+            print(form.errors)
     else:
         form = UserCreationForm()
     return render(request, 'total_users.html', {'form': form})
@@ -604,7 +651,7 @@ def login_view(request):
                 user = authenticate(request, username=username, password=password)
                 if user is not None:
                     if user.role == role:
-                        if user.is_active:  # Check if user is not blocked
+                        if not user.blocked:  # Check if user is not blocked
                             login(request, user)
                             request.session['userN'] = user.username
                             return redirect('crmApp:dashboard')  # Redirect to base URL after successful login
@@ -701,3 +748,59 @@ def delete_booking(request):
 
 
 # ================================================================================(end invoice)===============================
+
+def lead_agent_and_price(request):
+    try:
+        # Retrieve confirmed bookings
+        confirmed_bookings = Booking.objects.filter(status='Confirmed')
+
+        lead_agents_and_prices = []
+        for booking in confirmed_bookings:
+            lead_agents_and_prices.append({
+                'agent': booking.lead_agent,
+                'sale_date': booking.booking_date,
+                'amount': booking.price
+                # Add other fields as needed
+            })
+
+        context = {
+            'lead_agents_and_prices': lead_agents_and_prices
+        }
+
+        return render(request, 'your_template.html', context)
+    except Exception as e:
+        messages.error(request, f'Error occurred: {str(e)}')
+        return render(request, 'error_template.html')
+    
+    # =====================================================================agent data=========================
+
+from django.http import JsonResponse
+
+def get_agent_data(request):
+    username = request.POST.get('username')
+    
+    # Retrieve the agent object based on the provided username
+    try:
+        agent = CustomUser.objects.get(username=username)
+        
+        # Filter the bookings for the agent where status is 'confirmed'
+        confirmed_bookings = Booking.objects.filter(
+            lead_agent=agent,  # Filter by lead_agent matching the agent
+            status='confirmed'  # Filter by status being 'confirmed'
+        )
+        
+        # Aggregate the total price of confirmed bookings
+        total_price = confirmed_bookings.aggregate(total_price=Sum('price'))['total_price'] or 0
+        
+        # Print the total price for testing
+        print('Total Price:', total_price)
+        
+        # Return the total price as a JSON response
+        return JsonResponse({'total_price': total_price})
+        
+    except CustomUser.DoesNotExist:
+        return JsonResponse({'error': 'Agent not found'}, status=404)
+
+
+
+# ==================================================================================end agent data================================

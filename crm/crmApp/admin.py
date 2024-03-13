@@ -1,10 +1,10 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
-from .models import Booking, Refund, RejectedBooking, CustomUser  # Import Custom model
+from .models import Booking, Refund, RejectedBooking
+from .models import Sale
 
 @admin.register(Booking)
 class BookingAdmin(admin.ModelAdmin):
-    list_display = ['booking_id', 'passenger_name', 'departure_date', 'arrival_date', 'price','phone_number','email','mco']
+    list_display = ['booking_id', 'passenger_name', 'departure_date', 'arrival_date', 'price','phone_number','email','mco','change_date']
     search_fields = ['booking_id', 'passenger_name']
     list_filter = ['departure_date', 'arrival_date']
 
@@ -20,7 +20,7 @@ class RejectedBookingAdmin(admin.ModelAdmin):
 class CustomUserAdmin(UserAdmin):
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
-        ('Personal Info', {'fields': ('email', 'phoneNumber', 'role', 'team')}),
+        ('Personal Info', {'fields': ('email', 'phoneNumber', 'role', 'team', 'blocked')}),
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
         ('Important dates', {'fields': ('last_login', 'date_joined')}),
     )
@@ -38,6 +38,11 @@ class CustomUserAdmin(UserAdmin):
 # admin.site.register(CustomUser, CustomUserAdmin)
 
 
+class SalesAdmin(admin.ModelAdmin):
+    list_display = ('agent', 'sale_date', 'amount')
+    search_fields = ('agent__username',)  # Enables searching by agent username
 
+# Register your models here.
+admin.site.register(Sale, SalesAdmin)
 
 
