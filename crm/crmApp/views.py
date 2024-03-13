@@ -75,19 +75,25 @@ def flight_results(request):
         try:
             print("inside try")
             if return_date == "":
-                response = amadeus.shopping.flight_offers_search.get(
-                originLocationCode="GAU",
-                destinationLocationCode="DEL",
-                departureDate=departure_date,
-                adults=adults,
-                children=child,
-                infants=infants,
-                travelClass=class_type
-                ).data
-                # Store the response as JSON format
-                context = {
-                    "flights" : response
-                }
+                # response = amadeus.shopping.flight_offers_search.get(
+                # originLocationCode=from_location,
+                # destinationLocationCode=to_location,
+                # departureDate=departure_date,
+                # adults=adults,
+                # children=child,
+                # infants=infants,
+                # travelClass=class_type
+                # ).data
+                # # Store the response as JSON format
+                # context = {
+                #     "flights" : response,
+                #     "flights1" : json.dumps(response)
+                # }
+                file_path = "temp.txt"
+                # with open(file_path, "w") as file:
+                #     json.dump(context, file, indent= 4)
+                with open(file_path, "r") as file:
+                    context = json.load(file)
                 print("something went wrong")
 
             else:

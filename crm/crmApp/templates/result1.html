@@ -193,7 +193,13 @@
                                     <div class="time-arrow">
                                         <i class="icon"></i>
                                     </div>
-                                    <div class="time">{{ flight.itineraries.0.segments.0.arrival.at | format_time}}<span class="sm"> hrs</span></div>
+                                    <div class="time">
+                                        {% with last_segment=flight.itineraries.0.segments|last %}
+                                            {% if last_segment %}
+                                                {{ last_segment.arrival.at| format_time }}<span class="sm"> hrs</span>
+                                            {% endif %}
+                                        {% endwith %}
+                                    </div>
                                 </div>
                                 <div class="air-dur">
                                     <div class="top">10h 45m</div>
@@ -201,12 +207,15 @@
                                 </div>
                                 <div class="air-dur">
                                     <div class="top">10h 45m</div>
+                                    <div class="bottom">{{ flight.itineraries.0.segments.0.departure.iataCode }} - {{ flight.itineraries.0.segments.0.arrival.iataCode }}</div>
+
                                 </div>
                                 <div class="air-dur text-center">
                                     <div class="price">{{ flight.price.total }}</div>
                                     <div class="hover bottom"></div>
                                 </div>
-                                <button class="btn btn-primary" onclick="openModal('{{ flight.id }}')">View Details</button>
+                                <button class="btn btn-primary" onclick="openModal('{{ flight.id}}')">View Details</button>
+
                             </div>
                             <br>
                             {% endfor %}
@@ -219,8 +228,8 @@
                                             <h5 class="modal-title" id="flightModalLabel">Flight Details</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
-                                        <div class="modal-body">
-                                            <!-- Flight details content here -->
+                                        <div class="modal-body" id="flightDetails">
+                                            <!-- Flight details will be displayed here -->
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -229,6 +238,7 @@
                                     </div>
                                 </div>
                             </div>
+                            
                             
                          </div>
 
@@ -243,9 +253,27 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>    <script>
 function openModal(flightId) {
-    // Retrieve flight details based on flightId and populate modal content
-    var modal = new bootstrap.Modal(document.getElementById('flightModal'));
-    modal.show();
+    // Get the flight details from the context data
+    var flights = JSON.parse('{{ flights1|escapejs|safe }}'); // Parse the JSON string from Django template
+    var flightDetails = flights.find(flight => flight.id === flightId);
+    if (flightDetails) {
+        // Display flight details in the modal
+        var modalBody = document.getElementById('flightDetails');
+        modalBody.innerHTML = ''; // Clear previous content
+        for (var key in flightDetails) {
+            if (flightDetails.hasOwnProperty(key)) {
+                var p = document.createElement('p');
+                p.textContent = key + ': ' + JSON.stringify(flightDetails[key]);
+                modalBody.appendChild(p);
+            }
+        }
+
+        // Show the modal
+        var modal = new bootstrap.Modal(document.getElementById('flightModal'));
+        modal.show();
+    } else {
+        console.error('Flight details not found for ID:', flightId);
+    }
 }
 
 
