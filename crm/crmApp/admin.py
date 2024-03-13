@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Booking, Refund, RejectedBooking
+from .models import Booking, Refund, RejectedBooking, CustomUser
 from .models import Sale
 
 @admin.register(Booking)
@@ -15,6 +15,8 @@ class RefundAdmin(admin.ModelAdmin):
 @admin.register(RejectedBooking)
 class RejectedBookingAdmin(admin.ModelAdmin):
     list_display = ('booking_id', 'customer_name', 'reason', 'rejection_date')
+    
+from django.contrib.auth.admin import UserAdmin
 
 @admin.register(CustomUser)  # Register Custom model with CustomAdmin
 class CustomUserAdmin(UserAdmin):
