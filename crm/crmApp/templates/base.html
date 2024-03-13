@@ -24,10 +24,11 @@
                         {% if request.session.userN %}
                         <p style="color: white; font-weight: bolder" class="mt-2">{{ request.session.userN }}</p>
                     {% endif %}
-                        <form action="{% url 'crmApp:logout' %}" method="post">
+                    <hr>
+                        <form action="{% url 'crmApp:logout' %}" method="post" class="border p-0">
                             {% csrf_token %}
-                        <li class="nav-item">
-                                 <button class="btn white-btn" type="submit"><i class="fa-solid fa-right-from-bracket"></i></button>
+                        <li class="nav-item border">
+                                 <button class="btn text-white" type="submit"><i class="fa-solid fa-right-from-bracket"></i></button>
                         </li>
                 </form>
                     </div>

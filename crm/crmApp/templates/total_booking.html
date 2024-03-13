@@ -43,6 +43,9 @@
                             <th>Lead Status</th>
                             <th>Lead Agent</th>
                             <th>Status</th>
+                            {% if request.user.is_superuser or request.user.role == 'manager' %}
+                            <th>Reassign</th>
+                            {%  endif %}
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -81,6 +84,22 @@
                                     </select> 
                                 </form>
                             </td>
+                            {% if request.user.is_superuser or request.user.role == 'manager' %}
+                            <td>
+                                <!-- Reassign form -->
+                                <form id="reassign_form_{{ o.booking_id }}" method="POST" action="{% url 'crmApp:reassign_lead_agent' %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="booking_id" value="{{ o.booking_id }}">
+                                    <select name="lead_agent">
+                                        <!-- Loop through available agents -->
+                                        {% for agent in agents %}
+                                            <option value="{{ agent.id }}">{{ agent.username }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <button type="submit" class="btn btn-primary btn-sm mt-1">Reassign</button>
+                                </form>
+                            </td>
+                            {% endif %}
                             <td>
                                 <a href="{% url 'crmApp:booking' %}"><button class="btn btn-info btn-sm">Edit</button></a>
                                 {% if request.user.is_superuser %}

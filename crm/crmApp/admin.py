@@ -4,7 +4,7 @@ from .models import Sale
 
 @admin.register(Booking)
 class BookingAdmin(admin.ModelAdmin):
-    list_display = ['booking_id', 'passenger_name', 'departure_date', 'arrival_date', 'price','phone_number','email','mco']
+    list_display = ['booking_id', 'passenger_name', 'departure_date', 'arrival_date', 'price','phone_number','email','mco','change_date']
     search_fields = ['booking_id', 'passenger_name']
     list_filter = ['departure_date', 'arrival_date']
 @admin.register(Refund)
@@ -25,7 +25,7 @@ from django.contrib.auth.admin import UserAdmin
 class CustomUserAdmin(UserAdmin):
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
-        ('Personal Info', {'fields': ('email', 'phoneNumber', 'role', 'team')}),
+        ('Personal Info', {'fields': ('email', 'phoneNumber', 'role', 'team', 'blocked')}),
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
         ('Important dates', {'fields': ('last_login', 'date_joined')}),
     )
