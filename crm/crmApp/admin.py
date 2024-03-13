@@ -1,5 +1,7 @@
 from django.contrib import admin
+
 from .models import Booking, Refund, RejectedBooking, CustomUser
+
 from .models import Sale
 
 @admin.register(Booking)
@@ -37,7 +39,7 @@ class CustomUserAdmin(UserAdmin):
     ordering = ('username',)
 
 # Register the CustomUser model with the CustomUserAdmin
-# admin.site.register(CustomUser, CustomUserAdmin)
+
 
 
 class SalesAdmin(admin.ModelAdmin):
