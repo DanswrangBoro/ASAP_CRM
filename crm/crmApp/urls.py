@@ -3,6 +3,8 @@ from . import views
 from .views import update_booking_status
 from .views import fetch_passenger_data,submit_refund_form,update_refund_status
 from django.contrib.auth.views import LoginView
+from .views import reassign_lead_agent
+
 
 app_name = 'crmApp'
 
@@ -34,6 +36,11 @@ urlpatterns = [
     path('book_view/', views.book_view, name='book_view'),
     # path('generate-invoice/', generate_invoice, name='generate_invoice'),
     # path('invoice-success/', invoice_success, name='invoice_success'),
+    path('sales/', views.sales_view, name='sales'),
+    path('reassign/', reassign_lead_agent, name='reassign_lead_agent'),
+    path('get_agent_data/', views.get_agent_data, name='get_agent_data'),
+
+
 ]
 
 
