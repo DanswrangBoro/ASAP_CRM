@@ -58,6 +58,7 @@ class CustomUser(AbstractUser):
     phoneNumber = models.CharField(max_length=15)
     role = models.CharField(max_length=20)
     team = models.CharField(max_length=100)
+    blocked = models.BooleanField(default=False)
 
     # Add related_name to avoid clash with default User model
     groups = models.ManyToManyField('auth.Group', related_name='custom_user_set', blank=True, verbose_name='groups')
@@ -81,7 +82,7 @@ class Booking(models.Model):
     num_passengers = models.IntegerField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
     status = models.CharField(max_length=50, default="pending")
-    rejection_date = models.DateTimeField(blank=True, null=True)
+    change_date = models.DateTimeField(blank=True, null=True)
     mco = models.CharField(max_length=100, blank=True, null=True)
     lead_agent = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, related_name='lead_bookings')
 
