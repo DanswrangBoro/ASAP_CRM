@@ -46,6 +46,7 @@
                             {% if request.user.is_superuser or request.user.role == 'manager' %}
                             <th>Reassign</th>
                             {%  endif %}
+                            <th>Confirmation Email</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -100,6 +101,15 @@
                                 </form>
                             </td>
                             {% endif %}
+                            <td>
+                                <select>
+                                    {% comment %} <option value="" selected disabled>----------</option> {% endcomment %}
+                                    <option value="" selected>Pending</option>
+                                    <option value="" >Sent</option>
+                                    <option value="" >Recieved</option>
+                                    <option value="" >Declined</option>
+                                </select>
+                            </td>
                             <td>
                                 <a href="{% url 'crmApp:booking' %}"><button class="btn btn-info btn-sm">Edit</button></a>
                                 {% if request.user.is_superuser %}

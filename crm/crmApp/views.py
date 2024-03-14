@@ -804,3 +804,48 @@ def get_agent_data(request):
 
 
 # ==================================================================================end agent data================================
+    
+# views.py
+
+from django.core.mail import EmailMultiAlternatives
+from django.shortcuts import render
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from django.http import HttpResponse
+
+def generate_invoice(request):
+    # Your existing code to generate the invoice HTML content
+    invoice_html = render_to_string('generate_invoice.html')
+
+    # Render the generate_invoice.html template
+    return render(request, 'generate_invoice.html', {'invoice_html': invoice_html})
+
+def send_email(request):
+    if request.method == 'POST':
+        # Your existing code to generate the invoice HTML content
+        invoice_html = render_to_string('generate_invoice.html')
+
+        # Create a text/plain version of the HTML email content
+        text_content = strip_tags(invoice_html)
+
+        # Create the email object
+        email = EmailMultiAlternatives(
+            subject='Your Invoice',
+            body=text_content,
+            from_email='www.swrang.123@gmail.com',
+            to=['danswrang@adventurecode.io'],  # Replace with the recipient's email address
+        )
+
+        # Attach the HTML content
+        email.attach_alternative(invoice_html, "text/html")
+
+        # Optionally, add attachments if needed
+        # email.attach_file('/path/to/attachment.pdf')
+
+        # Send the email
+        email.send()
+
+        # Pass the email_sent context variable to indicate success
+        return render(request, 'generate_invoice.html', {'email_sent': True})
+    else:
+        return HttpResponse("Error: Invalid request method.")

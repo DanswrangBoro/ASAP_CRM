@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+{% if email_sent %}
+    <p style="color: green; text-align: center" id="error">Email sent successfully!</p>
+    <script>
+        setTimeout(function() {
+            document.getElementById('error').style.display = 'none';
+        }, 3000);
+    </script>
+{% endif %}
+<form action="{% url 'crmApp:send_email' %}" method="post">
+    {% csrf_token %}
+    {% comment %} <input type="hidden" name="invoice_html" value="{{ invoice_html }}"> {% endcomment %}
+    <div style="max-width: 600px; margin: 0 auto; margin-top:3%; padding: 20px; border: 1px solid #ddd; border-radius: 10px; font-family: Arial, sans-serif; background-color: #f9f9f9;">
+        <div style="text-align: center; margin-bottom: 20px;">
+            <h1 style="color: #333; margin: 0; font-size: 28px;">Invoice</h1>
+        </div>
+        <div style="margin-bottom: 20px;">
+            <p style="margin: 5px;"><strong>From:</strong> Your Airline</p>
+            <p style="margin: 5px;"><strong>To:</strong> Passenger Name</p>
+            <p style="margin: 5px;"><strong>Date:</strong> March 14, 2024</p>
+        </div>
+        <div style="background-color: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+            <h2 style="color: #333; margin-top: 0; font-size: 24px;">Flight Details</h2>
+            <p style="margin: 5px;"><strong>Flight:</strong> PR 2611</p>
+            <p style="margin: 5px;"><strong>Seat:</strong> 12C</p>
+        </div>
+        <div style="margin-top: 20px;">
+            <h2 style="color: #333; margin-top: 0; font-size: 24px;">Important Reminders</h2>
+            <ul style="padding: 0;">
+                <li style="margin: 5px; list-style: none;"><strong>Flight status:</strong> On time</li>
+                <li style="margin: 5px; list-style: none;"><strong>Bag drop counter:</strong> Check-in area</li>
+                <li style="margin: 5px; list-style: none;"><strong>Boarding gate closure:</strong> 30 minutes before departure</li>
+                <li style="margin: 5px; list-style: none;"><strong>Dangerous goods regulations:</strong> Follow guidelines</li>
+                <li style="margin: 5px; list-style: none;"><strong>Emergency exit row seating requirements:</strong> Be prepared</li>
+                <li style="margin: 5px; list-style: none;"><strong>Fitness to travel:</strong> Ensure good health</li>
+            </ul>
+        </div>
+        <div style="text-align: center; margin-top: 20px;">
+            <!-- Insert barcode image here (if available) -->
+            <img src="{% static 'barcode.png' %}" alt="Barcode" style="max-width: 200px;">
+        </div>
+        <div style="text-align: center; margin-top: 30px;">
+            <button type="submit" style="padding: 10px 20px; background-color: #337ab7; color: #fff; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">Send Email</button>
+        </div>
+    </div>
+</form>
+{% endblock %}
