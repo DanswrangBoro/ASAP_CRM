@@ -2,31 +2,25 @@
 {% load static %}
 {% block content %}
 {% if messages %}
-{% for message in messages %}
-    <div class="alert alert-success text-center" role="alert" style="display: block;" id="success-message">
-        {{ message }}
+    <div id="successMessage" class="container">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
     </div>
-    <script>
-        setTimeout(function() {
-            var successMessage = document.getElementById('success-message');
-            if (successMessage) {
-                successMessage.style.display = 'none';
-            }
-        }, 3000); // Hide after 3 seconds (3000 milliseconds)
-    </script>
-{% endfor %}
 {% endif %}
-{% if request.GET.success_message %}
-<div class="alert alert-success text-center" id="successMessage">
-    {{ request.GET.success_message }}
-</div>
+
+
 <script>
-    // Automatically close the success message after 3 seconds
-    setTimeout(function () {
-        document.getElementById('successMessage').style.display = 'none';
+    // Wait for three seconds before hiding the success message and optionally redirecting or refreshing the page
+    setTimeout(function() {
+        document.getElementById("successMessage").style.display = "none";
+        document.getElementById("chargebackForm").reset();  // Clear the form
+        // Optionally redirect or refresh the page after three seconds
+        
     }, 3000);
 </script>
-{% endif %}
 
 
 <h1 class="text-center mt-5">CRM <span>Dash</span>board - Total Users ({{ users|length }})</h1> 
