@@ -146,3 +146,29 @@ class Sale(models.Model):
         return f"Sale by {self.agent.username} on {self.sale_date}"
 
 # ===============================================================sales model==================================
+
+
+# ==============================================================================( Chargeback Model)=============================
+
+class Chargeback(models.Model):
+    booking_date = models.DateField()
+    booking_confirmation_no = models.CharField(max_length=50)
+    Booking = models.ForeignKey(Booking, on_delete=models.SET_NULL, null=True, related_name='lead_bookings')
+    customer_name = models.CharField(max_length=100)
+    customer_phone_no = models.CharField(max_length=20)
+    email_address = models.EmailField()
+    departure_city = models.CharField(max_length=100)
+    departure_date = models.DateField()
+    arrival_city = models.CharField(max_length=100)
+    arrival_date = models.DateField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    no_of_passenger = models.IntegerField()
+    credit_card_no = models.CharField(max_length=20)
+    confirmation_mail_status = models.CharField(max_length=50)
+    chargeback_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    reason = models.CharField(max_length=100)
+    chargeback_received_date = models.DateField()
+    chargeback_status = models.CharField(max_length=50, default="pending")
+    chargeback_lead_status = models.CharField(max_length=50, default="pending")
+
+# ==============================================================================( End Chargeback Model)=============================

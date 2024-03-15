@@ -50,3 +50,11 @@ class SalesAdmin(admin.ModelAdmin):
 admin.site.register(Sale, SalesAdmin)
 
 
+from .models import Chargeback
+
+@admin.register(Chargeback)
+class ChargebackAdmin(admin.ModelAdmin):
+    list_display = ('booking_confirmation_no','Booking','booking_date','customer_name', 'chargeback_amount', 'chargeback_status','chargeback_lead_status')
+    search_fields = ('booking_confirmation_no', 'customer_name')
+    list_filter = ('chargeback_status', 'chargeback_received_date')
+    date_hierarchy = 'chargeback_received_date'
