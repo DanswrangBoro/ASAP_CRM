@@ -2,58 +2,93 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOu805FkTduG2Fj5z0x6Gl0iXQrQlOQ0gMf5.C3f5z7A" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2aOt/Q==" crossorigin="anonymous" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOu805FkTduG2Fj5z0x6Gl0iXQrQlOQ0gMf5.C3f5z7A" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+        integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2aOt/Q=="
+        crossorigin="anonymous" />
     <link rel="stylesheet" href="{%  static 'css/base.css'%}">
     <title>CRM Dashboard</title>
 </head>
+
 <body>
     <div class="container-fluid">
         <div class="row">
             <nav class="col-md-2 col-12 d-none d-md-block custom-bg-color sidebar">
-                <div class="position-sticky pt-3">
+                <div class="position-sticky pt-3 sticky-side">
                     <!-- User information section -->
-                 <div class="user-info-section text-center">
-                     <!-- User icon -->
-                        <i class="fas fa-user-circle fa-3x user-icon"></i>
-                        <!-- User name -->
-                        {% if request.session.userN %}
-                        <p style="color: white; font-weight: bolder" class="mt-2">{{ request.session.userN }}</p>
-                    {% endif %}
-                    <hr>
-                        <form action="{% url 'crmApp:logout' %}" method="post" class="border p-0">
-                            {% csrf_token %}
-                        <li class="nav-item border">
-                                 <button class="btn text-white" type="submit"><i class="fa-solid fa-right-from-bracket"></i></button>
-                        </li>
-                </form>
+                    <div class="user-info-section text-center">
+                       <h2>CRM Logo</h2>
+
                     </div>
                     <div class="container glass-effect">
                         <ul class="nav flex-column">
                             <li class="nav-item">
                                 <a class="nav-link active" href="{% url 'crmApp:dashboard' %}">
-                                    <i class="fas fa-tachometer-alt mr-2"></i> Dashboard
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <g clip-path="url(#clip0_33_624)">
+                                            <path
+                                                d="M22 8.52V3.98C22 2.57 21.36 2 19.77 2H15.73C14.14 2 13.5 2.57 13.5 3.98V8.51C13.5 9.93 14.14 10.49 15.73 10.49H19.77C21.36 10.5 22 9.93 22 8.52Z"
+                                                stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                            <path
+                                                d="M22 19.77V15.73C22 14.14 21.36 13.5 19.77 13.5H15.73C14.14 13.5 13.5 14.14 13.5 15.73V19.77C13.5 21.36 14.14 22 15.73 22H19.77C21.36 22 22 21.36 22 19.77Z"
+                                                stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                            <path
+                                                d="M10.5 8.52V3.98C10.5 2.57 9.86 2 8.27 2H4.23C2.64 2 2 2.57 2 3.98V8.51C2 9.93 2.64 10.49 4.23 10.49H8.27C9.86 10.5 10.5 9.93 10.5 8.52Z"
+                                                stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                            <path
+                                                d="M10.5 19.77V15.73C10.5 14.14 9.86 13.5 8.27 13.5H4.23C2.64 13.5 2 14.14 2 15.73V19.77C2 21.36 2.64 22 4.23 22H8.27C9.86 22 10.5 21.36 10.5 19.77Z"
+                                                stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                        </g>
+                                        <defs>
+                                            <clipPath id="clip0_33_624">
+                                                <rect width="24" height="24" fill="white" />
+                                            </clipPath>
+                                        </defs>
+                                    </svg> Dashboard
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'crmApp:total_booking' %}">
-                                    <i class="fas fa-calendar-check mr-2 "></i> Total Bookings
+                                <a class="nav-link" href="#">
+                                    <img src="{% static 'assets/centers.png' %}" class="" alt="centers">
+                                    Centers
                                 </a>
                             </li>
                             {% if request.user.is_superuser or request.user.role == 'manager' %}
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'crmApp:total_user' %}">
-                                    <i class="fas fa-users mr-2"></i> Total Users
+                                    <img src="{% static 'assets/total-users.png' %}" class="" alt="total-users"> Total
+                                    Users
                                 </a>
                             </li>
                             {% endif %}
                             <li class="nav-item">
+                                <a class="nav-link" href="{% url 'crmApp:total_booking' %}">
+                                    <img src="{% static 'assets/total-bookings.png' %}" class="" alt="total-bookings">
+                                    Total Bookings
+                                </a>
+
+                            </li>
+                            <li>
+                            <li class="nav-item">
                                 <a class="nav-link" href="{% url 'crmApp:booking' %}">
-                                    <i class="fas fa-calendar-times mr-2"></i> Bookings
+                                    <img src="{% static 'assets/bookings.png' %}" class="" alt="bookings"> Bookings
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">
+                                    <img src="{% static 'assets/booking-status.png' %}" class="" alt="booking-status">
+                                    Booking Status
                                 </a>
                             </li>
                             <li class="nav-item">
@@ -73,7 +108,7 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'crmApp:mco' %}">
-                                    <i class="fas fa-id-card-alt mr-2"></i> MCO
+                                    <img src="{% static 'assets/MCO.png' %}" class="" alt="MCO"> MCO
                                 </a>
                             </li>
                             <!-- New links -->
@@ -85,27 +120,45 @@
                             {% if request.user.is_superuser or request.user.role == 'manager' %}
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'crmApp:ecredit' %}">
-                                    <i class="fas fa-credit-card mr-2"></i> E-Credit
+                                    <img src="{% static 'assets/credit.png' %}" class="" alt="Credit issuance">
+                                    Credit issuance
                                 </a>
                             </li>
                             {% endif %}
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'crmApp:generate_invoice' %}">
-                                    <i class="fas fa-file-invoice-dollar mr-2"></i>
+                                    <img src="{% static 'assets/invoice.png' %}" class="" alt="invoices">
                                     Invoices
                                 </a>
                             </li>
+                            <form action="{% url 'crmApp:logout' %}" method="post" style="padding-top: 40%;">
+                                {% csrf_token %}
+                                <li class="nav-item" style=" border: none; cursor: pointer;" onmouseover="this.style.backgroundColor='#3180ff';" onmouseout="this.style.backgroundColor='#f3f6fb';">
+                                    <button class="btn" type="submit" >
+                                        <img src="{% static 'assets/logout.png' %}" class="" alt="logout">Log Out
+                                    </button>
+                                    
+                                </li>
+                            </form>
+                            
                         </ul>
                     </div>
-                    </div>
+
+                </div>
+
             </nav>
             <main class="col-md-9 ms-sm-auto col-lg-10 px-4">
-              {% block content  %}{% endblock %}
+
+                {% block content %}{% endblock %}
             </main>
         </div>
     </div>
-    
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-eMNCOe7tC1doHpGoJtKh7z7lGz7fuP4F8nfdFvAOA6Gg/z6Y5J6XqqyGXYM2ntXU" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-pzjw8f+ua7Kw1TIq0v8FqFjcJ6pajs/rfdfs3SO+kD4Ck5BdPtF+to8xMp9MvcJ4" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"
+        integrity="sha384-eMNCOe7tC1doHpGoJtKh7z7lGz7fuP4F8nfdFvAOA6Gg/z6Y5J6XqqyGXYM2ntXU"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js"
+        integrity="sha384-pzjw8f+ua7Kw1TIq0v8FqFjcJ6pajs/rfdfs3SO+kD4Ck5BdPtF+to8xMp9MvcJ4"
+        crossorigin="anonymous"></script>
 </body>
+
 </html>
