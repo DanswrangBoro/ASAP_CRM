@@ -281,8 +281,10 @@ def book_view(request):
 
 def chargeback(request):
     chargebacks = Chargeback.objects.all()
-    highest_chargebacks = Chargeback.objects.order_by('-chargeback_amount')[:5]
-    total_chargeback_amount = chargebacks.aggregate(total_chargeback=Sum('chargeback_amount'))['total_chargeback']
+    highest_chargebacks = Chargeback.objects.order_by('-Booking__price')[:5]
+    total_chargeback_amount = chargebacks.aggregate(
+        total_chargeback=Sum('Booking__price')
+    )['total_chargeback']
     return render(request, "chargeback.html", {'chargebacks': chargebacks, 'highest_chargebacks': highest_chargebacks, 'total_chargeback_amount': total_chargeback_amount})
 
 def rejected(request):
@@ -866,44 +868,31 @@ def send_email(request):
     
 def submit_chargeback(request):
     if request.method == 'POST':
-        booking_date = request.POST.get('booking_date')
         booking_confirmation_no = request.POST.get('booking_confirmation_no')
-        customer_name = request.POST.get('customer_name')
-        customer_phone_no = request.POST.get('customer_phone_no')
-        email_address = request.POST.get('email_address')
-        departure_city = request.POST.get('departure_city')
-        departure_date = request.POST.get('departure_date')
-        arrival_city = request.POST.get('arrival_city')
-        arrival_date = request.POST.get('arrival_date')
-        price = request.POST.get('price')
-        no_of_passenger = request.POST.get('no_of_passenger')
-        credit_card_no = request.POST.get('credit_card_no')
-        confirmation_mail_status = request.POST.get('confirmation_mail_status')
-        chargeback_amount = request.POST.get('chargeback_amount')
         reason = request.POST.get('reason')
         chargeback_received_date = request.POST.get('chargeback_received_date')
-
-        # Save the form data to the Chargeback model
+        
+        booking = get_object_or_404(Booking, confirmation_no=booking_confirmation_no)
+        
+        # Create a new Chargeback instance related to the booking
         chargeback = Chargeback.objects.create(
-            booking_date=booking_date,
-            booking_confirmation_no=booking_confirmation_no,
-            customer_name=customer_name,
-            customer_phone_no=customer_phone_no,
-            email_address=email_address,
-            departure_city=departure_city,
-            departure_date=departure_date,
-            arrival_city=arrival_city,
-            arrival_date=arrival_date,
-            price=price,
-            no_of_passenger=no_of_passenger,
-            credit_card_no=credit_card_no,
-            confirmation_mail_status=confirmation_mail_status,
-            chargeback_amount=chargeback_amount,
+            Booking=booking,
             reason=reason,
             chargeback_received_date=chargeback_received_date,
+            # Add other fields as needed
         )
-        # success_message = "Chargeback submitted successfully!"
+        
+        # Optionally, you can add additional fields to the Chargeback model
+        # For example:
+        # chargeback.credit_card_no = request.POST.get('credit_card_no')
+        # chargeback.chargeback_amount = request.POST.get('chargeback_amount')
+        # chargeback.confirmation_mail_status = request.POST.get('confirmation_mail_status')
+        # chargeback.chargeback_status = request.POST.get('chargeback_status')
+        # chargeback.chargeback_lead_status = request.POST.get('chargeback_lead_status')
+        # chargeback.save()
+        
         messages.success(request, 'Chargeback Submitted Successfully!')
+        
     return redirect('crmApp:chargeback')
 
 # =================================================================================( update lead_chargeback_status)=========================

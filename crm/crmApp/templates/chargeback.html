@@ -33,48 +33,6 @@
     <label for="booking_confirmation_no">Booking Confirmation No:</label><br>
     <input type="text" id="booking_confirmation_no" name="booking_confirmation_no"><br><br>
 
-    <label for="lead_agent">Lead agent:</label><br>
-    <input type="text" id="lead_agent" name="lead_agent"><br><br>
-
-    <label for="booking_date">Booking Date:</label><br>
-    <input type="date" id="booking_date" name="booking_date"><br><br>
-
-    <label for="customer_name">Customer Name:</label><br>
-    <input type="text" id="customer_name" name="customer_name"><br><br>
-
-    <label for="customer_phone_no">Customer Phone No:</label><br>
-    <input type="text" id="customer_phone_no" name="customer_phone_no"><br><br>
-
-    <label for="email_address">Email Address:</label><br>
-    <input type="email" id="email_address" name="email_address"><br><br>
-
-    <label for="departure_city">Departure City:</label><br>
-    <input type="text" id="departure_city" name="departure_city"><br><br>
-
-    <label for="departure_date">Departure Date:</label><br>
-    <input type="date" id="departure_date" name="departure_date"><br><br>
-
-    <label for="arrival_city">Arrival City:</label><br>
-    <input type="text" id="arrival_city" name="arrival_city"><br><br>
-
-    <label for="arrival_date">Arrival Date:</label><br>
-    <input type="date" id="arrival_date" name="arrival_date"><br><br>
-
-    <label for="price">Price:</label><br>
-    <input type="text" id="price" name="price"><br><br>
-
-    <label for="no_of_passenger">Number of Passengers:</label><br>
-    <input type="number" id="no_of_passenger" name="no_of_passenger"><br><br>
-
-    <label for="credit_card_no">Credit Card No:</label><br>
-    <input type="text" id="credit_card_no" name="credit_card_no"><br><br>
-
-    <label for="confirmation_mail_status">Confirmation Mail Status:</label><br>
-    <input type="text" id="confirmation_mail_status" name="confirmation_mail_status"><br><br>
-
-    <label for="chargeback_amount">Chargeback Amount:</label><br>
-    <input type="text" id="chargeback_amount" name="chargeback_amount"><br><br>
-
     <label for="reason">Reason:</label><br>
     <input type="text" id="reason" name="reason"><br><br>
 
@@ -117,7 +75,7 @@
     <div class="card-body">
         <ul style="font-size: 0.8rem">
             {% for chargeback in highest_chargebacks %}
-            <li>{{ chargeback.customer_name }} - ${{ chargeback.chargeback_amount }}</li>
+            <li>{{ chargeback.Booking.passenger_name }} - ${{ chargeback.Booking.price }}</li>
             {% endfor %}
         </ul>
     </div>
@@ -148,7 +106,6 @@
                             <th>No Of Pssgr</th>
                             <th>Credit Card No</th>
                             <th>Confirmation Mail Status</th>
-                            <th>Chargeback Amount</th>
                             <th>Reason</th>
                             <th>Chargeback Recieved Date</th>
                             <th>Chargeback Status</th>
@@ -162,21 +119,20 @@
                         {% for chargeback in chargebacks %}
                         <tr>
                             <td>{{ forloop.counter }}</td>
-                            <td style="width: 10rem;">{{ chargeback.booking_confirmation_no }}</td>
+                            <td style="width: 10rem;">{{ chargeback.Booking.confirmation_no }}</td>
                             <td>{{chargeback.Booking.lead_agent.username}}</td>
-                            <td>{{ chargeback.booking_date }}</td>
-                            <td style="width: 10rem;">{{ chargeback.customer_name }}</td>
-                            <td style="width: 10rem;">{{ chargeback.customer_phone_no }}</td>
-                            <td style="width: 10rem;">{{ chargeback.email_address }}</td>
-                            <td>{{ chargeback.departure_city }}</td>
-                            <td>{{ chargeback.departure_date }}</td>
-                            <td>{{ chargeback.arrival_city }}</td>
-                            <td>{{ chargeback.arrival_date }}</td>
-                            <td>{{ chargeback.price }}</td>
+                            <td>{{ chargeback.Booking.change_date }}</td>
+                            <td style="width: 10rem;">{{ chargeback.Booking.passenger_name }}</td>
+                            <td style="width: 10rem;">{{ chargeback.Booking.phone_number }}</td>
+                            <td style="width: 10rem;">{{ chargeback.Booking.email }}</td>
+                            <td>{{ chargeback.Booking.departure }}</td>
+                            <td>{{ chargeback.Booking.departure_date }}</td>
+                            <td>{{ chargeback.Booking.arrival }}</td>
+                            <td>{{ chargeback.Booking.arrival_date }}</td>
+                            <td>{{ chargeback.Booking.price }}</td>
                             <td>{{ chargeback.no_of_passenger }}</td>
-                            <td style="width: 10rem;">{{ chargeback.credit_card_no }}</td>
+                            <td style="width: 10rem;">{{ chargeback.Booking.card_number }}</td>
                             <td>{{ chargeback.confirmation_mail_status }}</td>
-                            <td>{{ chargeback.chargeback_amount }}</td>
                             <td>{{ chargeback.reason }}</td>
                             <td>{{ chargeback.chargeback_received_date }}</td>
                             <td>{{ chargeback.chargeback_status }}</td>

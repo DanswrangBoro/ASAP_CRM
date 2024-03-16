@@ -14,12 +14,17 @@
                 <button type="button" class="btn-close" onclick="hideNotification()" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                {% for chargeback in pending_chargebacks %}
-                <h1>Chargeback Details</h1>
-                <p>Booking: {{ chargeback.Booking }}</p>
-                <p>Booking Confirmation No: {{ chargeback.booking_confirmation_no }}</p>
-                <p>Chargeback Amount: {{ chargeback.chargeback_amount }}</p>
-                {% endfor %}
+                <table class="table">
+                    <tbody>
+                        {% for chargeback in pending_chargebacks %}
+                        <tr style="font-size: 0.7rem">
+                            <td>{{ chargeback.Booking }}</td>
+                            <td>{{ chargeback.booking_confirmation_no }}</td>
+                            <td>{{ chargeback.chargeback_amount }}</td>0
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
 </div>
@@ -39,7 +44,7 @@
 <!-- Display Chargeback Alerts -->
     <marquee behavior="scroll" direction="left" class="alert alert-warning" style="{% if pending_chargebacks %} display:block; {% else %} display:none; {% endif %}">
         {% for chargeback in pending_chargebacks %}
-           <Strong>Chargeback alert:</strong> {{ chargeback.customer_name }} - ${{ chargeback.chargeback_amount }} | {{ chargeback.chargeback_received_date }}
+           <Strong>Chargeback alert:</strong> {{ chargeback.Booking.passenger_name }} - ${{ chargeback.Booking.price }} | {{ chargeback.chargeback_received_date }}
         {% endfor %}
     </marquee>
     <h1 class="text-center mt-1 py-2 col-custom-color2">CRM  <span>Dash</span>board</h1> <br>
