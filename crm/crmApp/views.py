@@ -76,25 +76,25 @@ def flight_results(request):
         try:
             print("inside try")
             if return_date == "":
-                # response = amadeus.shopping.flight_offers_search.get(
-                # originLocationCode=from_location,
-                # destinationLocationCode=to_location,
-                # departureDate=departure_date,
-                # adults=adults,
-                # children=child,
-                # infants=infants,
-                # travelClass=class_type
-                # ).data
-                # # Store the response as JSON format
-                # context = {
-                #     "flights" : response,
-                #     "flights1" : json.dumps(response)
-                # }
+                response = amadeus.shopping.flight_offers_search.get(
+                originLocationCode=from_location,
+                destinationLocationCode=to_location,
+                departureDate=departure_date,
+                adults=adults,
+                children=child,
+                infants=infants,
+                travelClass=class_type
+                ).data
+                # Store the response as JSON format
+                context = {
+                    "flights" : response,
+                    "flights1" : json.dumps(response)
+                }
                 file_path = "temp.txt"
-                # with open(file_path, "w") as file:
-                #     json.dump(context, file, indent= 4)
-                with open(file_path, "r") as file:
-                    context = json.load(file)
+                with open(file_path, "w") as file:
+                    json.dump(context, file, indent= 4)
+                # with open(file_path, "r") as file:
+                #     context = json.load(file)
                 print("something went wrong")
 
             else:
@@ -123,7 +123,7 @@ def flight_results(request):
                     "flights_return": response_return
                 }
             # Pass the stringified JSON data to the template
-            print(context)
+            # print(context)
             return render(request, 'result1.html', context)
         except ResponseError as error:
             return render(request, 'error.html', {'error': error})
@@ -849,3 +849,19 @@ def send_email(request):
         return render(request, 'generate_invoice.html', {'email_sent': True})
     else:
         return HttpResponse("Error: Invalid request method.")
+    
+
+def check_flight(request):
+    if request.method == 'POST':
+        flight  = json.loads(request.body.decode('utf-8'))
+        try:
+            response = amadeus.shopping.flight_offers.pricing.post(flight).data
+            print(response)
+            context = {
+                'flight' : response,
+            }
+            return JsonResponse(context)
+        
+        except:
+            print("something went wrong")
+        return HttpResponse("success")

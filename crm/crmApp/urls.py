@@ -40,7 +40,7 @@ urlpatterns = [
     path('sales/', views.sales_view, name='sales'),
     path('reassign/', reassign_lead_agent, name='reassign_lead_agent'),
     path('get_agent_data/', views.get_agent_data, name='get_agent_data'),
-
+    path('check-availability/', views.check_flight, name='check-flight'),
 
 ]
 
