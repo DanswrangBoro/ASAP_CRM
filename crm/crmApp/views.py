@@ -78,25 +78,27 @@ def flight_results(request):
         try:
             print("inside try")
             if return_date == "":
-                # response = amadeus.shopping.flight_offers_search.get(
-                # originLocationCode=from_location,
-                # destinationLocationCode=to_location,
-                # departureDate=departure_date,
-                # adults=adults,
-                # children=child,
-                # infants=infants,
-                # travelClass=class_type
-                # ).data
-                # # Store the response as JSON format
-                # context = {
-                #     "flights" : response,
-                #     "flights1" : json.dumps(response)
-                # }
+                response = amadeus.shopping.flight_offers_search.get(
+                originLocationCode=from_location,
+                destinationLocationCode=to_location,
+                departureDate=departure_date,
+                adults=adults,
+                children=child,
+                infants=infants,
+                travelClass=class_type
+                ).data
+                
+                # Store the response as JSON format
+                context = {
+                    "flights" : response,
+                    "flights1" : json.dumps(response),
+
+                }
                 file_path = "temp.txt"
-                # with open(file_path, "w") as file:
-                #     json.dump(context, file, indent= 4)
-                with open(file_path, "r") as file:
-                    context = json.load(file)
+                with open(file_path, "w") as file:
+                    json.dump(context, file, indent= 4)
+                # with open(file_path, "r") as file:
+                #     context = json.load(file)
                 print("something went wrong")
 
             else:
@@ -125,7 +127,7 @@ def flight_results(request):
                     "flights_return": response_return
                 }
             # Pass the stringified JSON data to the template
-            print(context)
+            # print(context)
             return render(request, 'result1.html', context)
         except ResponseError as error:
             return render(request, 'error.html', {'error': error})
@@ -863,6 +865,47 @@ def send_email(request):
         return render(request, 'generate_invoice.html', {'email_sent': True})
     else:
         return HttpResponse("Error: Invalid request method.")
+    
+
+def check_flight(request):
+    if request.method == 'POST':
+        json_data_str = request.POST.get('json_data')
+        flight = json.loads(json_data_str)
+        # Process the JSON data as needed
+        print(type(flight))
+        try:
+            response = amadeus.shopping.flight_offers.pricing.post(flight).data
+            print(response)
+            validating_airline_codes_set = set()
+            
+            for data in response["flightOffers"]:
+                for dats in data["itineraries"]:
+                    for segment in dats["segments"]:
+                        # print(segment["carrierCode"])
+                        validating_airline_codes_set.add(segment["carrierCode"])
+
+            # Convert the set to a list if needed
+            validating_airline_codes_list = list(validating_airline_codes_set)
+            airline_codes_string = ','.join(validating_airline_codes_list)
+            airlines = amadeus.reference_data.airlines.get(airlineCodes=airline_codes_string).data
+            # print(airlines)
+            result_dict = {item['iataCode']: item["businessName"] for item in airlines}
+            result_dict2 = {item['iataCode']: item.get('icaoCode', item['iataCode']) for item in airlines}
+            print(result_dict2)
+            context = {
+                'flight' : response,
+                "airlines":result_dict,
+                "airlines2":result_dict2,
+            }
+            # return HttpResponse({"success":"success"})
+            return render(request,'itinery.html',context)
+        except ResponseError as e:
+             # error = ClientError(e)
+            print(e.response.result["errors"][0]["detail"])
+            print(f"catch Error: {type(e)}")
+            # error_message = {"error": str(e.response.result["errors"])}
+            return HttpResponse(e.response.result["errors"])
+
     
 # ============================================================================( Chargeback View)==============================
     
