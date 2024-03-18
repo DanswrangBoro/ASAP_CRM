@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, reverse
 from django.http import JsonResponse
-from .models import Booking, Refund
+from .models import AdditionCharge, Booking, Refund
 from datetime import datetime
 from django.db.models import Sum
 from .models import Refund
@@ -17,7 +17,10 @@ from .models import Sale
 from django.db.models import Sum
 from .models import Chargeback
 from django.http import HttpResponseBadRequest
-# Configure logging
+from .models import Invoice
+import uuid
+import random
+
 logger = logging.getLogger(__name__)
     
 CLIENT_ID = os.environ.get('AMADEUS_CLIENT_ID','')
@@ -983,3 +986,102 @@ def update_chargeback_status(request):
 #         return redirect('crmApp:dashboard', {'chargeback': chargeback})
 #     except Chargeback.DoesNotExist:
 #         return render(request, 'chargeback_not_found.html')
+
+# =========================================================================(invoice creation)===================================
+
+def invoiceCreate(request):
+     # Retrieve all bookings with status 'confirmed'
+    confirmed_bookings = Booking.objects.filter(status='confirmed')
+    return render(request,'invoiceCreation.html', {'bookings': confirmed_bookings})
+# =========================================================================(invoice creation)===================================
+
+def submit_invoice(request):
+    if request.method == 'POST':
+        booking = request.POST.get('bookingId')
+        print("Booking Id:", booking)
+
+        base_price = request.POST.get('basePrice')
+        print("Base Price:", base_price)
+
+        markup_price = request.POST.get('markupPrice')
+        print("Markup Price:", markup_price)
+
+        description1 = request.POST.get('description1')
+        print("Description 1:", description1)
+
+        total1 = request.POST.get('total1')
+        print("Total 1:", total1)
+
+        tax = request.POST.get('tax')
+        print("Tax:", tax)
+
+        description2 = request.POST.get('description2')
+        print("Description 2:", description2)
+
+        total2 = request.POST.get('total2')
+        print("Total 2:", total2)
+
+        additional_charges = request.POST.getlist('additionalCharges[]')
+        print("Additional Charges:", additional_charges)
+
+        additional_description = request.POST.getlist('additionalDescription[]')
+        print("Additional Description:", additional_description)
+
+        discount = request.POST.get('discount')
+        print("Discount:", discount)
+
+        total_discount = request.POST.get('totalDiscount')
+        print("Total Discount:", total_discount)
+
+        grand_total = request.POST.get('grandTotal')
+        print("Grand Total:", grand_total)
+
+        booking_instance = get_object_or_404(Booking, booking_id = booking)
+        # Create an Invoice object
+        invoice = Invoice.objects.create(
+            invoice_id = random_invoice_no(),
+            booking = booking_instance,
+            base_price=base_price,
+            markup_price=markup_price,
+            description1=description1,
+            total1=total1,
+            tax=tax,
+            description2=description2,
+            total2=total2,
+            discount=discount,
+            total_discount=total_discount,
+            grand_total=grand_total
+        )
+
+        # Create an AdditionalCharge object
+        for p,des in zip(additional_charges,additional_description):
+            charges = AdditionCharge.objects.create(
+                invoice = invoice,
+                price = p,
+                description = des
+            )
+            charges.save()
+        # # Optionally, you can save the AdditionalCharge object
+        invoice.save()
+        
+        # Optionally, you can add a success message
+        messages.success(request, 'Invoice submitted successfully!')
+        
+        # Redirect to a success page or a desired URL
+        return redirect('crmApp:invoice')  # Adjust the URL name as per your project
+    
+def random_invoice_no():
+    # Generate a random UUID
+    random_uuid = uuid.uuid4()
+
+    # Convert UUID to a string with uppercase letters only
+    uuid_string = str(random_uuid).upper()
+
+    # Remove dashes and take the first 6 characters
+    invoice_number = ''.join(random.choices(uuid_string, k=6))
+    
+    return invoice_number
+
+# Example usage
+invoice_number = random_invoice_no()
+print("Random Invoice Number:", invoice_number)

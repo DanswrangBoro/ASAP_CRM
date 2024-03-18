@@ -85,7 +85,7 @@ class Booking(models.Model):
     status = models.CharField(max_length=50, default="pending")
     change_date = models.DateTimeField(blank=True, null=True)
     mco = models.CharField(max_length=100, blank=True, null=True)
-    lead_agent = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, related_name='lead_bookings')
+    lead_agent = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, blank=True, related_name='lead_bookings')
     card_number = models.IntegerField(max_length=16,default="1234567890123456")
 
     def __str__(self):
@@ -159,3 +159,30 @@ class Chargeback(models.Model):
     def __str__(self):
         return f"Chargeback for {self.Booking.booking_id}"
 # ==============================================================================( End Chargeback Model)=============================
+    
+
+# =================================================================================(submit invoice)==========================
+
+
+
+class Invoice(models.Model):
+    invoice_id = models.CharField(max_length=255, default="", null= True, blank=True)
+    booking = models.ForeignKey(Booking, on_delete=models.CASCADE, default="")
+    base_price = models.DecimalField(max_digits=10, decimal_places=2)
+    markup_price = models.DecimalField(max_digits=10, decimal_places=2)
+    description1 = models.CharField(max_length=100)
+    total1 = models.DecimalField(max_digits=10, decimal_places=2)
+    tax = models.DecimalField(max_digits=10, decimal_places=2)
+    description2 = models.CharField(max_length=100)
+    total2 = models.DecimalField(max_digits=10, decimal_places=2)
+    discount = models.DecimalField(max_digits=10, decimal_places=2)
+    total_discount = models.DecimalField(max_digits=10, decimal_places=2)
+    grand_total = models.DecimalField(max_digits=10, decimal_places=2)
+    def __str__(self):
+        return self.invoice_id
+
+
+class AdditionCharge(models.Model):
+    invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE, default="")
+    price = models.FloatField()
+    description = models.CharField(max_length=255)
