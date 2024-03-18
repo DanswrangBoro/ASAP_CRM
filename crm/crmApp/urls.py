@@ -44,6 +44,7 @@ urlpatterns = [
     path('update_chargeback_lead_status/', views.update_chargeback_lead_status, name='update_chargeback_lead_status'),
     path('update_chargeback_status/', views.update_chargeback_status, name='update_chargeback_status'),
     # path('chargeback-details/<int:chargeback_id>/', views.chargeback_details, name='chargeback_details'),
+    path('submit_form_customer/', views.submit_cutomer, name = 'submit_customer')
 ]
 
 
