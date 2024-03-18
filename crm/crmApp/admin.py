@@ -12,11 +12,11 @@ class BookingAdmin(admin.ModelAdmin):
 
 @admin.register(Refund)
 class RefundAdmin(admin.ModelAdmin):
-    list_display = ['booking_id','passenger_name']
+    list_display = ['booking_id']
 
 @admin.register(RejectedBooking)
 class RejectedBookingAdmin(admin.ModelAdmin):
-    list_display = ('booking_id', 'customer_name', 'reason', 'rejection_date')
+    list_display = ('booking_id', 'reason', 'rejection_date')
     
 from django.contrib.auth.admin import UserAdmin
 
@@ -54,7 +54,7 @@ from .models import Chargeback
 
 @admin.register(Chargeback)
 class ChargebackAdmin(admin.ModelAdmin):
-    list_display = ('booking_confirmation_no','Booking','booking_date','customer_name', 'chargeback_amount', 'chargeback_status','chargeback_lead_status')
+    list_display = (  'chargeback_status','chargeback_lead_status')
     search_fields = ('booking_confirmation_no', 'customer_name')
     list_filter = ('chargeback_status', 'chargeback_received_date')
     date_hierarchy = 'chargeback_received_date'

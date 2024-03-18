@@ -1,0 +1,62 @@
+{% extends 'base.html' %}{% load static %}
+{% block content %}
+{% load static %}
+{% load custom_filters %}
+<div>
+  <h1>Flight Itinerary</h1>
+
+  <p><strong>Type:</strong> {{ flight.type }}</p>
+
+  <h2>Flight Offers:</h2>
+  {% for flight_offer in flight.flightOffers %}
+  <div class="card mb-3">
+      <div class="card-header">
+          <h2>Flight Offer</h2>
+          <p><strong>Offer ID:</strong> {{ flight_offer.id }}</p>
+      </div>
+      <div class="card-body">
+          <div class="row">
+              <div class="col-md-6">
+                  <h3>Itineraries</h3>
+                  {% for itinerary in flight_offer.itineraries %}
+                  <div >
+                    {% for segment in itinerary.segments %}
+                    <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+
+                      {% with airline_code=segment.carrierCode%} 
+                      {% if airline_code in airlines2 %}
+                      <!-- Display airline logo with alt attribute as the airline name -->
+                      <img
+                        id="logoI"
+                        src="https://thimpu.pythonanywhere.com/logo/api/airline/{{ airlines2|get_value:airline_code }}"
+                        alt=" " style="max-width: 100px; max-height: 100px;"
+                      />
+                      {% endif %} 
+                      {% endwith %}
+                      <p><strong>Airline:</strong> {{ segment.carrierCode }}</p>
+                      <p><strong>Departure Airport:</strong> {{ segment.departure.iataCode }}</p>
+                      <p><strong>Departure Time:</strong> {{ segment.departure.at }}</p>
+                      <p><strong>Arrival Airport:</strong> {{ segment.arrival.iataCode }}</p>
+                      <p><strong>Arrival Time:</strong> {{ segment.arrival.at }}</p>
+                    </div>
+                        <!-- Add more segment details as needed -->
+                    {% endfor %}
+                  </div>
+                  {% endfor %}
+              </div>
+          </div>
+      </div>
+      <div class="card-footer">
+          <h3>Price</h3>
+          <p><strong>Currency:</strong> {{ flight_offer.price.currency }}</p>
+          <p><strong>Total Price:</strong> {{ flight_offer.price.total }}</p>
+          <p><strong>Base Price:</strong> {{ flight_offer.price.base }}</p>
+          <p><strong>Grand Total:</strong> {{ flight_offer.price.grandTotal }}</p>
+          <!-- Add more price details as needed -->
+      </div>
+  </div>
+{% endfor %}
+
+</div>
+
+{% endblock %}

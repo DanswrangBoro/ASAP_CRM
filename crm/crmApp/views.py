@@ -87,10 +87,12 @@ def flight_results(request):
                 # infants=infants,
                 # travelClass=class_type
                 # ).data
+                
                 # # Store the response as JSON format
                 # context = {
                 #     "flights" : response,
-                #     "flights1" : json.dumps(response)
+                #     "flights1" : json.dumps(response),
+
                 # }
                 file_path = "temp.txt"
                 # with open(file_path, "w") as file:
@@ -125,7 +127,7 @@ def flight_results(request):
                     "flights_return": response_return
                 }
             # Pass the stringified JSON data to the template
-            print(context)
+            # print(context)
             return render(request, 'result1.html', context)
         except ResponseError as error:
             return render(request, 'error.html', {'error': error})
@@ -281,8 +283,10 @@ def book_view(request):
 
 def chargeback(request):
     chargebacks = Chargeback.objects.all()
-    highest_chargebacks = Chargeback.objects.order_by('-chargeback_amount')[:5]
-    total_chargeback_amount = chargebacks.aggregate(total_chargeback=Sum('chargeback_amount'))['total_chargeback']
+    highest_chargebacks = Chargeback.objects.order_by('-Booking__price')[:5]
+    total_chargeback_amount = chargebacks.aggregate(
+        total_chargeback=Sum('Booking__price')
+    )['total_chargeback']
     return render(request, "chargeback.html", {'chargebacks': chargebacks, 'highest_chargebacks': highest_chargebacks, 'total_chargeback_amount': total_chargeback_amount})
 
 def rejected(request):
@@ -862,48 +866,81 @@ def send_email(request):
     else:
         return HttpResponse("Error: Invalid request method.")
     
+
+def check_flight(request):
+    if request.method == 'POST':
+        json_data_str = request.POST.get('json_data')
+        flight = json.loads(json_data_str)
+        # Process the JSON data as needed
+        print(type(flight))
+        try:
+            # response = amadeus.shopping.flight_offers.pricing.post(flight).data
+            # print(response)
+            # validating_airline_codes_set = set()
+            
+            # for data in response["flightOffers"]:
+            #     for dats in data["itineraries"]:
+            #         for segment in dats["segments"]:
+            #             # print(segment["carrierCode"])
+            #             validating_airline_codes_set.add(segment["carrierCode"])
+
+            # # Convert the set to a list if needed
+            # validating_airline_codes_list = list(validating_airline_codes_set)
+            # airline_codes_string = ','.join(validating_airline_codes_list)
+            # airlines = amadeus.reference_data.airlines.get(airlineCodes=airline_codes_string).data
+            # # print(airlines)
+            # result_dict = {item['iataCode']: item["businessName"] for item in airlines}
+            # result_dict2 = {item['iataCode']: item.get('icaoCode', item['iataCode']) for item in airlines}
+            # print(result_dict2)
+            # context = {
+            #     'flight' : response,
+            #     "airlines":result_dict,
+            #     "airlines2":result_dict2,
+            # }
+            file_path = "temp_ite.txt"
+            # with open(file_path, "w") as file:
+            #     json.dump(context, file, indent= 4)
+            with open(file_path, "r") as file:
+                context = json.load(file)
+            # return HttpResponse({"success":"success"})
+            return render(request,'itinery.html',context)
+        except ResponseError as e:
+             # error = ClientError(e)
+            print(e.response.result["errors"][0]["detail"])
+            print(f"catch Error: {type(e)}")
+            # error_message = {"error": str(e.response.result["errors"])}
+            return HttpResponse(e.response.result["errors"])
+
+    
 # ============================================================================( Chargeback View)==============================
     
 def submit_chargeback(request):
     if request.method == 'POST':
-        booking_date = request.POST.get('booking_date')
         booking_confirmation_no = request.POST.get('booking_confirmation_no')
-        customer_name = request.POST.get('customer_name')
-        customer_phone_no = request.POST.get('customer_phone_no')
-        email_address = request.POST.get('email_address')
-        departure_city = request.POST.get('departure_city')
-        departure_date = request.POST.get('departure_date')
-        arrival_city = request.POST.get('arrival_city')
-        arrival_date = request.POST.get('arrival_date')
-        price = request.POST.get('price')
-        no_of_passenger = request.POST.get('no_of_passenger')
-        credit_card_no = request.POST.get('credit_card_no')
-        confirmation_mail_status = request.POST.get('confirmation_mail_status')
-        chargeback_amount = request.POST.get('chargeback_amount')
         reason = request.POST.get('reason')
         chargeback_received_date = request.POST.get('chargeback_received_date')
-
-        # Save the form data to the Chargeback model
+        
+        booking = get_object_or_404(Booking, confirmation_no=booking_confirmation_no)
+        
+        # Create a new Chargeback instance related to the booking
         chargeback = Chargeback.objects.create(
-            booking_date=booking_date,
-            booking_confirmation_no=booking_confirmation_no,
-            customer_name=customer_name,
-            customer_phone_no=customer_phone_no,
-            email_address=email_address,
-            departure_city=departure_city,
-            departure_date=departure_date,
-            arrival_city=arrival_city,
-            arrival_date=arrival_date,
-            price=price,
-            no_of_passenger=no_of_passenger,
-            credit_card_no=credit_card_no,
-            confirmation_mail_status=confirmation_mail_status,
-            chargeback_amount=chargeback_amount,
+            Booking=booking,
             reason=reason,
             chargeback_received_date=chargeback_received_date,
+            # Add other fields as needed
         )
-        # success_message = "Chargeback submitted successfully!"
+        
+        # Optionally, you can add additional fields to the Chargeback model
+        # For example:
+        # chargeback.credit_card_no = request.POST.get('credit_card_no')
+        # chargeback.chargeback_amount = request.POST.get('chargeback_amount')
+        # chargeback.confirmation_mail_status = request.POST.get('confirmation_mail_status')
+        # chargeback.chargeback_status = request.POST.get('chargeback_status')
+        # chargeback.chargeback_lead_status = request.POST.get('chargeback_lead_status')
+        # chargeback.save()
+        
         messages.success(request, 'Chargeback Submitted Successfully!')
+        
     return redirect('crmApp:chargeback')
 
 # =================================================================================( update lead_chargeback_status)=========================
