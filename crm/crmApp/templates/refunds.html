@@ -14,12 +14,26 @@
     <table class="table table-striped custom-table">
         <thead>
             <tr>
+                <th>Sl no</th>
+                <th>Booking Date</th>
+                <th>Agent Name</th>
+                <th>Booking Confirmation no</th>
                 <th>Booking Id</th>
                 <th>Customer Name</th>
                 <th>Phone Number</th>
                 <th>Email</th>
+                <th>Departure City</th>
+                <th>Departure Date</th>
+                <th>Arrival City</th>
+                <th>Arrival Date</th>
+                <th>Booking Price</th>
+                <th>No of pssgr</th>
+                <th>Credit card</th>
+                <th>Confirmation Mail Status</th>
                 <th>Refund Amount</th>
                 <th>Refund Reason</th>
+                <th>Refund Status</th>
+                <th>Refund Lead Status</th>
                 <th>Status</th>
                 <th>Action</th>
             </tr>
@@ -27,12 +41,32 @@
         <tbody>
             {% for r in refund %}
             <tr>
+                <td>1</td>
+                <td>N/A</td>
+                <td>N/A</td>
+                <td>N/A</td>
                 <td>{{ r.booking_id }}</td>
                 <td>{{ r.passenger_name }}</td>
                 <td>{{ r.phone_number }}</td>
                 <td>{{ r.email }}</td>
+                <td>N/A</td>
+                <td>N/A</td>
+                <td>N/A</td>
+                <td>N/A</td>
+                <td>N/A</td>
+                <td>N/A</td>
+                <td>N/A</td>
+                <td>N/A</td>
                 <td><b>$</b> {{ r.refund_amount }}</td>
                 <td>{{ r.refund_reason }}</td>
+                <td>N/A</td>
+                <td>
+                    <select>
+                        <option value="pending" selected >Pending</option>
+                        <option value="approved" >Approved</option>
+                        <option value="declined" >Declined</option>
+                    </select>
+                </td>
                 <td>{{ r.status }}</td>
                 <td>
                     <form method="POST" action="{% url 'crmApp:update_refund_status' %}">

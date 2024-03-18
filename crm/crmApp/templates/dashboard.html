@@ -1,7 +1,53 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-    <h1 class="text-center mt-5 py-2 col-custom-color2">CRM  <span>Dash</span>board</h1> <br>
+<style>
+    .fas.fa-money-bill-alt {
+        font-size: 1.7rem;
+        margin-top: 10px;
+    }
+</style>
+<div id="notificationModal" class="modal border" style="display: none; position: absolute; top: 100px; left: 0; height: auto; width: 25rem">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Notification</h5>
+                <button type="button" class="btn-close" onclick="hideNotification()" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <tbody>
+                        {% for chargeback in pending_chargebacks %}
+                        <tr style="font-size: 0.7rem">
+                            <td>{{ chargeback.Booking }}</td>
+                            <td>{{ chargeback.booking_confirmation_no }}</td>
+                            <td>{{ chargeback.chargeback_amount }}</td>0
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+</div>
+
+
+
+{% for chargeback in pending_chargebacks %}
+<span class="position-relative" style="cursor: pointer" onclick="showNotification('{{ forloop.counter }}')">
+    <i class="fas fa-money-bill-alt"></i>
+    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-light text-dark mt-1">
+        {{ forloop.counter }}
+    </span>
+</span>
+{% endfor %}
+
+
+<!-- Display Chargeback Alerts -->
+    <marquee behavior="scroll" direction="left" class="alert alert-warning" style="{% if pending_chargebacks %} display:block; {% else %} display:none; {% endif %}">
+        {% for chargeback in pending_chargebacks %}
+           <Strong>Chargeback alert:</strong> {{ chargeback.Booking.passenger_name }} - ${{ chargeback.Booking.price }} | {{ chargeback.chargeback_received_date }}
+        {% endfor %}
+    </marquee>
+    <h1 class="text-center mt-1 py-2 col-custom-color2">CRM  <span>Dash</span>board</h1> <br>
     <div class="row">
         <div class="col-md-3  px-1 mt-md-0 mt-1">
             <div class="card shadow-lg col-custom-color card-with-background">
@@ -200,4 +246,29 @@
             });
         });
     </script> {% endcomment %}
+    <script>
+        function showNotification(counter) {
+            var modal = document.getElementById('notificationModal');
+            var notificationContent = document.getElementById('notificationContent');
+            
+            // Update notification content
+            //notificationContent.textContent = 'You clicked on chargeback #' + counter;
+        
+            // Show the modal by setting its display to 'block'
+            modal.style.display = 'block';
+            // Adjust modal position relative to the icon
+            var iconPosition = document.querySelector('.position-relative').getBoundingClientRect();
+            modal.style.top = (iconPosition.bottom + 10) + 'px';
+            modal.style.left = (iconPosition.left) + 'px';
+        }
+        
+        function hideNotification() {
+            var modal = document.getElementById('notificationModal');
+        
+            // Hide the modal by setting its display to 'none'
+            modal.style.display = 'none';
+        }
+            
+    </script>
+    
 {% endblock %}

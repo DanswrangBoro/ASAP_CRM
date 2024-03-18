@@ -225,6 +225,10 @@
                             </div>
                             <br>
                             {% endfor %}
+                            <form id="myForm" action="{% url 'crmApp:check-flight' %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="json_data" id="json_data_input">
+                            </form>
                             
                             
                             
@@ -335,7 +339,7 @@ function openModal(flightId) {
 }
 
 function sendFlightDataToServer(flightData) {
-    fetch('/check-availability/', {
+   /* fetch('/check-availability/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -354,7 +358,9 @@ function sendFlightDataToServer(flightData) {
     })
     .catch(error => {
         console.error('There was a problem with the fetch operation:', error);
-    });
+    }); */
+    document.getElementById('json_data_input').value = JSON.stringify(flightData);
+    document.getElementById('myForm').submit();
 }
 
 // Function to get CSRF token from cookies

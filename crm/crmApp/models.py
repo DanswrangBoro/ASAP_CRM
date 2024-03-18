@@ -69,6 +69,7 @@ class CustomUser(AbstractUser):
 
 class Booking(models.Model):
     booking_id = models.CharField(max_length=100)
+    confirmation_no = models.CharField(max_length=255,null=True,blank=True)
     passenger_name = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=15)
     email = models.EmailField()
@@ -85,6 +86,7 @@ class Booking(models.Model):
     change_date = models.DateTimeField(blank=True, null=True)
     mco = models.CharField(max_length=100, blank=True, null=True)
     lead_agent = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, related_name='lead_bookings')
+    card_number = models.IntegerField(max_length=16,default="1234567890123456")
 
     def __str__(self):
         return self.booking_id
@@ -93,9 +95,6 @@ class Booking(models.Model):
 
 class Refund(models.Model):
     booking_id = models.ForeignKey(Booking, on_delete=models.CASCADE)
-    passenger_name = models.CharField(max_length=255)
-    phone_number = models.CharField(max_length=15)
-    email = models.EmailField()
     refund_amount = models.DecimalField(max_digits=10, decimal_places=2)
     refund_reason = models.TextField()
     status = models.CharField(max_length=20,default="Pending")
@@ -126,7 +125,6 @@ class Refund(models.Model):
     
 class RejectedBooking(models.Model):
     booking_id = models.ForeignKey(Booking, on_delete=models.CASCADE)
-    customer_name = models.CharField(max_length=100)
     reason = models.TextField()
     rejection_date = models.DateField(auto_now_add=True)
 
@@ -146,3 +144,18 @@ class Sale(models.Model):
         return f"Sale by {self.agent.username} on {self.sale_date}"
 
 # ===============================================================sales model==================================
+
+
+# ==============================================================================( Chargeback Model)=============================
+
+class Chargeback(models.Model):
+    Booking = models.ForeignKey(Booking, on_delete=models.SET_NULL, null=True, related_name='lead_bookings')
+    credit_card_no = models.CharField(max_length=20)
+    confirmation_mail_status = models.CharField(max_length=50)
+    reason = models.CharField(max_length=100)
+    chargeback_received_date = models.DateField()
+    chargeback_status = models.CharField(max_length=50, default="pending")
+    chargeback_lead_status = models.CharField(max_length=50, default="pending")
+    def __str__(self):
+        return f"Chargeback for {self.Booking.booking_id}"
+# ==============================================================================( End Chargeback Model)=============================

@@ -10,7 +10,7 @@ app_name = 'crmApp'
 
 urlpatterns = [
     path('', views.login_view, name='login'),  # Assign 'login' as the name for the login view
-    path('base/', views.flight_book, name='base'),
+    # path('base/', views.flight_book, name='base'),
     path('dashboard/', views.dashboard, name='dashboard'),
     path('total_booking/', views.total_booking, name='total_booking'),
     path('total_user/', views.total_user, name='total_user'),
@@ -40,8 +40,10 @@ urlpatterns = [
     path('sales/', views.sales_view, name='sales'),
     path('reassign/', reassign_lead_agent, name='reassign_lead_agent'),
     path('get_agent_data/', views.get_agent_data, name='get_agent_data'),
-    path('check-availability/', views.check_flight, name='check-flight'),
-
+    path('check-availability/', views.check_flight, name='check-flight'),    path('submit_chargeback/', views.submit_chargeback, name='submit_chargeback'),
+    path('update_chargeback_lead_status/', views.update_chargeback_lead_status, name='update_chargeback_lead_status'),
+    path('update_chargeback_status/', views.update_chargeback_status, name='update_chargeback_status'),
+    # path('chargeback-details/<int:chargeback_id>/', views.chargeback_details, name='chargeback_details'),
 ]
 
 

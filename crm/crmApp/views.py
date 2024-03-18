@@ -15,6 +15,8 @@ from amadeus import Client as AmadeusClient
 import logging
 from .models import Sale
 from django.db.models import Sum
+from .models import Chargeback
+from django.http import HttpResponseBadRequest
 # Configure logging
 logger = logging.getLogger(__name__)
     
@@ -85,10 +87,12 @@ def flight_results(request):
                 infants=infants,
                 travelClass=class_type
                 ).data
+                
                 # Store the response as JSON format
                 context = {
                     "flights" : response,
-                    "flights1" : json.dumps(response)
+                    "flights1" : json.dumps(response),
+
                 }
                 file_path = "temp.txt"
                 with open(file_path, "w") as file:
@@ -164,8 +168,8 @@ def flight_results(request):
 #     except Exception as e:
 #         return render(request, 'result.html', {'error': str(e)})
 
-def flight_book(request):
-    return render(request, "base.html")
+# def flight_book(request):
+#     return render(request, "base.html")
 
 from decimal import Decimal
 
@@ -213,20 +217,25 @@ def dashboard(request):
     # Annual income
     annual_income = Booking.objects.filter(departure_date__year=current_year, status='confirmed').aggregate(annual_income=Sum('price'))['annual_income'] or 0
     userN = request.session.get('userN')
+    pending_chargebacks = Chargeback.objects.filter(chargeback_lead_status='pending')
+
     context = {
         'total_sales': total_sales,
         'monthly_income': monthly_income,
         'annual_income': annual_income,
         'user' : userN,
-        'confirm_agentlist' : agent_confirmlist
+        'confirm_agentlist' : agent_confirmlist,
+        'pending_chargebacks': pending_chargebacks,
     }
     return render(request,'dashboard.html',context)
 # =================================================================================end dashboard==================================
 
 def total_user(request):
     user_data = CustomUser.objects.all()  # Fetch all User objects
+    form = UserCreationForm()
     context = {
         "users": user_data,  # Rename the context variable to avoid confusion
+        'form' : form
     }
     return render(request, "total_users.html", context)
 
@@ -273,7 +282,12 @@ def book_view(request):
 
 
 def chargeback(request):
-    return render(request,"chargeback.html")
+    chargebacks = Chargeback.objects.all()
+    highest_chargebacks = Chargeback.objects.order_by('-Booking__price')[:5]
+    total_chargeback_amount = chargebacks.aggregate(
+        total_chargeback=Sum('Booking__price')
+    )['total_chargeback']
+    return render(request, "chargeback.html", {'chargebacks': chargebacks, 'highest_chargebacks': highest_chargebacks, 'total_chargeback_amount': total_chargeback_amount})
 
 def rejected(request):
     rejected_bookings = Booking.objects.filter(status='rejected')
@@ -575,14 +589,16 @@ def create_user(request):
             if password == confirm_password:
                 user = CustomUser.objects.create_user(email=email, username=username, phoneNumber=phoneNumber, role=role, team=team, password=password)
                 user.save()
+                messages.success(request,"user created successfuly!")
                 return redirect('crmApp:total_user')
             else:
-                pass
+                messages.warning(request,"Password does not match!")
+                return redirect('crmApp:total_user')
         else:
-            print(form.errors)
-    else:
-        form = UserCreationForm()
-    return render(request, 'total_users.html', {'form': form})
+            messages.warning(request,"user created successfuly!")
+
+            return redirect('crmApp:total_user')
+    return redirect('crmApp:total_user')
 
 
 # ==========================================================login===============================
@@ -853,15 +869,112 @@ def send_email(request):
 
 def check_flight(request):
     if request.method == 'POST':
-        flight  = json.loads(request.body.decode('utf-8'))
+        json_data_str = request.POST.get('json_data')
+        flight = json.loads(json_data_str)
+        # Process the JSON data as needed
+        print(type(flight))
         try:
             response = amadeus.shopping.flight_offers.pricing.post(flight).data
             print(response)
+            validating_airline_codes_set = set()
+            
+            for data in response["flightOffers"]:
+                for dats in data["itineraries"]:
+                    for segment in dats["segments"]:
+                        # print(segment["carrierCode"])
+                        validating_airline_codes_set.add(segment["carrierCode"])
+
+            # Convert the set to a list if needed
+            validating_airline_codes_list = list(validating_airline_codes_set)
+            airline_codes_string = ','.join(validating_airline_codes_list)
+            airlines = amadeus.reference_data.airlines.get(airlineCodes=airline_codes_string).data
+            # print(airlines)
+            result_dict = {item['iataCode']: item["businessName"] for item in airlines}
+            result_dict2 = {item['iataCode']: item.get('icaoCode', item['iataCode']) for item in airlines}
+            print(result_dict2)
             context = {
                 'flight' : response,
+                "airlines":result_dict,
+                "airlines2":result_dict2,
             }
-            return JsonResponse(context)
+            # return HttpResponse({"success":"success"})
+            return render(request,'itinery.html',context)
+        except ResponseError as e:
+             # error = ClientError(e)
+            print(e.response.result["errors"][0]["detail"])
+            print(f"catch Error: {type(e)}")
+            # error_message = {"error": str(e.response.result["errors"])}
+            return HttpResponse(e.response.result["errors"])
+
+    
+# ============================================================================( Chargeback View)==============================
+    
+def submit_chargeback(request):
+    if request.method == 'POST':
+        booking_confirmation_no = request.POST.get('booking_confirmation_no')
+        reason = request.POST.get('reason')
+        chargeback_received_date = request.POST.get('chargeback_received_date')
         
-        except:
-            print("something went wrong")
-        return HttpResponse("success")
+        booking = get_object_or_404(Booking, confirmation_no=booking_confirmation_no)
+        
+        # Create a new Chargeback instance related to the booking
+        chargeback = Chargeback.objects.create(
+            Booking=booking,
+            reason=reason,
+            chargeback_received_date=chargeback_received_date,
+            # Add other fields as needed
+        )
+        
+        # Optionally, you can add additional fields to the Chargeback model
+        # For example:
+        # chargeback.credit_card_no = request.POST.get('credit_card_no')
+        # chargeback.chargeback_amount = request.POST.get('chargeback_amount')
+        # chargeback.confirmation_mail_status = request.POST.get('confirmation_mail_status')
+        # chargeback.chargeback_status = request.POST.get('chargeback_status')
+        # chargeback.chargeback_lead_status = request.POST.get('chargeback_lead_status')
+        # chargeback.save()
+        
+        messages.success(request, 'Chargeback Submitted Successfully!')
+        
+    return redirect('crmApp:chargeback')
+
+# =================================================================================( update lead_chargeback_status)=========================
+
+def update_chargeback_lead_status(request):
+    if request.method == 'POST':
+        chargeback_id = request.POST.get('chargeback_id')
+        new_lead_status = request.POST.get('chargeback_lead_status')
+        
+        try:
+            chargeback = Chargeback.objects.get(pk=chargeback_id)
+            chargeback.chargeback_lead_status = new_lead_status
+            chargeback.save()
+        except Chargeback.DoesNotExist:
+            pass  # Handle the case where the chargeback does not exist
+        
+    return redirect('crmApp:chargeback')
+
+def update_chargeback_status(request):
+    if request.method == 'POST':
+        chargeback_id = request.POST.get('chargeback_id')
+        new_status = request.POST.get('chargeback_status')
+        print(new_status)
+        try:
+            chargeback = Chargeback.objects.get(pk=chargeback_id)
+            chargeback.chargeback_status = new_status
+            chargeback.save()
+            return redirect('crmApp:chargeback')
+        except Chargeback.DoesNotExist:
+            return HttpResponseBadRequest("Chargeback does not exist")
+    
+    return HttpResponseBadRequest("Invalid request")
+
+
+# ==========================================================================(chargeback_details)==============================
+
+# def chargeback_details(request, chargeback_id):
+#     try:
+#         chargeback = Chargeback.objects.get(pk=chargeback_id)
+#         return redirect('crmApp:dashboard', {'chargeback': chargeback})
+#     except Chargeback.DoesNotExist:
+#         return render(request, 'chargeback_not_found.html')
