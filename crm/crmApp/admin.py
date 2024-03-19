@@ -64,7 +64,7 @@ class ChargebackAdmin(admin.ModelAdmin):
 
 @admin.register(Invoice)
 class InvoiceAdmin(admin.ModelAdmin):
-    list_display = ['id', 'base_price', 'markup_price', 'description1', 'total1', 'tax', 'description2', 'total2', 'discount', 'total_discount', 'grand_total']
+    list_display = ['id', 'base_price', 'markup_price', 'description1', 'total1', 'tax', 'description2', 'total2', 'discount', 'total_discount', 'grand_total','status']
     list_filter = ['base_price', 'markup_price', 'total1', 'tax', 'total2', 'discount', 'total_discount', 'grand_total']
     search_fields = ['description1', 'description2']
 
