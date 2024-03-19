@@ -1,3 +1,9 @@
+
+
+
+# Ignore migration files
+*/migrations/*
+*/migrations/__init__.py
 # Django #
 *.log
 *.pot

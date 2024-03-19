@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, reverse
 from django.http import JsonResponse
-from .models import Booking, Refund
+from .models import AdditionCharge, Booking, Refund
 from datetime import datetime
 from django.db.models import Sum
 from .models import Refund
@@ -17,7 +17,10 @@ from .models import Sale
 from django.db.models import Sum
 from .models import Chargeback
 from django.http import HttpResponseBadRequest
-# Configure logging
+from .models import Invoice
+import uuid
+import random
+
 logger = logging.getLogger(__name__)
     
 CLIENT_ID = os.environ.get('AMADEUS_CLIENT_ID','')
@@ -87,10 +90,12 @@ def flight_results(request):
                 # infants=infants,
                 # travelClass=class_type
                 # ).data
+                
                 # # Store the response as JSON format
                 # context = {
                 #     "flights" : response,
-                #     "flights1" : json.dumps(response)
+                #     "flights1" : json.dumps(response),
+
                 # }
                 file_path = "temp.txt"
                 # with open(file_path, "w") as file:
@@ -125,7 +130,7 @@ def flight_results(request):
                     "flights_return": response_return
                 }
             # Pass the stringified JSON data to the template
-            print(context)
+            # print(context)
             return render(request, 'result1.html', context)
         except ResponseError as error:
             return render(request, 'error.html', {'error': error})
@@ -281,8 +286,10 @@ def book_view(request):
 
 def chargeback(request):
     chargebacks = Chargeback.objects.all()
-    highest_chargebacks = Chargeback.objects.order_by('-chargeback_amount')[:5]
-    total_chargeback_amount = chargebacks.aggregate(total_chargeback=Sum('chargeback_amount'))['total_chargeback']
+    highest_chargebacks = Chargeback.objects.order_by('-Booking__price')[:5]
+    total_chargeback_amount = chargebacks.aggregate(
+        total_chargeback=Sum('Booking__price')
+    )['total_chargeback']
     return render(request, "chargeback.html", {'chargebacks': chargebacks, 'highest_chargebacks': highest_chargebacks, 'total_chargeback_amount': total_chargeback_amount})
 
 def rejected(request):
@@ -862,48 +869,82 @@ def send_email(request):
     else:
         return HttpResponse("Error: Invalid request method.")
     
+
+def check_flight(request):
+    if request.method == 'POST':
+        json_data_str = request.POST.get('json_data')
+        flight = json.loads(json_data_str)
+        # Process the JSON data as needed
+        print(type(flight))
+        try:
+            # response = amadeus.shopping.flight_offers.pricing.post(flight).data
+            # print(response)
+            # validating_airline_codes_set = set()
+            
+            # for data in response["flightOffers"]:
+            #     for dats in data["itineraries"]:
+            #         for segment in dats["segments"]:
+            #             # print(segment["carrierCode"])
+            #             validating_airline_codes_set.add(segment["carrierCode"])
+
+            # # Convert the set to a list if needed
+            # validating_airline_codes_list = list(validating_airline_codes_set)
+            # airline_codes_string = ','.join(validating_airline_codes_list)
+            # airlines = amadeus.reference_data.airlines.get(airlineCodes=airline_codes_string).data
+            # # print(airlines)
+            # result_dict = {item['iataCode']: item["businessName"] for item in airlines}
+            # result_dict2 = {item['iataCode']: item.get('icaoCode', item['iataCode']) for item in airlines}
+            # print(result_dict2)
+            # context = {
+            #     'flight' : response,
+            #     'flight1' : json.dumps(response),
+            #     "airlines":result_dict,
+            #     "airlines2":result_dict2,
+            # }
+            file_path = "temp_ite.txt"
+            # with open(file_path, "w") as file:
+            #     json.dump(context, file, indent= 4)
+            with open(file_path, "r") as file:
+                context = json.load(file)
+            # return HttpResponse({"success":"success"})
+            return render(request,'itinery.html',context)
+        except ResponseError as e:
+             # error = ClientError(e)
+            print(e.response.result["errors"][0]["detail"])
+            print(f"catch Error: {type(e)}")
+            # error_message = {"error": str(e.response.result["errors"])}
+            return HttpResponse(e.response.result["errors"])
+
+    
 # ============================================================================( Chargeback View)==============================
     
 def submit_chargeback(request):
     if request.method == 'POST':
-        booking_date = request.POST.get('booking_date')
         booking_confirmation_no = request.POST.get('booking_confirmation_no')
-        customer_name = request.POST.get('customer_name')
-        customer_phone_no = request.POST.get('customer_phone_no')
-        email_address = request.POST.get('email_address')
-        departure_city = request.POST.get('departure_city')
-        departure_date = request.POST.get('departure_date')
-        arrival_city = request.POST.get('arrival_city')
-        arrival_date = request.POST.get('arrival_date')
-        price = request.POST.get('price')
-        no_of_passenger = request.POST.get('no_of_passenger')
-        credit_card_no = request.POST.get('credit_card_no')
-        confirmation_mail_status = request.POST.get('confirmation_mail_status')
-        chargeback_amount = request.POST.get('chargeback_amount')
         reason = request.POST.get('reason')
         chargeback_received_date = request.POST.get('chargeback_received_date')
-
-        # Save the form data to the Chargeback model
+        
+        booking = get_object_or_404(Booking, confirmation_no=booking_confirmation_no)
+        
+        # Create a new Chargeback instance related to the booking
         chargeback = Chargeback.objects.create(
-            booking_date=booking_date,
-            booking_confirmation_no=booking_confirmation_no,
-            customer_name=customer_name,
-            customer_phone_no=customer_phone_no,
-            email_address=email_address,
-            departure_city=departure_city,
-            departure_date=departure_date,
-            arrival_city=arrival_city,
-            arrival_date=arrival_date,
-            price=price,
-            no_of_passenger=no_of_passenger,
-            credit_card_no=credit_card_no,
-            confirmation_mail_status=confirmation_mail_status,
-            chargeback_amount=chargeback_amount,
+            Booking=booking,
             reason=reason,
             chargeback_received_date=chargeback_received_date,
+            # Add other fields as needed
         )
-        # success_message = "Chargeback submitted successfully!"
+        
+        # Optionally, you can add additional fields to the Chargeback model
+        # For example:
+        # chargeback.credit_card_no = request.POST.get('credit_card_no')
+        # chargeback.chargeback_amount = request.POST.get('chargeback_amount')
+        # chargeback.confirmation_mail_status = request.POST.get('confirmation_mail_status')
+        # chargeback.chargeback_status = request.POST.get('chargeback_status')
+        # chargeback.chargeback_lead_status = request.POST.get('chargeback_lead_status')
+        # chargeback.save()
+        
         messages.success(request, 'Chargeback Submitted Successfully!')
+        
     return redirect('crmApp:chargeback')
 
 # =================================================================================( update lead_chargeback_status)=========================
@@ -946,3 +987,143 @@ def update_chargeback_status(request):
 #         return redirect('crmApp:dashboard', {'chargeback': chargeback})
 #     except Chargeback.DoesNotExist:
 #         return render(request, 'chargeback_not_found.html')
+
+# =========================================================================(invoice creation)===================================
+
+def invoiceCreate(request):
+     # Retrieve all bookings with status 'confirmed'
+    confirmed_bookings = Booking.objects.filter(status='confirmed')
+    return render(request,'invoiceCreation.html', {'bookings': confirmed_bookings})
+# =========================================================================(invoice creation)===================================
+
+def submit_invoice(request):
+    if request.method == 'POST':
+        booking = request.POST.get('bookingId')
+        print("Booking Id:", booking)
+
+        base_price = request.POST.get('basePrice')
+        print("Base Price:", base_price)
+
+        markup_price = request.POST.get('markupPrice')
+        print("Markup Price:", markup_price)
+
+        description1 = request.POST.get('description1')
+        print("Description 1:", description1)
+
+        total1 = request.POST.get('total1')
+        print("Total 1:", total1)
+
+        tax = request.POST.get('tax')
+        print("Tax:", tax)
+
+        description2 = request.POST.get('description2')
+        print("Description 2:", description2)
+
+        total2 = request.POST.get('total2')
+        print("Total 2:", total2)
+
+        additional_charges = request.POST.getlist('additionalCharges[]')
+        print("Additional Charges:", additional_charges)
+
+        additional_description = request.POST.getlist('additionalDescription[]')
+        print("Additional Description:", additional_description)
+
+        discount = request.POST.get('discount')
+        print("Discount:", discount)
+
+        total_discount = request.POST.get('totalDiscount')
+        print("Total Discount:", total_discount)
+
+        grand_total = request.POST.get('grandTotal')
+        print("Grand Total:", grand_total)
+
+        booking_instance = get_object_or_404(Booking, booking_id = booking)
+        # Create an Invoice object
+        invoice = Invoice.objects.create(
+            invoice_id = random_invoice_no(),
+            booking = booking_instance,
+            base_price=base_price,
+            markup_price=markup_price,
+            description1=description1,
+            total1=total1,
+            tax=tax,
+            description2=description2,
+            total2=total2,
+            discount=discount,
+            total_discount=total_discount,
+            grand_total=grand_total
+        )
+
+        # Create an AdditionalCharge object
+        for p,des in zip(additional_charges,additional_description):
+            charges = AdditionCharge.objects.create(
+                invoice = invoice,
+                price = p,
+                description = des
+            )
+            charges.save()
+        # # Optionally, you can save the AdditionalCharge object
+        invoice.save()
+        
+        # Optionally, you can add a success message
+        messages.success(request, 'Invoice submitted successfully!')
+        
+        # Redirect to a success page or a desired URL
+        return redirect('crmApp:invoice')  # Adjust the URL name as per your project
+    
+def random_invoice_no():
+    # Generate a random UUID
+    random_uuid = uuid.uuid4()
+
+    # Convert UUID to a string with uppercase letters only
+    uuid_string = str(random_uuid).upper()
+
+    # Remove dashes and take the first 6 characters
+    invoice_number = ''.join(random.choices(uuid_string, k=6))
+    
+    return invoice_number
+
+# Example usage
+invoice_number = random_invoice_no()
+print("Random Invoice Number:", invoice_number)
+def submit_cutomer(request):
+    if request.method == 'POST':
+        # Get the list of first names
+        first_names = request.POST.getlist('firstName[]')
+        middle_names = request.POST.getlist('middleName[]')
+        last_names = request.POST.getlist('lastName[]')
+        Sex = request.POST.getlist('Sex[]')
+        DOB = request.POST.getlist('DOB[]')
+        email = request.POST.get('email')
+        countryCode = request.POST.get('countryCode')
+        phone = request.POST.get('phone')
+        json_data_str = request.POST.get('json_data')
+        flight = json.loads(json_data_str)
+        # Process the JSON data as needed
+        print(flight)
+        # Process the data as needed
+        print(first_names)
+        traveler_details = []
+        for index,(fname,lname,dob,sex) in enumerate(zip(first_names,last_names,DOB,Sex)):
+            formatted_person = {
+                "id": str(index),  # You can adjust the ID logic as needed
+                "dateOfBirth": dob,  # You might want to provide the actual date of birth
+                "name": {"firstName": fname.upper(), "lastName": lname.upper()},
+                "gender": sex.upper(),  # Assuming 'MALE' or 'FEMALE' format
+                "contact": {
+                    "emailAddress": email,  # Add the actual email address
+                    "phones": [
+                        {
+                            "deviceType": "MOBILE",
+                            "countryCallingCode": countryCode,  # Add the actual country calling code
+                            "number": phone  # Add the actual phone number
+                        }
+                    ],
+                }
+            }
+            traveler_details.append(formatted_person)
+        print(traveler_details)
+        # Return an HttpResponse or redirect to another page
+        return HttpResponse("Form submitted successfully!")
+
+    return HttpResponse("success")
