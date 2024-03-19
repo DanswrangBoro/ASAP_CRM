@@ -897,6 +897,7 @@ def check_flight(request):
             # print(result_dict2)
             # context = {
             #     'flight' : response,
+            #     'flight1' : json.dumps(response),
             #     "airlines":result_dict,
             #     "airlines2":result_dict2,
             # }
@@ -1085,3 +1086,44 @@ def random_invoice_no():
 # Example usage
 invoice_number = random_invoice_no()
 print("Random Invoice Number:", invoice_number)
+def submit_cutomer(request):
+    if request.method == 'POST':
+        # Get the list of first names
+        first_names = request.POST.getlist('firstName[]')
+        middle_names = request.POST.getlist('middleName[]')
+        last_names = request.POST.getlist('lastName[]')
+        Sex = request.POST.getlist('Sex[]')
+        DOB = request.POST.getlist('DOB[]')
+        email = request.POST.get('email')
+        countryCode = request.POST.get('countryCode')
+        phone = request.POST.get('phone')
+        json_data_str = request.POST.get('json_data')
+        flight = json.loads(json_data_str)
+        # Process the JSON data as needed
+        print(flight)
+        # Process the data as needed
+        print(first_names)
+        traveler_details = []
+        for index,(fname,lname,dob,sex) in enumerate(zip(first_names,last_names,DOB,Sex)):
+            formatted_person = {
+                "id": str(index),  # You can adjust the ID logic as needed
+                "dateOfBirth": dob,  # You might want to provide the actual date of birth
+                "name": {"firstName": fname.upper(), "lastName": lname.upper()},
+                "gender": sex.upper(),  # Assuming 'MALE' or 'FEMALE' format
+                "contact": {
+                    "emailAddress": email,  # Add the actual email address
+                    "phones": [
+                        {
+                            "deviceType": "MOBILE",
+                            "countryCallingCode": countryCode,  # Add the actual country calling code
+                            "number": phone  # Add the actual phone number
+                        }
+                    ],
+                }
+            }
+            traveler_details.append(formatted_person)
+        print(traveler_details)
+        # Return an HttpResponse or redirect to another page
+        return HttpResponse("Form submitted successfully!")
+
+    return HttpResponse("success")
