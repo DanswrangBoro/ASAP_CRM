@@ -1086,8 +1086,6 @@ def random_invoice_no():
 # Example usage
 invoice_number = random_invoice_no()
 print("Random Invoice Number:", invoice_number)
-
-
 def submit_cutomer(request):
     if request.method == 'POST':
         # Get the list of first names
