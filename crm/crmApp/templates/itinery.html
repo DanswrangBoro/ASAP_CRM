@@ -342,46 +342,55 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
+        var flights = JSON.parse('{{ flight1|escapejs|safe }}'); 
+        console.log(flights.flightOffers[0].travelerPricings.length)
+        var numberOfTravellers = Number(flights.flightOffers[0].travelerPricings.length)
     function sendFlightDataToServer() {
         var flights = JSON.parse('{{ flight1|escapejs|safe }}'); 
-        console.log(flights.flightOffers)
+        console.log(flights.flightOffers.travellers)
         document.getElementById('json_data_input').value = JSON.stringify(flights.flightOffers);
         document.getElementById('myForm').submit();
     }
   $(document).ready(function(){
       $("#addPassengerBtn").click(function(){
-          var newPassengerFields = '<div class="container-contain mt-5">' +
-                                      '<h1 class="mb-4">Additional Passenger</h1>' +
-                                      '<div class="form-row">' +
-                                          '<div class="form-group col-md-4">' +
-                                              '<label for="firstName">First Name</label>' +
-                                              '<input type="text" class="form-control" id="firstName" name="firstName[]" placeholder="Enter first name" required>' +
-                                          '</div>' +
-                                          '<div class="form-group col-md-4">' +
-                                              '<label for="middleName">Middle Name</label>' +
-                                              '<input type="text" class="form-control" id="middleName" name="middleName[]" placeholder="Enter middle name">' +
-                                          '</div>' +
-                                          '<div class="form-group col-md-4">' +
-                                              '<label for="lastName">Last Name</label>' +
-                                              '<input type="text" class="form-control" id="lastName" name="lastName[]" placeholder="Enter last name" required>' +
-                                          '</div>' +
-                                      '</div>' +
-                                      '<div class="form-row">' +
-                                          '<div class="form-group col-md-6">' +
-                                              '<label for="Sex">Sex</label>' +
-                                              '<select class="form-control" id="Sex" name="Sex[]">' +
-                                                  '<option value="Male">Male</option>' +
-                                                  '<option value="Female">Female</option>' +
-                                                  '<option value="Other">Other</option>' +
-                                              '</select>' +
-                                          '</div>' +
-                                          '<div class="form-group col-md-6">' +
-                                              '<label for="DOB">DOB</label>' +
-                                              '<input type="date" class="form-control" id="DOB" name="DOB[]" placeholder="DOB">' +
-                                          '</div>' +
-                                      '</div>' +
-                                  '</div>';
-          $(".container-custom").append(newPassengerFields);
+    // Check if the number of travellers is greater than 1
+    if (numberOfTravellers > 1) {
+        var newPassengerFields = '<div class="container-contain mt-5">' +
+                                    '<h1 class="mb-4">Additional Passenger</h1>' +
+                                    '<div class="form-row">' +
+                                        '<div class="form-group col-md-4">' +
+                                            '<label for="firstName">First Name</label>' +
+                                            '<input type="text" class="form-control" id="firstName" name="firstName[]" placeholder="Enter first name" required>' +
+                                        '</div>' +
+                                        '<div class="form-group col-md-4">' +
+                                            '<label for="middleName">Middle Name</label>' +
+                                            '<input type="text" class="form-control" id="middleName" name="middleName[]" placeholder="Enter middle name">' +
+                                        '</div>' +
+                                        '<div class="form-group col-md-4">' +
+                                            '<label for="lastName">Last Name</label>' +
+                                            '<input type="text" class="form-control" id="lastName" name="lastName[]" placeholder="Enter last name" required>' +
+                                        '</div>' +
+                                    '</div>' +
+                                    '<div class="form-row">' +
+                                        '<div class="form-group col-md-6">' +
+                                            '<label for="Sex">Sex</label>' +
+                                            '<select class="form-control" id="Sex" name="Sex[]">' +
+                                                '<option value="Male">Male</option>' +
+                                                '<option value="Female">Female</option>' +
+                                                '<option value="Other">Other</option>' +
+                                            '</select>' +
+                                        '</div>' +
+                                        '<div class="form-group col-md-6">' +
+                                            '<label for="DOB">DOB</label>' +
+                                            '<input type="date" class="form-control" id="DOB" name="DOB[]" placeholder="DOB">' +
+                                        '</div>' +
+                                    '</div>' +
+                                '</div>';
+        $(".container-custom").append(newPassengerFields);
+    } else {
+        // Display a message or alert indicating that no additional passenger can be added
+        alert("Cannot add additional passenger. Maximum number of passengers reached.");
+    }
       });
   });
 
