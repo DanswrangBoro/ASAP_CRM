@@ -1,12 +1,13 @@
 from django.contrib import admin
 
-from .models import Booking, Refund, RejectedBooking, CustomUser
+from .models import  AdditionCharge, Booking, Refund, RejectedBooking, CustomUser
 
 from .models import Sale
+from .models import Invoice
 
 @admin.register(Booking)
 class BookingAdmin(admin.ModelAdmin):
-    list_display = ['booking_id', 'passenger_name', 'departure_date', 'arrival_date', 'price','phone_number','email','mco','change_date']
+    list_display = ['id','booking_id', 'passenger_name', 'departure_date', 'arrival_date', 'price','phone_number','email','mco','change_date']
     search_fields = ['booking_id', 'passenger_name']
     list_filter = ['departure_date', 'arrival_date']
 
@@ -58,3 +59,16 @@ class ChargebackAdmin(admin.ModelAdmin):
     search_fields = ('booking_confirmation_no', 'customer_name')
     list_filter = ('chargeback_status', 'chargeback_received_date')
     date_hierarchy = 'chargeback_received_date'
+
+
+
+@admin.register(Invoice)
+class InvoiceAdmin(admin.ModelAdmin):
+    list_display = ['id', 'base_price', 'markup_price', 'description1', 'total1', 'tax', 'description2', 'total2', 'discount', 'total_discount', 'grand_total']
+    list_filter = ['base_price', 'markup_price', 'total1', 'tax', 'total2', 'discount', 'total_discount', 'grand_total']
+    search_fields = ['description1', 'description2']
+
+
+@admin.register(AdditionCharge)
+class  AdditionalChargeAdmin(admin.ModelAdmin):
+    list_display = ['price','description']

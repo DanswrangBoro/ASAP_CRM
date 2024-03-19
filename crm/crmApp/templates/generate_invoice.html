@@ -1,49 +1,186 @@
-{% extends 'base.html' %}
 {% load static %}
-{% block content %}
-{% if email_sent %}
-    <p style="color: green; text-align: center" id="error">Email sent successfully!</p>
-    <script>
-        setTimeout(function() {
-            document.getElementById('error').style.display = 'none';
-        }, 3000);
-    </script>
-{% endif %}
-<form action="{% url 'crmApp:send_email' %}" method="post">
-    {% csrf_token %}
-    {% comment %} <input type="hidden" name="invoice_html" value="{{ invoice_html }}"> {% endcomment %}
-    <div style="max-width: 600px; margin: 0 auto; margin-top:3%; padding: 20px; border: 1px solid #ddd; border-radius: 10px; font-family: Arial, sans-serif; background-color: #f9f9f9;">
-        <div style="text-align: center; margin-bottom: 20px;">
-            <h1 style="color: #333; margin: 0; font-size: 28px;">Invoice</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoices</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div style="text-align: center; margin: auto; width: 1000px">
+        <img src="{% static 'assets/banner.png' %}" alt="banner" style="display: block; margin: auto; height: 180px; width: 1000px;">
+    </div> 
+    <section id="invoice" style="max-width: 1000px; height: 100 vh; margin: auto;">
+        <table style="background-color: #f8f9fa; padding: 20px; width: 100%;">
+            <tr>
+                <td style="width: 50%; vertical-align: top;">
+                    <h4>From</h4>
+                </td>
+                <td style="width: 50%; text-align: right; vertical-align: top;">
+                    <h4>To</h4>
+                </td>
+            </tr>
+            <tr>
+                <td style="vertical-align: top;">
+                    <strong>Flight Booking Travel Agency</strong><br>
+                    Email: booking@example.com<br>
+                    Phone: +1234567890
+                </td>
+                <td style="text-align: right; vertical-align: top;">
+                    <strong>John Doe</strong><br>
+                    johndoe@example.com<br>
+                    +9876543210
+                </td>
+            </tr>
+        </table>
+        <div class="row">
+            <div class="col">
+                <h4>Passenger Details</h4>
+                <table class="table" style="width: 100%; border-style: dashed; border-color: black; border-width: 0.5px; border-collapse: collapse; padding: 10px;">
+                    <tr style="border-style: dashed; border-width: 1px; font-size: 0.9rem">
+                        <th style="width: 20%; padding: 5px; text-align: center;">Name</th>
+                        <th style="width: 20%; padding: 5px; text-align: center;">Email</th>
+                        <th style="width: 20%; padding: 5px; text-align: center;">Phone</th>
+                        <th style="width: 20%; padding: 5px; text-align: center;">Age</th>
+                        <th style="width: 20%; text-align: center;padding: 5px;">Sex</th>
+                    </tr>
+                    <tr style="border-style: dashed;border-width: 1px;font-size: 0.8rem">
+                        <td style="width: 20%; padding: 5px; text-align: center; border-right: 1px dashed;">John Doe</td>
+                        <td style="width: 20%; padding: 5px; text-align: center; border-right: 1px dashed;">john@example.com</td>
+                        <td style="width: 20%; padding: 5px; text-align: center; border-right: 1px dashed;">1234567890</td>
+                        <td style="width: 20%; padding: 5px; text-align: center; border-right: 1px dashed;">25</td>
+                        <td style="width: 20%; text-align: center; padding: 5px;">Male</td>
+                    </tr>
+                </table>                
+            </div>
         </div>
-        <div style="margin-bottom: 20px;">
-            <p style="margin: 5px;"><strong>From:</strong> Your Airline</p>
-            <p style="margin: 5px;"><strong>To:</strong> Passenger Name</p>
-            <p style="margin: 5px;"><strong>Date:</strong> March 14, 2024</p>
+        <div class="row">
+            <h4>Itinerary Details</h4>
+            <table class="table" style="width: 100%; border-style: dashed; border-color: black; border-width: 0.5px; border-collapse: collapse; padding: 10px;">
+                <thead style="font-size: 0.9rem">
+                    <tr style="border-style: dashed; border-width: 1px;">
+                        <th>Airline</th>
+                        <th>Depart City</th>
+                        <th>Arrival City</th>
+                        <th>Depart Airport</th>
+                        <th>Arrival Airport</th>
+                        <th>Departure Time</th>
+                        <th>Arrival Time</th>
+                        <th>Class</th>
+                        <th>Baggage Info</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="font-size: 0.8rem; text-align: center;">
+                        <td style="text-align: left;padding: 5px; border-right: 1px dashed;">
+                            <img class="airline-logo" src="airline_logo.jpg" alt="Airline Logo">
+                            <div class="info-value">Spice Jet</div>
+                            <div class="info-value">SG123</div>
+                        </td>
+                        <td style="text-align: center;padding: 5px; border-right: 1px dashed;">
+                            Delhi
+                        </td>
+                        <td style="text-align: center;padding: 5px; border-right: 1px dashed;">
+                            Guwahati
+                        </td>
+                        <td style="text-align: center;padding: 5px; border-right: 1px dashed;">
+                            Indira Gandhi International Airport
+                        </td>
+                        <td style="text-align: center;padding: 5px; border-right: 1px dashed;">
+                            Lokhpriya Gopinath Bordoloi International Airport
+                        </td>
+                        <td style="text-align: center;padding: 5px; border-right: 1px dashed;">
+                            19:20
+                        </td>
+                        <td style="text-align: center;padding: 5px; border-right: 1px dashed;">
+                            20:24
+                        </td>
+                        <td style="text-align: center;padding: 5px; border-right: 1px dashed;">
+                            Premium Economy
+                        </td>
+                        <td style="text-align: center;padding: 5px; border-right: 1px dashed;">
+                            1Kg
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-        <div style="background-color: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-            <h2 style="color: #333; margin-top: 0; font-size: 24px;">Flight Details</h2>
-            <p style="margin: 5px;"><strong>Flight:</strong> PR 2611</p>
-            <p style="margin: 5px;"><strong>Seat:</strong> 12C</p>
-        </div>
-        <div style="margin-top: 20px;">
-            <h2 style="color: #333; margin-top: 0; font-size: 24px;">Important Reminders</h2>
-            <ul style="padding: 0;">
-                <li style="margin: 5px; list-style: none;"><strong>Flight status:</strong> On time</li>
-                <li style="margin: 5px; list-style: none;"><strong>Bag drop counter:</strong> Check-in area</li>
-                <li style="margin: 5px; list-style: none;"><strong>Boarding gate closure:</strong> 30 minutes before departure</li>
-                <li style="margin: 5px; list-style: none;"><strong>Dangerous goods regulations:</strong> Follow guidelines</li>
-                <li style="margin: 5px; list-style: none;"><strong>Emergency exit row seating requirements:</strong> Be prepared</li>
-                <li style="margin: 5px; list-style: none;"><strong>Fitness to travel:</strong> Ensure good health</li>
-            </ul>
-        </div>
-        <div style="text-align: center; margin-top: 20px;">
-            <!-- Insert barcode image here (if available) -->
-            <img src="{% static 'barcode.png' %}" alt="Barcode" style="max-width: 200px;">
-        </div>
-        <div style="text-align: center; margin-top: 30px;">
-            <button type="submit" style="padding: 10px 20px; background-color: #337ab7; color: #fff; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">Send Email</button>
-        </div>
-    </div>
-</form>
-{% endblock %}
+        <table style="width: 100%; border-collapse: collapse; margin-top: 5px;">
+            <!-- Airline Fare -->
+            <tr>
+                <td style="width: 50%; padding: 5px;">
+                    <label for="basePrice" style="font-weight: bold;">Airline Fare:</label>
+                </td>
+                <td style="width: 50%; padding: 5px;">
+                    <input type="number" id="basePrice" name="basePrice" style="width: 100%;" value="1500" readonly>
+                </td>
+            </tr>
+            <!-- Description -->
+            <tr>
+                <td style="width: 50%; padding: 5px;">
+                    <label for="description1" style="font-weight: bold;">Description:</label>
+                </td>
+                <td style="width: 50%; padding: 5px;">
+                    <input type="text" id="description1" name="description1" style="width: 100%;" value="Airfare to Delhi" readonly>
+                </td>
+            </tr>
+            <!-- Total -->
+            <tr>
+                <td style="width: 50%; padding: 5px;">
+                    <label for="total1" style="font-weight: bold;">Total:</label>
+                </td>
+                <td style="width: 50%; padding: 5px;">
+                    <input type="text" id="total1" name="total1" style="width: 100%;" value="1700" readonly>
+                </td>
+            </tr>
+            <!-- Tax -->
+            <tr>
+                <td style="width: 50%; padding: 5px;">
+                    <label for="tax" style="font-weight: bold;">Tax:</label>
+                </td>
+                <td style="width: 50%; padding: 5px;">
+                    <input type="number" id="tax" name="tax" style="width: 100%;">
+                </td>
+            </tr>
+            <!-- Additional Charges -->
+            <tr>
+                <td style="width: 50%; padding: 5px;">
+                    <label for="additionalCharges" style="font-weight: bold;">Additional Charges:</label>
+                </td>
+                <td style="width: 50%; padding: 5px;">
+                    <input type="number" id="additionalCharges" name="additionalCharges" style="width: 100%;">
+                </td>
+            </tr>
+            <!-- Discount -->
+            <tr>
+                <td style="width: 50%; padding: 5px;">
+                    <label for="discount" style="font-weight: bold;">Discount:</label>
+                </td>
+                <td style="width: 50%; padding: 5px;">
+                    <input type="number" id="discount" name="discount" style="width: 100%;">
+                </td>
+            </tr>
+            <!-- Total Discount -->
+            <tr>
+                <td style="width: 50%; padding: 5px;">
+                    <label for="totalDiscount" style="font-weight: bold;">Total Discount:</label>
+                </td>
+                <td style="width: 50%; padding: 5px;">
+                    <input type="text" id="totalDiscount" name="totalDiscount" style="width: 100%;" readonly>
+                </td>
+            </tr>
+            <!-- Grand Total -->
+            <tr>
+                <td style="width: 50%; padding: 5px;">
+                    <label for="grandTotal" style="font-weight: bold;">Grand Total:</label>
+                </td>
+                <td style="width: 50%; padding: 5px;">
+                    <input type="text" id="grandTotal" name="grandTotal" style="width: 100%;" readonly>
+                </td>
+            </tr>
+        </table>
+        
+    </section>   
+</body>
+</html>
