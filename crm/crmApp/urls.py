@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import update_booking_status
+from .views import pending_invoices, send_signature_request, update_booking_status
 from .views import fetch_passenger_data,submit_refund_form,update_refund_status
 from django.contrib.auth.views import LoginView
 from .views import reassign_lead_agent
@@ -47,7 +47,10 @@ urlpatterns = [
     path('invoice/', views.invoiceCreate, name='invoice'),
     path('submit-invoice/', views.submit_invoice, name='submit_invoice'),
     path('fetch-invoice/', views.invoice_details_fetch, name="invoice-details-fetch"),
-    path('submit_form_customer/', views.submit_cutomer, name = 'submit_customer')
+    path('submit_form_customer/', views.submit_cutomer, name = 'submit_customer'),
+    path('send-signature-request/', send_signature_request, name='send_signature_request'),
+    path('pending_invoices/', pending_invoices, name='pending_invoices'),
+
 ]
 
 

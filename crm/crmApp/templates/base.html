@@ -123,17 +123,21 @@
                             </li>
                             {% endif %}
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'crmApp:generate_invoice' %}">
-                                    <img src="{% static 'assets/invoice.png' %}" class="" alt="invoices">
-                                    Invoices
-                                </a>
-                            </li>
-                            <li class="nav-item">
                                 <a class="nav-link" href="{% url 'crmApp:invoice' %}">
                                     <i class="fas fa-file-invoice mr-2"></i> Generate Invoice
                                 </a>
                             </li>
-
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'crmApp:pending_invoices' %}">
+                                    <i class="fas fa-file-invoice mr-2"></i> Pending Invoice
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'crmApp:generate_invoice' %}">
+                                    <img src="{% static 'assets/invoice.png' %}" class="" alt="invoices">
+                                    Sent Invoices
+                                </a>
+                            </li>
                             <form action="{% url 'crmApp:logout' %}" method="post" style="padding-top: 40%;">
                                 {% csrf_token %}
                                 <li class="nav-item" style=" border: none; cursor: pointer;" onmouseover="this.style.backgroundColor='#3180ff';" onmouseout="this.style.backgroundColor='#f3f6fb';">
