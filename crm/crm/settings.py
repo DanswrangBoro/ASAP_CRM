@@ -141,3 +141,6 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'www.swrang.123@gmail.com'  # Replace 'your-email' with your Gmail email address
 EMAIL_HOST_PASSWORD = 'atfavxdrtxbphqaa'  # Use the provided app password
+
+
+ADOBE_SIGN_INTEGRATION_KEY = '3AAABLblqZhDptsCYVOkAtkmIRq6GmqIEQi7Jzz2A5yCkkze-P1W-LpzLkzgvJLk5rqoi_bgkldPFHkgLZhW4HNhCiyf42xc9'

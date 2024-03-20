@@ -1,6 +1,7 @@
 {
     "data": {
         "type": "flight-order",
+
         "id": "eJzTd9f3d3P39jfVBzE8LF28ACsPBJo%3D",
         "queuingOfficeId": "NCE4D31SB",
         "associatedRecords": [
@@ -13,8 +14,10 @@
             {
                 "reference": "OFH9DJ",
                 "creationDate": "2024-03-20T11:36:00.000",
+
+
                 "originSystemCode": "GDS",
-                "flightOfferId": "1"
+                "flightOfferId": "2"
             }
         ],
         "flightOffers": [
@@ -289,8 +292,8 @@
                 "dateOfBirth": "1991-11-15",
                 "gender": "MALE",
                 "name": {
-                    "firstName": "THIMPU",
-                    "lastName": "SENGYUNG"
+                    "firstName": "DANSWRANG",
+                    "lastName": "BORO"
                 },
                 "contact": {
                     "purpose": "STANDARD",
