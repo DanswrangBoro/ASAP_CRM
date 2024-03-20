@@ -1,0 +1,546 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+{% load time_tags %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        :root {
+            --Grayscale1: #F4F5F5;
+            --SlateDark: #152835;
+            --active-color: #3799CF;
+        }
+        .cont {
+            display: none; /* Initially hide the container */
+        }
+        .show {
+        display: block !important; /* Show the container when this class is applied */
+        }
+            html {
+        background-color: var(--Grayscale1);  
+        margin: 5em;
+        font-family: Roboto-Regular;
+        }
+        a {
+            color: var(--active-color);
+        }
+
+        i.icon {
+        font-style: normal;
+        font-family: "Egencia-Icons";
+        }
+        .logo {
+        display: inline-block;
+        width: 11%;
+        text-align: center;
+        padding-right: 24px;
+        img {
+            max-width: 50px;
+        }
+        }
+        .info {
+        display: inline-block;
+        width: 85%;
+        vertical-align: top;
+        }
+        .air-desc {
+        display: inline-block;
+        width: 30%;
+        vertical-align: top;
+        div{
+        display: inline-block;
+        }
+        }
+
+        .air-dur {
+        display: inline-block;
+        vertical-align: top;
+        width: 22.5%;
+        }
+
+        .box {
+            max-width: 700px;
+            background: #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+            padding: 24px;
+
+            &.lite {
+                // Add styles for .box.lite here
+            }
+        }
+
+        .airline {
+        font-size: 13px;
+        color: #8D949A;
+        padding-bottom: 9px;
+        }
+
+        .time {
+        font-size: 21px;
+        .sm {
+            font-size: 13px;
+        }
+        }
+
+        .time-arrow {
+        font-size: 13px;
+        color: #C6CACD;
+        padding: 0 12px;
+        }
+
+        .top {
+        font-size: 15px;
+        color: #8D949A;
+        padding-top: 6px;
+        }
+
+        .bottom {
+        font-size: 13px;
+        color: #AFB4B9;
+        padding-top: 3px;
+        }
+        .price {
+        font-size: 21px;
+        color: #202D38;
+        margin-top: -3px;
+        }
+        .text-center {
+        text-align: center;
+        }
+
+        .box .hover {
+        display: none;
+        }
+        .box:hover .hover {
+        display: block;
+        }
+        .box {
+        cursor: pointer; /* Change cursor to pointer when hovering over the div */
+        /* Add other styling properties for the box */
+    }
+    .box.selected {
+        background-color: lightblue; /* Change background color when div is selected */
+        /* Add other styling properties for the selected box */
+    }
+
+
+    </style>
+
+               
+                <nav class="navbar navbar-expand-lg navbar-light custom-bg-color1 border-bottom">
+
+                    <div class="container-fluid">
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbarNav">
+                            <ul class="navbar-nav">
+                                <li class="nav-item">
+                                    <a class="nav-link active" aria-current="page" href="#">
+                                        <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'crmApp:total_booking' %}">
+                                        <i class="fas fa-calendar-check mr-2"></i>Total Bookings
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">
+                                        <i class="fas fa-users mr-2"></i>Total Users
+                                    </a>
+                                </li> 
+                                {% comment %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">
+                                        <i class="fas fa-dollar-sign mr-2"></i>Earnings
+                                    </a>
+                                </li>
+                                {% endcomment %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">
+                                        <i class="fas fa-exclamation-triangle mr-2"></i>Status
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">
+                                        <i class="fas fa-calendar-times mr-2"></i>Bookings
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">
+                                        <i class="fas fa-redo-alt mr-2"></i>Refunds
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">
+                                        <i class="fas fa-ban mr-2"></i>Chargebacks
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">
+                                        <i class="fas fa-times mr-2"></i>Rejected
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">
+                                        <i class="fas fa-id-card-alt mr-2"></i>MCO
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+                {% load time_tags %}
+                <div class="d-flex">
+                <div class="container-fluid">
+                    <div>
+                        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                            <h1 class="text-center mt-5">Flight Departure Results</h1>
+                            <div class="container mt-3">
+                                {% for flight in flights_departure %}
+                                <div class="box" data-flight-id="{{ flight.id }}">
+                                    <div class="airline">{{ flight.itineraries.0.segments.0.carrierCode }}</div>
+                                    <div class="air-desc">
+                                        <div class="time">{{ flight.itineraries.0.segments.0.departure.at | format_time }}<span class="sm"> hrs</span></div>
+                                        <div class="time-arrow">
+                                            <i class="icon"></i>
+                                        </div>
+                                        <div class="time">
+                                            {% with last_segment=flight.itineraries.0.segments|last %}
+                                                {% if last_segment %}
+                                                    {{ last_segment.arrival.at| format_time }}<span class="sm"> hrs</span>
+                                                {% endif %}
+                                            {% endwith %}
+                                        </div>
+                                    </div>
+                                    <div class="air-dur">
+                                        <!-- <div class="top">10h 45m</div> -->
+                                        <div class="bottom">{{ flight.itineraries.0.segments.0.departure.iataCode }}</div>
+                                    </div>
+                                    <div class="air-dur">
+                                        <!-- <div class="top">10h 45m</div> -->
+                                        <div class="bottom">
+                                            {% with last_segment=flight.itineraries.0.segments|last %}
+                                                {% if last_segment %}
+                                                    {{ last_segment.arrival.iataCode }}
+                                                {% endif %}
+                                            {% endwith %}
+                                        </div>
+    
+                                    </div>
+                                    <div class="air-dur text-center">
+                                        <div class="price">{{ flight.price.total }}</div>
+                                        <div class="hover bottom"></div>
+                                    </div>
+                                    <button class="btn btn-primary" onclick="openModalDep('{{ flight.id}}')">View Details</button>
+    
+                                </div>
+                                <br>
+                                {% endfor %}
+                             </div>
+    
+    
+                            
+                                                    
+                        </main>
+                    </div>
+                    <div class="container-fluid">
+                        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                            <h1 class="text-center mt-5">Flight Return Results</h1>
+                            <div class="container mt-3">
+                                {% for flight in flights_return %}
+                                <div class="box" data-flight-id="{{ flight.id }}">
+                                    <div class="airline">{{ flight.itineraries.0.segments.0.carrierCode }}</div>
+                                    <div class="air-desc">
+                                        <div class="time">{{ flight.itineraries.0.segments.0.departure.at | format_time }}<span class="sm"> hrs</span></div>
+                                        <div class="time-arrow">
+                                            <i class="icon"></i>
+                                        </div>
+                                        <div class="time">
+                                            {% with last_segment=flight.itineraries.0.segments|last %}
+                                                {% if last_segment %}
+                                                    {{ last_segment.arrival.at| format_time }}<span class="sm"> hrs</span>
+                                                {% endif %}
+                                            {% endwith %}
+                                        </div>
+                                    </div>
+                                    <div class="air-dur">
+                                        <!-- <div class="top">10h 45m</div> -->
+                                        <div class="bottom">{{ flight.itineraries.0.segments.0.departure.iataCode }}</div>
+                                    </div>
+                                    <div class="air-dur">
+                                        <!-- <div class="top">10h 45m</div> -->
+                                        <div class="bottom">
+                                            {% with last_segment=flight.itineraries.0.segments|last %}
+                                                {% if last_segment %}
+                                                    {{ last_segment.arrival.iataCode }}
+                                                {% endif %}
+                                            {% endwith %}
+                                        </div>
+    
+                                    </div>
+                                    <div class="air-dur text-center">
+                                        <div class="price">{{ flight.price.total }}</div>
+                                        <div class="hover bottom"></div>
+                                    </div>
+                                    <button class="btn btn-primary" onclick="openModalRet('{{ flight.id}}')">View Details</button>
+                                </div>
+                                <br>
+                                {% endfor %}
+                             </div>                  
+                        </main>
+                    </div>
+                </div>
+                <div style="height: auto; margin-top: 13rem; position: fixed; top: 0; left: 64.4rem; overflow-y: auto;">
+                    <div class="selected_fligths container cont col-md-3 border bg-dark text-light" style="height: auto; margin-top: 13rem; position: fixed; top: 0; left: 64.4rem; overflow-y: auto;">
+                        
+                    </div>
+                    <!-- Font Awesome icons -->
+                    <div id="toggle-icons">
+                        <i class="fas fa-eye-slash" id="hide-icon"></i>
+                        <i class="fas fa-eye" id="show-icon" style="display: none;"></i>
+                    </div>
+                    
+                </div>
+
+            </div>
+            <button id="createBookingBtn" class="btn btn-primary">Create booking</button>
+
+            <form id="myForm" action="{% url 'crmApp:check-flight' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="json_data" id="json_data_input">
+            </form>
+            
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script>
+        document.getElementById('toggle-icons').addEventListener('click', function() {
+            var container = document.querySelector('.cont');
+            var hideIcon = document.getElementById('hide-icon');
+            var showIcon = document.getElementById('show-icon');
+        
+            // Toggle visibility of container
+            container.classList.toggle('show');
+        
+            // Toggle display of icons
+            hideIcon.style.display = container.classList.contains('show') ? 'none' : 'inline';
+            showIcon.style.display = container.classList.contains('show') ? 'inline' : 'none';
+        });
+        document.getElementById('createBookingBtn').addEventListener('click', function() {
+            // Get the JSON representation of selected_flights
+            var jsonFlights = JSON.stringify(selected_flights);
+            
+            // Set the value of the hidden input field
+            document.getElementById('json_data_input').value = jsonFlights;
+            
+            // Submit the form
+            document.getElementById('myForm').submit();
+        });
+
+        </script>
+    <script>
+        var selected_flights = []
+        function openModalDep(flightId) {
+            // Get the flight details from the context data
+            var flights = JSON.parse('{{ flights_departure1|escapejs|safe }}'); // Parse the JSON string from Django template
+            var flightDetails = flights.find(flight => flight.id === flightId);
+
+            if (flightDetails) {
+                // Create modal container
+                var modalContainer = document.createElement('div');
+                modalContainer.className = 'modal fade';
+                modalContainer.id = 'flightModal';
+                modalContainer.tabIndex = '-1';
+                modalContainer.setAttribute('aria-labelledby', 'flightModalLabel');
+                modalContainer.setAttribute('aria-hidden', 'true');
+
+                // Create modal dialog
+                var modalDialog = document.createElement('div');
+                modalDialog.className = 'modal-dialog';
+
+                // Create modal content
+                var modalContent = document.createElement('div');
+                modalContent.className = 'modal-content';
+
+                // Create modal header
+                var modalHeader = document.createElement('div');
+                modalHeader.className = 'modal-header';
+                var modalTitle = document.createElement('h5');
+                modalTitle.className = 'modal-title';
+                modalTitle.id = 'flightModalLabel';
+                modalTitle.textContent = 'Flight Details';
+                var closeButton = document.createElement('button');
+                closeButton.type = 'button';
+                closeButton.className = 'btn-close';
+                closeButton.setAttribute('data-bs-dismiss', 'modal');
+                closeButton.setAttribute('aria-label', 'Close');
+                modalHeader.appendChild(modalTitle);
+                modalHeader.appendChild(closeButton);
+
+                // Create modal body
+                var modalBody = document.createElement('div');
+                modalBody.className = 'modal-body';
+                modalBody.id = 'flightDetails';
+                for (var key in flightDetails) {
+                    if (flightDetails.hasOwnProperty(key)) {
+                        var p = document.createElement('p');
+                        p.textContent = key + ': ' + JSON.stringify(flightDetails[key]);
+                        modalBody.appendChild(p);
+                    }
+                }
+
+                // Create modal footer
+                var modalFooter = document.createElement('div');
+                modalFooter.className = 'modal-footer';
+                var closeButtonFooter = document.createElement('button');
+                closeButtonFooter.type = 'button';
+                closeButtonFooter.className = 'btn btn-secondary';
+                closeButtonFooter.setAttribute('data-bs-dismiss', 'modal');
+                closeButtonFooter.textContent = 'Close';
+
+                // Create button to display flight details in console
+                var displayButton = document.createElement('button');
+                displayButton.type = 'button';
+                displayButton.className = 'btn btn-primary';
+                displayButton.textContent = 'select';
+                displayButton.addEventListener('click', function() {
+                    console.log('Flight details:', flightDetails);
+                    selected_flights[0] = flightDetails;
+                    console.log(selected_flights);
+                    showSelectedFligths();
+                });
+
+                modalFooter.appendChild(closeButtonFooter);
+                modalFooter.appendChild(displayButton);
+
+                // Append elements to modal content
+                modalContent.appendChild(modalHeader);
+                modalContent.appendChild(modalBody);
+                modalContent.appendChild(modalFooter);
+
+                // Append modal content to modal dialog
+                modalDialog.appendChild(modalContent);
+
+                // Append modal dialog to modal container
+                modalContainer.appendChild(modalDialog);
+
+                // Append modal container to body
+                document.body.appendChild(modalContainer);
+
+                // Show the modal
+                var modal = new bootstrap.Modal(modalContainer);
+                modal.show();
+            } else {
+                console.error('Flight details not found for ID:', flightId);
+            }
+        }
+        function openModalRet(flightId) {
+            // Get the flight details from the context data
+            var flights = JSON.parse('{{ flights_return1|escapejs|safe }}'); // Parse the JSON string from Django template
+            var flightDetails = flights.find(flight => flight.id === flightId);
+
+            if (flightDetails) {
+                // Create modal container
+                var modalContainer = document.createElement('div');
+                modalContainer.className = 'modal fade';
+                modalContainer.id = 'flightModal';
+                modalContainer.tabIndex = '-1';
+                modalContainer.setAttribute('aria-labelledby', 'flightModalLabel');
+                modalContainer.setAttribute('aria-hidden', 'true');
+
+                // Create modal dialog
+                var modalDialog = document.createElement('div');
+                modalDialog.className = 'modal-dialog';
+
+                // Create modal content
+                var modalContent = document.createElement('div');
+                modalContent.className = 'modal-content';
+
+                // Create modal header
+                var modalHeader = document.createElement('div');
+                modalHeader.className = 'modal-header';
+                var modalTitle = document.createElement('h5');
+                modalTitle.className = 'modal-title';
+                modalTitle.id = 'flightModalLabel';
+                modalTitle.textContent = 'Flight Details';
+                var closeButton = document.createElement('button');
+                closeButton.type = 'button';
+                closeButton.className = 'btn-close';
+                closeButton.setAttribute('data-bs-dismiss', 'modal');
+                closeButton.setAttribute('aria-label', 'Close');
+                modalHeader.appendChild(modalTitle);
+                modalHeader.appendChild(closeButton);
+
+                // Create modal body
+                var modalBody = document.createElement('div');
+                modalBody.className = 'modal-body';
+                modalBody.id = 'flightDetails';
+                for (var key in flightDetails) {
+                    if (flightDetails.hasOwnProperty(key)) {
+                        var p = document.createElement('p');
+                        p.textContent = key + ': ' + JSON.stringify(flightDetails[key]);
+                        modalBody.appendChild(p);
+                    }
+                }
+
+                // Create modal footer
+                var modalFooter = document.createElement('div');
+                modalFooter.className = 'modal-footer';
+                var closeButtonFooter = document.createElement('button');
+                closeButtonFooter.type = 'button';
+                closeButtonFooter.className = 'btn btn-secondary';
+                closeButtonFooter.setAttribute('data-bs-dismiss', 'modal');
+                closeButtonFooter.textContent = 'Close';
+
+                // Create button to display flight details in console
+                var displayButton = document.createElement('button');
+                displayButton.type = 'button';
+                displayButton.className = 'btn btn-primary';
+                displayButton.textContent = 'select';
+                displayButton.addEventListener('click', function() {
+                    console.log('Flight details:', flightDetails);
+                    selected_flights[1] = flightDetails;
+                    console.log(selected_flights)
+                    showSelectedFligths();
+                });
+
+                modalFooter.appendChild(closeButtonFooter);
+                modalFooter.appendChild(displayButton);
+
+                // Append elements to modal content
+                modalContent.appendChild(modalHeader);
+                modalContent.appendChild(modalBody);
+                modalContent.appendChild(modalFooter);
+
+                // Append modal content to modal dialog
+                modalDialog.appendChild(modalContent);
+
+                // Append modal dialog to modal container
+                modalContainer.appendChild(modalDialog);
+
+                // Append modal container to body
+                document.body.appendChild(modalContainer);
+
+                // Show the modal
+                var modal = new bootstrap.Modal(modalContainer);
+                modal.show();
+            } else {
+                console.error('Flight details not found for ID:', flightId);
+            }
+        }
+
+        function showSelectedFligths(){
+            var container = document.querySelector(".selected_fligths");
+            container.innerHTML = '';
+
+            // Loop through selected_flights array and display each flight
+            selected_flights.forEach(function(flightDetails, index) {
+                // Create a div element to display flight details
+                var flightDiv = document.createElement('div');
+                flightDiv.textContent = 'Flight ' + (index + 1) + ': ' + JSON.stringify(flightDetails.id); // Display flight details as JSON string
+
+                // Append the flight details div to the container
+                container.appendChild(flightDiv);
+            });
+        }
+    </script>
+{% endblock %}
