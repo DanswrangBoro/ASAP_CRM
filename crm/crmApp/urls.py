@@ -46,6 +46,7 @@ urlpatterns = [
     # path('chargeback-details/<int:chargeback_id>/', views.chargeback_details, name='chargeback_details'),
     path('invoice/', views.invoiceCreate, name='invoice'),
     path('submit-invoice/', views.submit_invoice, name='submit_invoice'),
+    path('fetch-invoice/', views.invoice_details_fetch, name="invoice-details-fetch"),
     path('submit_form_customer/', views.submit_cutomer, name = 'submit_customer')
 ]
 

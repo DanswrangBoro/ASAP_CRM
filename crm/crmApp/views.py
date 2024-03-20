@@ -20,6 +20,7 @@ from django.http import HttpResponseBadRequest
 from .models import Invoice
 import uuid
 import random
+from django.core.serializers import serialize
 
 logger = logging.getLogger(__name__)
     
@@ -832,17 +833,122 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.http import HttpResponse
 
-def generate_invoice(request):
-    # Your existing code to generate the invoice HTML content
-    invoice_html = render_to_string('generate_invoice.html')
+# def generate_invoice(request):
+#     # Retrieve all invoices and their associated addition charges
+#     invoices = Invoice.objects.all().select_related('booking')
+#     for invoice in invoices:
+#         invoice.addition_charges = list(invoice.additioncharge_set.all())
 
-    # Render the generate_invoice.html template
-    return render(request, 'generate_invoice.html', {'invoice_html': invoice_html})
+#     # Serialize the invoices to JSON
+#     invoices_json = serialize('json', invoices, use_natural_foreign_keys=True, use_natural_primary_keys=True)
+
+#     # Pass the retrieved data to the template context
+#     context = {
+#         'invoices': invoices,
+#         'invoices_json': invoices_json,
+#     }
+
+#     # Render the generate_invoice.html template with the context
+#     return render(request, 'generate_invoice.html', context)
+
+def generate_invoice(request):
+    # Retrieve all invoices
+    invoices = Invoice.objects.all().select_related('booking')
+
+    # Serialize invoices and related addition charges
+    invoice_data = []
+    for invoice in invoices:
+        # Serialize the invoice
+        invoice_dict = {
+            'invoice_id': invoice.invoice_id,
+            'booking': {
+                'booking_id': invoice.booking.booking_id,
+                'confirmation_no': invoice.booking.confirmation_no,
+                'passenger_name': invoice.booking.passenger_name,
+                'phone_number': invoice.booking.phone_number,
+                'email': invoice.booking.email,
+                'flight_details': invoice.booking.flight_details,
+                'trip_type': invoice.booking.trip_type,
+                'reference_id': invoice.booking.reference_id,
+                'departure': invoice.booking.departure,
+                'departure_date': invoice.booking.departure_date.isoformat(),
+                'arrival': invoice.booking.arrival,
+                'arrival_date': invoice.booking.arrival_date.isoformat(),
+                'num_passengers': invoice.booking.num_passengers,
+                'price': str(invoice.booking.price),
+                'status': invoice.booking.status,
+                'change_date': invoice.booking.change_date.isoformat() if invoice.booking.change_date else None,
+                'mco': invoice.booking.mco,
+                'lead_agent': invoice.booking.lead_agent.natural_key() if invoice.booking.lead_agent else None,
+                'card_number': invoice.booking.card_number,
+            },
+            'base_price': str(invoice.base_price),
+            'markup_price': str(invoice.markup_price),
+            'description1': invoice.description1,
+            'total1': str(invoice.total1),
+            'tax': str(invoice.tax),
+            'description2': invoice.description2,
+            'total2': str(invoice.total2),
+            'discount': str(invoice.discount),
+            'total_discount': str(invoice.total_discount),
+            'grand_total': str(invoice.grand_total),
+        }
+        
+        # Retrieve and serialize addition charges for the invoice
+        addition_charges = AdditionCharge.objects.filter(invoice=invoice)
+        addition_charges_data = []
+        for charge in addition_charges:
+            charge_data = {
+                'price': str(charge.price),
+                'description': charge.description,
+            }
+            addition_charges_data.append(charge_data)
+        
+        # Include addition charges data in the invoice dictionary
+        invoice_dict['addition_charges'] = addition_charges_data
+        
+        # Add the serialized invoice dictionary to the list
+        invoice_data.append(invoice_dict)
+    
+    # Convert the list of dictionaries to JSON
+    invoices_json = json.dumps(invoice_data)
+
+    # Pass the JSON data to the template context
+    context = {
+        'invoices_json': invoices_json,
+        'invoices' : invoices
+    }
+
+    # Render the generate_invoice.html template with the context
+    return render(request, 'generate_invoice.html', context)
 
 def send_email(request):
     if request.method == 'POST':
-        # Your existing code to generate the invoice HTML content
-        invoice_html = render_to_string('generate_invoice.html')
+        id = request.POST.get("invoice_id")
+        invoices = get_object_or_404(Invoice, invoice_id=id)
+
+        # Calculate total price including base price and markup price
+        total_price = invoices.base_price + invoices.markup_price
+
+        # Loop through addition charges and calculate total
+        addition_charges_total = Decimal('0')
+        addition_charges = invoices.addition_charges()
+        for addition_charge in addition_charges:
+            addition_charges_total += Decimal(str(addition_charge.price))
+
+        # Calculate grand total
+        grand_total = (total_price + addition_charges_total + invoices.tax) - invoices.discount
+
+        # Prepare context for rendering email template
+        context = {
+            'invoices': invoices,
+            'total_price': total_price,
+            'missceleneous': addition_charges_total,
+            'grand_total': grand_total
+        }
+
+        # Render the invoice HTML content
+        invoice_html = render_to_string('invoice_template.html', context)
 
         # Create a text/plain version of the HTML email content
         text_content = strip_tags(invoice_html)
@@ -852,20 +958,21 @@ def send_email(request):
             subject='Your Invoice',
             body=text_content,
             from_email='www.swrang.123@gmail.com',
-            to=['danswrang@adventurecode.io'],  # Replace with the recipient's email address
+            to=[invoices.booking.email],  # Replace with the recipient's email address
         )
 
         # Attach the HTML content
         email.attach_alternative(invoice_html, "text/html")
 
-        # Optionally, add attachments if needed
-        # email.attach_file('/path/to/attachment.pdf')
-
         # Send the email
         email.send()
 
-        # Pass the email_sent context variable to indicate success
-        return render(request, 'generate_invoice.html', {'email_sent': True})
+        # Update status to 'sent' after email is sent
+        invoices.status = 'sent'
+        invoices.save()
+
+        # Redirect to the page indicating that the email has been sent
+        return redirect('crmApp:generate_invoice')
     else:
         return HttpResponse("Error: Invalid request method.")
     
@@ -1086,6 +1193,19 @@ def random_invoice_no():
 # Example usage
 invoice_number = random_invoice_no()
 print("Random Invoice Number:", invoice_number)
+
+
+
+
+def invoice_details_fetch(request):
+    if  request.method == "POST":
+        id = request.POST.get("invoiceid")
+        invoice_details = get_object_or_404(Invoice, invoice_id = id)
+        context = {
+            "data" : json.dumps(invoice_details)
+        }
+        return render("new.html",context)
+    
 def submit_cutomer(request):
     if request.method == 'POST':
         # Get the list of first names

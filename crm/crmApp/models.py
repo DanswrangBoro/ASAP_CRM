@@ -90,6 +90,18 @@ class Booking(models.Model):
 
     def __str__(self):
         return self.booking_id
+    def natural_key(self):
+            return (
+                self.booking_id, self.confirmation_no, self.passenger_name,
+                self.phone_number, self.email, self.flight_details,
+                self.trip_type, self.reference_id, self.departure,
+                self.departure_date.isoformat(), self.arrival,
+                self.arrival_date.isoformat(), self.num_passengers,
+                str(self.price), self.status, 
+                self.change_date.isoformat() if self.change_date else None,
+                self.mco, self.lead_agent.natural_key() if self.lead_agent else None,
+                self.card_number
+            )
 
 
 
@@ -178,11 +190,23 @@ class Invoice(models.Model):
     discount = models.DecimalField(max_digits=10, decimal_places=2)
     total_discount = models.DecimalField(max_digits=10, decimal_places=2)
     grand_total = models.DecimalField(max_digits=10, decimal_places=2)
+    status = models.CharField(max_length=50, default="pending")
     def __str__(self):
         return self.invoice_id
+    def natural_key(self):
+        return (
+            self.invoice_id, self.booking.natural_key(), str(self.base_price),
+            str(self.markup_price), self.description1, str(self.total1),
+            str(self.tax), self.description2, str(self.total2),
+            str(self.discount), str(self.total_discount), str(self.grand_total)
+        )
+    def addition_charges(self):
+        return self.additioncharge_set.all()
 
 
 class AdditionCharge(models.Model):
     invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE, default="")
     price = models.FloatField()
     description = models.CharField(max_length=255)
+    def natural_key(self):
+        return (self.invoice.natural_key(), str(self.price), self.description)
