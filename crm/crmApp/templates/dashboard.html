@@ -6,49 +6,69 @@
         font-size: 1.7rem;
         margin-top: 10px;
     }
+
+    /* select {
+        border-color: transparent;
+        outline: none;
+    } */
 </style>
+<!-- Chart.js Script -->
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+<!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.bundle.min.js"></script> -->
+
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom mb-5">
     <div class="container-fluid">
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="container" style="width: 100%;">
-        <a class="navbar-brand" href="#"> <b>Welcome to your dashboard</b></a>
-        <p>This is where you can manage your tasks and view important information.</p>
+
+        <!-- Navbar Brand and Description -->
+        <div class="container" style="width: 100%;">
+            <a class="navbar-brand" href="#"> <b>Welcome to your dashboard</b></a>
+            <p>This is where you can manage your tasks and view important information.</p>
+        </div>
+
+        <!-- Navbar Toggler Button -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Navbar Links -->
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <img src="{% static 'assets/search.png' %}" class="" alt="search">
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <img src="{% static 'assets/message.png' %}" class="" alt="message">
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <img src="{% static 'assets/noti.png' %}" class="" alt="notification">
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <img src="{% static 'assets/setting.png' %}" class="" alt="total-users">
+                    </a>
+                </li>
+                <li class="nav-item" style="margin-top: 3%; border: none; cursor: pointer;" onmouseover="this.style.backgroundColor='#3180ff';" onmouseout="this.style.backgroundColor='#f3f6fb';">
+                    {% if request.session.userN %}
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-user-circle fa-lg"></i>
+                        <p class="mb-0 ml-2 px-2" style="font-weight: bold; font-size: large;">{{ request.session.userN }}</p>
+                    </div>
+                    {% endif %}
+                </li>
+            </ul>
+        </div>
     </div>
-    
-      <div class="collapse navbar-collapse " id="navbarNav" style="display: flex; justify-content: right">
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <img src="{% static 'assets/search.png' %}" class="" alt="search">
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <img src="{% static 'assets/message.png' %}" class="" alt="message">
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <img src="{% static 'assets/setting.png' %}" class="" alt="total-users">
-                </a>
-            </li>
-            <li class="nav-item" style="margin-top: 3%; border: none; cursor: pointer;" onmouseover="this.style.backgroundColor='#3180ff';" onmouseout="this.style.backgroundColor='#f3f6fb';">
-                {% if request.session.userN %}
-                <div class="d-flex align-items-center">
-                    <i class="fas fa-user-circle fa-lg"></i>
-                    <p class="mb-0 ml-2 px-2" style="font-weight: bold; font-size: large;">{{ request.session.userN }}</p>
-                </div>
-                {% endif %}
-            </li>
-        </ul>
-        
-      </div>
-    </div>
-  </nav>
+</nav>
+
 <div id="notificationModal" class="modal border" style="display: none; position: absolute; top: 100px; left: 0; height: auto; width: 25rem">
         <div class="modal-content">
             <div class="modal-header">
@@ -147,14 +167,11 @@
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h3 class="mb-0">Sales Overview</h3>
-                        <div class="dropdown">
-                            <button class="btn btn-sm btn-primary dropdown-toggle" type="button" id="salesDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Yearly
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="salesDropdown">
-                                <a class="dropdown-item" href="#">Yearly</a>
-                                <a class="dropdown-item" href="#">Monthly</a>
-                            </div>
+                        <div class="form-group">
+                            <select>
+                                <option value="monthly">Monthly</option>
+                                <option value="yearly">Yearly</option>
+                            </select>
                         </div>
                     </div>
                     <div class="card-body">
@@ -162,28 +179,25 @@
                     </div>
                 </div>
             </div>
-            
-            
+    
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <h3>Income</h3>
-                        <div class="dropdown">
-                            <button class="btn btn-sm btn-primary dropdown-toggle" type="button" id="incomeDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Yearly
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="incomeDropdown">
-                                <a class="dropdown-item" href="#">Yearly</a>
-                                <a class="dropdown-item" href="#">Monthly</a>
-                            </div>
+                        <h3 class="mb-0">Income</h3>
+                        <div class="form-group">
+                            <select>
+                                <option value="monthly">Monthly</option>
+                                <option value="yearly">Yearly</option>
+                            </select>
                         </div>
                     </div>
-                    <div class="card-body">
-                        <canvas id="incomeChart"></canvas>
-                    </div>
+                    <div class="card-body d-flex justify-content-center align-items-center">
+                        <div class="chart-container income" style="position: relative; height: 50%; width: 50%; align-items: center;">
+                            <canvas id="incomeChart"></canvas>
+                        </div>
                 </div>
             </div>
-            
+    
         </div>
     </div>
     
@@ -199,33 +213,54 @@
                 borderWidth: 1
             }]
         };
-
-        // Income Chart Data
-        var incomeData = {
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-            datasets: [{
-                label: 'Income',
-                data: [2000, 2500, 1800, 3000, 2000, 1500, 2500],
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1
-            }]
-        };
+    
 
         // Render Charts
         var salesCtx = document.getElementById('salesChart').getContext('2d');
         var incomeCtx = document.getElementById('incomeChart').getContext('2d');
-
+    
         var salesChart = new Chart(salesCtx, {
             type: 'line',
             data: salesData
         });
 
+                // Income Chart Data
+                var incomeData = {
+            labels: ['Profit', 'Income', 'Loss'],
+            datasets: [{
+                label: 'Income',
+                data: [2500, 2000, 1800], // Adjusted income data for pie chart
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.5)', // Red color for profit
+                    'rgba(54, 162, 235, 0.5)', // Blue color for income
+                    'rgba(255, 206, 86, 0.5)', // Yellow color for loss
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)', // Red color for profit
+                    'rgba(54, 162, 235, 1)', // Blue color for income
+                    'rgba(255, 206, 86, 1)', // Yellow color for loss
+                ],
+                borderWidth: 1
+            }]
+        };
+    
+    
         var incomeChart = new Chart(incomeCtx, {
-            type: 'line',
-            data: incomeData
+            type: 'pie',
+            data: incomeData,
+            options: {
+            cutoutPercentage: 30, // Adjust the cutoutPercentage value to decrease the size of the pie chart
+            plugins: {
+                legend: {
+                    position: 'bottom' // Display legend at the bottom
+                }
+            }
+        }
         });
     </script>
+    
+    
+    
      <div class="container mt-5">
         <div class="row">
             <div class="col-md-9">
@@ -327,6 +362,7 @@
             </div>
         </div>
     </div>
+
     <div class="container mt-5 mb-5">
         <div class="row">
             <div class="col-md-12">
@@ -336,7 +372,7 @@
                         <div>
                             <button class="btn btn-sm btn-primary mr-2">Annual</button>
                             <button class="btn btn-sm btn-primary mr-2">Monthly</button>
-                            <button class="btn btn-sm btn-primary ml-2">View More</button> <!-- Added ml-2 for left margin -->
+                            <button class="btn btn-sm btn-primary ml-2">View More</button>
                         </div>
                     </div>
                     <div class="card-body">
@@ -347,24 +383,23 @@
         </div>
     </div>
     
-    
-
     <script>
         // Income Overview Chart Data
         var incomeOverviewData = {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun','Jul', 'Aug', 'Sept', 'Oct','Nov' ,'Dec'],
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
             datasets: [{
                 label: 'Income Overview',
-                data: [2000, 2500, 1800, 3000, 2000, 1500],
+                data: [2000, 2500, 1800, 3000, 2000, 1500, 2500, 2800, 2200, 3500, 2400, 2000], // Data for all months
                 backgroundColor: 'rgba(75, 192, 192, 0.2)',
                 borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1
+                borderWidth: 1,
+                barThickness: 10 // Adjust the width of the bars here
             }]
         };
-
+    
         // Render Chart
         var incomeOverviewCtx = document.getElementById('incomeOverviewChart').getContext('2d');
-
+    
         var incomeOverviewChart = new Chart(incomeOverviewCtx, {
             type: 'bar',
             data: incomeOverviewData,
@@ -379,111 +414,158 @@
             }
         });
     </script>
+    
 
-<div class="container mt-5">
-    <div class="row">
-        <!-- Total Leads Bar Graph -->
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h3>Total Leads</h3>
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Monthly
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="#">Monthly</a>
-                            <a class="dropdown-item" href="#">Yearly</a>
+
+    <div class="container mt-5 mb-5">
+        <div class="row">
+            <!-- Total Leads Bar Graph -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h3>Total Leads</h3>
+                        <div class="form-group">
+                            <select>
+                                <option value="monthly">Monthly</option>
+                                <option value="yearly">Yearly</option>
+                            </select>
+                            <button>View More</button>
+                        </div>
+                        
+                        
+                    </div>
+                    <div class="card-body">
+                        <!-- Placeholder for total leads bar graph -->
+                        <canvas id="totalLeadsGraph" width="400" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+    
+            <!-- Chargeback Ratio Circle Graph -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h3>Chargeback Ratio</h3>
+                        <button class="btn btn-primary">View More</button>
+                    </div>
+                    <div class="card-body d-flex justify-content-center align-items-center">
+                        <div class="chart-container" style="position: relative; height: 50%; width: 50%; align-items: center;">
+                            <canvas id="chargebackRatioGraph"></canvas>
                         </div>
                     </div>
                 </div>
-                <div class="card-body">
-                    <!-- Placeholder for total leads bar graph -->
-                    <canvas id="totalLeadsGraph" width="400" height="200"></canvas>
-                </div>
             </div>
-        </div>
-
-        <!-- Chargeback Ratio Circle Graph -->
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h3>Chargeback Ratio</h3>
-                    <button class="btn btn-primary">View More</button>
-                </div>
-                <div class="card-body">
-                    <!-- Placeholder for chargeback ratio circle graph -->
-                    <canvas id="chargebackRatioGraph" width="400" height="200"></canvas>
-                </div>
-            </div>
-        </div>
+            
     </div>
-</div>
-<!-- Total Leads Bar Graph -->
-<script>
-    // Total Leads Data
-    var totalLeadsData = {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-        datasets: [{
-            label: 'Total Leads',
-            data: [100, 200, 150, 300, 250, 400, 350],
-            backgroundColor: 'rgba(54, 162, 235, 0.5)', // Blue color for bars
-            borderColor: 'rgba(54, 162, 235, 1)', // Border color for bars
-            borderWidth: 1
-        }]
-    };
+    
+    <!-- Total Leads Bar Graph -->
+    <script>
+        // Total Leads Data
+            var totalLeadsCanvas = document.getElementById('totalLeadsGraph');
+            var totalLeadsData = {
+                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                datasets: [{
+                    label: 'Total Leads',
+                    data: [100, 200, 150, 300, 250, 400, 350],
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)', // Blue color for bars
+                    borderColor: 'rgba(54, 162, 235, 1)', // Border color for bars
+                    borderWidth: 1,
+                    barThickness: 10 // Define bar thickness here
+                }]
+            };
 
-    // Total Leads Options
-    var totalLeadsOptions = {
-        scales: {
-            y: {
-                beginAtZero: true
+    
+        // Total Leads Options
+        var totalLeadsOptions = {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        };
+    
+        // Initialize Total Leads Bar Graph
+        var totalLeadsChart = new Chart(totalLeadsCanvas, {
+            type: 'bar',
+            data: totalLeadsData,
+            options: totalLeadsOptions
+        });
+    </script>
+    
+   <!-- Chargeback Ratio Circle Graph -->
+   <script>
+   // Chargeback Ratio Data
+var chargebackRatioCanvas = document.getElementById('chargebackRatioGraph');
+var chargebackRatioData = {
+    labels: ['Weekly', 'Monthly', 'Quarterly', 'Yearly'],
+    datasets: [{
+        label: 'Chargeback Ratio',
+        data: [40, 30, 10, 20], // Adjust the data as needed, e.g., 40 for yearly
+        backgroundColor: [
+            'rgba(75, 192, 192, 0.5)', // Green color for successful
+            'rgba(255, 99, 132, 0.5)', // Red color for pending
+            'rgba(255, 206, 86, 0.5)', // Yellow color for failed
+            'rgba(54, 162, 235, 0.5)' // Blue color for yearly (you can adjust colors as needed)
+        ],
+        borderColor: [
+            'rgba(75, 192, 192, 1)', // Green color for successful
+            'rgba(255, 99, 132, 1)', // Red color for pending
+            'rgba(255, 206, 86, 1)', // Yellow color for failed
+            'rgba(54, 162, 235, 1)' // Blue color for yearly (you can adjust colors as needed)
+        ],
+        borderWidth: 1,
+        borderRadius: [10, 10, 10, 10], // Set border radius for each dataset individually
+    }]
+};
+
+// Chargeback Ratio Options
+var chargebackRatioOptions = {
+    cutoutPercentage: 30,
+    plugins: {
+        legend: {
+            display: true,
+            position: 'bottom', // Display legend at the bottom
+            align: 'center', // Align the legend to the center
+            labels: {
+                boxWidth: 20, // Adjust the width of the legend box
+                usePointStyle: true, // Use point style instead of colored square
+                padding: 10 // Adjust padding between legend items
+            },
+            // Adjust the maximum width of the legend to fit in one line
+            maxSize: {
+                width: 500
+            }
+        },
+        datalabels: { // Configuration for the datalabels plugin
+            display: function(context) {
+                return context.dataset.data[context.dataIndex] > 0; // Display labels only if data is greater than 0
+            },
+            color: 'white', // Set the font color inside the chart to white
+            font: {
+                size: 14, // Adjust font size as needed
+                weight: 'bold' // Make the font bold
+            },
+            formatter: function(value, context) {
+                var percentage = Math.round(value) + '%';
+                return percentage; // Append '%' to the value
             }
         }
-    };
+    }
+};
 
-    // Initialize Total Leads Bar Graph
-    var totalLeadsChart = new Chart(totalLeadsCanvas, {
-        type: 'bar',
-        data: totalLeadsData,
-        options: totalLeadsOptions
-    });
+// Initialize Chargeback Ratio Circle Graph
+var chargebackRatioChart = new Chart(chargebackRatioCanvas, {
+    type: 'doughnut',
+    data: chargebackRatioData,
+    options: chargebackRatioOptions
+});
+
+
+
 </script>
 
-<!-- Chargeback Ratio Circle Graph -->
-<script>
-    // Chargeback Ratio Data
-    var chargebackRatioData = {
-        labels: ['Successful', 'Pending', 'Failed'],
-        datasets: [{
-            label: 'Chargeback Ratio',
-            data: [60, 20, 20],
-            backgroundColor: [
-                'rgba(75, 192, 192, 0.5)', // Green color for successful
-                'rgba(255, 99, 132, 0.5)', // Red color for pending
-                'rgba(255, 206, 86, 0.5)' // Yellow color for failed
-            ],
-            borderColor: [
-                'rgba(75, 192, 192, 1)', // Green color for successful
-                'rgba(255, 99, 132, 1)', // Red color for pending
-                'rgba(255, 206, 86, 1)' // Yellow color for failed
-            ],
-            borderWidth: 1
-        }]
-    };
 
-    // Chargeback Ratio Options
-    var chargebackRatioOptions = {
-        cutoutPercentage: 70
-    };
-
-    // Initialize Chargeback Ratio Circle Graph
-    var chargebackRatioChart = new Chart(chargebackRatioCanvas, {
-        type: 'doughnut',
-        data: chargebackRatioData,
-        options: chargebackRatioOptions
-    });
-</script>
+    
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     {% comment %} <script>
@@ -587,4 +669,7 @@
             
     </script>
     
+
+
+   
 {% endblock %}
