@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, reverse
 from django.http import JsonResponse
+import requests
 from .models import AdditionCharge, Booking, Refund
 from datetime import datetime
 from django.db.models import Sum
@@ -21,6 +22,19 @@ from .models import Invoice
 import uuid
 import random
 from django.core.serializers import serialize
+from pprint import pprint
+
+from dropbox_sign import \
+    ApiClient, ApiException, Configuration, apis, models
+
+configuration = Configuration(
+    # Configure HTTP basic authorization: api_key
+    username="8b0a24b667d452502026dde34a7e83e7dc821a6a6e935df11f2af2bbe023ad39",
+
+    # or, configure Bearer (JWT) authorization: oauth2
+    # access_token="YOUR_ACCESS_TOKEN",
+)
+
 
 logger = logging.getLogger(__name__)
     
@@ -103,36 +117,44 @@ def flight_results(request):
                     json.dump(context, file, indent= 4)
                 # with open(file_path, "r") as file:
                 #     context = json.load(file)
-                print("something went wrong")
+                return render(request, 'result1.html', context)
 
             else:
-                response = amadeus.shopping.flight_offers_search.get(
-                originLocationCode=from_location,
-                destinationLocationCode=to_location,
-                departureDate=departure_date,
-                adults=adults,
-                children=child,
-                infants=infants,
-                travelClass=class_type
-                ).data
+                # response = amadeus.shopping.flight_offers_search.get(
+                # originLocationCode=from_location,
+                # destinationLocationCode=to_location,
+                # departureDate=departure_date,
+                # adults=adults,
+                # children=child,
+                # infants=infants,
+                # travelClass=class_type
+                # ).data
 
-                response_return = amadeus.shopping.flight_offers_search.get(
-                originLocationCode=to_location,
-                destinationLocationCode=from_location,
-                departureDate=return_date,
-                adults=adults,
-                children=child,
-                infants=infants,
-                travelClass=class_type
-                ).data
-                # Store the response as JSON format
-                context = {
-                    "flights" : response,
-                    "flights_return": response_return
-                }
+                # response_return = amadeus.shopping.flight_offers_search.get(
+                # originLocationCode=to_location,
+                # destinationLocationCode=from_location,
+                # departureDate=return_date,
+                # adults=adults,
+                # children=child,
+                # infants=infants,
+                # travelClass=class_type
+                # ).data
+                # # Store the response as JSON format
+                # context = {
+                #     "flights_departure" : response,
+                #     "flights_return": response_return,
+                #     "flights_departure1" : json.dumps(response),
+                #     "flights_return1" : json.dumps(response_return),
+                # }
+                # print(context)
+                file_path = "round.txt"
+                # with open(file_path, "w") as file:
+                #     json.dump(context, file, indent= 4)
+                with open(file_path, "r") as file:
+                    context = json.load(file)
             # Pass the stringified JSON data to the template
             # print(context)
-            return render(request, 'result1.html', context)
+                return render(request, 'roundtrip.html', context)
         except ResponseError as error:
             return render(request, 'error.html', {'error': error})
     else:
@@ -852,12 +874,12 @@ from django.http import HttpResponse
 #     return render(request, 'generate_invoice.html', context)
 
 def generate_invoice(request):
-    # Retrieve all invoices
-    invoices = Invoice.objects.all().select_related('booking')
+    # Retrieve sent invoices
+    sent_invoices = Invoice.objects.filter(status='sent').select_related('booking')
 
-    # Serialize invoices and related addition charges
-    invoice_data = []
-    for invoice in invoices:
+    # Serialize sent invoices and related addition charges
+    sent_invoice_data = []
+    for invoice in sent_invoices:
         # Serialize the invoice
         invoice_dict = {
             'invoice_id': invoice.invoice_id,
@@ -908,19 +930,91 @@ def generate_invoice(request):
         invoice_dict['addition_charges'] = addition_charges_data
         
         # Add the serialized invoice dictionary to the list
-        invoice_data.append(invoice_dict)
+        sent_invoice_data.append(invoice_dict)
     
     # Convert the list of dictionaries to JSON
-    invoices_json = json.dumps(invoice_data)
+    sent_invoices_json = json.dumps(sent_invoice_data)
 
     # Pass the JSON data to the template context
     context = {
-        'invoices_json': invoices_json,
-        'invoices' : invoices
+        'invoices_json': sent_invoices_json,
+        'invoices' : sent_invoices
     }
 
     # Render the generate_invoice.html template with the context
     return render(request, 'generate_invoice.html', context)
+
+
+def pending_invoices(request):
+    # Retrieve pending invoices
+    pending_invoices = Invoice.objects.filter(status='pending').select_related('booking')
+
+    # Serialize pending invoices and related addition charges
+    pending_invoice_data = []
+    for invoice in pending_invoices:
+        # Serialize the invoice
+        invoice_dict = {
+            'invoice_id': invoice.invoice_id,
+            'booking': {
+                'booking_id': invoice.booking.booking_id,
+                'confirmation_no': invoice.booking.confirmation_no,
+                'passenger_name': invoice.booking.passenger_name,
+                'phone_number': invoice.booking.phone_number,
+                'email': invoice.booking.email,
+                'flight_details': invoice.booking.flight_details,
+                'trip_type': invoice.booking.trip_type,
+                'reference_id': invoice.booking.reference_id,
+                'departure': invoice.booking.departure,
+                'departure_date': invoice.booking.departure_date.isoformat(),
+                'arrival': invoice.booking.arrival,
+                'arrival_date': invoice.booking.arrival_date.isoformat(),
+                'num_passengers': invoice.booking.num_passengers,
+                'price': str(invoice.booking.price),
+                'status': invoice.booking.status,
+                'change_date': invoice.booking.change_date.isoformat() if invoice.booking.change_date else None,
+                'mco': invoice.booking.mco,
+                'lead_agent': invoice.booking.lead_agent.natural_key() if invoice.booking.lead_agent else None,
+                'card_number': invoice.booking.card_number,
+            },
+            'base_price': str(invoice.base_price),
+            'markup_price': str(invoice.markup_price),
+            'description1': invoice.description1,
+            'total1': str(invoice.total1),
+            'tax': str(invoice.tax),
+            'description2': invoice.description2,
+            'total2': str(invoice.total2),
+            'discount': str(invoice.discount),
+            'total_discount': str(invoice.total_discount),
+            'grand_total': str(invoice.grand_total),
+        }
+        
+        # Retrieve and serialize addition charges for the invoice
+        addition_charges = AdditionCharge.objects.filter(invoice=invoice)
+        addition_charges_data = []
+        for charge in addition_charges:
+            charge_data = {
+                'price': str(charge.price),
+                'description': charge.description,
+            }
+            addition_charges_data.append(charge_data)
+        
+        # Include addition charges data in the invoice dictionary
+        invoice_dict['addition_charges'] = addition_charges_data
+        
+        # Add the serialized invoice dictionary to the list
+        pending_invoice_data.append(invoice_dict)
+    
+    # Convert the list of dictionaries to JSON
+    pending_invoices_json = json.dumps(pending_invoice_data)
+
+    # Pass the JSON data to the template context
+    context = {
+        'invoices_json': pending_invoices_json,
+        'invoices' : pending_invoices
+    }
+
+    # Render the template with the context
+    return render(request, 'invoice_pending.html', context)
 
 def send_email(request):
     if request.method == 'POST':
@@ -982,37 +1076,37 @@ def check_flight(request):
         json_data_str = request.POST.get('json_data')
         flight = json.loads(json_data_str)
         # Process the JSON data as needed
-        # print(type(flight))
+        # print(flight)
         try:
-            response = amadeus.shopping.flight_offers.pricing.post(flight).data
-            print(response)
-            validating_airline_codes_set = set()
+            # response = amadeus.shopping.flight_offers.pricing.post(flight).data
+            # print(response)
+            # validating_airline_codes_set = set()
             
-            for data in response["flightOffers"]:
-                for dats in data["itineraries"]:
-                    for segment in dats["segments"]:
-                        # print(segment["carrierCode"])
-                        validating_airline_codes_set.add(segment["carrierCode"])
+            # for data in response["flightOffers"]:
+            #     for dats in data["itineraries"]:
+            #         for segment in dats["segments"]:
+            #             # print(segment["carrierCode"])
+            #             validating_airline_codes_set.add(segment["carrierCode"])
 
-            # Convert the set to a list if needed
-            validating_airline_codes_list = list(validating_airline_codes_set)
-            airline_codes_string = ','.join(validating_airline_codes_list)
-            airlines = amadeus.reference_data.airlines.get(airlineCodes=airline_codes_string).data
-            # print(airlines)
-            result_dict = {item['iataCode']: item["businessName"] for item in airlines}
-            result_dict2 = {item['iataCode']: item.get('icaoCode', item['iataCode']) for item in airlines}
-            print(result_dict2)
-            context = {
-                'flight' : response,
-                'flight1' : json.dumps(response),
-                "airlines":result_dict,
-                "airlines2":result_dict2,
-            }
+            # # Convert the set to a list if needed
+            # validating_airline_codes_list = list(validating_airline_codes_set)
+            # airline_codes_string = ','.join(validating_airline_codes_list)
+            # airlines = amadeus.reference_data.airlines.get(airlineCodes=airline_codes_string).data
+            # # print(airlines)
+            # result_dict = {item['iataCode']: item["businessName"] for item in airlines}
+            # result_dict2 = {item['iataCode']: item.get('icaoCode', item['iataCode']) for item in airlines}
+            # print(result_dict2)
+            # context = {
+            #     'flight' : response,
+            #     'flight1' : json.dumps(response),
+            #     "airlines":result_dict,
+            #     "airlines2":result_dict2,
+            # }
             file_path = "temp_ite.txt"
-            with open(file_path, "w") as file:
-                json.dump(context, file, indent= 4)
-            # with open(file_path, "r") as file:
-            #     context = json.load(file)
+            # with open(file_path, "w") as file:
+            #     json.dump(context, file, indent= 4)
+            with open(file_path, "r") as file:
+                context = json.load(file)
             # return HttpResponse({"success":"success"})
             return render(request,'itinery.html',context)
         except ResponseError as e:
@@ -1246,17 +1340,17 @@ def submit_cutomer(request):
         fullname = f'{traveler_details[0]["name"]["firstName"]} {traveler_details[0]["name"]["firstName"]}'
 
         try:
-            response = amadeus.booking.flight_orders.post(flight, traveler_details).data
-            print(response)
-            context = {
-                "data":response
-            }
+            # response = amadeus.booking.flight_orders.post(flight, traveler_details).data
+            # print(response)
+            # context = {
+            #     "data":response
+            # }
             file_path = 'order.txt'
-            with open(file_path, "w") as file:
-                    json.dump(context, file, indent= 4)
-            # with open(file_path, "r") as file:
-            #         context = json.load(file)
-            # response = context["data"]
+            # with open(file_path, "w") as file:
+            #         json.dump(context, file, indent= 4)
+            with open(file_path, "r") as file:
+                    context = json.load(file)
+            response = context["data"]
             booking_id = response.get("id")
             passenger_name = fullname
             phone_number = phone
@@ -1264,8 +1358,10 @@ def submit_cutomer(request):
             flight_details = None  # Not provided in the response
             trip_type = None  # Not provided in the response
             # print(response["flightOffers"][0]["itineraries"])
-            if len(response["flightOffers"][0]["itineraries"]) == 1:
+            if len(response["flightOffers"]) == 1:
                 trip_type = "One way"
+            else:
+                trip_type = "Round Trip"
             reference_id = response.get("id")
             departure = response["flightOffers"][0]["itineraries"][0]["segments"][0]['departure']["iataCode"]
             departure_date = date_format(response["flightOffers"][0]["itineraries"][0]["segments"][0]['departure']["at"])
@@ -1310,3 +1406,65 @@ def date_format(datetime_str):
     date_str = date_only.isoformat()
     
     return date_str
+
+
+
+
+
+def send_signature_request(request):
+    if request.method=="POST":
+            bookingId = request.POST.get("bookingId")
+            booking = get_object_or_404(Booking, booking_id=bookingId)
+            email = booking.email
+            booking_info = f"Booking ID: {bookingId}, Email: {email}"
+            print(booking_info)
+            # with ApiClient(configuration) as api_client:
+            #     signature_request_api = apis.SignatureRequestApi(api_client)
+
+            #     signer_1 = models.SubSignatureRequestTemplateSigner(
+            #         role="Payment Authorization",
+            #         email_address=email,
+            #         name="Danswrang Boro",
+            #     )
+
+            #     # cc_1 = models.SubCC(
+            #     #     role="Accounting",
+            #     #     email_address="danswrang@adventurecode.io",
+            #     # )
+
+            #     custom_field_1 = models.SubCustomField(
+            #         name="cost",
+            #         value="$20,000",
+            #         editor="Payment Authorization",
+            #         required=True,
+            #     )
+
+            #     signing_options = models.SubSigningOptions(
+            #         draw=True,
+            #         type=True,
+            #         upload=True,
+            #         phone=False,
+            #         default_type="draw",
+            #     )
+
+            #     data = models.SignatureRequestSendWithTemplateRequest(
+            #         template_ids=["25f361d637eda607cdbe16150d4ffa4727d27b12"],
+            #         subject="Purchase Order",
+            #         message="Glad we could come to an agreement.",
+            #         signers=[signer_1],
+            #         # ccs=[cc_1],
+            #         custom_fields=[custom_field_1],
+            #         signing_options=signing_options,
+            #         test_mode=True,
+            #     )
+
+            #     try:
+            #         response = signature_request_api.signature_request_send_with_template(data)
+            #         pprint(response)
+            #         return HttpResponse("sent successful")
+            #     except ApiException as e:
+            #         print(e)
+            #         return HttpResponse("something went wrong")
+
+            return redirect('crmApp:invoice')
+

@@ -210,3 +210,6 @@ class AdditionCharge(models.Model):
     description = models.CharField(max_length=255)
     def natural_key(self):
         return (self.invoice.natural_key(), str(self.price), self.description)
+
+
+# ====================================================================( dropbox sign ) ========================

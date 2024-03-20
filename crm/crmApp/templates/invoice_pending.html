@@ -1,0 +1,271 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content%}
+<div class="container mt-4">
+    <div class="table-responsive" id="table">
+    <h2  style="font-size: 0.8rem">Invoice Details</h2>
+      <table class="table table-bordered">
+        <thead class="thead-dark" style="font-size: 0.8rem">
+          <tr>
+            <th>Invoice ID</th>
+            <th>Base Price</th>
+            <th>Markup Price</th>
+            <th>Description 1</th>
+            <th>Total 1</th>
+            <th>Tax</th>
+            <th>Description 2</th>
+            <th>Total 2</th>
+            <th>Discount</th>
+            <th>Total Discount</th>
+            <th>Service charges</th>
+            <th>Grand Total</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for invoice in invoices %}
+          <tr  style="font-size: 0.7rem">
+            <td class="invoice-id" data-invoice-id="{{ invoice.invoice_id }}" style="font-weight: bolder; cursor: pointer; background: grey; color: white">{{ invoice.invoice_id }}</td>
+            <td>{{ invoice.base_price }}</td>
+            <td>{{ invoice.markup_price }}</td>
+            <td>{{ invoice.description1 }}</td>
+            <td>{{ invoice.total1 }}</td>
+            <td>{{ invoice.tax }}</td>
+            <td>{{ invoice.description2 }}</td>
+            <td>{{ invoice.total2 }}</td>
+            <td>{{ invoice.discount }}</td>
+            <td>{{ invoice.total_discount }}</td>
+            <td>{% for charges in invoice.additioncharge_set.all %}
+                    {{ charges.description }} {{ charges.price }} <br>
+                {% endfor %}
+            </td>
+            <td>{{ invoice.grand_total }}</td>
+            <td>{{ invoice.status }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+    <section id="invoice" style="max-width: 900px; height: auto; margin: auto; margin-top: 10px; padding: 10px 10px 0 10px; background-color: #f8f9fa;display: none">
+        <table style="padding: 20px; width: 100%; font-size: 0.7rem; margin-top: 10px">
+            <tr>
+                <td style="width: 50%; vertical-align: top;">
+                    <h4 style="font-size: 0.7rem">From</h4>
+                </td>
+                <td style="width: 50%; text-align: right; vertical-align: top;">
+                    <h4 style="font-size: 0.7rem">To</h4>
+                </td>
+            </tr>
+            <tr>
+                <td style="vertical-align: top;">
+                    <strong>Flight Booking Travel Agency</strong><br>
+                    Email: booking@example.com<br>
+                    Phone: +1234567890
+                </td>
+                <td style="text-align: right; vertical-align: top;">
+                    <strong>John Doe</strong><br>
+                    johndoe@example.com<br>
+                    +9876543210
+                </td>
+            </tr>
+        </table>
+        <hr>
+        <div class="row">
+            <div class="col">
+                <h4 style="font-size: 0.8rem">Passenger Details</h4>
+                <table class="table" style="width: 100%; border-style: dashed; border-color: black; border-width: 0.5px; border-collapse: collapse; padding: 10px;">
+                    <tr style="border-style: dashed; border-width: 1px; font-size: 0.6rem">
+                        <th style="width: 20%; padding: 5px; text-align: center;">Name</th>
+                        <th style="width: 20%; padding: 5px; text-align: center;">Email</th>
+                        <th style="width: 20%; padding: 5px; text-align: center;">Phone</th>
+                        <th style="width: 20%; padding: 5px; text-align: center;">Type</th>
+                        <th style="width: 20%; padding: 5px; text-align: center;">DOB</th>
+                        <th style="width: 20%; text-align: center;padding: 5px;">Sex</th>
+                    </tr>
+                    <tr style="border-style: dashed;border-width: 1px;font-size: 0.6rem">
+                        <td style="width: 20%; padding: 5px; text-align: center; border-right: 1px dashed;">John Doe</td>
+                        <td style="width: 20%; padding: 5px; text-align: center; border-right: 1px dashed;">john@example.com</td>
+                        <td style="width: 20%; padding: 5px; text-align: center; border-right: 1px dashed;">1234567890</td>
+                        <td style="width: 20%; padding: 5px; text-align: center; border-right: 1px dashed;">Adult</td>
+                        <td style="width: 20%; padding: 5px; text-align: center; border-right: 1px dashed;">25/02/1996</td>
+                        <td style="width: 20%; text-align: center; padding: 5px;">Male</td>
+                    </tr>
+                </table>                
+            </div>
+        </div>
+        <div class="row">
+            <h4 style="font-size: 0.8rem">Itinerary Details</h4>
+            <table class="table" style="width: 97.5%; font-size:0.6rem; border-style: dashed; margin:auto;border-color: black; border-width: 0.5px; border-collapse: collapse; padding: 10px;">
+                <thead style="font-size: 0.6rem; text-align: center">
+                    <tr style="border-style: dashed; border-width: 1px;">
+                        <th>Airline</th>
+                        <th>Depart City</th>
+                        <th>Arrival City</th>
+                        <th>Depart Airport</th>
+                        <th>Arrival Airport</th>
+                        <th>Departure Time</th>
+                        <th>Arrival Time</th>
+                        <th>Class</th>
+                        <th>Baggage Info</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="font-size: 0.6rem; text-align: center;">
+                        <td style="text-align: left;padding: 5px; border-right: 1px dashed;">
+                            <img class="airline-logo" src="airline_logo.jpg" alt="Airline Logo">
+                            <div class="info-value">Spice Jet</div>
+                            <div class="info-value">SG123</div>
+                        </td>
+                        <td style="text-align: center;padding: 5px; border-right: 1px dashed;">
+                            Delhi
+                        </td>
+                        <td style="text-align: center;padding: 5px; border-right: 1px dashed;">
+                            Guwahati
+                        </td>
+                        <td style="text-align: center;padding: 5px; border-right: 1px dashed;">
+                            Indira Gandhi International Airport
+                        </td>
+                        <td style="text-align: center;padding: 5px; border-right: 1px dashed;">
+                            Lokhpriya Gopinath Bordoloi International Airport
+                        </td>
+                        <td style="text-align: center;padding: 5px; border-right: 1px dashed;">
+                            19:20
+                        </td>
+                        <td style="text-align: center;padding: 5px; border-right: 1px dashed;">
+                            20:24
+                        </td>
+                        <td style="text-align: center;padding: 5px; border-right: 1px dashed;">
+                            Premium Economy
+                        </td>
+                        <td style="text-align: center;padding: 5px; border-right: 1px dashed;">
+                            1Kg
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <table style="width: 50%; text-align: left; border-collapse: collapse; margin-top: 20px; font-size: 0.6rem;">
+            <tr>
+                <th style="width: 50%; padding: 5px; font-weight: bold;">Airfare Charges</th>
+                <td style="width: 50%; padding: 5px; text-align: right; font-size: 0.6rem;" id="airfarecharges"></td>
+            </tr>
+            <tr>
+                <th style="width: 50%; padding: 5px; font-weight: bold;">Agency Fees</th>
+                <td style="width: 50%; padding: 5px; text-align: right; font-size: 0.6rem;">$100</td>
+            </tr>
+            <tr>
+                <th style="width: 50%; padding: 5px; font-weight: bold;">Miscellaneous Fees</th>
+                <td id="additionChargesTotal" style="width: 50%; padding: 5px; text-align: right; font-size: 0.6rem;">$0</td>
+            </tr>
+            <tr>
+                <th style="width: 50%; padding: 5px; font-weight: bold;">Tax</th>
+                <td id="taxAmount" style="width: 50%; padding: 5px; text-align: right; font-size: 0.6rem;">$0</td>
+            </tr>
+            <tr>
+                <th style="width: 50%; padding: 5px; font-weight: bold;">Discount</th>
+                <td id="discountAmount" style="width: 50%; padding: 5px; text-align: right; font-size: 0.6rem;">$0</td>
+            </tr>
+            <tr style="border-top: 1px solid grey">
+                <th style="width: 50%; padding: 5px; font-weight: bold;"><b>Total Charge</b></th>
+                <td id="totalPriceAfterDiscount" style="width: 50%; padding: 5px; text-align: right; font-size: 0.6rem;"><b>$0</b></td>
+            </tr>
+        </table>
+        <form id="this_form" method='POST' action="{% url 'crmApp:send_email'  %}">
+            {% csrf_token %}
+            <input type="hidden"  name="invoice_id"  id="id_to_pass"/>
+        </form>
+        <button type="submit" id="submit_the_form" style="background-color: BLUE; padding: 5px; margin-top: 10px; width: 100px; border: none; cursor: pointer; color: white"> send mail</button>
+
+    </section>  
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Retrieve the JSON data from the template context
+            var invoicesJson = '{{ invoices_json | escapejs }}';
+            var section = document.getElementById("invoice");
+            var table = document.getElementById("table");
+            // Parse the JSON data into JavaScript objects
+            var invoices = JSON.parse(invoicesJson);
+            console.log("Invoices:", invoices);
+    
+            // Function to calculate total price of addition charges
+            function calculateAdditionChargesTotal(additionCharges) {
+                var totalPrice = 0;
+                additionCharges.forEach(function(charge) {
+                    totalPrice += parseFloat(charge.price);
+                });
+                return totalPrice;
+            }
+    
+            // Add click event listener to all elements with class 'invoice-id'
+            document.querySelectorAll('.invoice-id').forEach(function(element) {
+                element.addEventListener('click', function() {
+                    // Extract invoice_id from data attribute
+                    var invoiceId = this.getAttribute('data-invoice-id');
+                    document.getElementById("id_to_pass").value=invoiceId;
+    
+                    // Find the invoice object with the clicked ID
+                    var clickedInvoice = invoices.find(function(invoice) {
+                        return invoice.invoice_id === invoiceId;
+                    });
+    
+                    // Calculate airfare (base price + markup price)
+                    var airfarePrice = parseFloat(clickedInvoice.base_price) + parseFloat(clickedInvoice.markup_price);
+    
+                    // Calculate total price of addition charges
+                    var additionChargesTotal = calculateAdditionChargesTotal(clickedInvoice.addition_charges);
+    
+                    // Calculate total price after discount
+                    var totalPriceAfterDiscount = airfarePrice + additionChargesTotal + parseFloat(clickedInvoice.tax) - parseFloat(clickedInvoice.discount);
+    
+                    // Display airfare and addition charges total in HTML
+                    var airfareElement = document.getElementById("airfarecharges");
+                    airfareElement.textContent = '$ ' + airfarePrice.toFixed(2);
+    
+                    var additionChargesTotalElement = document.getElementById("additionChargesTotal");
+                    additionChargesTotalElement.textContent = '$ ' + additionChargesTotal.toFixed(2);
+    
+                    // Display tax in HTML
+                    var taxAmountElement = document.getElementById("taxAmount");
+                    taxAmountElement.textContent = '$ ' + parseFloat(clickedInvoice.tax).toFixed(2);
+    
+                    // Display discount or "None" in HTML
+                    var discountAmountElement = document.getElementById("discountAmount");
+                    if (parseFloat(clickedInvoice.discount) > 0) {
+                        discountAmountElement.textContent = '$ ' + parseFloat(clickedInvoice.discount).toFixed(2);
+                    } else {
+                        discountAmountElement.textContent = 'None';
+                    }
+    
+                    // Display total price after discount in HTML
+                    var totalPriceAfterDiscountElement = document.getElementById("totalPriceAfterDiscount");
+                    totalPriceAfterDiscountElement.innerHTML = '<b>$' + totalPriceAfterDiscount.toFixed(2) + '</b>';
+    
+                    // Display corresponding whole data in console
+                    console.log("Clicked Invoice Data:", clickedInvoice);
+                    section.style.display = 'block';
+                    table.style.display = 'none';
+                });
+            });
+        });
+    </script>
+    <script>
+        // Function to handle form submission
+        function submitForm() {
+            // Assuming there's some logic here to send the mail
+            // For demonstration purposes, let's just log a message
+            console.log("Mail sent!");
+            document.getElementById("this_form").submit();
+            // You can add your AJAX call or any other logic to actually send the mail here
+        }
+    
+        // Attaching the function to the button click event
+        document.getElementById("submit_the_form").addEventListener("click", function(event) {
+            event.preventDefault(); // Prevent the default form submission behavior
+            submitForm(); // Call the function to handle form submission
+        });
+    </script>
+    
+{% endblock %}
