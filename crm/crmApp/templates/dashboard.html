@@ -7,17 +7,12 @@
         margin-top: 10px;
     }
 
-    /* select {
-        border-color: transparent;
-        outline: none;
-    } */
+
 </style>
 <!-- Chart.js Script -->
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js/dist/Chart.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
-<!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.bundle.min.js"></script> -->
-
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom mb-5">
     <div class="container-fluid">
@@ -120,8 +115,20 @@
                         {% endif %}
                         <h5 class="card-text" style="color: #fff; padding-right: 50%;">Total Sales</h5>
                         </a>
-                        <h3 style=""><b>$</b> {{ total_sales }}</h3>
-                        <p style="">Since last Month</p>
+                        <div class="container mt-5">
+                            <div class="row">
+                                <div class="col text-left d-flex align-items-center">
+                                    <h3><b>${{ total_sales }}</b></h3>
+                                </div>
+                                <div class="col text-right">
+                                    <div class="up text-center" style="background-color: rgba(171, 233, 171, 0.5);">
+                                        <h5>up</h5>
+                                       
+                                    </div>
+                                    <p class="mb-0" style="font-size: 0.5rem;">Since last Month</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -131,8 +138,20 @@
                         <a class="text-decoration-none text-reset" href="{% url 'crmApp:sales' %}">
                             <h5 class="card-text" style="color: #fff; padding-right: 50%;">Total Leads</h5>
                         </a>
-                        <h3 style=""><b>$</b> {{ total_sales }}</h3>
-                        <p style="">Since last Month</p>
+                        <div class="container mt-5">
+                            <div class="row">
+                                <div class="col text-left d-flex align-items-center">
+                                    <h3><b>${{ total_sales }}</b></h3>
+                                </div>
+                                <div class="col text-right">
+                                    <div class="up text-center" style="background-color: rgba(171, 233, 171, 0.5);">
+                                        <h5>up</h5>
+                                       
+                                    </div>
+                                    <p class="mb-0" style="font-size: 0.5rem;">Since last Month</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -140,30 +159,59 @@
                 <div class="card shadow-lg col-custom-color card-with-background4">
                     <div class="card-body">
                         <a class="text-decoration-none text-reset" href="{% url 'crmApp:sales' %}">
-                            <h5 class="card-text" style="color: #fff; padding-right: 50%;">Total Refund</h5>
+                            <h5 class="card-text" style="color: #fff; padding-right: 30%;">Total Refund</h5>
                         </a>
-                        <h3 style=""><b>$</b> {{ total_sales }}</h3>
-                        <p style="">Since last Month</p>
+                        <div class="container mt-5">
+                            <div class="row">
+                                <div class="col text-left d-flex align-items-center">
+                                    <h3><b>${{ total_sales }}</b></h3>
+                                </div>
+                                <div class="col text-right">
+                                    <div class="up text-center" style="background-color: rgba(171, 233, 171, 0.5);">
+                                        <h5>up</h5>
+                                       
+                                    </div>
+                                    <p class="mb-0" style="font-size: 0.5rem;">Since last Month</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+            
             <div class="col-md-3 px-1 mt-md-0 mt-1">
                 <div class="card shadow-lg col-custom-color card-with-background5">
                     <div class="card-body">
                         <a class="text-decoration-none text-reset" href="{% url 'crmApp:sales' %}">
-                            <h5 class="card-text" style="color: #fff; padding-right: 30%;">Total Chargeback</h5>
+                            <h5 class="card-text" style="color: #fff; padding-right: 10%;">Total Chargeback</h5>
                         </a>
-                        <h3 style=""><b>$</b> {{ total_sales }}</h3>
-                        <p style="">Since last Month</p>
+                        <div class="container mt-5">
+                            <div class="row">
+                                <div class="col text-left d-flex align-items-center">
+                                    <h3><b>${{ total_sales }}</b></h3>
+                                </div>
+                                <div class="col text-right">
+                                    <div class="up text-center" style="background-color: rgba(171, 233, 171, 0.5);">
+                                        <h5>up</h5>
+                                       
+                                    </div>
+                                    <p class="mb-0" style="font-size: 0.5rem;">Since last Month</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        
                     </div>
                 </div>
             </div>
+            
+            
         </div>
     </div>
     
-    <div class="container mt-5">
+    <div class="container mt-4" style="padding-right: 0; padding-left: 0;" >
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-6 px-1 mt-md-0">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h3 class="mb-0">Sales Overview</h3>
@@ -180,7 +228,7 @@
                 </div>
             </div>
     
-            <div class="col-md-6">
+            <div class="col-md-6 px-1 mt-md-0">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h3 class="mb-0">Income</h3>
@@ -192,7 +240,7 @@
                         </div>
                     </div>
                     <div class="card-body d-flex justify-content-center align-items-center">
-                        <div class="chart-container income" style="position: relative; height: 50%; width: 50%; align-items: center;">
+                        <div class="chart-container income" style="position: relative; height: 100%; width: 100%; align-items: center;">
                             <canvas id="incomeChart"></canvas>
                         </div>
                 </div>
@@ -202,68 +250,90 @@
     </div>
     
     <script>
-        // Sales Chart Data
-        var salesData = {
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-            datasets: [{
-                label: 'Sales',
-                data: [1000, 2000, 1500, 3000, 2500, 1800, 4000],
-                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 1
-            }]
-        };
-    
+// Sales Chart Data
+var salesData = {
+    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+    datasets: [{
+        label: '', // Set an empty string to hide the legend label
+        data: [1000, 2000, 1500, 3000, 2500, 1800, 4000],
+        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+        borderColor: 'rgba(54, 162, 235, 1)',
+        borderWidth: 1
+    }]
+};
 
-        // Render Charts
-        var salesCtx = document.getElementById('salesChart').getContext('2d');
-        var incomeCtx = document.getElementById('incomeChart').getContext('2d');
-    
-        var salesChart = new Chart(salesCtx, {
-            type: 'line',
-            data: salesData
-        });
+// Render Charts
+var salesCtx = document.getElementById('salesChart').getContext('2d');
+var incomeCtx = document.getElementById('incomeChart').getContext('2d');
 
-                // Income Chart Data
-                var incomeData = {
-            labels: ['Profit', 'Income', 'Loss'],
-            datasets: [{
-                label: 'Income',
-                data: [2500, 2000, 1800], // Adjusted income data for pie chart
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.5)', // Red color for profit
-                    'rgba(54, 162, 235, 0.5)', // Blue color for income
-                    'rgba(255, 206, 86, 0.5)', // Yellow color for loss
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)', // Red color for profit
-                    'rgba(54, 162, 235, 1)', // Blue color for income
-                    'rgba(255, 206, 86, 1)', // Yellow color for loss
-                ],
-                borderWidth: 1
-            }]
-        };
-    
-    
-        var incomeChart = new Chart(incomeCtx, {
-            type: 'pie',
-            data: incomeData,
-            options: {
-            cutoutPercentage: 30, // Adjust the cutoutPercentage value to decrease the size of the pie chart
-            plugins: {
-                legend: {
-                    position: 'bottom' // Display legend at the bottom
-                }
+var salesChart = new Chart(salesCtx, {
+    type: 'line',
+    data: salesData,
+    options: {
+        legend: {
+            display: false // Hide the legend
+        }
+    }
+});
+
+
+
+
+
+
+  // Income Chart Data
+var incomeData = {
+    labels: ['Profit', 'Income', 'Loss'],
+    datasets: [{
+        label: 'Income',
+        data: [2500, 2000, 1800], // Adjusted income data for pie chart
+        backgroundColor: [
+            'rgba(255, 99, 132, 0.5)', // Red color for profit
+            'rgba(54, 162, 235, 0.5)', // Blue color for income
+            'rgba(255, 206, 86, 0.5)', // Yellow color for loss
+        ],
+        borderColor: [
+            'rgba(255, 99, 132, 1)', // Red color for profit
+            'rgba(54, 162, 235, 1)', // Blue color for income
+            'rgba(255, 206, 86, 1)', // Yellow color for loss
+        ],
+        borderWidth: 1
+    }]
+};
+
+// Initialize pie chart
+var incomeChart = new Chart(incomeCtx, {
+    type: 'pie', // Set chart type to pie
+    data: incomeData,
+    options: {
+        legend: {
+            position: 'bottom' // Display legend at the bottom
+        },
+        plugins: {
+            labels: {
+                render: 'label',
+                fontColor: 'black',
+                fontSize: 14,
+                position: 'outside'
             }
         }
-        });
+    }
+});
+
+
+
+
+
+
+
+
     </script>
     
     
     
-     <div class="container mt-5">
+     <div class="container mt-4" style="padding-right: 0; padding-left: 0;">
         <div class="row">
-            <div class="col-md-9">
+            <div class="col-md-9 px-1 mt-md-0">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5>Total Sales</h5>
@@ -329,7 +399,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 ">
                 <div class="card">
                     <div class="card-header">
                         <h5>Best Performers</h5>
@@ -363,9 +433,9 @@
         </div>
     </div>
 
-    <div class="container mt-5 mb-5">
+    <div class="container mt-4" style="padding-right: 0; padding-left: 0;">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12 px-1 mt-md-0">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h3>Income Overview</h3>
@@ -384,43 +454,47 @@
     </div>
     
     <script>
-        // Income Overview Chart Data
-        var incomeOverviewData = {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-            datasets: [{
-                label: 'Income Overview',
-                data: [2000, 2500, 1800, 3000, 2000, 1500, 2500, 2800, 2200, 3500, 2400, 2000], // Data for all months
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1,
-                barThickness: 10 // Adjust the width of the bars here
-            }]
-        };
-    
-        // Render Chart
-        var incomeOverviewCtx = document.getElementById('incomeOverviewChart').getContext('2d');
-    
-        var incomeOverviewChart = new Chart(incomeOverviewCtx, {
-            type: 'bar',
-            data: incomeOverviewData,
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
+       // Income Overview Chart Data
+var incomeOverviewData = {
+    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+    datasets: [{
+        label: '', // Set an empty string to hide the legend label
+        data: [2000, 2500, 1800, 3000, 2000, 1500, 2500, 2800, 2200, 3500, 2400, 2000], // Data for all months
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 1,
+        barThickness: 10 // Adjust the width of the bars here
+    }]
+};
+
+// Render Chart
+var incomeOverviewCtx = document.getElementById('incomeOverviewChart').getContext('2d');
+
+var incomeOverviewChart = new Chart(incomeOverviewCtx, {
+    type: 'bar',
+    data: incomeOverviewData,
+    options: {
+        legend: {
+            display: false // Hide the legend
+        },
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
                 }
-            }
-        });
+            }]
+        }
+    }
+});
+
     </script>
     
 
 
-    <div class="container mt-5 mb-5">
+    <div class="container mt-4 mb-5" style="padding-right: 0; padding-left: 0;">
         <div class="row">
             <!-- Total Leads Bar Graph -->
-            <div class="col-md-6">
+            <div class="col-md-6 px-1 mt-md-0">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h3>Total Leads</h3>
@@ -436,20 +510,20 @@
                     </div>
                     <div class="card-body">
                         <!-- Placeholder for total leads bar graph -->
-                        <canvas id="totalLeadsGraph" width="400" height="200"></canvas>
+                        <canvas id="totalLeadsGraph"></canvas>
                     </div>
                 </div>
             </div>
     
             <!-- Chargeback Ratio Circle Graph -->
-            <div class="col-md-6">
+            <div class="col-md-6 px-1 mt-md-0">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h3>Chargeback Ratio</h3>
                         <button class="btn btn-primary">View More</button>
                     </div>
                     <div class="card-body d-flex justify-content-center align-items-center">
-                        <div class="chart-container" style="position: relative; height: 50%; width: 50%; align-items: center;">
+                        <div class="chart-container" style="position: relative; height: 100%; width: 100%; align-items: center;">
                             <canvas id="chargebackRatioGraph"></canvas>
                         </div>
                     </div>
@@ -476,7 +550,10 @@
 
     
         // Total Leads Options
-        var totalLeadsOptions = {
+        var totalLeadsOptions = { 
+            legend: {
+            display: false // Hide the legend
+        },
             scales: {
                 y: {
                     beginAtZero: true
@@ -494,71 +571,116 @@
     
    <!-- Chargeback Ratio Circle Graph -->
    <script>
-   // Chargeback Ratio Data
-var chargebackRatioCanvas = document.getElementById('chargebackRatioGraph');
-var chargebackRatioData = {
-    labels: ['Weekly', 'Monthly', 'Quarterly', 'Yearly'],
-    datasets: [{
-        label: 'Chargeback Ratio',
-        data: [40, 30, 10, 20], // Adjust the data as needed, e.g., 40 for yearly
-        backgroundColor: [
-            'rgba(75, 192, 192, 0.5)', // Green color for successful
-            'rgba(255, 99, 132, 0.5)', // Red color for pending
-            'rgba(255, 206, 86, 0.5)', // Yellow color for failed
-            'rgba(54, 162, 235, 0.5)' // Blue color for yearly (you can adjust colors as needed)
-        ],
-        borderColor: [
-            'rgba(75, 192, 192, 1)', // Green color for successful
-            'rgba(255, 99, 132, 1)', // Red color for pending
-            'rgba(255, 206, 86, 1)', // Yellow color for failed
-            'rgba(54, 162, 235, 1)' // Blue color for yearly (you can adjust colors as needed)
-        ],
-        borderWidth: 1,
-        borderRadius: [10, 10, 10, 10], // Set border radius for each dataset individually
-    }]
-};
+var xitems = ['Weekly', 'Monthly', 'Quarterly', 'Yearly'];
+var yitems = [478, 522, 200, 300]; // Update with your desired data
 
-// Chargeback Ratio Options
-var chargebackRatioOptions = {
-    cutoutPercentage: 30,
-    plugins: {
-        legend: {
-            display: true,
-            position: 'bottom', // Display legend at the bottom
-            align: 'center', // Align the legend to the center
-            labels: {
-                boxWidth: 20, // Adjust the width of the legend box
-                usePointStyle: true, // Use point style instead of colored square
-                padding: 10 // Adjust padding between legend items
-            },
-            // Adjust the maximum width of the legend to fit in one line
-            maxSize: {
-                width: 500
+new Chart(document.getElementById("chargebackRatioGraph"), {
+    type: 'doughnut',
+    data: {
+        labels: xitems,
+        datasets: [{
+            data: yitems,
+            backgroundColor: ["#8DB6CD", "#FFB6C1", "#87CEEB", "#FFD700"],
+            fill: false
+        }]
+    },
+    options: {
+        tooltips: {
+            enabled: false,
+        },
+        showPercentage: true,
+        elements: {
+            arc: {
+                borderWidth: 1,
+                borderRadius: 10, // Set border radius to 10
             }
         },
-        datalabels: { // Configuration for the datalabels plugin
-            display: function(context) {
-                return context.dataset.data[context.dataIndex] > 0; // Display labels only if data is greater than 0
-            },
-            color: 'white', // Set the font color inside the chart to white
-            font: {
-                size: 14, // Adjust font size as needed
-                weight: 'bold' // Make the font bold
-            },
-            formatter: function(value, context) {
-                var percentage = Math.round(value) + '%';
-                return percentage; // Append '%' to the value
+        legend: {
+            display: true,
+            position: 'bottom',
+            labels: {
+                fontColor: 'black', // Set label font color
+                fontSize: 14, // Set label font size
+                usePointStyle: true, // Use round icons
+                padding: 20 // Set padding to 5
             }
         }
     }
-};
-
-// Initialize Chargeback Ratio Circle Graph
-var chargebackRatioChart = new Chart(chargebackRatioCanvas, {
-    type: 'doughnut',
-    data: chargebackRatioData,
-    options: chargebackRatioOptions
 });
+
+Chart.pluginService.register({
+    afterDraw: function(chart, easing) {
+        if (chart.config.options.showPercentage || chart.config.options.showLabel) {
+            var self = chart.config;
+            var ctx = chart.chart.ctx;
+
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillStyle = "black"; // Change text color to black for better visibility
+            ctx.font = 'bold 0.6rem Arial'; // Change font style and size
+
+            self.data.datasets.forEach(function(dataset, datasetIndex) {
+                var total = 0,
+                    labelxy = [],
+                    offset = Math.PI / 2,
+                    radius,
+                    centerx,
+                    centery,
+                    lastend = 0;
+
+                for (var val of dataset.data) {
+                    total += +val;
+                }
+
+                var i = 0;
+                var meta = dataset._meta[i];
+                while (!meta) {
+                    i++;
+                    meta = dataset._meta[i];
+                }
+
+                var element;
+                for (index = 0; index < meta.data.length; index++) {
+                    element = meta.data[index];
+                    radius = 0.9 * element._view.outerRadius - element._view.innerRadius;
+                    centerx = element._model.x;
+                    centery = element._model.y;
+                    var thispart = dataset.data[index];
+                    var arcsector = Math.PI * (2 * thispart / total);
+                    if (element.hasValue() && dataset.data[index] > 0) {
+                        labelxy.push(lastend + arcsector / 2 + Math.PI + offset);
+                    } else {
+                        labelxy.push(-1);
+                    }
+                    lastend += arcsector;
+
+                    // Apply border radius of 10 to each segment
+                    element._model.borderRadius = 10;
+
+                    // Check if label is 'Weekly' and apply border width of 15
+                    if (chart.config.data.labels[index] === 'Weekly') {
+                        element._model.borderWidth = 15;
+                    }
+                }
+
+                var lradius = radius * 3 / 1.6;
+                for (var idx in labelxy) {
+                    if (labelxy[idx] === -1) continue;
+                    var langle = labelxy[idx];
+                    var dx = centerx + lradius * Math.cos(langle);
+                    var dy = centery + lradius * Math.sin(langle);
+                    var val = (dataset.data[idx] / total * 100).toFixed(1);
+
+                    if (chart.config.options.showPercentage) {
+                        ctx.fillText(val + '%', dx, dy);
+                    }
+                }
+            });
+        }
+    }
+});
+
+
 
 
 
