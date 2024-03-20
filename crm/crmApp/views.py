@@ -82,27 +82,27 @@ def flight_results(request):
         try:
             print("inside try")
             if return_date == "":
-                # response = amadeus.shopping.flight_offers_search.get(
-                # originLocationCode=from_location,
-                # destinationLocationCode=to_location,
-                # departureDate=departure_date,
-                # adults=adults,
-                # children=child,
-                # infants=infants,
-                # travelClass=class_type
-                # ).data
+                response = amadeus.shopping.flight_offers_search.get(
+                originLocationCode=from_location,
+                destinationLocationCode=to_location,
+                departureDate=departure_date,
+                adults=adults,
+                children=child,
+                infants=infants,
+                travelClass=class_type
+                ).data
                 
-                # # Store the response as JSON format
-                # context = {
-                #     "flights" : response,
-                #     "flights1" : json.dumps(response),
+                # Store the response as JSON format
+                context = {
+                    "flights" : response,
+                    "flights1" : json.dumps(response),
 
-                # }
+                }
                 file_path = "temp.txt"
-                # with open(file_path, "w") as file:
-                #     json.dump(context, file, indent= 4)
-                with open(file_path, "r") as file:
-                    context = json.load(file)
+                with open(file_path, "w") as file:
+                    json.dump(context, file, indent= 4)
+                # with open(file_path, "r") as file:
+                #     context = json.load(file)
                 print("something went wrong")
 
             else:
@@ -982,37 +982,37 @@ def check_flight(request):
         json_data_str = request.POST.get('json_data')
         flight = json.loads(json_data_str)
         # Process the JSON data as needed
-        print(type(flight))
+        # print(type(flight))
         try:
-            # response = amadeus.shopping.flight_offers.pricing.post(flight).data
-            # print(response)
-            # validating_airline_codes_set = set()
+            response = amadeus.shopping.flight_offers.pricing.post(flight).data
+            print(response)
+            validating_airline_codes_set = set()
             
-            # for data in response["flightOffers"]:
-            #     for dats in data["itineraries"]:
-            #         for segment in dats["segments"]:
-            #             # print(segment["carrierCode"])
-            #             validating_airline_codes_set.add(segment["carrierCode"])
+            for data in response["flightOffers"]:
+                for dats in data["itineraries"]:
+                    for segment in dats["segments"]:
+                        # print(segment["carrierCode"])
+                        validating_airline_codes_set.add(segment["carrierCode"])
 
-            # # Convert the set to a list if needed
-            # validating_airline_codes_list = list(validating_airline_codes_set)
-            # airline_codes_string = ','.join(validating_airline_codes_list)
-            # airlines = amadeus.reference_data.airlines.get(airlineCodes=airline_codes_string).data
-            # # print(airlines)
-            # result_dict = {item['iataCode']: item["businessName"] for item in airlines}
-            # result_dict2 = {item['iataCode']: item.get('icaoCode', item['iataCode']) for item in airlines}
-            # print(result_dict2)
-            # context = {
-            #     'flight' : response,
-            #     'flight1' : json.dumps(response),
-            #     "airlines":result_dict,
-            #     "airlines2":result_dict2,
-            # }
+            # Convert the set to a list if needed
+            validating_airline_codes_list = list(validating_airline_codes_set)
+            airline_codes_string = ','.join(validating_airline_codes_list)
+            airlines = amadeus.reference_data.airlines.get(airlineCodes=airline_codes_string).data
+            # print(airlines)
+            result_dict = {item['iataCode']: item["businessName"] for item in airlines}
+            result_dict2 = {item['iataCode']: item.get('icaoCode', item['iataCode']) for item in airlines}
+            print(result_dict2)
+            context = {
+                'flight' : response,
+                'flight1' : json.dumps(response),
+                "airlines":result_dict,
+                "airlines2":result_dict2,
+            }
             file_path = "temp_ite.txt"
-            # with open(file_path, "w") as file:
-            #     json.dump(context, file, indent= 4)
-            with open(file_path, "r") as file:
-                context = json.load(file)
+            with open(file_path, "w") as file:
+                json.dump(context, file, indent= 4)
+            # with open(file_path, "r") as file:
+            #     context = json.load(file)
             # return HttpResponse({"success":"success"})
             return render(request,'itinery.html',context)
         except ResponseError as e:
@@ -1220,13 +1220,13 @@ def submit_cutomer(request):
         json_data_str = request.POST.get('json_data')
         flight = json.loads(json_data_str)
         # Process the JSON data as needed
-        print(flight)
+        # print(flight)
         # Process the data as needed
         print(first_names)
         traveler_details = []
         for index,(fname,lname,dob,sex) in enumerate(zip(first_names,last_names,DOB,Sex)):
             formatted_person = {
-                "id": str(index),  # You can adjust the ID logic as needed
+                "id": str(index+1),  # You can adjust the ID logic as needed
                 "dateOfBirth": dob,  # You might want to provide the actual date of birth
                 "name": {"firstName": fname.upper(), "lastName": lname.upper()},
                 "gender": sex.upper(),  # Assuming 'MALE' or 'FEMALE' format
@@ -1243,7 +1243,70 @@ def submit_cutomer(request):
             }
             traveler_details.append(formatted_person)
         print(traveler_details)
+        fullname = f'{traveler_details[0]["name"]["firstName"]} {traveler_details[0]["name"]["firstName"]}'
+
+        try:
+            response = amadeus.booking.flight_orders.post(flight, traveler_details).data
+            print(response)
+            context = {
+                "data":response
+            }
+            file_path = 'order.txt'
+            with open(file_path, "w") as file:
+                    json.dump(context, file, indent= 4)
+            # with open(file_path, "r") as file:
+            #         context = json.load(file)
+            # response = context["data"]
+            booking_id = response.get("id")
+            passenger_name = fullname
+            phone_number = phone
+            email = email
+            flight_details = None  # Not provided in the response
+            trip_type = None  # Not provided in the response
+            # print(response["flightOffers"][0]["itineraries"])
+            if len(response["flightOffers"][0]["itineraries"]) == 1:
+                trip_type = "One way"
+            reference_id = response.get("id")
+            departure = response["flightOffers"][0]["itineraries"][0]["segments"][0]['departure']["iataCode"]
+            departure_date = date_format(response["flightOffers"][0]["itineraries"][0]["segments"][0]['departure']["at"])
+            arrival = response["flightOffers"][0]["itineraries"][0]["segments"][-1]['arrival']["iataCode"]
+            arrival_date = date_format(response["flightOffers"][0]["itineraries"][0]["segments"][-1]['arrival']["at"])
+            num_passengers = len(traveler_details)
+            price = response["flightOffers"][0]["price"]["grandTotal"]
+            
+            booking_instance = Booking.objects.create(
+                booking_id=booking_id,
+                passenger_name=passenger_name,
+                phone_number=phone_number,
+                email=email,
+                flight_details=flight_details,
+                trip_type=trip_type,
+                reference_id=reference_id,
+                departure=departure,
+                departure_date=departure_date,
+                arrival=arrival,
+                arrival_date=arrival_date,
+                num_passengers=num_passengers,
+                price=price
+            )
+            # Add more fields from the response as needed
+            return redirect('crmApp:booking')
+        except ResponseError as e:
+            print(e.response.result["errors"][0]["detail"])
+            print(f"catch Error: {type(e)}")
         # Return an HttpResponse or redirect to another page
         return HttpResponse("Form submitted successfully!")
 
     return HttpResponse("success")
+
+
+def date_format(datetime_str):
+    datetime_obj = datetime.fromisoformat(datetime_str)
+    
+    # Extract the date part
+    date_only = datetime_obj.date()
+    
+    # Convert date to string in YYYY-MM-DD format
+    date_str = date_only.isoformat()
+    
+    return date_str

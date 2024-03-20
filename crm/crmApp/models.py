@@ -73,7 +73,7 @@ class Booking(models.Model):
     passenger_name = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=15)
     email = models.EmailField()
-    flight_details = models.CharField(max_length=255)
+    flight_details = models.CharField(max_length=255, null=True, blank=True)
     trip_type = models.CharField(max_length=50)
     reference_id = models.CharField(max_length=100)
     departure = models.CharField(max_length=100)
