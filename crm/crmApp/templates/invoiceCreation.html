@@ -297,6 +297,7 @@
                 <th>Lead Agent</th>
                 <th>Status</th>
                 <th>Confirmation Mail</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -320,12 +321,33 @@
                 <td>{{ booking.lead_agent }}</td>
                 <td>{{ booking.status }}</td>
                 <td>{{ booking.confirmation_mail }}</td>
+                <td>
+                    <button class="btn btn-primary" onclick="submitAuthorization(`{{ booking.booking_id }}`);" style="width: 9rem; padding:5%;font-size: 0.9rem">Authorize payment</button>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
+    <form id="authorizePaymentForm" action="{% url 'crmApp:send_signature_request' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" id="passId"  name="bookingId"/>
+    </form>
 </div>
-
+<script>
+    function submitAuthorization(bookingId) {
+        console.log("Received bookingId:", bookingId);
+    
+        var bookingIdInput = document.getElementById("passId");
+        if (bookingIdInput) {
+            bookingIdInput.value = bookingId;
+            bookingIdInput.textContent = bookingId;
+            console.log("Value set in input:", bookingIdInput.value);
+        } else {
+            console.error("Element with id 'bookingIdInput' not found.");
+        }
+        document.getElementById( "authorizePaymentForm").submit();
+    }
+</script>
 <script>
     // Function to handle click on booking ID
     function showInvoiceForm(bookingId) {

@@ -1,43 +1,43 @@
 {
     "data": {
         "type": "flight-order",
-        "id": "eJzTd9f3t4yI8PcDAAt8Ans%3D",
+        "id": "eJzTd9f3dwkLCI4AAAulAoo%3D",
         "queuingOfficeId": "NCE4D31SB",
         "associatedRecords": [
             {
-                "reference": "O9XXON",
-                "creationDate": "2024-03-19T12:19:00.000",
+                "reference": "ODVPSX",
+                "creationDate": "2024-03-20T05:05:00.000",
                 "originSystemCode": "GDS",
-                "flightOfferId": "1"
+                "flightOfferId": "2"
             }
         ],
         "flightOffers": [
             {
                 "type": "flight-offer",
-                "id": "1",
+                "id": "2",
                 "source": "GDS",
                 "nonHomogeneous": false,
-                "lastTicketingDate": "2024-03-19",
+                "lastTicketingDate": "2024-03-20",
                 "itineraries": [
                     {
                         "segments": [
                             {
                                 "departure": {
                                     "iataCode": "GAU",
-                                    "at": "2024-03-21T18:15:00"
+                                    "at": "2024-03-23T12:40:00"
                                 },
                                 "arrival": {
                                     "iataCode": "DEL",
                                     "terminal": "3",
-                                    "at": "2024-03-21T20:45:00"
+                                    "at": "2024-03-23T15:35:00"
                                 },
                                 "carrierCode": "UK",
-                                "number": "722",
+                                "number": "742",
                                 "aircraft": {
                                     "code": "320"
                                 },
-                                "duration": "PT2H30M",
-                                "id": "45",
+                                "duration": "PT2H55M",
+                                "id": "41",
                                 "numberOfStops": 0,
                                 "co2Emissions": [
                                     {
@@ -52,8 +52,8 @@
                 ],
                 "price": {
                     "currency": "EUR",
-                    "total": "158.16",
-                    "base": "140.00",
+                    "total": "81.06",
+                    "base": "72.00",
                     "fees": [
                         {
                             "amount": "0.00",
@@ -68,7 +68,7 @@
                             "type": "FORM_OF_PAYMENT"
                         }
                     ],
-                    "grandTotal": "158.16",
+                    "grandTotal": "81.06",
                     "billingCurrency": "EUR"
                 },
                 "pricingOptions": {
@@ -87,15 +87,15 @@
                         "travelerType": "ADULT",
                         "price": {
                             "currency": "EUR",
-                            "total": "79.08",
-                            "base": "70.00",
+                            "total": "81.06",
+                            "base": "72.00",
                             "taxes": [
                                 {
-                                    "amount": "5.57",
+                                    "amount": "5.56",
                                     "code": "IN"
                                 },
                                 {
-                                    "amount": "2.62",
+                                    "amount": "2.61",
                                     "code": "P2"
                                 },
                                 {
@@ -103,49 +103,11 @@
                                     "code": "YR"
                                 }
                             ],
-                            "refundableTaxes": "9.08"
+                            "refundableTaxes": "9.06"
                         },
                         "fareDetailsBySegment": [
                             {
-                                "segmentId": "45",
-                                "cabin": "ECONOMY",
-                                "fareBasis": "V0GRPRYS",
-                                "brandedFare": "ECOYS",
-                                "class": "V",
-                                "includedCheckedBags": {
-                                    "weight": 15,
-                                    "weightUnit": "KG"
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        "travelerId": "2",
-                        "fareOption": "STANDARD",
-                        "travelerType": "ADULT",
-                        "price": {
-                            "currency": "EUR",
-                            "total": "79.08",
-                            "base": "70.00",
-                            "taxes": [
-                                {
-                                    "amount": "5.57",
-                                    "code": "IN"
-                                },
-                                {
-                                    "amount": "2.62",
-                                    "code": "P2"
-                                },
-                                {
-                                    "amount": "0.89",
-                                    "code": "YR"
-                                }
-                            ],
-                            "refundableTaxes": "9.08"
-                        },
-                        "fareDetailsBySegment": [
-                            {
-                                "segmentId": "45",
+                                "segmentId": "41",
                                 "cabin": "ECONOMY",
                                 "fareBasis": "V0GRPRYS",
                                 "brandedFare": "ECOYS",
@@ -163,11 +125,11 @@
         "travelers": [
             {
                 "id": "1",
-                "dateOfBirth": "1993-10-14",
+                "dateOfBirth": "1999-02-20",
                 "gender": "MALE",
                 "name": {
-                    "firstName": "AGENT",
-                    "lastName": "AGENT"
+                    "firstName": "DANSWRANG",
+                    "lastName": "BORO"
                 },
                 "contact": {
                     "purpose": "STANDARD",
@@ -175,30 +137,10 @@
                         {
                             "deviceType": "MOBILE",
                             "countryCallingCode": "44",
-                            "number": "1234567890"
+                            "number": "9365163250"
                         }
                     ],
-                    "emailAddress": "agent@email.com"
-                }
-            },
-            {
-                "id": "2",
-                "dateOfBirth": "1993-07-09",
-                "gender": "MALE",
-                "name": {
-                    "firstName": "THIMPU",
-                    "lastName": "SENGYUNG"
-                },
-                "contact": {
-                    "purpose": "STANDARD",
-                    "phones": [
-                        {
-                            "deviceType": "MOBILE",
-                            "countryCallingCode": "44",
-                            "number": "1234567890"
-                        }
-                    ],
-                    "emailAddress": "agent@email.com"
+                    "emailAddress": "danswrang@adventurecode.io"
                 }
             }
         ],
