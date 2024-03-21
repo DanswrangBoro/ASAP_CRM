@@ -50,7 +50,7 @@ urlpatterns = [
     path('submit_form_customer/', views.submit_cutomer, name = 'submit_customer'),
     path('send-signature-request/', send_signature_request, name='send_signature_request'),
     path('pending_invoices/', pending_invoices, name='pending_invoices'),
-
+    path('flight-search-multi/', views.flight_search_multi, name='multi_search'),
 ]
 
 

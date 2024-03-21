@@ -1468,3 +1468,81 @@ def send_signature_request(request):
 
             return redirect('crmApp:invoice')
 
+
+def flight_search_multi(request):
+    if request.method == 'GET':
+        # Retrieve data from the GET request
+        departure_cities = request.GET.getlist('departureCity[]')
+        arrival_cities = request.GET.getlist('arrivalCity[]')
+        departure_dates = request.GET.getlist('departureDate[]')
+        adult = request.GET.get('passengerCount')
+        childrens = 0
+        infant = 0
+        travel_class = request.GET.get('flightClass')
+
+        print("Departure Cities:", departure_cities)
+        print("Arrival Cities:", arrival_cities)
+        print("Departure Dates:", departure_dates)
+        print("Passenger Count:", adult)
+        print("Travel Class:", travel_class)
+
+        originDesrinations = []
+        travelers = []
+        for index, (departure_city, arrival_city, departure_date) in enumerate(zip(departure_cities, arrival_cities, departure_dates)):
+            data = {
+                    "id": str(index+1),
+                    "originLocationCode": departure_city,
+                    "destinationLocationCode": arrival_city,
+                    "departureDateTimeRange": {
+                        "date": str(departure_date)
+                    }
+            }
+            originDesrinations.append(data)
+
+        if int(adult) > 0:
+            for i in range(1,int(adult)+1):
+                data = {
+                    "id": str(i),
+                }
+        flight = {
+            "currencyCode": "USD",
+            "originDestinations": [
+            ],
+            "travelers": [
+                {
+                    "id": "1",
+                    "travelerType": "ADULT",
+                    "fareOptions": [
+                        "STANDARD"
+                    ]
+                },
+                {
+                    "id": "2",
+                    "travelerType": "CHILD",
+                    "fareOptions": [
+                        "STANDARD"
+                    ]
+                }
+            ],
+            "sources": [
+                "GDS"
+            ],
+            "searchCriteria": {
+                "flightFilters": {
+                    "cabinRestrictions": [
+                        {
+                            "cabin": "BUSINESS",
+                            "coverage": "MOST_SEGMENTS",
+                            "originDestinationIds": [
+                                "1"
+                            ]
+                        }
+                    ]
+                }
+            }
+        }
+
+        return HttpResponse('Flight search form submitted successfully.')
+    else:
+        # If the request method is not GET, return an error response or redirect to an error page
+        return HttpResponse('Error: Only GET requests are allowed for this view.')

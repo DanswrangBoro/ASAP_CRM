@@ -90,7 +90,7 @@
         </div>
     </form>
 
-    <form id="flightSearchFormMulti" style="display: none;">
+    <form id="flightSearchFormMulti" style="display: none;" method="GET" action="{% url 'crmApp:multi_search' %}">
         <!-- Initial set of input fields for first city -->
         <div class="form row city">
             <div class="form-group col-md-4">
