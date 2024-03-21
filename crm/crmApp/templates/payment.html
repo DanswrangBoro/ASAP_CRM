@@ -1,0 +1,68 @@
+<!-- payment.html -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 style="font-size: 0.9rem">Payment List</h1>
+    <div class="table-responsive">
+        <table class="table table-striped" style="font-size: 0.7rem">
+            <thead>
+                <tr>
+                    <th>Booking Id</th>
+                    <th>Transaction Id</th>
+                    <th>Transaction Status</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                    <th>Card Holder Name</th>
+                    <th>Card Number</th>
+                    <th>Expiry Date</th>
+                    {% comment %} <th>CVV</th> {% endcomment %}
+                    <th>Card Type</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for payment in payments %}
+                    <tr>
+                        <td style="font-weight: bolder; color: Blue; cursor: pointer" onclick="viewBooking('{{ payment.booking.booking_id }}')">{{ payment.booking.booking_id }}</td>
+                        <td>{{payment.transaction_id}}</td>
+                        <td>{{ payment.transaction_status}}</td>
+                        <td>{{ payment.amount }}</td>
+                        <td>{{ payment.payment_date }}</td>
+                        <td>{{ payment.cardholder_name }}</td>
+                        <td>{{ payment.card_number }}</td>
+                        <td>{{ payment.expiry_date }}</td>
+                        {% comment %} <td>{{ payment.cvv }}</td> {% endcomment %}
+                        <td>{{ payment.card_type }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<!-- Form to submit booking ID -->
+<form id="bookingForm" method="post" action="{% url 'crmApp:related_booking' %}" style="display: none;">
+    {% csrf_token %}
+    <input type="hidden" id="bookingIdInput" name="booking_id">
+</form>
+
+{% comment %} <script>
+    // Function to open modal and submit booking ID
+    function viewBooking(bookingId) {
+        // Set booking ID in the form
+        document.getElementById("bookingIdInput").value = bookingId;
+        // Trigger the modal to display
+        $('#bookingModal').modal('show');
+    }
+</script> {% endcomment %}
+<script>
+    function viewBooking(bookingId) {
+        document.getElementById("bookingIdInput").value = bookingId;
+        document.getElementById('bookingForm').submit();
+    }
+</script>
+
+
+
+{% endblock %}
+
