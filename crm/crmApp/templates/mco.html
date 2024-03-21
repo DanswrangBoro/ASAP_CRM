@@ -16,7 +16,7 @@
         <tbody>
             {% for m in mco %}
             <tr>
-                <td>{{ m.booking_id }}</td>
+                <td  style="font-weight: bolder; color: Blue; cursor: pointer" onclick="viewBooking('{{ m.booking_id }}')">{{ m.booking_id }}</td>
                 <td>{{ m.passenger_name }}</td>
                 <td>Extra Baggage Fee</td>
                 <td><b>$</b> {{ m.mco }}</td>
@@ -26,6 +26,18 @@
         </tbody>
     </table>
 </div>
+<!-- Form to submit booking ID -->
+<form id="bookingForm" method="post" action="{% url 'crmApp:related_booking' %}" style="display: none;">
+    {% csrf_token %}
+    <input type="hidden" id="bookingIdInput" name="booking_id">
+</form>
+<script>
+    function viewBooking(bookingId) {
+        console.log(bookingId)
+        document.getElementById("bookingIdInput").value = bookingId;
+        document.getElementById('bookingForm').submit();
+}
+</script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-eMNCOe7tC1doHpGoJtKh7z7lGz7fuP4F8nfdFvAOA6Gg/z6Y5J6XqqyGXYM2ntXU" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-pzjw8f+ua7Kw1TIq0v8FqFjcJ6pajs/rfdfs3SO+kD4Ck5BdPtF+to8xMp9MvcJ4" crossorigin="anonymous"></script>
 {% endblock %}

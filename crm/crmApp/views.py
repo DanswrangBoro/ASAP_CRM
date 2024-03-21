@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, reverse
 from django.http import JsonResponse
 import requests
-from .models import AdditionCharge, Booking, Refund
+from .models import AdditionCharge, Booking, Payment, Refund
 from datetime import datetime
 from django.db.models import Sum
 from .models import Refund
@@ -211,9 +211,10 @@ def total_booking(request):
         total_mco += Decimal(booking.mco)
     
     total_revenue = total_price + total_mco
-    total_price_str = "${:.2f}".format(total_price)  # Formatting total price as a string
-    total_mco_str = "${:.2f}".format(total_mco)  # Formatting total MCO as a string
-    total_revenue_str = "${:.2f}".format(total_revenue)  # Formatting total revenue as a string
+    # Rounding to two decimal points
+    total_price_str = "${:.2f}".format(round(total_price, 2))
+    total_mco_str = "${:.2f}".format(round(total_mco, 2))
+    total_revenue_str = "${:.2f}".format(round(total_revenue, 2))
 
     context = {
         "original": original,
@@ -225,35 +226,44 @@ def total_booking(request):
     }
     return render(request, "total_booking.html", context)
 
+
 # =================================================================================dashboard======================================
 
+def format_price(price):
+    if price >= 1000:
+        return "${:.1f}K".format(price / 1000)
+    else:
+        return "${:.2f}".format(price)
+
 def dashboard(request):
-       # Total sales
+    # Total sales
     confirmed_bookings = Booking.objects.filter(status='confirmed')
     total_sales = confirmed_bookings.aggregate(total_sales=Sum('price'))['total_sales'] or 0
-
-    print("this is total :",total_sales)
+    total_sales_str = format_price(total_sales)
 
     # Monthly income
     now = datetime.now()
     current_month = now.month
     current_year = now.year
     monthly_income = Booking.objects.filter(departure_date__month=current_month, departure_date__year=current_year, status='confirmed').aggregate(monthly_income=Sum('price'))['monthly_income'] or 0
-    agent_confirmlist = Booking.objects.filter(status = 'confirmed')
+    monthly_income_str = format_price(monthly_income)
+
     # Annual income
     annual_income = Booking.objects.filter(departure_date__year=current_year, status='confirmed').aggregate(annual_income=Sum('price'))['annual_income'] or 0
+    annual_income_str = format_price(annual_income)
+
     userN = request.session.get('userN')
     pending_chargebacks = Chargeback.objects.filter(chargeback_lead_status='pending')
 
     context = {
-        'total_sales': total_sales,
-        'monthly_income': monthly_income,
-        'annual_income': annual_income,
-        'user' : userN,
-        'confirm_agentlist' : agent_confirmlist,
+        'total_sales': total_sales_str,
+        'monthly_income': monthly_income_str,
+        'annual_income': annual_income_str,
+        'user': userN,
         'pending_chargebacks': pending_chargebacks,
     }
-    return render(request,'dashboard.html',context)
+    return render(request, 'dashboard.html', context)
+
 # =================================================================================end dashboard==================================
 
 def total_user(request):
@@ -459,9 +469,6 @@ def submit_refund_form(request):
     if request.method == 'POST':
         # Get form data from the POST request
         booking_id = request.POST.get('bookingId')
-        passenger_name = request.POST.get('passengerName')
-        phone_number = request.POST.get('phoneNumber')
-        email = request.POST.get('email')
         refund_type = request.POST.get('refundType')
         refund_amount = request.POST.get('refundAmount')
         refund_reason = request.POST.get('refundReason')
@@ -469,22 +476,21 @@ def submit_refund_form(request):
         # Retrieve the Booking object based on the booking_id
         try:
             booking = Booking.objects.get(booking_id=booking_id)
+                # Create a Refund object and save it to the database
+            refund = Refund(
+                booking_id=booking,
+                refund_amount=refund_amount,
+                refund_type = refund_type,
+                refund_reason=refund_reason
+            )
+            refund.save()
+
+            # Set a success message
+            success_message = "Refund form submitted successfully"
         except Booking.DoesNotExist:
             return HttpResponse("Invalid Booking ID", status=400)
 
-        # Create a Refund object and save it to the database
-        refund = Refund(
-            booking=booking,
-            passenger_name=passenger_name,
-            phone_number=phone_number,
-            email=email,
-            refund_amount=refund_amount,
-            refund_reason=refund_reason
-        )
-        refund.save()
-
-        # Set a success message
-        success_message = "Refund form submitted successfully"
+     
 
         # Redirect back to the 'booking' page with the success message as a query parameter
         booking_url = reverse('crmApp:booking')  # Replace 'booking' with your actual URL name
@@ -1468,7 +1474,6 @@ def send_signature_request(request):
 
             return redirect('crmApp:invoice')
 
-
 def flight_search_multi(request):
     if request.method == 'GET':
         # Retrieve data from the GET request
@@ -1537,3 +1542,31 @@ def flight_search_multi(request):
     else:
         # If the request method is not GET, return an error response or redirect to an error page
         return HttpResponse('Error: Only GET requests are allowed for this view.')
+      
+def payment(request):
+    payments = Payment.objects.all()
+    formatted_payments = []
+    for payment in payments:
+        card_number = str(payment.card_number)
+        formatted_card_number = '**** **** **** ' + card_number[-4:]
+        payment.card_number = formatted_card_number
+        formatted_payments.append(payment)
+    context = {
+                'payments': formatted_payments,
+                }
+    return render(request, 'payment.html', context)
+
+def relatedBooking(request):
+    if request.method == 'POST':
+        booking_id = request.POST.get('booking_id')
+        print("printing this",booking_id)
+        booking = Booking.objects.get(booking_id=booking_id)
+        context = {
+                    'booking': booking
+                   }
+        return render(request,'pay_rleated_booking.html', context)
+    
+
+def initiatePayment(request):
+    return render(request,'initiatePayment.html')
+

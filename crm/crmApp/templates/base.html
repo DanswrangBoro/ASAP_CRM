@@ -138,6 +138,16 @@
                                     Sent Invoices
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'crmApp:payment' %}">
+                                    <i class="fas fa-money-bill-wave"></i> Payment Record
+                                </a>                                
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'crmApp:initiatePayment' %}">
+                                    <i class="fas fa-credit-card"></i> Initiate Payment
+                                </a>                                
+                            </li>
                             <form action="{% url 'crmApp:logout' %}" method="post" style="padding-top: 40%;">
                                 {% csrf_token %}
                                 <li class="nav-item" style=" border: none; cursor: pointer;" onmouseover="this.style.backgroundColor='#3180ff';" onmouseout="this.style.backgroundColor='#f3f6fb';">
@@ -147,8 +157,6 @@
                                     
                                 </li>
                             </form>
-                            
-
                         </ul>
                     </div>
 
