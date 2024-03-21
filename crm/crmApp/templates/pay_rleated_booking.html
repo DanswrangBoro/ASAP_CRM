@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<!-- Div to display booking details -->
+<div class="container mt-5 shadow py-3">
+    <h1 style="font-size: 0.9rem">Booking Details ( Booking ID: {{ booking.booking_id }})</h1>
+    <div class="table-responsive mt-3">
+        <table class="table table-striped" style="font-size: 0.7rem">
+                <tr>
+                    <th>Confirmation No</th>
+                    <td>{{ booking.confirmation_no }}</td>
+                </tr>
+                <tr>
+                    <th>Passenger Name</th>
+                    <td>{{ booking.passenger_name }}</td>
+                </tr>
+                <tr>
+                    <th>Phone Number</th>
+                    <td>{{ booking.phone_number }}</td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td>{{ booking.email }}</td>
+                </tr>
+                <tr>
+                    <th>Flight Details</th>
+                    <td>{{ booking.flight_details }}</td>
+                </tr>
+                <tr>
+                    <th>Trip Type</th>
+                    <td>{{ booking.trip_type }}</td>
+                </tr>
+                <tr>
+                    <th>Reference ID</th>
+                    <td>{{ booking.reference_id }}</td>
+                </tr>
+                <tr>
+                    <th>Departure</th>
+                    <td>{{ booking.departure }}</td>
+                </tr>
+                <tr>
+                    <th>Departure Date</th>
+                    <td>{{ booking.departure_date }}</td>
+                </tr>
+                <tr>
+                    <th>Arrival</th>
+                    <td>{{ booking.arrival }}</td>
+                </tr>
+                <tr>
+                    <th>Arrival Date</th>
+                    <td>{{ booking.arrival_date }}</td>
+                </tr>
+                <tr>
+                    <th>Number of Passengers</th>
+                    <td>{{ booking.num_passengers }}</td>
+                </tr>
+                <tr>
+                    <th>Price</th>
+                    <td>{{ booking.price }}</td>
+                </tr>
+                <tr>
+                    <th>Status</th>
+                    <td>{{ booking.status }}</td>
+                </tr>
+                <tr>
+                    <th>Change Date</th>
+                    <td>{{ booking.change_date }}</td>
+                </tr>
+                <tr>
+                    <th>MCO</th>
+                    <td>{{ booking.mco }}</td>
+                </tr>
+                <tr>
+                    <th>Lead Agent</th>
+                    <td>{{ booking.lead_agent }}</td>
+                </tr>
+                <tr>
+                    <th>Card Number</th>
+                    <td>{{ booking.card_number }}</td>
+                </tr>
+        </table>
+    </div>
+</div>
+{% endblock %}

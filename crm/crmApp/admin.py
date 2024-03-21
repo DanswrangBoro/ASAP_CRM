@@ -1,5 +1,5 @@
 from django.contrib import admin
-
+from .models import Payment
 from .models import  AdditionCharge, Booking, Refund, RejectedBooking, CustomUser
 
 from .models import Sale
@@ -72,3 +72,11 @@ class InvoiceAdmin(admin.ModelAdmin):
 @admin.register(AdditionCharge)
 class  AdditionalChargeAdmin(admin.ModelAdmin):
     list_display = ['price','description']
+
+
+class PaymentAdmin(admin.ModelAdmin):
+    list_display = ('booking_id', 'transaction_id', 'transaction_status', 'amount', 'payment_date', 'cardholder_name', 'card_number', 'expiry_date', 'cvv', 'card_type')
+    search_fields = ['booking_id__booking_id', 'transaction_id', 'cardholder_name', 'card_number']
+    list_filter = ('transaction_status', 'payment_date')
+
+admin.site.register(Payment, PaymentAdmin)

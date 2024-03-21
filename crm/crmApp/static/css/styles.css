@@ -1,0 +1,171 @@
+
+body{
+  overflow: hidden;
+
+}
+
+@font-face {
+  font-family: 'icons';
+  src: url("../fonts/icomoon.woff") format('woff'), url("../fonts/icomoon.ttf") format('truetype'), url("../fonts/icomoon.otf") format('opentype'), url("../fonts/icomoon.eot") format('embedded-opentype');
+}
+
+.clearfix:before,
+.clearfix:after {
+  content: "";
+  display: table;
+}
+.clearfix:after {
+  clear: both;
+}
+.clearfix {
+  zoom: 1;
+}
+
+
+.card-bounding{
+  width: 90%;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 2%;
+  border-radius: 10px;
+  font-family: 'Roboto';
+  background:url('https://t3.ftcdn.net/jpg/01/97/84/44/360_F_197844441_Febp1tgrOZtBPJxLIirtYKobhi4j04Z6.jpg');
+  color: white;
+  transform: translateY(70%);
+}
+
+.card-bounding aside{
+  font-size:20px;
+  padding-bottom: 8px;
+}
+.card-container {
+  width: 100%;
+  padding-left: 80px;
+  padding-right: 40px;
+  position: relative;
+  box-sizing: border-box;
+  /* border: 1px solid #ccc; */
+  margin: 0 auto 30px auto;
+}
+/* Default styling */
+.card-container input {
+  letter-spacing: 1px;
+  font-size: 1.5rem;
+  border-radius: 6px;
+  padding: 10px;
+  border: 0;
+  outline: none;
+  margin-left: 16%;
+  box-sizing: border-box;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 768px) {
+  .card-container input {
+    width: 80%; /* Adjust width for smaller screens */
+    margin-left: 10%; /* Remove left margin on smaller screens */
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .card-container input {
+    font-size: 1.2rem; /* Decrease font size for even smaller screens */
+  }
+}
+
+.card-type {
+  width:20%;
+  height: 46px;
+  background: url("../images/cards.png");
+  background-position: 0 -291px;
+  background-repeat: no-repeat;
+  position: absolute;
+  top: 5px;
+  left: 4px;
+}
+.card-type.mastercard {
+  background-position: 0 -5px;
+  width:20%;
+}
+.card-type.visa {
+  background-position: 0 -121px;
+  width:20%;
+}
+.card-type.amex {
+  background-position: 0 -61px;
+  width:20%;
+}
+.card-type.discover {
+  background-position: 0 -178px;
+  width:20%;
+}
+.card-valid {
+  position: absolute;
+  top: 0;
+  left: 95%;
+  line-height: 60px;
+  font-size: 20px;
+  font-family: 'icons';
+  color: #ccc;
+}
+.card-valid.active {
+  color: #42ca7c;
+}
+.card-details {
+  width: 100%;
+  text-align: left;
+  margin-bottom: 30px;
+  transition: 300ms ease;
+}
+.card-details input {
+  font-size: 20px;
+  padding: 10px;
+  box-sizing: border-box;
+  width: 100%;
+}
+.card-details input.error {
+  border: 1px solid #c2313c;
+  box-shadow: 0 4px 8px 0 rgba(238,76,87,0.3);
+  outline: none;
+}
+.card-details .expiration {
+  width: 30%;
+  float: left;
+  padding-right: 5%;
+}
+.card-details .cvv {
+  width: 30%;
+  float: left;
+padding-right: 5%;
+}
+.card-details .ctype {
+  width: 30%;
+  float: left;
+}
+
+/* suggestions styling */
+
+#creditCardTypeSuggestions {
+  display: none;
+  position: absolute;
+  /* top: calc(100% + 5px); */
+  left:57%;
+  width: calc(100% - 10px);
+  background-color: #01081a;
+  /* border: 1px solid #ccc; */
+  text-align:left;
+  width: 150px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  top:70%;
+  z-index:20;
+  padding: 5px;
+  overflow: hidden;
+  
+}
+
+#creditCardTypeSuggestions.visible {
+  display: block;
+  overflow-y: auto;
+}
+

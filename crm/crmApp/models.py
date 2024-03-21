@@ -3,7 +3,7 @@ from asyncio.windows_events import NULL
 from email.policy import default
 from unittest.util import _MAX_LENGTH
 from django.db import models
-
+from django.core.validators import MaxValueValidator, MinValueValidator
 # Create your models here.
 
 class PNR_TABLE(models.Model):
@@ -109,6 +109,7 @@ class Refund(models.Model):
     booking_id = models.ForeignKey(Booking, on_delete=models.CASCADE)
     refund_amount = models.DecimalField(max_digits=10, decimal_places=2)
     refund_reason = models.TextField()
+    refund_type =  models.CharField(max_length=20,null = True, blank= True)
     status = models.CharField(max_length=20,default="Pending")
 
     def __str__(self):
@@ -213,3 +214,18 @@ class AdditionCharge(models.Model):
 
 
 # ====================================================================( dropbox sign ) ========================
+    
+class Payment(models.Model):
+    booking = models.ForeignKey('Booking', on_delete=models.CASCADE)
+    transaction_id = models.CharField(max_length=100)
+    transaction_status = models.CharField(max_length=50)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    payment_date = models.DateTimeField()
+    cardholder_name = models.CharField(max_length=100)
+    card_number = models.IntegerField(max_length=16, validators=[MaxValueValidator(9999999999999999), MinValueValidator(1000000000000000)])
+    expiry_date = models.DateField()
+    cvv = models.CharField(max_length=4)
+    card_type = models.CharField(max_length=20)
+
+    def __str__(self):
+        return f"Payment for Booking ID: {self.booking}"

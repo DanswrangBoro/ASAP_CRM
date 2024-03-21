@@ -38,15 +38,17 @@
 <div id="flightBookingForm" class="container hidden">
     <h2 class="mb-4">Flight Booking Form</h2>
     <!-- Flight booking form content -->
+    <div class="mb-3 me-3" style="flex: 1;">
+        <label for="tripType" class="form-label"><i class="bi bi-geo-alt"></i> Trip Type</label>
+        <select class="form-select" id="tripType" name="tripType">
+            <option value="oneWay">One Way</option>
+            <option value="roundTrip">Round Trip</option>
+            <option value="multi">Multi-City</option>
+        </select>
+    </div>
     <form id="flightSearchForm" class="custom-booking" action="{% url 'crmApp:flight_results' %}" method="GET">
         <div class="row col-md-5">
-            <div class="mb-3 me-3" style="flex: 1;">
-                <label for="tripType" class="form-label"><i class="bi bi-geo-alt"></i> Trip Type</label>
-                <select class="form-select" id="tripType" name="tripType">
-                    <option value="oneWay">One Way</option>
-                    <option value="roundTrip">Round Trip</option>
-                </select>
-            </div>
+
             <div class="mb-3 me-3" style="flex: 1;">
                 <label for="flightClass" class="form-label"><i class="bi bi-geo-alt"></i> Flight Class</label>
                 <select class="form-select" id="flightClass" name="flightClass">
@@ -86,6 +88,47 @@
                 <button type="submit" class="btn btn-primary" style="margin-top: 32px;">Search</button>
             </div>
         </div>
+    </form>
+
+    <form id="flightSearchFormMulti" style="display: none;" method="GET" action="{% url 'crmApp:multi_search' %}">
+        <!-- Initial set of input fields for first city -->
+        <div class="form row city">
+            <div class="form-group col-md-4">
+                <label for="departureCity1">Departure City:</label>
+                <input type="text" class="form-control" name="departureCity[]" required>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="arrivalCity1">Arrival City:</label>
+                <input type="text" class="form-control" name="arrivalCity[]" required>
+            </div>
+            <div class="form-group col-md-3">
+                <label for="departureDate1">Departure Date:</label>
+                <input type="date" class="form-control" name="departureDate[]" required>
+            </div>
+            <div class="form-group col-md-1">
+                <button type="button" class="btn btn-danger deleteCityBtn">Delete</button>
+            </div>
+        </div>
+        <div id="additionalCities">
+            <!-- Additional input fields will be appended here -->
+        </div>
+        <button type="button" id="addCityBtn" class="btn btn-primary">Add More</button>
+        <hr class="my-4">
+        <!-- Remaining form fields -->
+        <div class="form-group">
+            <label for="passengerCount">Passengers:</label>
+            <input type="number" class="form-control" name="passengerCount" min="1" value="1">
+        </div>
+        <div class="form-group">
+            <label for="travelClass">Travel Class:</label>
+            <select class="form-select" id="flightClass" name="flightClass">
+                <option value="ECONOMY">Economy</option>
+                <option value="PREMIUM ECONOMY">Business</option>
+                <option value="FIRST">First</option>
+                <option value="BUSINESS">Business</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Search</button>
     </form>
 </div>
 
@@ -322,13 +365,27 @@
     document.addEventListener("DOMContentLoaded", function () {
         const tripTypeSelect = document.getElementById('tripType');
         const returnDateField = document.getElementById('returnDateField');
+        const multiform = document.getElementById('flightSearchFormMulti');
+        const nonmultiform = document.getElementById('flightSearchForm');
+
 
         // Function to handle trip type change
         function handleTripTypeChange() {
             if (tripTypeSelect.value === 'oneWay') {
                 returnDateField.style.display = 'none';
-            } else {
+                multiform.style.display = 'none';
+                nonmultiform.style.display = 'block';
+
+            }
+            if(tripTypeSelect.value === 'multi'){
+                returnDateField.style.display = 'none';
+                multiform.style.display = 'block';
+                nonmultiform.style.display = 'none';
+            } 
+            else {
                 returnDateField.style.display = 'block';
+                multiform.style.display = 'none';
+                nonmultiform.style.display = 'block';
             }
         }
 
@@ -338,6 +395,46 @@
         // Add event listener for trip type change
         tripTypeSelect.addEventListener('change', handleTripTypeChange);
     });
+document.addEventListener('DOMContentLoaded', function() {
+    var addCityBtn = document.getElementById('addCityBtn');
+    var additionalCities = document.getElementById('additionalCities');
+    var cityIndex = 2; // Starting index for additional cities
+
+    addCityBtn.addEventListener('click', function() {
+        var cityDiv = document.createElement('div');
+        cityDiv.classList.add('form', 'row', 'city');
+        cityDiv.innerHTML = `
+            <div class="form-group col-md-4">
+                <label for="departureCity${cityIndex}">Departure City:</label>
+                <input type="text" class="form-control" name="departureCity[]" required>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="arrivalCity${cityIndex}">Arrival City:</label>
+                <input type="text" class="form-control" name="arrivalCity[]" required>
+            </div>
+            <div class="form-group col-md-3">
+                <label for="departureDate${cityIndex}">Departure Date:</label>
+                <input type="date" class="form-control" name="departureDate[]" required>
+            </div>
+            <div class="form-group col-md-1">
+                <button type="button" class="btn btn-danger deleteCityBtn">Delete</button>
+            </div>
+        `;
+        additionalCities.appendChild(cityDiv);
+        cityIndex++;
+
+        // Add event listener for delete button
+        var deleteButtons = document.querySelectorAll('.deleteCityBtn');
+        deleteButtons.forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var cityRow = btn.closest('.city');
+                cityRow.remove();
+            });
+        });
+    });
+});
+
+
 </script>
      <script>
         // Function to fetch passenger data
