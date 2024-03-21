@@ -14,22 +14,7 @@
     <table class="table table-striped custom-table">
         <thead>
             <tr>
-                <th>Sl no</th>
-                <th>Booking Date</th>
-                <th>Agent Name</th>
-                <th>Booking Confirmation no</th>
                 <th>Booking Id</th>
-                <th>Customer Name</th>
-                <th>Phone Number</th>
-                <th>Email</th>
-                <th>Departure City</th>
-                <th>Departure Date</th>
-                <th>Arrival City</th>
-                <th>Arrival Date</th>
-                <th>Booking Price</th>
-                <th>No of pssgr</th>
-                <th>Credit card</th>
-                <th>Confirmation Mail Status</th>
                 <th>Refund Amount</th>
                 <th>Refund Reason</th>
                 <th>Refund Status</th>
@@ -41,22 +26,7 @@
         <tbody>
             {% for r in refund %}
             <tr>
-                <td>1</td>
-                <td>N/A</td>
-                <td>N/A</td>
-                <td>N/A</td>
-                <td>{{ r.booking_id }}</td>
-                <td>{{ r.passenger_name }}</td>
-                <td>{{ r.phone_number }}</td>
-                <td>{{ r.email }}</td>
-                <td>N/A</td>
-                <td>N/A</td>
-                <td>N/A</td>
-                <td>N/A</td>
-                <td>N/A</td>
-                <td>N/A</td>
-                <td>N/A</td>
-                <td>N/A</td>
+                <td style="font-weight: bolder; color: Blue; cursor: pointer" onclick="viewBooking('{{ r.booking_id }}')">{{ r.booking_id }}</td>
                 <td><b>$</b> {{ r.refund_amount }}</td>
                 <td>{{ r.refund_reason }}</td>
                 <td>N/A</td>
@@ -79,46 +49,8 @@
                             <option value="cancelled" {% if r.status == 'cancelled' %} selected {% endif %}>Cancel</option>
                         </select>
                     </form>
-                </td> 
-                <td>
-                    <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#bookingDetailsModal{{ r.booking_id }}">
-                        <i class="fa-solid fa-eye" style="cursor: pointer"></i>
-                    </button>                                    
-                </td>                               
+                </td>                            
             </tr>
-            <div class="modal fade" id="bookingDetailsModal{{ r.booking_id }}" tabindex="-1" aria-labelledby="bookingDetailsModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="bookingDetailsModalLabel">Booking Details</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            {% for b in booking %}
-                                {%if b.booking_id == r.booking_id %}
-                                    <p><strong>Booking ID:</strong> {{ booking.booking_id }}</p>
-                                    <p><strong>Passenger Name:</strong> {{ b.passenger_name }}</p>
-                                    <p><strong>Phone Number:</strong> {{ b.phone_number }}</p>
-                                    <p><strong>Email:</strong> {{ b.email }}</p>
-                                    <p><strong>Flight Details:</strong> {{ b.flight_details }}</p>
-                                    <p><strong>Trip Type:</strong> {{ b.trip_type }}</p>
-                                    <p><strong>Reference ID:</strong> {{ b.reference_id }}</p>
-                                    <p><strong>Departure:</strong> {{ b.departure }}</p>
-                                    <p><strong>Departure Date:</strong> {{ b.departure_date }}</p>
-                                    <p><strong>Arrival:</strong> {{ b.arrival }}</p>
-                                    <p><strong>Arrival Date:</strong> {{ b.arrival_date }}</p>
-                                    <p><strong>Number of Passengers:</strong> {{ b.num_passengers }}</p>
-                                    <p><strong>Price:</strong> ${{ b.price }}</p>
-                                    <p><strong>Status:</strong> {{ b.status }}</p>
-                                {% endif %}
-                            {% endfor %}
-                            {% comment %} {% else %}
-                                <p>No record found for Booking Id: <b>{{r.booking_id}}</b></p>
-                            {% endcomment %}                                        
-                        </div>
-                    </div>
-                </div>
-            </div>
             {% endfor %}
         </tbody>
         
@@ -126,7 +58,16 @@
     <hr>
 </div>
 
-
+<form id="bookingForm" method="post" action="{% url 'crmApp:related_booking' %}" style="display: none;">
+    {% csrf_token %}
+    <input type="hidden" id="bookingIdInput" name="booking_id">
+</form>
+<script>
+    function viewBooking(bookingId) {
+        document.getElementById("bookingIdInput").value = bookingId;
+        document.getElementById('bookingForm').submit();
+    }
+</script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-eMNCOe7tC1doHpGoJtKh7z7lGz7fuP4F8nfdFvAOA6Gg/z6Y5J6XqqyGXYM2ntXU" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-pzjw8f+ua7Kw1TIq0v8FqFjcJ6pajs/rfdfs3SO+kD4Ck5BdPtF+to8xMp9MvcJ4" crossorigin="anonymous"></script>
 {% endblock %}
