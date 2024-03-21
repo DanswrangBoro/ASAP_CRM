@@ -120,38 +120,38 @@ def flight_results(request):
                 return render(request, 'result1.html', context)
 
             else:
-                # response = amadeus.shopping.flight_offers_search.get(
-                # originLocationCode=from_location,
-                # destinationLocationCode=to_location,
-                # departureDate=departure_date,
-                # adults=adults,
-                # children=child,
-                # infants=infants,
-                # travelClass=class_type
-                # ).data
+                response = amadeus.shopping.flight_offers_search.get(
+                originLocationCode=from_location,
+                destinationLocationCode=to_location,
+                departureDate=departure_date,
+                adults=adults,
+                children=child,
+                infants=infants,
+                travelClass=class_type
+                ).data
 
-                # response_return = amadeus.shopping.flight_offers_search.get(
-                # originLocationCode=to_location,
-                # destinationLocationCode=from_location,
-                # departureDate=return_date,
-                # adults=adults,
-                # children=child,
-                # infants=infants,
-                # travelClass=class_type
-                # ).data
-                # # Store the response as JSON format
-                # context = {
-                #     "flights_departure" : response,
-                #     "flights_return": response_return,
-                #     "flights_departure1" : json.dumps(response),
-                #     "flights_return1" : json.dumps(response_return),
-                # }
+                response_return = amadeus.shopping.flight_offers_search.get(
+                originLocationCode=to_location,
+                destinationLocationCode=from_location,
+                departureDate=return_date,
+                adults=adults,
+                children=child,
+                infants=infants,
+                travelClass=class_type
+                ).data
+                # Store the response as JSON format
+                context = {
+                    "flights_departure" : response,
+                    "flights_return": response_return,
+                    "flights_departure1" : json.dumps(response),
+                    "flights_return1" : json.dumps(response_return),
+                }
                 # print(context)
                 file_path = "round.txt"
-                # with open(file_path, "w") as file:
-                #     json.dump(context, file, indent= 4)
-                with open(file_path, "r") as file:
-                    context = json.load(file)
+                with open(file_path, "w") as file:
+                    json.dump(context, file, indent= 4)
+                # with open(file_path, "r") as file:
+                #     context = json.load(file)
             # Pass the stringified JSON data to the template
             # print(context)
                 return render(request, 'roundtrip.html', context)
@@ -1084,35 +1084,35 @@ def check_flight(request):
         # Process the JSON data as needed
         # print(flight)
         try:
-            # response = amadeus.shopping.flight_offers.pricing.post(flight).data
-            # print(response)
-            # validating_airline_codes_set = set()
+            response = amadeus.shopping.flight_offers.pricing.post(flight).data
+            print(response)
+            validating_airline_codes_set = set()
             
-            # for data in response["flightOffers"]:
-            #     for dats in data["itineraries"]:
-            #         for segment in dats["segments"]:
-            #             # print(segment["carrierCode"])
-            #             validating_airline_codes_set.add(segment["carrierCode"])
+            for data in response["flightOffers"]:
+                for dats in data["itineraries"]:
+                    for segment in dats["segments"]:
+                        # print(segment["carrierCode"])
+                        validating_airline_codes_set.add(segment["carrierCode"])
 
-            # # Convert the set to a list if needed
-            # validating_airline_codes_list = list(validating_airline_codes_set)
-            # airline_codes_string = ','.join(validating_airline_codes_list)
-            # airlines = amadeus.reference_data.airlines.get(airlineCodes=airline_codes_string).data
-            # # print(airlines)
-            # result_dict = {item['iataCode']: item["businessName"] for item in airlines}
-            # result_dict2 = {item['iataCode']: item.get('icaoCode', item['iataCode']) for item in airlines}
-            # print(result_dict2)
-            # context = {
-            #     'flight' : response,
-            #     'flight1' : json.dumps(response),
-            #     "airlines":result_dict,
-            #     "airlines2":result_dict2,
-            # }
+            # Convert the set to a list if needed
+            validating_airline_codes_list = list(validating_airline_codes_set)
+            airline_codes_string = ','.join(validating_airline_codes_list)
+            airlines = amadeus.reference_data.airlines.get(airlineCodes=airline_codes_string).data
+            # print(airlines)
+            result_dict = {item['iataCode']: item["businessName"] for item in airlines}
+            result_dict2 = {item['iataCode']: item.get('icaoCode', item['iataCode']) for item in airlines}
+            print(result_dict2)
+            context = {
+                'flight' : response,
+                'flight1' : json.dumps(response),
+                "airlines":result_dict,
+                "airlines2":result_dict2,
+            }
             file_path = "temp_ite.txt"
-            # with open(file_path, "w") as file:
-            #     json.dump(context, file, indent= 4)
-            with open(file_path, "r") as file:
-                context = json.load(file)
+            with open(file_path, "w") as file:
+                json.dump(context, file, indent= 4)
+            # with open(file_path, "r") as file:
+            #     context = json.load(file)
             # return HttpResponse({"success":"success"})
             return render(request,'itinery.html',context)
         except ResponseError as e:
@@ -1474,6 +1474,75 @@ def send_signature_request(request):
 
             return redirect('crmApp:invoice')
 
+def flight_search_multi(request):
+    if request.method == 'GET':
+        # Retrieve data from the GET request
+        departure_cities = request.GET.getlist('departureCity[]')
+        arrival_cities = request.GET.getlist('arrivalCity[]')
+        departure_dates = request.GET.getlist('departureDate[]')
+        adult = request.GET.get('passengerCount')
+        childrens = 0
+        infant = 0
+        travel_class = request.GET.get('flightClass')
+
+        print("Departure Cities:", departure_cities)
+        print("Arrival Cities:", arrival_cities)
+        print("Departure Dates:", departure_dates)
+        print("Passenger Count:", adult)
+        print("Travel Class:", travel_class)
+
+        
+        resultLists = []
+        id = 1
+        for index, (departure_city, arrival_city, departure_date) in enumerate(zip(departure_cities, arrival_cities, departure_dates)):
+            data = []
+            try:
+                response = amadeus.shopping.flight_offers_search.get(
+                    originLocationCode=departure_city,
+                    destinationLocationCode=arrival_city,
+                    departureDate=departure_date,
+                    adults=adult,
+                    children=childrens,
+                    infants=infant,
+                    travelClass=travel_class
+                    ).data
+                print(response)
+                for fdata in response:
+                    fdata["id"] = f'{id}'
+                    id = id + 1
+                # response = {"flight":"flight"}
+                # data.append(response)
+                resultLists.append(response)    
+            except ResponseError as e:
+                print(e["error"])
+        file_path = 'multiResult.txt'
+        with open(file_path,'w') as file:
+            json.dump(resultLists,file, indent=2)
+
+        validating_airline_codes_set = set()
+        for flightDatas in resultLists:
+            for offers in flightDatas:
+                for dats in offers["itineraries"]:
+                    for segment in dats["segments"]:
+                        validating_airline_codes_set.add(segment["carrierCode"])
+        validating_airline_codes_list = list(validating_airline_codes_set)
+        airline_codes_string = ','.join(validating_airline_codes_list)
+        airlines = amadeus.reference_data.airlines.get(airlineCodes=airline_codes_string).data
+        result_dict = {item['iataCode']: item['businessName'] for item in airlines}
+        result_dict2 = {item['iataCode']: item.get('icaoCode', item['iataCode']) for item in airlines}
+        context = {
+            "flightOffers": resultLists,
+            "flightOffers1": json.dumps(resultLists),
+            "airlines2": result_dict2,
+            "airlines3": json.dumps(result_dict2),
+            "airlines":result_dict,
+        }
+        return render(request,"multi_result.html",context)
+
+    else:
+        # If the request method is not GET, return an error response or redirect to an error page
+        return HttpResponse('Error: Only GET requests are allowed for this view.')
+      
 def payment(request):
     payments = Payment.objects.all()
     formatted_payments = []
@@ -1500,3 +1569,4 @@ def relatedBooking(request):
 
 def initiatePayment(request):
     return render(request,'initiatePayment.html')
+
