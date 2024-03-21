@@ -113,16 +113,16 @@
                         {% if request.user.is_superuser %}
                             <a class="text-decoration-none text-reset" href="{% url 'crmApp:sales' %}">
                         {% endif %}
-                        <h5 class="card-text" style="color: #fff;">Total Sales</h5>
+                        <h5 class="card-text" style="color: #fff; text-align: left;">Total Sales</h5>
                         </a>
                         <div class="container mt-5">
                             <div class="row">
-                                <div class="col text-left d-flex align-items-center">
-                                    <h3><b>${{ total_sales }}</b></h3>
+                                <div class="col d-flex justify-content-left px-0 mx-0 align-items-center">
+                                    <h5><b>{{ total_sales }}</b></h5>
                                 </div>
                                 <div class="col text-right">
                                     <div class="up text-center" style="background-color: rgba(171, 233, 171, 0.5);">
-                                        <h5>up</h5>
+                                        <h6>up</h6>
                                        
                                     </div>
                                     <p class="mb-0" style="font-size: 0.5rem;">Since last Month</p>
@@ -136,16 +136,16 @@
                 <div class="card shadow-lg col-custom-color card-with-background3">
                     <div class="card-body">
                         <a class="text-decoration-none text-reset" href="{% url 'crmApp:sales' %}">
-                            <h5 class="card-text" style="color: #fff;">Total Leads</h5>
+                            <h5 class="card-text" style="color: #fff; text-align: left;">Total Leads</h5>
                         </a>
                         <div class="container mt-5">
                             <div class="row">
-                                <div class="col text-left d-flex align-items-center">
-                                    <h3><b>${{ total_sales }}</b></h3>
+                                <div class="col d-flex justify-content-left px-0 mx-0  align-items-center">
+                                    <h5><b>{{ total_sales }}</b></h5>
                                 </div>
                                 <div class="col text-right">
                                     <div class="up text-center" style="background-color: rgba(171, 233, 171, 0.5);">
-                                        <h5>up</h5>
+                                        <h6>up</h6>
                                        
                                     </div>
                                     <p class="mb-0" style="font-size: 0.5rem;">Since last Month</p>
@@ -159,16 +159,16 @@
                 <div class="card shadow-lg col-custom-color card-with-background4">
                     <div class="card-body">
                         <a class="text-decoration-none text-reset" href="{% url 'crmApp:sales' %}">
-                            <h5 class="card-text" style="color: #fff; padding-right: 30%;">Total Refund</h5>
+                            <h5 class="card-text" style="color: #fff;text-align: left;">Total Refund</h5>
                         </a>
                         <div class="container mt-5">
                             <div class="row">
-                                <div class="col text-left d-flex align-items-center">
-                                    <h3><b>${{ total_sales }}</b></h3>
+                                <div class="col d-flex justify-content-left px-0 mx-0  align-items-center">
+                                    <h5><b>{{ total_sales }}</b></h5>
                                 </div>
                                 <div class="col text-right">
                                     <div class="up text-center" style="background-color: rgba(171, 233, 171, 0.5);">
-                                        <h5>up</h5>
+                                        <h6>up</h6>
                                        
                                     </div>
                                     <p class="mb-0" style="font-size: 0.5rem;">Since last Month</p>
@@ -183,16 +183,16 @@
                 <div class="card shadow-lg col-custom-color card-with-background5">
                     <div class="card-body">
                         <a class="text-decoration-none text-reset" href="{% url 'crmApp:sales' %}">
-                            <h5 class="card-text" style="color: #fff; padding-right: 10%;">Total Chargeback</h5>
+                            <h5 class="card-text" style="color: #fff; text-align: left;">Total Chargeback</h5>
                         </a>
                         <div class="container mt-5">
                             <div class="row">
-                                <div class="col text-left d-flex align-items-center">
-                                    <h3><b>${{ total_sales }}</b></h3>
+                                <div class="col d-flex justify-content-left px-0 mx-0 align-items-center">
+                                    <h5><b>{{ total_sales }}</b></h5>
                                 </div>
                                 <div class="col text-right">
                                     <div class="up text-center" style="background-color: rgba(171, 233, 171, 0.5);">
-                                        <h5>up</h5>
+                                        <h6>up</h6>
                                        
                                     </div>
                                     <p class="mb-0" style="font-size: 0.5rem;">Since last Month</p>
@@ -245,8 +245,7 @@
     </div>
     
     <script>
-// Sales Chart Data
-var salesData = {
+        var salesData = {
     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
     datasets: [{
         label: '', // Set an empty string to hide the legend label
@@ -267,15 +266,22 @@ var salesChart = new Chart(salesCtx, {
     options: {
         legend: {
             display: false // Hide the legend
+        },
+        scales: {
+            xAxes: [{
+                gridLines: {
+                    display: false // Hide x-axis gridlines
+                }
+            }],
+            yAxes: [{
+                gridLines: {
+                    borderDash: [5, 5], // Set border dash style [5, 5]
+                    zeroLineWidth: 0 // Hide the zero line
+                }
+            }]
         }
     }
 });
-
-
-
-
-
-
   // Income Chart Data
 var incomeData = {
     labels: ['Profit', 'Income', 'Loss'],
@@ -314,19 +320,8 @@ var incomeChart = new Chart(incomeCtx, {
         }
     }
 });
-
-
-
-
-
-
-
-
     </script>
-    
-    
-    
-     <div class="container mt-4" style="padding-right: 0; padding-left: 0;">
+      <div class="container mt-4" style="padding-right: 0; padding-left: 0;">
         <div class="row">
             <div class="col-md-9 px-1 mt-md-0">
                 <div class="card">
@@ -449,18 +444,30 @@ var incomeChart = new Chart(incomeCtx, {
     </div>
     
     <script>
-       // Income Overview Chart Data
-var incomeOverviewData = {
+      var incomeOverviewData = {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
     datasets: [{
         label: '', // Set an empty string to hide the legend label
         data: [2000, 2500, 1800, 3000, 2000, 1500, 2500, 2800, 2200, 3500, 2400, 2000], // Data for all months
-        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        backgroundColor: [], // Dynamically set background color
         borderColor: 'rgba(75, 192, 192, 1)',
         borderWidth: 1,
         barThickness: 10 // Adjust the width of the bars here
     }]
 };
+
+// Set default color
+var defaultColor = 'rgba(75, 192, 192, 0.2)';
+var zeroValueColor = 'rgba(255, 0, 0, 0.5)'; // Red color for zero values with increased opacity
+
+// Fill background color array dynamically based on data values
+incomeOverviewData.datasets[0].data.forEach(function(value) {
+    if (value > 0) {
+        incomeOverviewData.datasets[0].backgroundColor.push(defaultColor);
+    } else {
+        incomeOverviewData.datasets[0].backgroundColor.push(zeroValueColor);
+    }
+});
 
 // Render Chart
 var incomeOverviewCtx = document.getElementById('incomeOverviewChart').getContext('2d');
@@ -473,14 +480,32 @@ var incomeOverviewChart = new Chart(incomeOverviewCtx, {
             display: false // Hide the legend
         },
         scales: {
+            xAxes: [{
+                gridLines: {
+                    display: false // Hide vertical grid lines (column lines)
+                }
+            }],
             yAxes: [{
+                gridLines: {
+                    borderDash: [5, 5], // Set border dash style [5, 5]
+                    zeroLineWidth: 0 // Hide the zero line
+                },
                 ticks: {
                     beginAtZero: true
                 }
             }]
+        },
+        plugins: {
+            datalabels: {
+                display: true,
+                color: 'black' // Change the color of the data labels
+            }
         }
     }
 });
+
+
+
 
     </script>
     
@@ -529,39 +554,72 @@ var incomeOverviewChart = new Chart(incomeOverviewCtx, {
     
     <!-- Total Leads Bar Graph -->
     <script>
-        // Total Leads Data
-            var totalLeadsCanvas = document.getElementById('totalLeadsGraph');
-            var totalLeadsData = {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                datasets: [{
-                    label: 'Total Leads',
-                    data: [100, 200, 150, 300, 250, 400, 350],
-                    backgroundColor: 'rgba(54, 162, 235, 0.5)', // Blue color for bars
-                    borderColor: 'rgba(54, 162, 235, 1)', // Border color for bars
-                    borderWidth: 1,
-                    barThickness: 10 // Define bar thickness here
-                }]
-            };
+          var totalLeadsCanvas = document.getElementById('totalLeadsGraph');
+var totalLeadsData = {
+    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+    datasets: [{
+        label: 'Total Leads',
+        data: [110, 200, 150, 300, 250, 400, 350],
+        backgroundColor: 'rgba(54, 162, 235, 0.8)', // Blue color for bars with increased alpha
+        borderColor: 'rgba(54, 162, 235, 1)', // Border color for bars
+        borderWidth: 1,
+        barThickness: 10 // Define bar thickness here
+    }, {
+        label: 'Line Dataset', // Label for line dataset
+        data: [110, 200, 150, 300, 250, 400, 350], // Data for line dataset adjusted to be on top of bars
+        type: 'line', // Set dataset type as 'line'
+        borderColor: 'red', // Line color
+        borderWidth: 2, // Line width
+        fill: true // Do not fill area under the line
+    }]
+};
 
-    
-        // Total Leads Options
-        var totalLeadsOptions = { 
-            legend: {
-            display: false // Hide the legend
-        },
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
+var totalLeadsOptions = {
+    legend: {
+        display: false // Hide the legend
+    },
+    scales: {
+        xAxes: [{
+            gridLines: {
+                display: false // Hide x-axis gridlines
             }
-        };
-    
-        // Initialize Total Leads Bar Graph
-        var totalLeadsChart = new Chart(totalLeadsCanvas, {
-            type: 'bar',
-            data: totalLeadsData,
-            options: totalLeadsOptions
-        });
+        }],
+        yAxes: [{
+            gridLines: {
+                borderDash: [5, 5], // Set border dash style [5, 5]
+                zeroLineWidth: 0 // Hide the zero line
+            }
+        }]
+    },
+    plugins: {
+        datalabels: {
+            formatter: function(value, context) {
+                return ''; // Hide default data labels
+            }
+        }
+    },
+    annotation: {
+        annotations: [{
+            type: 'line',
+            mode: 'horizontal',
+            scaleID: 'y',
+            value: 0,
+            borderColor: 'red', // Line color
+            borderWidth: 1,
+            label: {
+                enabled: false
+            }
+        }]
+    }
+};
+
+var totalLeadsChart = new Chart(totalLeadsCanvas, {
+    type: 'bar',
+    data: totalLeadsData,
+    options: totalLeadsOptions
+});
+
+
     </script>
     
    <!-- Chargeback Ratio Circle Graph -->

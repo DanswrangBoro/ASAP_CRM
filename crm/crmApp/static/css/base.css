@@ -22,7 +22,7 @@ body{
     padding: 20px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     color: black; /* Set text color to white for better visibility */
-    min-height: 100vh;
+    min-height: 100vh !important;
   }
 
 a{
@@ -55,16 +55,6 @@ main{
     
     background-size: 100% 100%;
 }
-
-.card-with-background1 {
-    background-color: #AB47BC; /* Add your desired background color class here */
-    
-    background-size: 100% 100%;
-}
-.card-with-background2 {
-    background-color: #9FCC2E; /* Add your desired background color class here */
-    background-size: 100% 100%;
-}
 .card-with-background3 {
     background-color: #FA9F1B; /* Add your desired background color class here */
     background-size: 100% 100%;
@@ -78,26 +68,11 @@ main{
     background-size: 100% 100%;
 }
 
-.card-with-background6 {
-    background-color: #77eef2;/* Add your desired background color class here */
-    background-size: 100% 100%;
-}
-.card-with-background7 {
-    background: linear-gradient(#b8b7d3,#f7f3f8); /* Add your desired background color class here */
-    background-size: 100% 100%;
-    font-size: 0.8rem;
-}
-.card-with-background8 {
-    background: linear-gradient(#ececf3,#eeeaef); /* Add your desired background color class here */
-    background-size: 100% 100%;
-    font-size: 0.8rem;
-}
 
-
-.income{
+/* .income{
     height: 30%;
     width:20%;
-}
+} */
 
 span{
     color:red;
