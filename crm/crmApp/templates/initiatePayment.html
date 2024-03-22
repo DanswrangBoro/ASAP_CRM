@@ -1,35 +1,33 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
-<div class="card-bounding">
-    <aside>Card Number:</aside>
-    <div class="card-container">
-        <div class="card-type"></div>
-        <input placeholder="0000 0000 0000 0000" onkeyup="$cc.validate(event)" />
-        <div class="card-valid">&#xea10;</div>
-    </div>
-
-    <div class="card-details clearfix">
-        <div class="expiration">
-            <aside style="font-size: 14px;">Expiry</aside>
-            <input style="border-radius: 8px; font-size: 14px;" type="text" onkeyup="$cc.expiry.call(this,event)" maxlength="5" placeholder="mm/yy" />
-        </div>
-
-        <div class="cvv">
-            <aside style="font-size: 14px;">CVV</aside>
-            <input id="cvvInput" style="border-radius: 8px; font-size: 14px;" type="text" placeholder="XXX" maxlength="3" oninput="handleCVVInput(this.value)" />
-        </div>
-
-        <div class="ctype">
-            <aside style="font-size: 14px;">Type</aside>
-            <input style="border-radius: 8px; font-size: 14px;" type="text" placeholder="Visa, Amex" onkeyup="handleInput(this.value)" />
-        </div>
-    </div>
-
-    <div id="creditCardTypeSuggestions"></div>
-
-    <p style="color: white; text-transform: uppercase;">baibhav rajkumar</p>
+<h1 style="font-size: 0.9rem" class="bg-dark text-warning text-uppercase py-3 px-2 mt-5">Booking for initiation</h1>
+<div class="table-responsive mt-3">
+    <table class="table table-striped" style="font-size: 0.7rem">
+        <tr>
+            <th>Booking Id</th>
+            <th>Lead Agent</th>
+            <th>Action</th>
+        </tr>
+        {% for b in book %}
+        <tr>
+            <td  style="font-weight: bolder; color: Blue; cursor: pointer" onclick="viewBooking('{{ b.booking_id }}')">{{b.booking_id}}</td>
+            <td>{{b.lead_agent}}</td>
+            <td><a href="{% url 'crmApp:gateway' %}"><input type="button" value="Initiate Payment" id="ip"></a></td>
+        </tr>
+    {% endfor %}
+    </table>
 </div>
-<script src="{% static 'js/creditCardValidator.js' %}"></script>
+
+<form id="bookingForm" method="post" action="{% url 'crmApp:related_booking' %}" style="display: none;">
+    {% csrf_token %}
+    <input type="hidden" id="bookingIdInput" name="booking_id">
+</form>
+<script>
+    function viewBooking(bookingId) {
+        console.log(bookingId)
+        document.getElementById("bookingIdInput").value = bookingId;
+        document.getElementById('bookingForm').submit();
+}
+</script>
 {% endblock %}
