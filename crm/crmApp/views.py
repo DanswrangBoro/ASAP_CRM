@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect, reverse
 from django.http import JsonResponse
 import requests
+import os
+from django.http import FileResponse
 from .models import AdditionCharge, Booking, Center, Payment, Refund
 from datetime import datetime
 from django.db.models import Sum
@@ -146,7 +148,7 @@ def flight_results(request):
                     "flights_departure1" : json.dumps(response),
                     "flights_return1" : json.dumps(response_return),
                 }
-                # print(context)
+                print(context)
                 file_path = "round.txt"
                 with open(file_path, "w") as file:
                     json.dump(context, file, indent= 4)
@@ -208,7 +210,6 @@ def total_booking(request):
     total_mco = Decimal(0.0)
     for booking in confirmed_bookings:
         total_price += Decimal(booking.price)
-        total_mco += Decimal(booking.mco)
     
     total_revenue = total_price + total_mco
     # Rounding to two decimal points
@@ -895,7 +896,6 @@ def generate_invoice(request):
                 'passenger_name': invoice.booking.passenger_name,
                 'phone_number': invoice.booking.phone_number,
                 'email': invoice.booking.email,
-                'flight_details': invoice.booking.flight_details,
                 'trip_type': invoice.booking.trip_type,
                 'reference_id': invoice.booking.reference_id,
                 'departure': invoice.booking.departure,
@@ -906,7 +906,6 @@ def generate_invoice(request):
                 'price': str(invoice.booking.price),
                 'status': invoice.booking.status,
                 'change_date': invoice.booking.change_date.isoformat() if invoice.booking.change_date else None,
-                'mco': invoice.booking.mco,
                 'lead_agent': invoice.booking.lead_agent.natural_key() if invoice.booking.lead_agent else None,
                 'card_number': invoice.booking.card_number,
             },
@@ -967,7 +966,7 @@ def pending_invoices(request):
                 'passenger_name': invoice.booking.passenger_name,
                 'phone_number': invoice.booking.phone_number,
                 'email': invoice.booking.email,
-                'flight_details': invoice.booking.flight_details,
+
                 'trip_type': invoice.booking.trip_type,
                 'reference_id': invoice.booking.reference_id,
                 'departure': invoice.booking.departure,
@@ -978,7 +977,6 @@ def pending_invoices(request):
                 'price': str(invoice.booking.price),
                 'status': invoice.booking.status,
                 'change_date': invoice.booking.change_date.isoformat() if invoice.booking.change_date else None,
-                'mco': invoice.booking.mco,
                 'lead_agent': invoice.booking.lead_agent.natural_key() if invoice.booking.lead_agent else None,
                 'card_number': invoice.booking.card_number,
             },
@@ -1200,7 +1198,7 @@ def update_chargeback_status(request):
 def invoiceCreate(request):
      # Retrieve all bookings with status 'confirmed'
     confirmed_bookings = Booking.objects.filter(status='confirmed')
-    return render(request,'invoiceCreation.html', {'bookings': confirmed_bookings})
+    return render(request,'invoicelists.html', {'bookings': confirmed_bookings})
 # =========================================================================(invoice creation)===================================
 
 def submit_invoice(request):
@@ -1346,16 +1344,16 @@ def submit_cutomer(request):
         fullname = f'{traveler_details[0]["name"]["firstName"]} {traveler_details[0]["name"]["firstName"]}'
 
         try:
-            # response = amadeus.booking.flight_orders.post(flight, traveler_details).data
-            # print(response)
-            # context = {
-            #     "data":response
-            # }
+            response = amadeus.booking.flight_orders.post(flight, traveler_details).data
+            print(response)
+            context = {
+                "data":response
+            }
             file_path = 'order.txt'
-            # with open(file_path, "w") as file:
-            #         json.dump(context, file, indent= 4)
-            with open(file_path, "r") as file:
-                    context = json.load(file)
+            with open(file_path, "w") as file:
+                    json.dump(context, file, indent= 4)
+            # with open(file_path, "r") as file:
+            #         context = json.load(file)
             response = context["data"]
             booking_id = response.get("id")
             passenger_name = fullname
@@ -1366,6 +1364,8 @@ def submit_cutomer(request):
             # print(response["flightOffers"][0]["itineraries"])
             if len(response["flightOffers"]) == 1:
                 trip_type = "One way"
+            elif len(response["flightOffers"]) > 2:
+                trip_type = "multi-city"
             else:
                 trip_type = "Round Trip"
             reference_id = response.get("id")
@@ -1381,7 +1381,6 @@ def submit_cutomer(request):
                 passenger_name=passenger_name,
                 phone_number=phone_number,
                 email=email,
-                flight_details=flight_details,
                 trip_type=trip_type,
                 reference_id=reference_id,
                 departure=departure,
@@ -1595,6 +1594,45 @@ def centersList(request):
     centers = Center.objects.all()
     return render(request, 'centers_list.html', {'centers': centers})
 
+def invoice_form(request):
+    if request.method == 'POST':
+        bookingid = request.POST.get('bookingId')
+        print(bookingid)
+        try:
+            response = amadeus.booking.flight_order(bookingid).get().data
+            booking = get_object_or_404(Booking, booking_id = bookingid)
+            validating_airline_codes_set = set()
+            
+            for data in response["flightOffers"]:
+                for dats in data["itineraries"]:
+                    for segment in dats["segments"]:
+                        # print(segment["carrierCode"])
+                        validating_airline_codes_set.add(segment["carrierCode"])
+
+            # Convert the set to a list if needed
+            validating_airline_codes_list = list(validating_airline_codes_set)
+            airline_codes_string = ','.join(validating_airline_codes_list)
+            airlines = amadeus.reference_data.airlines.get(airlineCodes=airline_codes_string).data
+            # print(airlines)
+            result_dict = {item['iataCode']: item["businessName"] for item in airlines}
+            result_dict2 = {item['iataCode']: item.get('icaoCode', item['iataCode']) for item in airlines}
+            print(result_dict2)
+            total_price = 0
+            for flight in response["flightOffers"]:
+                # print(flight["price"]["grandTotal"])
+                total_price = total_price + float(flight["price"]["grandTotal"])
+            context ={
+                'flight' : response,
+                'booking' : booking,
+                "airlines":result_dict,
+                "airlines2":result_dict2,
+                "airline_price":total_price
+            }
+        except ReferenceError as e :
+            print(e["error"])
+        return render(request, 'invoiceForm.html', context)
+    else:
+        return redirect('crmApp:invocie')
 
 def add_center(request):
     if request.method == 'POST':
@@ -1624,9 +1662,6 @@ def add_center(request):
         return redirect('crmApp:centers_list')
     
 
-import os
-from django.http import FileResponse
-
 def view_pdf(request, id):
     # Retrieve the Center instance or return a 404 error if not found
     center = get_object_or_404(Center, pk=id)
@@ -1644,3 +1679,4 @@ def view_pdf(request, id):
     else:
         # Return a 404 error if the PDF file does not exist
         return HttpResponse("PDF file not found", status=404)
+

@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+{% load custom_filters %}
 <style>
     .text-right {
         text-align: right !important; /* Ensure text alignment is set to right */
@@ -40,9 +41,9 @@
         flex-grow: 1;
     }
     .banner {
-        {% comment %} background-image: url('https://source.unsplash.com/1200x300/?airplane'); {% endcomment %}
+        /* {% comment %} background-image: url('https://source.unsplash.com/1200x300/?airplane'); {% endcomment %} */
         background-size: cover;
-        {% comment %} height: 200px; {% endcomment %}
+        /* {% comment %} height: 200px; {% endcomment %} */
         display: flex;
         justify-content: center;
         align-items: center;
@@ -51,31 +52,11 @@
     }
 </style>
 
-{% if messages %}
-    <div id="successMessage" class="container">
-        {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}" role="alert">
-                {{ message }}
-            </div>
-        {% endfor %}
-    </div>
-{% endif %}
-
-
-<script>
-    // Wait for three seconds before hiding the success message and optionally redirecting or refreshing the page
-    setTimeout(function() {
-        document.getElementById("successMessage").style.display = "none";
-        document.getElementById("chargebackForm").reset();  // Clear the form
-        // Optionally redirect or refresh the page after three seconds
-        
-    }, 3000);
-</script>
 <!-- Button to generate invoice -->
-{% comment %} <button type="button" class="btn btn-primary mt-3" id="generateInvoiceBtn"><i class="fas fa-plus"></i> Generate Invoice</button> {% endcomment %}
+<!-- {% comment %} <button type="button" class="btn btn-primary mt-3" id="generateInvoiceBtn"><i class="fas fa-plus"></i> Generate Invoice</button> {% endcomment %} -->
 
 <!-- Invoice Section (initially hidden) -->
-<div class="container bg-light py-5" id="invoiceSection" style="display: none;">
+<div class="container bg-light py-5" id="invoiceSection">
     <div class="banner mt-2">
         <img src="{% static 'assets/banner.png' %}" alt="banner" style="width: 1200px">
     </div>
@@ -89,17 +70,18 @@
             </div>
             <div class="col-md-6 text-right">
                 <h4>To</h4>
-                <p><strong>John Doe</strong></p>
-                <p>Email: johndoe@example.com</p>
-                <p>Phone: +9876543210</p>
+                <p><strong>{{ flight.travelers.0.name.firstName }} {{ flight.travelers.0.name.lastName }}</strong></p>
+                <p>Email: {{ flight.travelers.0.contact.emailAddress }}</p>
+                <p>Phone: +{{ flight.travelers.0.contact.phones.0.countryCallingCode }}-{{ flight.travelers.0.contact.phones.0.number }}</p>
             </div>
         </div>
         <hr>
         <!-- Customer Details -->
         <div class="row">
             <div class="col">
-                <h4>Customer Details:</h4>
+                <h4>Passenger Details:</h4>
                 <table class="table">
+                    
                     <tr>
                         <th>Name</th>
                         <th>Email</th>
@@ -107,10 +89,11 @@
                         <th>Address</th>
                         <th>Sex</th>
                     </tr>
+                    {% for traveler in flight.travelers %}
                     <tr>
-                        <td><input type="text" class="form-control" value="John Doe" readonly></td>
-                        <td><input type="email" class="form-control" value="john@example.com" readonly></td>
-                        <td><input type="tel" class="form-control" value="1234567890" readonly></td>
+                        <td><input type="text" class="form-control" value="{{ traveler.name.firstName }} {{ traveler.name.lastName }}" readonly></td>
+                        <td><input type="email" class="form-control" value="{{ traveler.contact.emailAddress }}" readonly></td>
+                        <td><input type="tel" class="form-control" value="+{{ traveler.contact.phones.0.countryCallingCode }}-{{ traveler.contact.phones.0.number }}" readonly></td>
                         <td><input type="text" class="form-control" value="123 Main St" readonly></td>
                         <td>
                             <select class="form-control" disabled>
@@ -119,6 +102,7 @@
                             </select>
                         </td>
                     </tr>
+                    {% endfor  %}
                 </table>
             </div>
         </div>
@@ -128,37 +112,49 @@
             <div class="col">
                 <h4>Itinerary Details:</h4>
                 <!-- Overall container for all itineraries -->
-                <div class="itinerary-container bg-light">
+               
                     <!-- Itinerary 1 -->
-                    <div class="itinerary">
-                        <div class="itinerary-header">
-                            <div class="flight">
-                                <img class="airline-logo" src="airline_logo.jpg" alt="Airline Logo">
-                                <div class="info-value">Spice Jet</div>
-                                <div class="info-value">SG123</div>
+                    {% for flights in flight.flightOffers %}
+                        {% for itinary in flights.itineraries.0.segments %}
+                        <div class="itinerary-container bg-light">
+                        <div class="itinerary">
+                            <div class="itinerary-header">
+                                <div class="flight">
+                                    {% with airline_code=itinary.carrierCode%} 
+                                    {% if airline_code in airlines2 %}
+                                    <!-- Display airline logo with alt attribute as the airline name -->
+                                    <img
+                                        id="logoI"
+                                        src="https://thimpu.pythonanywhere.com/logo/api/airline/{{ airlines2|get_value:airline_code }}"
+                                        alt=" " style="max-width: 100px; max-height: 100px;"
+                                    />
+                                    {% endif %} 
+                                    {% endwith %}
+                                    <div class="info-value">{{ itinary.carrierCode }}</div>
+                                    <div class="info-value">{{ itinary.carrierCode }}{{ itinary.number }}</div>
+                                    <div class="info-value">{{ itinary.aircraft.code }}</div>
+                                </div>
+                                <div class="itinerary-route">
+                                    <div class="flight-info">
+                                        <div>{{ itinary.departure.iataCode }}</div>
+                                        <div><i class="fas fa-arrow-right"></i></div>
+                                        <div>{{ itinary.arrival.iataCode }}</div>
+                                    </div>
+                                    <div class="flight-info" style="margin: 5px;">
+                                        <div class="info-value">{{ itinary.departure.at }}</div>
+                                        <div class="info-value">{{ itinary.arrival.at }}</div>
+                                    </div>
+                                </div>
+                                <div class="itinerary-class">{{ itinary.co2Emissions.0.cabin }}</div>
+                                <div class="itinerary-baggage">Baggage Info</div>
                             </div>
-                            <div class="itinerary-route">
-                                <div class="flight-info">
-                                    <div>Delhi</div>
-                                    <div><i class="fas fa-arrow-right"></i></div>
-                                    <div>Guwahati</div>
-                                </div>
-                                <div class="flight-info" style="max-width: 500px">
-                                    <div class="info-value">Indiragandhi International Airport</div>
-                                    <div class="info-value">Lokhpriya Gopinath Bordoloi International Airport</div>
-                                </div>
-                                <div class="flight-info">
-                                    <div class="info-value">Departure Time</div>
-                                    <div class="info-value">Arrival Time</div>
-                                </div>
-                            </div>
-                            <div class="itinerary-class">Class</div>
-                            <div class="itinerary-baggage">Baggage Info</div>
+        
                         </div>
-    
-                    </div>
-                    <!-- Add more itineraries as needed -->
                 </div>
+
+                        {% endfor %}
+                    {% endfor %}
+                    <!-- Add more itineraries as needed -->
             </div>
         </div>
         <hr>
@@ -172,7 +168,7 @@
                         <div class="form-group row">
                             <label for="basePrice" class="col-sm-2 col-form-label">Airline Fare:</label>
                             <div class="col-sm-4">
-                                <input type="number" class="form-control" id="basePrice" name="basePrice" placeholder="Enter base price">
+                                <input type="number" class="form-control" id="basePrice" name="basePrice" value="{{ airline_price }}" placeholder="Enter base price">
                             </div>
                             <label for="markupPrice" class="col-sm-2 col-form-label">Markup Price:</label>
                             <div class="col-sm-4">
@@ -274,103 +270,6 @@
         </form> 
     </div>
 </div>
-<!-- Table -->
-<div class="table-responsive mt-3" id="bookingTable">
-    <table class="table">
-        <thead style="font-size: 0.8rem; text-align: center">
-            <tr>
-                <th>Booking ID</th>
-                <th>Passenger Name</th>
-                <th>Phone Number</th>
-                <th>Email ID</th>
-                <th>Flight Details</th>
-                <th>Trip Type</th>
-                <th>Ref ID</th>
-                <th>Departure City</th>
-                <th>Departure Date</th>
-                <th>Arrival City</th>
-                <th>Arrival Date</th>
-                <th>No. of Passengers</th>
-                <th>Price</th>
-                <th>MCO</th>
-                <th>Lead Status</th>
-                <th>Lead Agent</th>
-                <th>Status</th>
-                <th>Confirmation Mail</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for booking in bookings %}
-            <tr style="font-size: 0.7rem">
-                <td><a href="#" onclick="showInvoiceForm('{{ booking.booking_id }}'); return false;" style="text-decoration: none; color: black; font-weight: bolder">{{ booking.booking_id }}</a></td>
-                <td>{{ booking.passenger_name }}</td>
-                <td>{{ booking.phone_number }}</td>
-                <td>{{ booking.email }}</td>
-                <td>{{ booking.flight_details }}</td>
-                <td>{{ booking.trip_type }}</td>
-                <td>{{ booking.reference_id }}</td>
-                <td>{{ booking.departure }}</td>
-                <td>{{ booking.departure_date }}</td>
-                <td>{{ booking.arrival }}</td>
-                <td>{{ booking.arrival_date }}</td>
-                <td>{{ booking.num_passengers }}</td>
-                <td>{{ booking.price }}</td>
-                <td>{{ booking.mco }}</td>
-                <td>{{ booking.lead_status }}</td>
-                <td>{{ booking.lead_agent }}</td>
-                <td>{{ booking.status }}</td>
-                <td>{{ booking.confirmation_mail }}</td>
-                <td>
-                    <button class="btn btn-primary" onclick="submitAuthorization(`{{ booking.booking_id }}`);" style="width: 9rem; padding:5%;font-size: 0.9rem">Authorize payment</button>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <form id="authorizePaymentForm" action="{% url 'crmApp:send_signature_request' %}" method="post">
-        {% csrf_token %}
-        <input type="hidden" id="passId"  name="bookingId"/>
-    </form>
-</div>
-<script>
-    function submitAuthorization(bookingId) {
-        console.log("Received bookingId:", bookingId);
-    
-        var bookingIdInput = document.getElementById("passId");
-        if (bookingIdInput) {
-            bookingIdInput.value = bookingId;
-            bookingIdInput.textContent = bookingId;
-            console.log("Value set in input:", bookingIdInput.value);
-        } else {
-            console.error("Element with id 'bookingIdInput' not found.");
-        }
-        document.getElementById( "authorizePaymentForm").submit();
-    }
-</script>
-<script>
-    // Function to handle click on booking ID
-    function showInvoiceForm(bookingId) {
-        // Hide the table
-        document.getElementById('bookingTable').style.display = 'none';
-        
-        // Show the invoice form section
-        document.getElementById('invoiceSection').style.display = 'block';
-
-        // Populate the hidden input field with the booking ID
-        document.getElementById('bookingIdInput').value = bookingId;
-    }
-</script>
-
-{% comment %} <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function(){
-        // Function to toggle the invoice section when the "Generate Invoice" button is clicked
-        $('#generateInvoiceBtn').click(function(){
-            $('#invoiceSection').toggle();
-        });
-    });
-</script> {% endcomment %}
 
 
 <!-- Bootstrap JS (optional) -->
