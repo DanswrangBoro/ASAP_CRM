@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="col-md-12">
+    <button class="btn btn-success mt-3" id="addCentersButton" onclick="display()" style="font-weight: bolder; font-size: 0.8rem">
+        <i class="fas fa-plus" style="font-weight: bold;"></i>
+        Add Centers
+    </button>            
+</div>
+<div class="container mt-5 py-3 shadow" style="display: none" id="hidden">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h2 class="mb-4">Add Center</h2>
+            <form method="POST" action="{% url 'crmApp:add_center' %}" enctype="multipart/form-data">
+            {% comment %} <form method="POST" action="#" enctype="multipart/form-data"> {% endcomment %}
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="name" class="form-label">Center Name</label>
+                    <input type="text" class="form-control" id="name" name="name" required>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+                <div class="mb-3">
+                    <label for="address" class="form-label">Address</label>
+                    <input type="text" class="form-control" id="address" name="address" required>
+                </div>
+                <div class="mb-3">
+                    <label for="phone" class="form-label">Phone</label>
+                    <input type="text" class="form-control" id="phone" name="phone" required>
+                </div>
+                <div class="mb-3">
+                    <label for="contact_person" class="form-label">Contact Person</label>
+                    <input type="text" class="form-control" id="contact_person" name="contact_person" required>
+                </div>
+                <div class="mb-3">
+                    <label for="document" class="form-label">Upload Document</label>
+                    <input type="file" class="form-control" id="document" name="document" accept=".pdf,.doc,.docx">
+                </div>
+                <button type="submit" class="btn btn-primary">Add Center</button>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="container border mt-2 py-5">
+    <h4 class="mb-4">Centers List</h4>
+    <div class="table-responsive">
+        <table class="table table-striped" style="font-size: 0.7rem">
+            <thead>
+                <tr>
+                    <th>Center  Name</th>
+                    <th>Email</th>
+                    <th>Address</th>
+                    <th>Phone</th>
+                    <th>Contact Person</th>
+                    <th>Acknowledgement Status</th>
+                    <th>Document</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for center in centers %}
+                <tr>
+                    <td>{{ center.name }}</td>
+                    <td>{{ center.email }}</td>
+                    <td>{{ center.address }}</td>
+                    <td>{{ center.phone }}</td>
+                    <td>{{ center.contact_person }}</td>
+                    <td>Pending</td>
+                    <td>
+                        {% if center.document %}
+                            {% with ext=center.document.name|slice:'-4:' %}
+                                {% if ext == '.pdf' %}
+                                {% comment %} <a href="{% url 'crmApp:view_pdf' filename='your_pdf_file.pdf' %}" class="btn btn-danger"> {% endcomment %}
+                                    <a href="{% url 'crmApp:view_pdf' id=center.id %}" class="btn btn-danger" style="font-size: 0.7rem; ">
+                                        <i class="bi bi-file-pdf"></i> View PDF
+                                    </a>
+                                    
+                                {% elif ext|lower == '.jpg' or ext|lower == '.jpeg' or ext|lower == '.png' or ext|lower == '.gif' %}
+                                    <img src="{{ center.document.url }}" alt="{{ center.name }}" style="max-width: 100px; max-height: 100px;">
+                                {% else %}
+                                    Unsupported file type
+                                {% endif %}
+                            {% endwith %}
+                        {% else %}
+                            No document
+                        {% endif %}
+                    </td>
+                    <td style="vertical-align:middle; cursor: default">
+                        <p style="text-align: center; {% if center.status == 'active' %} background-color: green; color: white {% elif center.status == 'inactive' %} background-color: grey; color: white;opacity: 0.5; {% endif %}">
+                            {{ center.status }}
+                        </p>
+                    </td>
+                    
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    function display() {
+        var element = document.getElementById('hidden');
+        var currentDisplay = element.style.display;
+        if (currentDisplay === 'block') {
+            element.style.display = 'none';
+        } else {
+            element.style.display = 'block';
+        }
+    }
+    
+</script>
+
+{% endblock %}

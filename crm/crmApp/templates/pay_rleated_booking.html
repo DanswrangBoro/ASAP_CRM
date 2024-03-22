@@ -2,8 +2,157 @@
 {% load static %}
 {% block content %}
 <!-- Div to display booking details -->
-<div class="container mt-5 shadow py-3">
-    <h1 style="font-size: 0.9rem">Booking Details ( Booking ID: {{ booking.booking_id }})</h1>
+<div class="container mt-4 shadow py-3">
+    {% comment %} {{ itineries.id}} {% endcomment %}
+    <div class="table-responsive mt-3">
+        <table class="table table-striped" style="font-size: 0.7rem">
+    <tr class="bg-dark text-warning text-uppercase">
+        <th colspan="2" class="py-3"><h1 style="font-size: 0.9rem">Flight Details</h1></th>
+    </tr>
+    {% for data in itineries.flightOffers %}
+        <tr>
+            <th>Flight Offer ID</th>
+            <td> {{ data.id }}</td>
+        </tr>
+        <tr>
+            <th>Reference</th><td>{{ data.reference }}</td>
+        </tr>
+        <tr>
+            <th>Departure IATA Code</th> <td>{{ data.itineraries.0.segments.0.departure.iataCode }}</td>
+        </tr>
+        <tr>
+            <th>Departure Time</th> <td>{{ data.itineraries.0.segments.0.departure.at }}</td>
+        </tr>
+        <tr>
+            <th>Arrival IATA Code</th><td> {{ data.itineraries.0.segments.0.arrival.iataCode }}</td>
+        </tr>
+        <tr>
+            <th>Arrival Terminal</th> <td>{{ data.itineraries.0.segments.0.arrival.terminal }}</td>
+        </tr>
+        <tr>
+            <th>Arrival Time</th> <td>{{ data.itineraries.0.segments.0.arrival.at }}</td>
+        </tr>
+        <tr>
+            <th>Carrier Code</th><td> {{ data.itineraries.0.segments.0.carrierCode }}</td>
+        </tr>
+        <tr>
+            <th>Flight Number</th><td> {{ data.itineraries.0.segments.0.number }}</td>
+        </tr>
+        <tr>
+            <th>Aircraft Code</th><td> {{ data.itineraries.0.segments.0.aircraft.code }}</td>
+        </tr>
+        <tr>
+            <th>Duration</th> <td>{{ data.itineraries.0.segments.0.duration }}</td>
+        </tr>
+        <tr>
+            <th>Booking Status</th><td> {{ data.itineraries.0.segments.0.bookingStatus }}</td>
+        </tr>
+        <tr>
+            <th>Currency</th><td> {{ data.price.currency }}</td>
+        </tr>
+        <tr>
+            <th>Total Price</th><td> {{ data.price.total }}</td>
+        </tr>
+        <tr>
+            <th>Base Price</th><td> {{ data.price.base }}</td>
+        </tr>
+        <tr>
+            <th>Grand Total Price</th><td> {{ data.price.grandTotal }}</td>
+        </tr>
+            <tr class="bg-dark text-warning text-uppercase">
+                <th colspan="2" class="py-3"><h1 style="font-size: 0.9rem">Pricing Details</h1></th>
+            </tr>
+            {% for pricing in data.travelerPricings %}
+                <tr>
+                    <th>Traveler ID</th><td> {{ pricing.travelerId }}</td>
+                </tr>
+                <tr>
+                    <th>Traveler Type</th> <td> {{ pricing.travelerType }}</td>
+                </tr>
+                <tr>
+                    <th>Price Currency</th> <td>{{ pricing.price.currency }}</td>
+                </tr>
+                <tr>
+                    <th>Price Total</th><td> {{ pricing.price.total }}</td>
+                </tr>
+                <tr>
+                    <th>Price Base</th><td> {{ pricing.price.base }}</td>
+                </tr>
+                    <tr class="bg-dark text-warning text-uppercase">
+                        <th colspan="2" class="py-3"><h1 style="font-size: 0.9rem">Taxes</h1></th>
+                    </tr>
+                {% for tax in pricing.price.taxes %}
+                    <tr>
+                        <th>Tax Amount</th><td> {{ tax.amount }}</td>
+                    </tr>
+                    <tr>
+                        <th>Tax Code</th><td> {{ tax.code }}</td>
+                    </tr>
+                {% endfor %}
+
+                <tr class="bg-dark text-warning text-uppercase">
+                    <th colspan="2" class="py-3"><h1 style="font-size: 0.9rem">Fare Details</h1></th>
+                </tr>
+                {% for segment in pricing.fareDetailsBySegment %}
+                    <tr>
+                        <th>Segment ID</th><td> {{ segment.segmentId }}</td>
+                    </tr>
+                    <tr>
+                        <th>Cabin</th><td> {{ segment.cabin }}</td>
+                    </tr>
+                    <tr>
+                        <th>Fare Basis</th><td> {{ segment.fareBasis }}</td>
+                    </tr>
+                    <tr>
+                        <th>Class</th><td> {{ segment.class }}</td>
+                    </tr>
+                    <tr>
+                        <th>Included Checked Bags Weight</th><td> {{ segment.includedCheckedBags.weight }}</td>
+                    </tr>
+                    <tr>
+                        <th>Included Checked Bags Weight Unit</th><td> {{ segment.includedCheckedBags.weightUnit }}</td>
+                    </tr>
+                    <tr class="bg-dark text-warning text-uppercase">
+                        <th colspan="2" class="py-3"><h1 style="font-size: 0.9rem">Meal Services</h1></th>
+                    </tr>
+                    {% for meal in segment.mealServices %}
+                        <tr>
+                            <td colspan=2>{{ meal.label }}</td>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+            {% endfor %}
+    {% endfor %}
+    <tr class="bg-dark text-warning text-uppercase">
+        <th colspan="2" class="py-3"><h1 style="font-size: 0.9rem">Passenger Details</h1></th>
+    </tr>
+
+    {% for traveler in itineries.travelers %}
+      <tr>
+          <th>Total Traveler</th><td>{{ forloop.counter }}</td>  
+      </tr>
+      <tr>
+            <th>Traveler ID</th><td> {{ traveler.id }}</td>
+      </tr>
+      <tr>
+            <th>First Name</th><td> {{ traveler.name.firstName }}</td>
+      </tr>
+      <tr>
+            <th>Last Name</th><td> {{ traveler.name.lastName }}</td>
+      </tr>
+      <tr>
+            <th>Purpose</th><td> {{ traveler.contact.purpose }}</td>
+      </tr>
+      <tr>
+            <th>Phone</th><td> {{ traveler.contact.phones.0.number }}</td>
+      </tr>
+      <tr>
+            <th>Email</th><td> {{ traveler.contact.emailAddress }}</td>
+      </tr>
+    {% endfor %}
+</table>
+</div>
+    <h1 style="font-size: 0.9rem" class="bg-dark text-warning text-uppercase py-3 px-2">Booking Details ( Booking ID: {{ booking.booking_id }})</h1>
     <div class="table-responsive mt-3">
         <table class="table table-striped" style="font-size: 0.7rem">
                 <tr>

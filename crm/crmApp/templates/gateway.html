@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+<div class="card-bounding" id="cards">
+    <aside>Card Number:</aside>
+    <div class="card-container">
+        <div class="card-type"></div>
+        <input placeholder="0000 0000 0000 0000" onkeyup="$cc.validate(event)" />
+        <div class="card-valid">&#xea10;</div>
+    </div>
+    <div class="card-details clearfix">
+        <div class="expiration">
+            <aside style="font-size: 14px;">Expiry</aside>
+            <input style="border-radius: 8px; font-size: 14px;" type="text" onkeyup="$cc.expiry.call(this,event)" maxlength="5" placeholder="mm/yy" />
+        </div>
+
+        <div class="cvv">
+            <aside style="font-size: 14px;">CVV</aside>
+            <input id="cvvInput" style="border-radius: 8px; font-size: 14px;" type="text" placeholder="XXX" maxlength="3" oninput="handleCVVInput(this.value)" />
+        </div>
+
+        <div class="ctype">
+            <aside style="font-size: 14px;">Type</aside>
+            <input style="border-radius: 8px; font-size: 14px;" type="text" placeholder="Visa, Amex" onkeyup="handleInput(this.value)" />
+        </div>
+    </div>
+
+    <div id="creditCardTypeSuggestions"></div>
+
+    <input type="text" name="cardHolderName" placeholder="Enter Card Holders Name" style="outline: none">
+</div>
+<script src="{% static 'js/creditCardValidator.js' %}"></script>
+{% endblock %}

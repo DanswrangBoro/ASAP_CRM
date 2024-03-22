@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Payment
+from .models import Center, Payment
 from .models import  AdditionCharge, Booking, Refund, RejectedBooking, CustomUser
 
 from .models import Sale
@@ -80,3 +80,8 @@ class PaymentAdmin(admin.ModelAdmin):
     list_filter = ('transaction_status', 'payment_date')
 
 admin.site.register(Payment, PaymentAdmin)
+
+
+@admin.register(Center)
+class CenterAdmin(admin.ModelAdmin):
+    list_display = ('name', 'email', 'address', 'phone', 'contact_person', 'document', 'status')
