@@ -54,6 +54,7 @@ urlpatterns = [
     path('payment/', views.payment, name='payment'), 
     path('related-booking/', relatedBooking, name='related_booking'),
     path('initiate-payment/', views.initiatePayment, name='initiatePayment'),
+    path('invoice-form/', views.invoice_form, name="invocie_form"),
 ]
 
 

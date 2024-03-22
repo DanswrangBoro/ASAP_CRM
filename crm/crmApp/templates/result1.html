@@ -114,6 +114,19 @@
     }
 
 
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+
     </style>
 
                
@@ -250,7 +263,7 @@ function openModal(flightId) {
     if (flightDetails) {
         // Create modal container
         var modalContainer = document.createElement('div');
-        modalContainer.className = 'modal fade';
+        modalContainer.className = 'modal modal- fade';
         modalContainer.id = 'flightModal';
         modalContainer.tabIndex = '-1';
         modalContainer.setAttribute('aria-labelledby', 'flightModalLabel');
@@ -258,7 +271,7 @@ function openModal(flightId) {
 
         // Create modal dialog
         var modalDialog = document.createElement('div');
-        modalDialog.className = 'modal-dialog';
+        modalDialog.className = 'modal-dialog modal-dialog-centered';
 
         // Create modal content
         var modalContent = document.createElement('div');
@@ -282,14 +295,27 @@ function openModal(flightId) {
         // Create modal body
         var modalBody = document.createElement('div');
         modalBody.className = 'modal-body';
-        modalBody.id = 'flightDetails';
+
+        // Create table for flight details
+        var table = document.createElement('table');
+        table.className = 'table';
+
+        // Loop through flight details and create table rows
         for (var key in flightDetails) {
             if (flightDetails.hasOwnProperty(key)) {
-                var p = document.createElement('p');
-                p.textContent = key + ': ' + JSON.stringify(flightDetails[key]);
-                modalBody.appendChild(p);
+                var row = document.createElement('tr');
+                var th = document.createElement('th');
+                th.textContent = key;
+                var td = document.createElement('td');
+                td.textContent = JSON.stringify(flightDetails[key]);
+                
+                row.appendChild(th);
+                row.appendChild(td);
+                table.appendChild(row);
             }
         }
+
+        modalBody.appendChild(table);
 
         // Create modal footer
         var modalFooter = document.createElement('div');
@@ -330,6 +356,7 @@ function openModal(flightId) {
         // Show the modal
         var modal = new bootstrap.Modal(modalContainer);
         modal.show();
+
     } else {
         console.error('Flight details not found for ID:', flightId);
     }
