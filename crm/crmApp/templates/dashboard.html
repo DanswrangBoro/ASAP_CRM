@@ -331,7 +331,7 @@ var incomeChart = new Chart(incomeCtx, {
                     </div>
                     <div class="card-body">
                         <table class="table">
-                            <thead>
+                            <thead style="background-color:#EAF2FF;border-bottom: none;">
                                 <tr>
                                     <th>Agent Name</th>
                                     <th>Total Sales</th>
@@ -444,30 +444,17 @@ var incomeChart = new Chart(incomeCtx, {
     </div>
     
     <script>
-      var incomeOverviewData = {
+     var incomeOverviewData = {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
     datasets: [{
         label: '', // Set an empty string to hide the legend label
         data: [2000, 2500, 1800, 3000, 2000, 1500, 2500, 2800, 2200, 3500, 2400, 2000], // Data for all months
-        backgroundColor: [], // Dynamically set background color
+        backgroundColor: '#2994F6', // Set bar color to #217DF5
         borderColor: 'rgba(75, 192, 192, 1)',
         borderWidth: 1,
         barThickness: 10 // Adjust the width of the bars here
     }]
 };
-
-// Set default color
-var defaultColor = 'rgba(75, 192, 192, 0.2)';
-var zeroValueColor = 'rgba(255, 0, 0, 0.5)'; // Red color for zero values with increased opacity
-
-// Fill background color array dynamically based on data values
-incomeOverviewData.datasets[0].data.forEach(function(value) {
-    if (value > 0) {
-        incomeOverviewData.datasets[0].backgroundColor.push(defaultColor);
-    } else {
-        incomeOverviewData.datasets[0].backgroundColor.push(zeroValueColor);
-    }
-});
 
 // Render Chart
 var incomeOverviewCtx = document.getElementById('incomeOverviewChart').getContext('2d');
@@ -503,10 +490,6 @@ var incomeOverviewChart = new Chart(incomeOverviewCtx, {
         }
     }
 });
-
-
-
-
     </script>
     
 
@@ -568,8 +551,9 @@ var totalLeadsData = {
         label: 'Line Dataset', // Label for line dataset
         data: [110, 200, 150, 300, 250, 400, 350], // Data for line dataset adjusted to be on top of bars
         type: 'line', // Set dataset type as 'line'
-        borderColor: 'red', // Line color
+        borderColor: '#15BEF4', // Line color
         borderWidth: 2, // Line width
+        backgroundColor: '#D5F1FD', // Fill color for the line
         fill: true // Do not fill area under the line
     }]
 };
@@ -633,7 +617,7 @@ new Chart(document.getElementById("chargebackRatioGraph"), {
         labels: xitems,
         datasets: [{
             data: yitems,
-            backgroundColor: ["#8DB6CD", "#FFB6C1", "#87CEEB", "#FFD700"],
+            backgroundColor: ["#35E0F7", "#0AB4FD", "#00D27A", "#004ECC"],
             fill: false
         }]
     },
@@ -669,7 +653,7 @@ Chart.pluginService.register({
 
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
-            ctx.fillStyle = "black"; // Change text color to black for better visibility
+            ctx.fillStyle = "white"; // Change text color to black for better visibility
             ctx.font = 'bold 0.6rem Arial'; // Change font style and size
 
             self.data.datasets.forEach(function(dataset, datasetIndex) {
