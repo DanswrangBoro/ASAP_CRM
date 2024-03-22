@@ -231,3 +231,25 @@ class Payment(models.Model):
 class MCO(models.Model):
     booking = models.ForeignKey('Booking', on_delete= models.CASCADE)
     price = models.FloatField(null=True, blank = True)
+
+
+# ==========================================================================( €Centers Start)=======================================
+
+class Center(models.Model):
+    # Other fields...
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    address = models.CharField(max_length=255)
+    phone = models.CharField(max_length=20)
+    contact_person = models.CharField(max_length=100)
+    document = models.FileField(upload_to='center_documents/', null=True, blank=True)
+    
+    # New field for status
+    ACTIVE_STATUS_CHOICES = [
+        ('active', 'Active'),
+        ('inactive', 'Inactive'),
+    ]
+    status = models.CharField(max_length=10, choices=ACTIVE_STATUS_CHOICES, default='inactive')
+
+    def __str__(self):
+        return self.name

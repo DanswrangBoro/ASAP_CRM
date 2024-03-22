@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect, reverse
 from django.http import JsonResponse
 import requests
-from .models import AdditionCharge, Booking, Payment, Refund
+import os
+from django.http import FileResponse
+from .models import AdditionCharge, Booking, Center, Payment, Refund
 from datetime import datetime
 from django.db.models import Sum
 from .models import Refund
@@ -23,7 +25,7 @@ import uuid
 import random
 from django.core.serializers import serialize
 from pprint import pprint
-
+from django.core.files.storage import FileSystemStorage
 from dropbox_sign import \
     ApiClient, ApiException, Configuration, apis, models
 
@@ -799,7 +801,7 @@ def delete_booking(request):
 def lead_agent_and_price(request):
     try:
         # Retrieve confirmed bookings
-        confirmed_bookings = Booking.objects.filter(status='Confirmed')
+        confirmed_bookings = Booking.objects.filter(status='confirmed')
 
         lead_agents_and_prices = []
         for booking in confirmed_bookings:
@@ -1557,15 +1559,40 @@ def relatedBooking(request):
     if request.method == 'POST':
         booking_id = request.POST.get('booking_id')
         print("printing this",booking_id)
+        response = amadeus.booking.flight_order(booking_id).get()
+        print(response.data)
         booking = Booking.objects.get(booking_id=booking_id)
         context = {
-                    'booking': booking
+                    'booking': booking,
+                    'itineries' : response.data
                    }
         return render(request,'pay_rleated_booking.html', context)
     
 
 def initiatePayment(request):
-    return render(request,'initiatePayment.html')
+    confirmed_bookings = Booking.objects.filter(status='confirmed')
+    for  booking in confirmed_bookings:
+            print(booking)
+    context={
+        "book": confirmed_bookings
+    }
+    return render(request,'initiatePayment.html', context)
+
+
+def gateway(request):
+    return render(request, 'gateway.html')
+
+
+
+
+
+
+
+# =========================================================================( Centers Start )================================================
+
+def centersList(request):
+    centers = Center.objects.all()
+    return render(request, 'centers_list.html', {'centers': centers})
 
 def invoice_form(request):
     if request.method == 'POST':
@@ -1606,3 +1633,50 @@ def invoice_form(request):
         return render(request, 'invoiceForm.html', context)
     else:
         return redirect('crmApp:invocie')
+
+def add_center(request):
+    if request.method == 'POST':
+        name = request.POST['name']
+        email = request.POST['email']
+        address = request.POST['address']
+        phone = request.POST['phone']
+        contact_person = request.POST['contact_person']
+        
+        # Handle file upload
+        document = None
+        if 'document' in request.FILES:
+            uploaded_document = request.FILES['document']
+            fs = FileSystemStorage()
+            document = fs.save(uploaded_document.name, uploaded_document)
+        
+        # Create Center object
+        center = Center.objects.create(
+            name=name,
+            email=email,
+            address=address,
+            phone=phone,
+            contact_person=contact_person,
+            document=document
+        )
+        
+        return redirect('crmApp:centers_list')
+    
+
+def view_pdf(request, id):
+    # Retrieve the Center instance or return a 404 error if not found
+    center = get_object_or_404(Center, pk=id)
+    
+    # Get the path to the PDF file
+    pdf_path = center.document.path
+    
+    # Print the PDF path for debugging
+    print("PDF Path:", pdf_path)
+
+    # Check if the PDF file exists
+    if os.path.exists(pdf_path):
+        # Open the PDF file in binary mode and return it as a FileResponse
+        return FileResponse(open(pdf_path, 'rb'), content_type='application/pdf')
+    else:
+        # Return a 404 error if the PDF file does not exist
+        return HttpResponse("PDF file not found", status=404)
+
