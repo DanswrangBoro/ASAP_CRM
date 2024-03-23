@@ -73,7 +73,6 @@ class Booking(models.Model):
     passenger_name = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=15)
     email = models.EmailField()
-    flight_details = models.CharField(max_length=255, null=True, blank=True)
     trip_type = models.CharField(max_length=50)
     reference_id = models.CharField(max_length=100)
     departure = models.CharField(max_length=100)
@@ -84,7 +83,6 @@ class Booking(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     status = models.CharField(max_length=50, default="pending")
     change_date = models.DateTimeField(blank=True, null=True)
-    mco = models.CharField(max_length=100, blank=True, null=True)
     lead_agent = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, blank=True, related_name='lead_bookings')
     card_number = models.IntegerField(max_length=16,default="1234567890123456")
 
@@ -229,3 +227,29 @@ class Payment(models.Model):
 
     def __str__(self):
         return f"Payment for Booking ID: {self.booking}"
+    
+class MCO(models.Model):
+    booking = models.ForeignKey('Booking', on_delete= models.CASCADE)
+    price = models.FloatField(null=True, blank = True)
+
+
+# ==========================================================================( €Centers Start)=======================================
+
+class Center(models.Model):
+    # Other fields...
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    address = models.CharField(max_length=255)
+    phone = models.CharField(max_length=20)
+    contact_person = models.CharField(max_length=100)
+    document = models.FileField(upload_to='center_documents/', null=True, blank=True)
+    
+    # New field for status
+    ACTIVE_STATUS_CHOICES = [
+        ('active', 'Active'),
+        ('inactive', 'Inactive'),
+    ]
+    status = models.CharField(max_length=10, choices=ACTIVE_STATUS_CHOICES, default='inactive')
+
+    def __str__(self):
+        return self.name

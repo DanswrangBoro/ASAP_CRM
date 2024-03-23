@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<style>
+    .text-right {
+        text-align: right !important; /* Ensure text alignment is set to right */
+    }
+
+    /* Adjust margin to push the button to the right */
+    #addChargeRow {
+        margin-left: auto;
+    }
+    .itinerary-container {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+
+    .itinerary-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .airline-logo {
+        width: 80px;
+        height: auto;
+    }
+
+    .flight-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 5px;
+    }
+
+    .flight-info .info-value {
+        flex-grow: 1;
+    }
+    .banner {
+        /* {% comment %} background-image: url('https://source.unsplash.com/1200x300/?airplane'); {% endcomment %} */
+        background-size: cover;
+        /* {% comment %} height: 200px; {% endcomment %} */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        text-align: center;
+    }
+</style>
+
+{% if messages %}
+    <div id="successMessage" class="container">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+
+<script>
+    // Wait for three seconds before hiding the success message and optionally redirecting or refreshing the page
+    setTimeout(function() {
+        document.getElementById("successMessage").style.display = "none";
+        document.getElementById("chargebackForm").reset();  // Clear the form
+        // Optionally redirect or refresh the page after three seconds
+        
+    }, 3000);
+</script>
+<!-- Button to generate invoice -->
+<!-- {% comment %} <button type="button" class="btn btn-primary mt-3" id="generateInvoiceBtn"><i class="fas fa-plus"></i> Generate Invoice</button> {% endcomment %} -->
+
+<!-- Invoice Section (initially hidden) -->
+
+<!-- Table -->
+<div class="table-responsive mt-3" id="bookingTable">
+    <table class="table">
+        <thead style="font-size: 0.8rem; text-align: center">
+            <tr>
+                <th>Booking ID</th>
+                <th>Passenger Name</th>
+                <th>Phone Number</th>
+                <th>Email ID</th>
+                <th>Flight Details</th>
+                <th>Trip Type</th>
+                <th>Ref ID</th>
+                <th>Departure City</th>
+                <th>Departure Date</th>
+                <th>Arrival City</th>
+                <th>Arrival Date</th>
+                <th>No. of Passengers</th>
+                <th>Price</th>
+                <th>MCO</th>
+                <th>Lead Status</th>
+                <th>Lead Agent</th>
+                <th>Status</th>
+                <th>Confirmation Mail</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for booking in bookings %}
+            <tr style="font-size: 0.7rem">
+                <td><a href="#" onclick="showInvoiceForm('{{ booking.booking_id }}'); return false;" style="text-decoration: none; color: black; font-weight: bolder">{{ booking.booking_id }}</a></td>
+                <td>{{ booking.passenger_name }}</td>
+                <td>{{ booking.phone_number }}</td>
+                <td>{{ booking.email }}</td>
+                <td>{{ booking.flight_details }}</td>
+                <td>{{ booking.trip_type }}</td>
+                <td>{{ booking.reference_id }}</td>
+                <td>{{ booking.departure }}</td>
+                <td>{{ booking.departure_date }}</td>
+                <td>{{ booking.arrival }}</td>
+                <td>{{ booking.arrival_date }}</td>
+                <td>{{ booking.num_passengers }}</td>
+                <td>{{ booking.price }}</td>
+                <td>{{ booking.mco }}</td>
+                <td>{{ booking.lead_status }}</td>
+                <td>{{ booking.lead_agent }}</td>
+                <td>{{ booking.status }}</td>
+                <td>{{ booking.confirmation_mail }}</td>
+                <td>
+                    <button class="btn btn-primary" onclick="submitAuthorization(`{{ booking.booking_id }}`);" style="width: 9rem; padding:5%;font-size: 0.9rem">Authorize payment</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <form id="authorizePaymentForm" action="{% url 'crmApp:send_signature_request' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" id="passId"  name="bookingId"/>
+    </form>
+    <form id="displayinvocieform" action="{% url 'crmApp:invocie_form' %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" id="bookingIdInput"  name="bookingId"/>
+    </form>
+</div>
+<script>
+    function submitAuthorization(bookingId) {
+        console.log("Received bookingId:", bookingId);
+    
+        var bookingIdInput = document.getElementById("passId");
+        if (bookingIdInput) {
+            bookingIdInput.value = bookingId;
+            bookingIdInput.textContent = bookingId;
+            console.log("Value set in input:", bookingIdInput.value);
+        } else {
+            console.error("Element with id 'bookingIdInput' not found.");
+        }
+        document.getElementById( "authorizePaymentForm").submit();
+    }
+</script>
+<script>
+    // Function to handle click on booking ID
+    function showInvoiceForm(bookingId) {
+        console.log(bookingId)
+        form = document.getElementById('displayinvocieform')
+        document.getElementById('bookingIdInput').value = bookingId;
+        form.submit();
+    }
+</script>
+
+
+
+<!-- Bootstrap JS (optional) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+
+
+{% endblock %}
