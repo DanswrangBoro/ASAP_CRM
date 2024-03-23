@@ -52,12 +52,10 @@
                     </a>
                 </li>
                 <li class="nav-item" style="margin-top: 3%; border: none; cursor: pointer;" onmouseover="this.style.backgroundColor='#3180ff';" onmouseout="this.style.backgroundColor='#f3f6fb';">
-                    {% if request.session.userN %}
                     <div class="d-flex align-items-center">
                         <i class="fas fa-user-circle fa-lg"></i>
-                        <p class="mb-0 ml-2 px-2" style="font-weight: bold; font-size: large;">{{ request.session.userN }}</p>
+                        <p class="mb-0 ml-2 px-2" style="font-weight: bold; font-size: large;">{{ request.user.username }}</p>
                     </div>
-                    {% endif %}
                 </li>
             </ul>
         </div>

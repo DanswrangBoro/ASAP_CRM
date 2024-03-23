@@ -1,0 +1,135 @@
+{
+    "flight": {
+        "type": "flight-offers-pricing",
+        "flightOffers": [
+            {
+                "type": "flight-offer",
+                "id": "1",
+                "source": "GDS",
+                "instantTicketingRequired": false,
+                "nonHomogeneous": false,
+                "paymentCardRequired": false,
+                "lastTicketingDate": "2024-03-26",
+                "itineraries": [
+                    {
+                        "segments": [
+                            {
+                                "departure": {
+                                    "iataCode": "CCU",
+                                    "at": "2024-03-26T17:00:00"
+                                },
+                                "arrival": {
+                                    "iataCode": "MAA",
+                                    "terminal": "4",
+                                    "at": "2024-03-26T19:30:00"
+                                },
+                                "carrierCode": "AI",
+                                "number": "785",
+                                "aircraft": {
+                                    "code": "32N"
+                                },
+                                "operating": {
+                                    "carrierCode": "AI"
+                                },
+                                "duration": "PT2H30M",
+                                "id": "85",
+                                "numberOfStops": 0,
+                                "co2Emissions": [
+                                    {
+                                        "weight": 89,
+                                        "weightUnit": "KG",
+                                        "cabin": "ECONOMY"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "price": {
+                    "currency": "EUR",
+                    "total": "105.00",
+                    "base": "88.00",
+                    "fees": [
+                        {
+                            "amount": "0.00",
+                            "type": "SUPPLIER"
+                        },
+                        {
+                            "amount": "0.00",
+                            "type": "TICKETING"
+                        },
+                        {
+                            "amount": "0.00",
+                            "type": "FORM_OF_PAYMENT"
+                        }
+                    ],
+                    "grandTotal": "105.00",
+                    "billingCurrency": "EUR"
+                },
+                "pricingOptions": {
+                    "fareType": [
+                        "PUBLISHED"
+                    ],
+                    "includedCheckedBagsOnly": true
+                },
+                "validatingAirlineCodes": [
+                    "AI"
+                ],
+                "travelerPricings": [
+                    {
+                        "travelerId": "1",
+                        "fareOption": "STANDARD",
+                        "travelerType": "ADULT",
+                        "price": {
+                            "currency": "EUR",
+                            "total": "105.00",
+                            "base": "88.00",
+                            "taxes": [
+                                {
+                                    "amount": "2.61",
+                                    "code": "P2"
+                                },
+                                {
+                                    "amount": "8.00",
+                                    "code": "IN"
+                                },
+                                {
+                                    "amount": "4.50",
+                                    "code": "K3"
+                                },
+                                {
+                                    "amount": "1.89",
+                                    "code": "YR"
+                                }
+                            ],
+                            "refundableTaxes": "28.00"
+                        },
+                        "fareDetailsBySegment": [
+                            {
+                                "segmentId": "85",
+                                "cabin": "ECONOMY",
+                                "fareBasis": "GIP",
+                                "class": "G",
+                                "includedCheckedBags": {
+                                    "weight": 25,
+                                    "weightUnit": "KG"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "bookingRequirements": {
+            "emailAddressRequired": true,
+            "mobilePhoneNumberRequired": true
+        }
+    },
+    "flight1": "{\"type\": \"flight-offers-pricing\", \"flightOffers\": [{\"type\": \"flight-offer\", \"id\": \"1\", \"source\": \"GDS\", \"instantTicketingRequired\": false, \"nonHomogeneous\": false, \"paymentCardRequired\": false, \"lastTicketingDate\": \"2024-03-26\", \"itineraries\": [{\"segments\": [{\"departure\": {\"iataCode\": \"CCU\", \"at\": \"2024-03-26T17:00:00\"}, \"arrival\": {\"iataCode\": \"MAA\", \"terminal\": \"4\", \"at\": \"2024-03-26T19:30:00\"}, \"carrierCode\": \"AI\", \"number\": \"785\", \"aircraft\": {\"code\": \"32N\"}, \"operating\": {\"carrierCode\": \"AI\"}, \"duration\": \"PT2H30M\", \"id\": \"85\", \"numberOfStops\": 0, \"co2Emissions\": [{\"weight\": 89, \"weightUnit\": \"KG\", \"cabin\": \"ECONOMY\"}]}]}], \"price\": {\"currency\": \"EUR\", \"total\": \"105.00\", \"base\": \"88.00\", \"fees\": [{\"amount\": \"0.00\", \"type\": \"SUPPLIER\"}, {\"amount\": \"0.00\", \"type\": \"TICKETING\"}, {\"amount\": \"0.00\", \"type\": \"FORM_OF_PAYMENT\"}], \"grandTotal\": \"105.00\", \"billingCurrency\": \"EUR\"}, \"pricingOptions\": {\"fareType\": [\"PUBLISHED\"], \"includedCheckedBagsOnly\": true}, \"validatingAirlineCodes\": [\"AI\"], \"travelerPricings\": [{\"travelerId\": \"1\", \"fareOption\": \"STANDARD\", \"travelerType\": \"ADULT\", \"price\": {\"currency\": \"EUR\", \"total\": \"105.00\", \"base\": \"88.00\", \"taxes\": [{\"amount\": \"2.61\", \"code\": \"P2\"}, {\"amount\": \"8.00\", \"code\": \"IN\"}, {\"amount\": \"4.50\", \"code\": \"K3\"}, {\"amount\": \"1.89\", \"code\": \"YR\"}], \"refundableTaxes\": \"28.00\"}, \"fareDetailsBySegment\": [{\"segmentId\": \"85\", \"cabin\": \"ECONOMY\", \"fareBasis\": \"GIP\", \"class\": \"G\", \"includedCheckedBags\": {\"weight\": 25, \"weightUnit\": \"KG\"}}]}]}], \"bookingRequirements\": {\"emailAddressRequired\": true, \"mobilePhoneNumberRequired\": true}}",
+    "airlines": {
+        "AI": "AIR INDIA"
+    },
+    "airlines2": {
+        "AI": "AIC"
+    }
+}
