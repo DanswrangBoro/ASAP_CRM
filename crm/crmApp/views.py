@@ -1680,3 +1680,139 @@ def view_pdf(request, id):
         # Return a 404 error if the PDF file does not exist
         return HttpResponse("PDF file not found", status=404)
 
+# =========================================================================( center agreement email )
+
+from django.core.mail import send_mail
+# from django.template.loader import render_to_string
+
+def authorize_center(request):
+    if request.method == "POST":
+        # Get the data from the POST request
+        center_id = request.POST.get("centerId")
+        
+        # Get the center object
+        center = Center.objects.get(pk=center_id)
+        
+        # Render the agreement email HTML content
+        context = {'center': center}
+        agreement_html = render_to_string('agreement_email.html', context)
+        
+        # Create a text/plain version of the HTML email content
+        text_content = strip_tags(agreement_html)
+        
+        # Create the email object
+        email = EmailMultiAlternatives(
+            subject='Agreement for Center Authorization',
+            body=text_content,
+            from_email='www.swrang.123@gmail.com',
+            to=[center.email],  # Assuming center has an email field
+        )
+        
+        # Attach the HTML content
+        email.attach_alternative(agreement_html, "text/html")
+        
+        # Send the email
+        email.send()
+        
+        return HttpResponseRedirect(reverse('crmApp:centers_list'))
+    
+    
+
+# def ack_agree(request, center_id):
+#     # Get the client's IP address from the request object
+#     # client_ip_address = request.META.get('REMOTE_ADDR')
+#     client_ip_address = '103.219.61.205'
+#     api_url = f"http://ipinfo.io/{client_ip_address}/json"
+#     ipDetails = requests.get(api_url).json()
+#     print(ipDetails)
+    
+#     print("Client IP Address:", client_ip_address)
+    
+#     # Retrieve the Center object based on the center_id
+#     center = get_object_or_404(Center, pk=center_id)
+    
+#     context = {
+#         'center': center,
+#         'client_ip_address': client_ip_address
+#     }
+    
+#     return render(request, 'ack_agree.html', context)
+import re
+
+def detect_os(user_agent):
+    if 'Windows' in user_agent:
+        return 'Windows'
+    elif 'Macintosh' in user_agent:
+        return 'Macintosh'
+    # elif 'Linux' in user_agent:
+    #     return 'Linux'
+    elif re.search(r'Android', user_agent):
+        return 'Android'
+    elif re.search(r'iPad|iPhone', user_agent):
+        return 'iOS'
+    else:
+        return 'Linux'
+
+def detect_browser(user_agent):
+    if 'Chrome' in user_agent:
+        return 'Chrome'
+    elif 'Firefox' in user_agent:
+        return 'Firefox'
+    elif 'Safari' in user_agent:
+        return 'Safari'
+    else:
+        return 'Unknown'
+
+def detect_device(user_agent):
+    if re.search(r'Mobile|Android|iPhone|iPad', user_agent):
+        return 'Mobile'
+    elif re.search(r'Tablet|iPad', user_agent):
+        return 'Tablet'
+    else:
+        return 'Desktop'
+
+
+def ack_agree(request, center_id):
+    # Get the client's IP address from the request object
+    client_ip_address = '103.219.61.205'  # Example IP address for testing
+    api_url = f"http://ipinfo.io/{client_ip_address}/json"
+    ipDetails = requests.get(api_url).json()
+    print(ipDetails)
+    
+    print("Client IP Address:", client_ip_address)
+    
+    # Get the user-agent string from the request headers
+    user_agent = request.headers.get('User-Agent', 'Unknown')
+    
+    # Extracting operating system, browser, and device information from the user-agent string
+    os_info = detect_os(user_agent)
+    browser_info = detect_browser(user_agent)
+    device_info = detect_device(user_agent)
+    # user_agent = request.META.get('HTTP_USER_AGENT', 'Unknown')
+
+    # Retrieve the Center object based on the center_id
+    center = get_object_or_404(Center, pk=center_id)
+    center.status = 'active'
+    center.acknowledgment_status = 'acknowledged'
+    center.signed_at = datetime.now()
+    center.save()
+    
+    context = {
+        # 'SERVER_USER_AGENT': user_agent,
+        'center': center,
+        'client_ip_address': client_ip_address,
+        'os_info': os_info,
+        'browser_info': browser_info,
+        'device_info': device_info,
+        'ip': ipDetails
+    }
+    
+    return render(request, 'ack_agree.html', context)
+
+def track(request):
+    # Log the email open event
+    print("Email is opened")
+    # You can save this event to your database or perform any other necessary actions
+
+    # Return a JSON response indicating the event was logged successfully
+    return JsonResponse({"message": "Email open event logged"})

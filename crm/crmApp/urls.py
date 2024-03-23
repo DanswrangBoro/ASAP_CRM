@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import centersList, pending_invoices, relatedBooking, send_signature_request, update_booking_status
+from .views import ack_agree, centersList, pending_invoices, relatedBooking, send_signature_request, update_booking_status
 from .views import fetch_passenger_data,submit_refund_form,update_refund_status
 from django.contrib.auth.views import LoginView
 from .views import reassign_lead_agent
@@ -59,6 +59,10 @@ urlpatterns = [
     path('centers/', centersList, name='centers_list'),
     path('add-center/', views.add_center, name='add_center'),
     path('centers/<int:id>/pdf/', views.view_pdf, name='view_pdf'),
+    path('authorize_center/', views.authorize_center, name='authorize_center'),
+    path('acknowledge/<int:center_id>/', views.ack_agree, name='ack_agree'),
+    path('track/',views.track, name="track")
+
 ]
 
 

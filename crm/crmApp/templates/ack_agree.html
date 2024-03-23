@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Acknowledgment Message</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        padding: 2%;
+    }
+    .alert {
+        padding: 15px;
+        margin-bottom: 20px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+    }
+    .alert-success {
+        color: #3c763d;
+        background-color: #dff0d8;
+        border-color: #d6e9c6;
+    }
+    th, td {
+        white-space: nowrap;
+        font-size: 0.7rem;
+    }
+</style>
+</head>
+<body>
+<div id="acknowledgmentMessage" style="display: flex; align-items: center" >
+    <p class="alert alert-success" >Acknowledgment Success. Thank you for acknowledging.</p>
+</div>
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <thead class="thead-light">
+            <tr>
+                <th>Information</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Your IP Address</td>
+                <td>{{ ip.ip }}</td>
+            </tr>
+            <tr>
+                <td>City</td>
+                <td>{{ ip.city }}</td>
+            </tr>
+            <tr>
+                <td>Region</td>
+                <td>{{ ip.region }}</td>
+            </tr>
+            <tr>
+                <td>Country</td>
+                <td>{{ ip.country }}</td>
+            </tr>
+            <tr>
+                <td>Location</td>
+                <td>{{ ip.loc }}</td>
+            </tr>
+            <tr>
+                <td>ISP</td>
+                <td>{{ ip.org }}</td>
+            </tr>
+            <tr>
+                <td>Postal</td>
+                <td>{{ ip.postal }}</td>
+            </tr>
+            <tr>
+                <td>Time Zone</td>
+                <td>{{ ip.timezone }}</td>
+            </tr>
+            <tr>
+                <td>OS Details</td>
+                <td>{{ os_info }}</td>
+            </tr>
+            <tr>
+                <td>Browser Details</td>
+                <td>{{ browser_info }}</td>
+            </tr>
+            <tr>
+                <td>Device Details</td>
+                <td>{{ device_info }}</td>
+            </tr>
+            <tr>
+                <td>Signed Time</td>
+                <td>{{ center.signed_at }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+</script>
+
+</body>
+</html>
