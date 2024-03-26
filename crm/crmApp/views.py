@@ -18,7 +18,8 @@ from amadeus import Client as AmadeusClient
 import logging
 from .models import Sale
 from django.db.models import Sum
-from .models import Chargeback
+from .models import Chargeback,Center
+from django.contrib.auth import get_user_model
 from django.http import HttpResponseBadRequest
 from .models import Invoice
 import uuid
@@ -28,6 +29,10 @@ from pprint import pprint
 from django.core.files.storage import FileSystemStorage
 from dropbox_sign import \
     ApiClient, ApiException, Configuration, apis, models
+
+from django.db.models.signals import post_migrate
+from django.dispatch import receiver
+from django.contrib.sessions.models import Session
 
 configuration = Configuration(
     # Configure HTTP basic authorization: api_key
@@ -47,6 +52,22 @@ amadeus = Client(
     client_id = CLIENT_ID,
     client_secret = CLIENT_SECRET_ID
 )
+
+@receiver(post_migrate)
+def create_main_center(sender, **kwargs):
+    if sender.name == get_user_model()._meta.app_label:
+        main_center, created = Center.objects.get_or_create(
+            name='Main',
+            email='',
+            address='',
+            phone='',
+            contact_person='Admin',
+            status='active'
+        )
+        if created:
+            print('Main center created successfully.')
+
+
 
 def get_location_suggestions(request):
     keyword = request.GET.get('keyword', '')
@@ -202,30 +223,56 @@ def flight_results(request):
 from decimal import Decimal
 
 def total_booking(request):
-    original = Booking.objects.filter(status__in=['inprocess', 'rejected', 'confirmed', 'cancelled'])
-    agents = CustomUser.objects.filter(role='agent')
-    confirmed_bookings = original.filter(status='confirmed')
+    if request.user.is_superuser:
+        original = Booking.objects.filter(status__in=['inprocess', 'rejected', 'confirmed', 'cancelled'])
+        agents = CustomUser.objects.filter(role='agent')
+        confirmed_bookings = original.filter(status='confirmed')
 
-    total_price = Decimal(0.0)
-    total_mco = Decimal(0.0)
-    for booking in confirmed_bookings:
-        total_price += Decimal(booking.price)
-    
-    total_revenue = total_price + total_mco
-    # Rounding to two decimal points
-    total_price_str = "${:.2f}".format(round(total_price, 2))
-    total_mco_str = "${:.2f}".format(round(total_mco, 2))
-    total_revenue_str = "${:.2f}".format(round(total_revenue, 2))
+        total_price = Decimal(0.0)
+        total_mco = Decimal(0.0)
+        for booking in confirmed_bookings:
+            total_price += Decimal(booking.price)
+        
+        total_revenue = total_price + total_mco
+        # Rounding to two decimal points
+        total_price_str = "${:.2f}".format(round(total_price, 2))
+        total_mco_str = "${:.2f}".format(round(total_mco, 2))
+        total_revenue_str = "${:.2f}".format(round(total_revenue, 2))
 
-    context = {
-        "original": original,
-        "length": original.count(),
-        "total_price": total_price_str,
-        "total_mco": total_mco_str,
-        "total_revenue": total_revenue_str,
-        "agents": agents
-    }
-    return render(request, "total_booking.html", context)
+        context = {
+            "original": original,
+            "length": original.count(),
+            "total_price": total_price_str,
+            "total_mco": total_mco_str,
+            "total_revenue": total_revenue_str,
+            "agents": agents
+        }
+        return render(request, "total_booking.html", context)
+    else:
+        original = Booking.objects.filter(status__in=['inprocess', 'rejected', 'confirmed', 'cancelled'],center=request.user.center)
+        agents = CustomUser.objects.filter(role='agent')
+        confirmed_bookings = original.filter(status='confirmed')
+
+        total_price = Decimal(0.0)
+        total_mco = Decimal(0.0)
+        for booking in confirmed_bookings:
+            total_price += Decimal(booking.price)
+        
+        total_revenue = total_price + total_mco
+        # Rounding to two decimal points
+        total_price_str = "${:.2f}".format(round(total_price, 2))
+        total_mco_str = "${:.2f}".format(round(total_mco, 2))
+        total_revenue_str = "${:.2f}".format(round(total_revenue, 2))
+
+        context = {
+            "original": original,
+            "length": original.count(),
+            "total_price": total_price_str,
+            "total_mco": total_mco_str,
+            "total_revenue": total_revenue_str,
+            "agents": agents
+        }
+        return render(request, "total_booking.html", context)
 
 
 # =================================================================================dashboard======================================
@@ -267,14 +314,31 @@ def dashboard(request):
 
 # =================================================================================end dashboard==================================
 
+
 def total_user(request):
-    user_data = CustomUser.objects.all()  # Fetch all User objects
-    form = UserCreationForm()
-    context = {
-        "users": user_data,  # Rename the context variable to avoid confusion
-        'form' : form
-    }
-    return render(request, "total_users.html", context)
+    if request.user.is_superuser:
+        user_data = CustomUser.objects.all()  # Fetch all User objects
+        centers = Center.objects.all()  # Fetch all Center objects
+        form = UserCreationForm()
+        context = {
+            "users": user_data,  # Rename the context variable to avoid confusion
+            'form': form,
+            'centers': centers,  # Pass the centers data to the template context
+        }
+        return render(request, "total_users.html", context)
+    elif request.user.role == 'manager':
+        print(request.user.center.pk)
+        # center = get_object_or_404(Center,pk = request.user.center.pk)
+        user_data = CustomUser.objects.filter(center = request.user.center.pk)  # Fetch all User objects
+        print(user_data)
+        centers = Center.objects.filter(pk = request.user.center.pk)
+        form = UserCreationForm()
+        context = {
+            "users": user_data,  # Rename the context variable to avoid confusion
+            'form': form,
+            'centers': centers,  # Pass the centers data to the template context
+        }
+        return render(request, "total_users.html", context)
 
 
 def sales_view(request):
@@ -287,11 +351,18 @@ def sales_view(request):
     return render(request, 'sales.html', context)
 
 def booking(request):
-    original = Booking.objects.all()
-    context = {
-        "original" : original
-    }
-    return render(request,"bookings.html", context)
+    if request.user.is_superuser:
+        original = Booking.objects.all()
+        context = {
+            "original" : original
+        }
+        return render(request,"bookings.html", context)
+    else:
+        original = Booking.objects.filter(center = request.user.center)
+        context = {
+            "original" : original
+        }
+        return render(request,"bookings.html", context)
 
 def refund(request):
     refund_data = Refund.objects.all()
@@ -607,31 +678,43 @@ from django.contrib.auth import authenticate, login
 from .forms import UserCreationForm
 from .models import CustomUser
 
+from django.contrib import messages
+
 def create_user(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
             email = form.cleaned_data['email']
-            username = form.cleaned_data['userName']
+            username = form.cleaned_data['username']
             phoneNumber = form.cleaned_data['phoneNumber']
             role = form.cleaned_data['role']
-            team = form.cleaned_data['team']
             password = form.cleaned_data['password']
             confirm_password = form.cleaned_data['confirmPassword']
+            center = form.cleaned_data['center']  # Get the selected center from the form
+
+            print("Email:", email)
+            print("Username:", username)
+            print("Phone Number:", phoneNumber)
+            print("Role:", role)
+            print("Password:", password)
+            print("Confirm Password:", confirm_password)
+            print("Center:", center)
 
             if password == confirm_password:
-                user = CustomUser.objects.create_user(email=email, username=username, phoneNumber=phoneNumber, role=role, team=team, password=password)
+                user = CustomUser.objects.create_user(email=email, username=username, phoneNumber=phoneNumber, role=role,password=password)
+                user.center = center  # Assign the selected center to the user
                 user.save()
-                messages.success(request,"user created successfuly!")
+                messages.success(request, "User created successfully!")
                 return redirect('crmApp:total_user')
             else:
-                messages.warning(request,"Password does not match!")
+                messages.warning(request, "Password does not match!")
                 return redirect('crmApp:total_user')
         else:
-            messages.warning(request,"user created successfuly!")
-
+            print("Form errors:", form.errors)  # Print form errors for debugging
+            messages.warning(request, "Form is not valid!")
             return redirect('crmApp:total_user')
     return redirect('crmApp:total_user')
+
 
 
 # ==========================================================login===============================
@@ -677,44 +760,33 @@ from django.shortcuts import render, redirect
 # from .models import Custom  # Import your custom user model
 
 def login_view(request):
+    # Check if the user is already authenticated
+    if request.user.is_authenticated:
+        # Redirect to the dashboard if the user is already logged in
+        return redirect('crmApp:dashboard')
+
     error_message = None
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-        role = request.POST.get('role')
-        
-        # Check if the user is a superuser
-        if role == 'superuser':
-            user = authenticate(request, username=username, password=password)
-            if user is not None:
-                login(request, user)
-                request.session['userN'] = user.username
-                print(request.session['userN'])
+        active_sessions = Session.objects.all()
+        for active in active_sessions:
+            print("Session data before authentication:", active.get_decoded())
+        # Authenticate user
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            active_sessions = Session.objects.all()
+            for active in active_sessions:
+                print("Session data before authentication:", active.get_decoded())
+            if not user.blocked:  # Check if user is not blocked
+                login(request, user)  # Django will handle session management
                 return redirect('crmApp:dashboard')  # Redirect to base URL after successful login
             else:
-                error_message = 'Invalid username or password'
+                error_message = 'This user is blocked'
         else:
-            # Check if the user with specified role exists
-            try:
-                # Authenticate user using Custom model
-                user = authenticate(request, username=username, password=password)
-                if user is not None:
-                    if user.role == role:
-                        if not user.blocked:  # Check if user is not blocked
-                            login(request, user)
-                            request.session['userN'] = user.username
-                            return redirect('crmApp:dashboard')  # Redirect to base URL after successful login
-                        else:
-                            error_message = 'This user is blocked'
-                    else:
-                        error_message = 'User with specified role not found'
-                else:
-                    error_message = 'Invalid username or password'
-            except CustomUser.DoesNotExist:
-                error_message = 'User with specified role not found'
+            error_message = 'Invalid username or password'
 
     return render(request, 'login.html', {'error_message': error_message})
-
 
 # ==========================================================end login===============================
 # =======================================logout===================
@@ -1375,7 +1447,7 @@ def submit_cutomer(request):
             arrival_date = date_format(response["flightOffers"][0]["itineraries"][0]["segments"][-1]['arrival']["at"])
             num_passengers = len(traveler_details)
             price = response["flightOffers"][0]["price"]["grandTotal"]
-            
+            center_instance = get_object_or_404(Center, pk = request.user.center.pk)
             booking_instance = Booking.objects.create(
                 booking_id=booking_id,
                 passenger_name=passenger_name,
@@ -1388,7 +1460,8 @@ def submit_cutomer(request):
                 arrival=arrival,
                 arrival_date=arrival_date,
                 num_passengers=num_passengers,
-                price=price
+                price=price,
+                center = center_instance
             )
             # Add more fields from the response as needed
             return redirect('crmApp:booking')

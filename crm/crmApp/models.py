@@ -6,6 +6,29 @@ from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 # Create your models here.
 
+
+# ==========================================================================( €Centers Start)=======================================
+
+class Center(models.Model):
+    # Other fields...
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    address = models.CharField(max_length=255)
+    phone = models.CharField(max_length=20)
+    contact_person = models.CharField(max_length=100)
+    document = models.FileField(upload_to='center_documents/', null=True, blank=True)
+    
+    # New field for status
+    ACTIVE_STATUS_CHOICES = [
+        ('active', 'Active'),
+        ('inactive', 'Inactive'),
+    ]
+    status = models.CharField(max_length=10, choices=ACTIVE_STATUS_CHOICES, default='inactive')
+
+    def __str__(self):
+        return self.name
+
+
 class PNR_TABLE(models.Model):
     email = models.TextField(max_length=200)
     phone = models.TextField(max_length=10)
@@ -56,9 +79,15 @@ from django.db import models
 
 class CustomUser(AbstractUser):
     phoneNumber = models.CharField(max_length=15)
-    role = models.CharField(max_length=20)
-    team = models.CharField(max_length=100)
+    ROLE_CHOICES = [
+        ('manager', 'manager'),
+        ('agent', 'agent'),
+    ]
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES)
     blocked = models.BooleanField(default=False)
+
+    # Foreign key to Center
+    center = models.ForeignKey(Center, on_delete=models.CASCADE, related_name='users', null=True, blank=True)
 
     # Add related_name to avoid clash with default User model
     groups = models.ManyToManyField('auth.Group', related_name='custom_user_set', blank=True, verbose_name='groups')
@@ -66,6 +95,7 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.username
+    
 
 class Booking(models.Model):
     booking_id = models.CharField(max_length=100)
@@ -85,6 +115,7 @@ class Booking(models.Model):
     change_date = models.DateTimeField(blank=True, null=True)
     lead_agent = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, blank=True, related_name='lead_bookings')
     card_number = models.IntegerField(max_length=16,default="1234567890123456")
+    center = models.ForeignKey(Center, on_delete=models.SET_NULL, null=True,blank=True)
 
     def __str__(self):
         return self.booking_id
@@ -233,23 +264,7 @@ class MCO(models.Model):
     price = models.FloatField(null=True, blank = True)
 
 
-# ==========================================================================( €Centers Start)=======================================
 
-class Center(models.Model):
-    # Other fields...
-    name = models.CharField(max_length=100)
-    email = models.EmailField()
-    address = models.CharField(max_length=255)
-    phone = models.CharField(max_length=20)
-    contact_person = models.CharField(max_length=100)
-    document = models.FileField(upload_to='center_documents/', null=True, blank=True)
-    
-    # New field for status
-    ACTIVE_STATUS_CHOICES = [
-        ('active', 'Active'),
-        ('inactive', 'Inactive'),
-    ]
-    status = models.CharField(max_length=10, choices=ACTIVE_STATUS_CHOICES, default='inactive')
 
     # New field for acknowledgment status
     ACKNOWLEDGEMENT_STATUS_CHOICES = [
@@ -260,3 +275,4 @@ class Center(models.Model):
     signed_at = models.CharField(max_length=20,default='Not signed yet', blank=True, null=True)
     def __str__(self):
         return self.name
+

@@ -21,23 +21,26 @@ class RejectedBookingAdmin(admin.ModelAdmin):
     
 from django.contrib.auth.admin import UserAdmin
 
-@admin.register(CustomUser)  # Register Custom model with CustomAdmin
+@admin.register(CustomUser)
 class CustomUserAdmin(UserAdmin):
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
-        ('Personal Info', {'fields': ('email', 'phoneNumber', 'role', 'team', 'blocked')}),
+        ('Personal Info', {'fields': ('email', 'phoneNumber', 'role', 'blocked', 'center')}),
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
         ('Important dates', {'fields': ('last_login', 'date_joined')}),
     )
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('username', 'email', 'phoneNumber', 'role', 'team', 'password1', 'password2'),
+            'fields': ('username', 'email', 'phoneNumber', 'role', 'password1', 'password2', 'center'),
         }),
     )
-    list_display = ('username', 'email', 'phoneNumber', 'role', 'team', 'is_staff')
-    search_fields = ('username', 'email', 'phoneNumber', 'role', 'team')
+    list_display = ('username', 'email', 'phoneNumber', 'role', 'is_staff')
+    search_fields = ('username', 'email', 'phoneNumber', 'role')
     ordering = ('username',)
+    def add_view(self, request, form_url='', extra_context=None):
+        self.form = self.add_form  # Set the form to your custom form
+        return super().add_view(request, form_url, extra_context)
 
 # Register the CustomUser model with the CustomUserAdmin
 
