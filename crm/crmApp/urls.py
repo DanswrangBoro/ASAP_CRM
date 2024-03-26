@@ -61,7 +61,10 @@ urlpatterns = [
     path('centers/<int:id>/pdf/', views.view_pdf, name='view_pdf'),
     path('authorize_center/', views.authorize_center, name='authorize_center'),
     path('acknowledge/<int:center_id>/', views.ack_agree, name='ack_agree'),
-    path('track/',views.track, name="track")
+    path('track/',views.track, name="track"),
+    path('total_chargeback/',views.total_chargeback, name="total_chargeback"),
+    path('total_leads/',views.total_leads, name="total_leads"),
+    path('total_refund/',views.total_refund, name="total_refund")
 
 ]
 

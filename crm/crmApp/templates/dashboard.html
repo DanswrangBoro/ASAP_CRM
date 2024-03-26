@@ -14,13 +14,15 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js/dist/Chart.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom mb-5">
+<nav class="navbar navbar-expand-lg navbar-light  mb-2">
     <div class="container-fluid">
 
         <!-- Navbar Brand and Description -->
         <div class="container" style="width: 100%; ">
-            <a class="navbar-brand" href="#" style="font-size:1rem;"> <b>Welcome to your dashboard</b></a>
-            <p style="font-size:0.8rem;">This is where you can manage your tasks and view important information.</p>
+          
+                <a class="navbar-brand" href="#" style="font-size: 1rem;"><b>Welcome to your dashboard</b></a>
+                <p style="font-size: 0.8rem; color: #67748E;">This is where you can manage your tasks and view important information.</p>
+       
         </div>
 
         <!-- Navbar Toggler Button -->
@@ -111,7 +113,8 @@
                         {% if request.user.is_superuser %}
                             <a class="text-decoration-none text-reset" href="{% url 'crmApp:sales' %}">
                         {% endif %}
-                        <h5 class="card-text" style="color: #fff; text-align: left;">Total Sales</h5>
+                        <h6 class="card-text" style="color:#67748E; text-align: left;">Total Sales <img src="{% static 'assets/right-arrow.png'%}" alt="" style="height: 6%; width: 6%; display:flex; float: inline-end;"> 
+                        </h6>
                         </a>
                         <div class="container mt-5">
                             <div class="row">
@@ -120,10 +123,10 @@
                                 </div>
                                 <div class="col text-right">
                                     <div class="up text-center" style="background-color: rgba(171, 233, 171, 0.5);">
-                                        <h6>up</h6>
-                                       
+                                        <h6 style="color:#009E5C; padding: 1% 0 1% 0;"><i class="fas fa-arrow-up" style="color: green;"></i>
+                                            4.77%</h6>
                                     </div>
-                                    <p class="mb-0" style="font-size: 0.5rem;">Since last Month</p>
+                                    <p class="mb-0" style="font-size: 0.5rem; color: #67748E;">Since last Month</p>
                                 </div>
                             </div>
                         </div>
@@ -133,8 +136,9 @@
             <div class="col-md-3 px-1 mt-md-0 mt-1">
                 <div class="card shadow-lg col-custom-color card-with-background3">
                     <div class="card-body">
-                        <a class="text-decoration-none text-reset" href="{% url 'crmApp:sales' %}">
-                            <h5 class="card-text" style="color: #fff; text-align: left;">Total Leads</h5>
+                        <a class="text-decoration-none text-reset" href="{% url 'crmApp:total_leads' %}">
+                            <h6 class="card-text" style="color: #67748E; text-align: left;">Total Leads  <img src="{% static 'assets/right-arrow.png'%}" alt="" style="height: 6%; width: 6%; display:flex; float: inline-end;">
+                            </h6>
                         </a>
                         <div class="container mt-5">
                             <div class="row">
@@ -143,10 +147,10 @@
                                 </div>
                                 <div class="col text-right">
                                     <div class="up text-center" style="background-color: rgba(171, 233, 171, 0.5);">
-                                        <h6>up</h6>
+                                        <h6 style="color:#009E5C;padding: 1% 0 1% 0;"><i class="fas fa-arrow-up" style="color: green;"></i> 4.77%</h6>
                                        
                                     </div>
-                                    <p class="mb-0" style="font-size: 0.5rem;">Since last Month</p>
+                                    <p class="mb-0" style="font-size: 0.5rem; color: #67748E;">Since last Month</p>
                                 </div>
                             </div>
                         </div>
@@ -156,8 +160,9 @@
             <div class="col-md-3 px-1 mt-md-0 mt-1">
                 <div class="card shadow-lg col-custom-color card-with-background4">
                     <div class="card-body">
-                        <a class="text-decoration-none text-reset" href="{% url 'crmApp:sales' %}">
-                            <h5 class="card-text" style="color: #fff;text-align: left;">Total Refund</h5>
+                        <a class="text-decoration-none text-reset" href="{% url 'crmApp:total_refund' %}">
+                            <h6 class="card-text" style="color: #67748E;text-align: left;">Total Refund  <img src="{% static 'assets/right-arrow.png'%}" alt="" style="height: 6%; width: 6%; display:flex; float: inline-end;">
+                            </h6>
                         </a>
                         <div class="container mt-5">
                             <div class="row">
@@ -166,10 +171,10 @@
                                 </div>
                                 <div class="col text-right">
                                     <div class="up text-center" style="background-color: rgba(171, 233, 171, 0.5);">
-                                        <h6>up</h6>
+                                        <h6 style="color:#009E5C;padding: 1% 0 1% 0;"><i class="fas fa-arrow-up" style="color: green;"></i> 4.77%</h6>
                                        
                                     </div>
-                                    <p class="mb-0" style="font-size: 0.5rem;">Since last Month</p>
+                                    <p class="mb-0" style="font-size: 0.5rem; color: #67748E;">Since last Month</p>
                                 </div>
                             </div>
                         </div>
@@ -180,8 +185,9 @@
             <div class="col-md-3 px-1 mt-md-0 mt-1">
                 <div class="card shadow-lg col-custom-color card-with-background5">
                     <div class="card-body">
-                        <a class="text-decoration-none text-reset" href="{% url 'crmApp:sales' %}">
-                            <h5 class="card-text" style="color: #fff; text-align: left;">Total Chargeback</h5>
+                        <a class="text-decoration-none text-reset" href="{% url 'crmApp:total_chargeback' %}">
+                            <h6 class="card-text" style="color: #67748E; text-align: left;">Total Chargeback  <img src="{% static 'assets/right-arrow.png'%}" alt="" style="height: 6%; width: 6%; display:flex; float: inline-end;">
+                            </h6>
                         </a>
                         <div class="container mt-5">
                             <div class="row">
@@ -190,10 +196,10 @@
                                 </div>
                                 <div class="col text-right">
                                     <div class="up text-center" style="background-color: rgba(171, 233, 171, 0.5);">
-                                        <h6>up</h6>
+                                        <h6 style="color:#009E5C;padding: 1% 0 1% 0;"><i class="fas fa-arrow-up" style="color: green;"></i> 4.77%</h6>
                                        
                                     </div>
-                                    <p class="mb-0" style="font-size: 0.5rem;">Since last Month</p>
+                                    <p class="mb-0" style="font-size: 0.5rem; color: #67748E;">Since last Month</p>
                                 </div>
                             </div>
                         </div>
@@ -206,10 +212,10 @@
         <div class="row">
             <div class="col-md-6 px-1 mt-md-0">
                 <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h3 class="mb-0">Sales Overview</h3>
+                    <div class="card-header d-flex justify-content-between align-items-center" style="border: none; background-color: #FFFFFF;">
+                        <h5 class="mb-0">Sales Overview</h5>
                         <div class="form-group">
-                            <select>
+                            <select style="border: 1px solid #b9c0cf; border-radius: 5px; padding: 6px; ">
                                 <option value="monthly">Monthly</option>
                                 <option value="yearly">Yearly</option>
                             </select>
@@ -223,10 +229,10 @@
     
             <div class="col-md-6 px-1 mt-md-0">
                 <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h3 class="mb-0">Income</h3>
+                    <div class="card-header d-flex justify-content-between align-items-center" style="border: none; background-color: #FFFFFF;">
+                        <h5 class="mb-0">Income</h5>
                         <div class="form-group">
-                            <select>
+                            <select style="border: 1px solid #b9c0cf; border-radius: 5px; padding: 6px; ">
                                 <option value="monthly">Monthly</option>
                                 <option value="yearly">Yearly</option>
                             </select>
@@ -243,20 +249,19 @@
     </div>
     
     <script>
-        var salesData = {
+       var salesData = {
     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
     datasets: [{
         label: '', // Set an empty string to hide the legend label
         data: [1000, 2000, 1500, 3000, 2500, 1800, 4000],
-        backgroundColor: 'rgba(54, 162, 235, 0.2)',
-        borderColor: 'rgba(54, 162, 235, 1)',
-        borderWidth: 1
+        backgroundColor: 'rgba(54, 162, 235, 0.06)',
+        borderColor: '#1CABF7',
+        borderWidth: 3
     }]
 };
 
 // Render Charts
 var salesCtx = document.getElementById('salesChart').getContext('2d');
-var incomeCtx = document.getElementById('incomeChart').getContext('2d');
 
 var salesChart = new Chart(salesCtx, {
     type: 'line',
@@ -269,6 +274,12 @@ var salesChart = new Chart(salesCtx, {
             xAxes: [{
                 gridLines: {
                     display: false // Hide x-axis gridlines
+                },
+                ticks: {
+                    callback: function(value, index, values) {
+                        // Display point style for labels
+                        return '\u25CF ' + value; // Unicode for black circle
+                    }
                 }
             }],
             yAxes: [{
@@ -280,25 +291,30 @@ var salesChart = new Chart(salesCtx, {
         }
     }
 });
+
+
+// income chart
+var incomeCtx = document.getElementById('incomeChart').getContext('2d');
   // Income Chart Data
 var incomeData = {
-    labels: ['Profit', 'Income', 'Loss'],
+    labels: ['Income', 'Loss', 'Profit'],
     datasets: [{
         label: 'Income',
         data: [2500, 2000, 1800], // Adjusted income data for pie chart
         backgroundColor: [
-            'rgba(255, 99, 132, 0.5)', // Red color for profit
-            'rgba(54, 162, 235, 0.5)', // Blue color for income
-            'rgba(255, 206, 86, 0.5)', // Yellow color for loss
+                'rgba(27, 195, 73, 0.5)',
+                'rgba(224, 51, 101, 0.5)',
+                'rgba(34, 129, 246, 0.5)', 
         ],
         borderColor: [
-            'rgba(255, 99, 132, 1)', // Red color for profit
-            'rgba(54, 162, 235, 1)', // Blue color for income
-            'rgba(255, 206, 86, 1)', // Yellow color for loss
+                'rgba(27, 195, 73, 0.5)',
+                'rgba(224, 51, 101, 0.5)',
+                'rgba(34, 129, 246, 0.5)', 
         ],
         borderWidth: 1
     }]
 };
+
 
 // Initialize pie chart
 var incomeChart = new Chart(incomeCtx, {
@@ -323,20 +339,22 @@ var incomeChart = new Chart(incomeCtx, {
         <div class="row">
             <div class="col-md-9 px-1 mt-md-0">
                 <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5>Total Sales</h5>
-                        <button class="btn btn-sm btn-primary">View All</button>
+                    <div class="card-header d-flex justify-content-between align-items-center"style="border: none; background-color: #FFFFFF;" >
+                        <h5>Agent Monthly Performance</h5>
+                        <button class="btn" style="border: 1px solid #b9c0cf; padding: 6px;">View All</button>
                     </div>
                     <div class="card-body">
-                        <table class="table">
-                            <thead style="background-color:#EAF2FF;border-bottom: none;">
+                        <table class="table " style="border-color:#74c9f7ab">
+                            <thead style="background-color:#EAF2FF; border:2px solid white; font-size: 0.8rem;">
                                 <tr>
                                     <th>Agent Name</th>
                                     <th>Total Sales</th>
                                     <th>Refund</th>
                                     <th>Chargeback</th>
                                     <th>Chargeback Alert</th>
-                                    <th>Status</th>
+                                    <th><img src="{% static 'assets/more.png'%}" alt="" style="height: 20px; width: 20px;"></th>
+
+                                    
                                 </tr>
                             </thead>
                             <tbody>
@@ -347,7 +365,8 @@ var incomeChart = new Chart(incomeCtx, {
                                     <td>$200</td>
                                     <td>$50</td>
                                     <td>No</td>
-                                    <td>Active</td>
+                                    <td><img src="{% static 'assets/more.png'%}" alt="" style="height: 20px; width: 20px;"></td>
+                                   
                                 </tr>
                                 <tr>
                                     <td>Agent 1</td>
@@ -355,7 +374,8 @@ var incomeChart = new Chart(incomeCtx, {
                                     <td>$200</td>
                                     <td>$50</td>
                                     <td>No</td>
-                                    <td>Active</td>
+                                    <td><img src="{% static 'assets/more.png'%}" alt="" style="height: 20px; width: 20px;"></td>
+                                   
                                 </tr>
                                 <tr>
                                     <td>Agent 1</td>
@@ -363,7 +383,8 @@ var incomeChart = new Chart(incomeCtx, {
                                     <td>$200</td>
                                     <td>$50</td>
                                     <td>No</td>
-                                    <td>Active</td>
+                                    <td><img src="{% static 'assets/more.png'%}" alt="" style="height: 20px; width: 20px;"></td>
+                               
                                 </tr>
                                 <tr>
                                     <td>Agent 1</td>
@@ -371,7 +392,8 @@ var incomeChart = new Chart(incomeCtx, {
                                     <td>$200</td>
                                     <td>$50</td>
                                     <td>No</td>
-                                    <td>Active</td>
+                                    <td><img src="{% static 'assets/more.png'%}" alt="" style="height: 20px; width: 20px;"></td>
+                                   
                                 </tr>
                                 <tr>
                                     <td>Agent 1</td>
@@ -379,7 +401,8 @@ var incomeChart = new Chart(incomeCtx, {
                                     <td>$200</td>
                                     <td>$50</td>
                                     <td>No</td>
-                                    <td>Active</td>
+                                    <td><img src="{% static 'assets/more.png'%}" alt="" style="height: 20px; width: 20px;"></td>
+                                 
                                 </tr>
                                 <!-- Add more rows if needed -->
                             </tbody>
@@ -387,14 +410,15 @@ var incomeChart = new Chart(incomeCtx, {
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 ">
+            <div class="col-md-3">
                 <div class="card">
-                    <div class="card-header">
+                    <div class="card-header"  style="border: none; background-color: #FFFFFF;" >
                         <h5>Best Performers</h5>
+                        <p   style="font-size: 0.7rem;">for this month</p>
                     </div>
                     <div class="card-body">
-                        <table class="table">
-                            
+                        
+                        <table class="table perfor">
                             <tbody>
                                 <!-- Add your table rows here -->
                                 <tr>
@@ -418,6 +442,7 @@ var incomeChart = new Chart(incomeCtx, {
                     </div>
                 </div>
             </div>
+            
         </div>
     </div>
 
@@ -425,16 +450,21 @@ var incomeChart = new Chart(incomeCtx, {
         <div class="row">
             <div class="col-md-12 px-1 mt-md-0">
                 <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h3>Income Overview</h3>
-                        <div>
-                            <button class="btn btn-sm btn-primary mr-2">Annual</button>
-                            <button class="btn btn-sm btn-primary mr-2">Monthly</button>
-                            <button class="btn btn-sm btn-primary ml-2">View More</button>
+                    <div class="card-header d-flex justify-content-between align-items-center" style="border: none; background-color: #FFFFFF;">
+                        <h5>Total Leads Generated</h5>
+                        <div class="form-group" style="display: flex; align-items: center; gap: 5px">
+                            <select style="border: 1px solid #b9c0cf; border-radius: 5px; padding: 6px; ">
+                                <option value="monthly">Monthly</option>
+                                <option value="yearly">Yearly</option>
+                            </select>
+                            <button class="btn" style="border: 1px solid #b9c0cf; display: flex; align-items: center;">
+                                View More  
+                                <img src="{% static 'assets/right-arrow.png' %}" alt="" style="height: 10px; width: 10px; margin-left: 5px;">
+                            </button>                       
                         </div>
                     </div>
                     <div class="card-body">
-                        <canvas id="incomeOverviewChart"></canvas>
+                        <canvas id="incomeOverviewChart" height="70%"></canvas> <!-- Adjusted height to 200 -->
                     </div>
                 </div>
             </div>
@@ -442,52 +472,52 @@ var incomeChart = new Chart(incomeCtx, {
     </div>
     
     <script>
-     var incomeOverviewData = {
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-    datasets: [{
-        label: '', // Set an empty string to hide the legend label
-        data: [2000, 2500, 1800, 3000, 2000, 1500, 2500, 2800, 2200, 3500, 2400, 2000], // Data for all months
-        backgroundColor: '#2994F6', // Set bar color to #217DF5
-        borderColor: 'rgba(75, 192, 192, 1)',
-        borderWidth: 1,
-        barThickness: 10 // Adjust the width of the bars here
-    }]
-};
-
-// Render Chart
-var incomeOverviewCtx = document.getElementById('incomeOverviewChart').getContext('2d');
-
-var incomeOverviewChart = new Chart(incomeOverviewCtx, {
-    type: 'bar',
-    data: incomeOverviewData,
-    options: {
-        legend: {
-            display: false // Hide the legend
-        },
-        scales: {
-            xAxes: [{
-                gridLines: {
-                    display: false // Hide vertical grid lines (column lines)
-                }
-            }],
-            yAxes: [{
-                gridLines: {
-                    borderDash: [5, 5], // Set border dash style [5, 5]
-                    zeroLineWidth: 0 // Hide the zero line
-                },
-                ticks: {
-                    beginAtZero: true
-                }
+        var incomeOverviewData = {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            datasets: [{
+                label: '', // Set an empty string to hide the legend label
+                data: [2000, 2500, 1800, 3000, 2000, 1500, 2500, 2800, 2200, 3500, 2400, 2000], // Data for all months
+                backgroundColor: '#2994F6', // Set bar color to #217DF5
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1,
+                barThickness: 10 // Adjust the width of the bars here
             }]
-        },
-        plugins: {
-            datalabels: {
-                display: true,
-                color: 'black' // Change the color of the data labels
+        };
+    
+        // Render Chart
+        var incomeOverviewCtx = document.getElementById('incomeOverviewChart').getContext('2d');
+    
+        var incomeOverviewChart = new Chart(incomeOverviewCtx, {
+            type: 'bar',
+            data: incomeOverviewData,
+            options: {
+                legend: {
+                    display: false // Hide the legend
+                },
+                scales: {
+                    xAxes: [{
+                        gridLines: {
+                            display: false // Hide vertical grid lines (column lines)
+                        }
+                    }],
+                    yAxes: [{
+                        gridLines: {
+                            borderDash: [5, 5], // Set border dash style [5, 5]
+                            zeroLineWidth: 0 // Hide the zero line
+                        },
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                },
+                plugins: {
+                    datalabels: {
+                        display: true,
+                        color: 'black' // Change the color of the data labels
+                    }
+                }
             }
-        }
-    }
-});
+        });
     </script>
     
 
@@ -497,17 +527,18 @@ var incomeOverviewChart = new Chart(incomeOverviewCtx, {
             <!-- Total Leads Bar Graph -->
             <div class="col-md-6 px-1 mt-md-0">
                 <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h3>Total Leads</h3>
-                        <div class="form-group">
-                            <select>
+                    <div class="card-header d-flex justify-content-between align-items-center" style="border: none; background-color: #FFFFFF;" >
+                        <h3>Refund Ratio</h3>        
+                        <div class="form-group" style="display: flex; align-items: center; gap: 5px">
+                            <select style="border: 1px solid #b9c0cf; border-radius: 5px; padding: 6px; ">
                                 <option value="monthly">Monthly</option>
                                 <option value="yearly">Yearly</option>
                             </select>
-                            <button>View More</button>
+                            <button class="btn" style="border: 1px solid #b9c0cf; display: flex; align-items: center;">
+                                View More  
+                                <img src="{% static 'assets/right-arrow.png' %}" alt="" style="height: 10px; width: 10px; margin-left: 5px;">
+                            </button>                       
                         </div>
-                        
-                        
                     </div>
                     <div class="card-body">
                         <!-- Placeholder for total leads bar graph -->
@@ -519,10 +550,13 @@ var incomeOverviewChart = new Chart(incomeOverviewCtx, {
             <!-- Chargeback Ratio Circle Graph -->
             <div class="col-md-6 px-1 mt-md-0">
                 <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
+                    <div class="card-header d-flex justify-content-between align-items-center" style="border: none; background-color: #FFFFFF;">
                         <h3>Chargeback Ratio</h3>
-                        <button class="btn btn-primary">View More</button>
-                    </div>
+                        <button class="btn" style="border: 1px solid #b9c0cf; display: flex; align-items: center;">
+                            View More  
+                            <img src="{% static 'assets/right-arrow.png' %}" alt="" style="height: 10px; width: 10px; margin-left: 5px;">
+                        </button>
+                        </div>
                     <div class="card-body d-flex justify-content-center align-items-center">
                         <div class="chart-container" style="position: relative; height: 100%; width: 100%; align-items: center;">
                             <canvas id="chargebackRatioGraph"></canvas>
@@ -537,17 +571,17 @@ var incomeOverviewChart = new Chart(incomeOverviewCtx, {
     <script>
           var totalLeadsCanvas = document.getElementById('totalLeadsGraph');
 var totalLeadsData = {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
     datasets: [{
         label: 'Total Leads',
-        data: [110, 200, 150, 300, 250, 400, 350],
+        data: [110, 200, 150, 300, 250, 400],
         backgroundColor: 'rgba(54, 162, 235, 0.8)', // Blue color for bars with increased alpha
         borderColor: 'rgba(54, 162, 235, 1)', // Border color for bars
         borderWidth: 1,
-        barThickness: 10 // Define bar thickness here
+        barThickness: 25 // Define bar thickness here
     }, {
         label: 'Line Dataset', // Label for line dataset
-        data: [110, 200, 150, 300, 250, 400, 350], // Data for line dataset adjusted to be on top of bars
+        data: [110, 200, 150, 300, 250, 400], // Data for line dataset adjusted to be on top of bars
         type: 'line', // Set dataset type as 'line'
         borderColor: '#15BEF4', // Line color
         borderWidth: 2, // Line width

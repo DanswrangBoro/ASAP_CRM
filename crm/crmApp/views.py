@@ -1889,3 +1889,14 @@ def track(request):
 
     # Return a JSON response indicating the event was logged successfully
     return JsonResponse({"message": "Email open event logged"})
+
+# totalchargeback table pages
+
+def total_chargeback(request):
+    return render(request,'total_chargeback.html')
+
+def total_leads(request):
+    return render(request,'total_leads.html')
+
+def total_refund(request):
+    return render(request,'total_refund.html')

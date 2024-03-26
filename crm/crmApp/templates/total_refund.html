@@ -7,11 +7,9 @@
 
         <!-- Navbar Brand and Description -->
         <div class="container" style="width: 100%;">
-            <a class="navbar-brand" href="#" style="font-size: 1rem;"><b>Total Sales</b></a>
-            <p style="font-size: 0.8rem; color: #67748E; margin-top: 5px;">This section provides an overview of the total sales made.</p>
-        </div>
-        
-
+            <a class="navbar-brand" href="#" style="font-size: 1rem;"><b>Refund</b></a>
+            <p style="font-size: 0.8rem; color: #67748E; margin-top: 5px;">This section provides an overview of refunds issued for transactions.</p>
+        </div>        
         <!-- Navbar Toggler Button -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -53,17 +51,19 @@
 <div class="col-md-12 px-1 mt-md-0">
     <div class="card" style="border: none;">
         <div class="card-header d-flex justify-content-between align-items-center" style="border: none; background-color: #FFFFFF;">
-            <h5>Total sales Table</h5>
+            <h5>Total leads table</h5>
         </div>
         <div class="card-body">
             <table class="table" style="border-color:#74c9f7ab">
                 <thead style="background-color:#EAF2FF; border:2px solid white; font-size: 0.8rem;">
                     <tr>
-                        <th>Agent</th>
-                        <th>Total Sales</th>
-                        <th>Refund</th>
-                        <th>Chargeback</th>
-                        <th>Chargeback alert</th>
+                        <th>Agent name</th>
+                        <th>Customer name</th>
+                        <th>Booking ID</th>
+                        <th>Refund amount</th>
+                        <th>Refund/Dispute date</th>
+                        <th>Card number</th>
+                        <th>Status <img src="{% static 'assets/down-arrow.png'%}" alt="" style="height: 15px; width: 15px;"></th>
                         <th><img src="{% static 'assets/more.png'%}" alt="" style="height: 20px; width: 20px;"></th>
                     </tr>
                 </thead>
@@ -71,10 +71,12 @@
                     {% for sales in sale_data %}
                     <tr>
                         <td>{{ sales.lead_agent.username }}</td>
-                        <td><b>$ </b>{{ sales.price }}</td>
                         <td><b>$ </b></td>
                         <td><b>$ </b></td>
                         <td><b>$ </b></td>
+                        <td><b>$ </b></td>
+                        <td></td>
+                        <td></td>
                         <td><img src="{% static 'assets/more.png'%}" alt="" style="height: 20px; width: 20px;"></td>
                     </tr>
                     {% endfor %}
