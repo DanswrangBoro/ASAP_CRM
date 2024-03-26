@@ -25,8 +25,16 @@ class Center(models.Model):
     ]
     status = models.CharField(max_length=10, choices=ACTIVE_STATUS_CHOICES, default='inactive')
 
+    # New field for acknowledgment status
+    ACKNOWLEDGEMENT_STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('acknowledged', 'Acknowledged'),
+    ]
+    acknowledgment_status = models.CharField(max_length=20, choices=ACKNOWLEDGEMENT_STATUS_CHOICES, default='pending')
+    signed_at = models.CharField(max_length=20,default='Not signed yet', blank=True, null=True)
     def __str__(self):
         return self.name
+
 
 
 class PNR_TABLE(models.Model):
@@ -266,29 +274,4 @@ class MCO(models.Model):
 
 # ==========================================================================( €Centers Start)=======================================
 
-class Center(models.Model):
-    # Other fields...
-    name = models.CharField(max_length=100)
-    email = models.EmailField()
-    address = models.CharField(max_length=255)
-    phone = models.CharField(max_length=20)
-    contact_person = models.CharField(max_length=100)
-    document = models.FileField(upload_to='center_documents/', null=True, blank=True)
-    
-    # New field for status
-    ACTIVE_STATUS_CHOICES = [
-        ('active', 'Active'),
-        ('inactive', 'Inactive'),
-    ]
-    status = models.CharField(max_length=10, choices=ACTIVE_STATUS_CHOICES, default='inactive')
-
-    # New field for acknowledgment status
-    ACKNOWLEDGEMENT_STATUS_CHOICES = [
-        ('pending', 'Pending'),
-        ('acknowledged', 'Acknowledged'),
-    ]
-    acknowledgment_status = models.CharField(max_length=20, choices=ACKNOWLEDGEMENT_STATUS_CHOICES, default='pending')
-    signed_at = models.CharField(max_length=20,default='Not signed yet', blank=True, null=True)
-    def __str__(self):
-        return self.name
 
