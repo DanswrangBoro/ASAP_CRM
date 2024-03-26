@@ -1903,6 +1903,17 @@ def track(request):
     # Return a JSON response indicating the event was logged successfully
     return JsonResponse({"message": "Email open event logged"})
 
+# totalchargeback table pages
+
+def total_chargeback(request):
+    return render(request,'total_chargeback.html')
+
+def total_leads(request):
+    return render(request,'total_leads.html')
+
+def total_refund(request):
+    return render(request,'total_refund.html')
+
 def new_booking(request):
     pending_bookings = Booking.objects.filter(status='pending')
     return render(request, 'new_booking.html', {'pending_bookings': pending_bookings})
@@ -1964,3 +1975,4 @@ def centers_related_refund(request, center_name):
     # Retrieve refund-related data related to the specified center
     refund_data = Refund.objects.filter(booking_id__center__name=center_name)
     return render(request, 'center_related_refund.html', {'refund_data': refund_data})
+

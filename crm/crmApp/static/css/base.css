@@ -26,7 +26,7 @@ body{
   }
 
 a{
-    color:black;
+    color:#67748E;
 }
 .sticky-side{
  background-color: #ffffff;
@@ -51,20 +51,15 @@ main{
     background-color: #A5D7E8;
 }
 .card-with-background {
-    background-color: #03A9F4; /* Add your desired background color class here */
-    
     background-size: 100% 100%;
 }
 .card-with-background3 {
-    background-color: #FA9F1B; /* Add your desired background color class here */
     background-size: 100% 100%;
 }
 .card-with-background4 {
-    background-color: #f72d7e; /* Add your desired background color class here */
     background-size: 100% 100%;
 }
 .card-with-background5 {
-    background-color: #ef5b47; /* Add your desired background color class here */
     background-size: 100% 100%;
 }
 
@@ -115,7 +110,7 @@ ul, li{
 
 /* Apply styles on hover */
 .nav-link:hover {
-    background-color:#afafaf;
+    background-color:#3180ff;
     color: #fff;
     /* Change to your desired background color */
     /* Change to your desired text color */
@@ -186,3 +181,14 @@ ul, li{
         width: 1%; /* Set your desired width for smaller screens */
     }
 }
+
+/* performance table style */
+
+
+.perfor {
+border: none;
+}
+.perfor td {
+border: none;
+}
+                  

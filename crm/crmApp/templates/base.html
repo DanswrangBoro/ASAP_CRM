@@ -68,7 +68,7 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="#" id="centers-link">
                                     <img src="{% static 'assets/centers.png' %}" class="" alt="center">
-                                    Centers
+                                    Centers <img src="{% static 'assets/down-arrow.png'%}" alt="" style="height: 10%; width: 10%; display:flex; float: inline-end;">
                                 </a>
                             </li>
                             {% endif %}
@@ -86,45 +86,87 @@
                             </li>
                             {% if request.user.is_superuser or request.user.role == 'manager' %}
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'crmApp:total_user' %}">
+                                <a class="nav-link" href="#" id="total-users">
                                     <img src="{% static 'assets/total-users.png' %}" class="" alt="total-users"> Total
-                                    Users
+                                    Users<img src="{% static 'assets/down-arrow.png'%}" alt="" style="height: 10%; width: 10%; display:flex; float: inline-end;">
+                                </a>
+                            </li>
+                            <li class="nav-item hidden" id="admin">
+                                <a class="nav-link" href="{% url 'crmApp:total_user' %}" style="font-size: 0.8rem; border: 1px solid#CCE0FF; border-radius: 10px; ">
+                                    <img src="{% static 'assets/blue-dot1.png' %}" class="" alt="img">
+                                    Admin
+                                </a>
+                            </li>
+                            <li class="nav-item hidden" id="manager">
+                                <a class="nav-link" href="#" style="font-size: 0.8rem; border: 1px solid#CCE0FF; border-radius: 10px;">
+                                    <img src="{% static 'assets/blue-dot2.png' %}" class="" alt="changes">
+                                    Manager
+                                </a>
+                            </li>
+                            <li class="nav-item hidden" id="agents">
+                                <a class="nav-link" href="#" style="font-size: 0.8rem; border: 1px solid#CCE0FF; border-radius: 10px; ">
+                                    <img src="{% static 'assets/blue-dot2.png' %}" class="" alt="cancellation">
+                                   Agents
                                 </a>
                             </li>
                             {% endif %}
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'crmApp:total_booking' %}">
+                                <a class="nav-link" href="#" id="total-bookings">
                                     <img src="{% static 'assets/total-bookings.png' %}" class="" alt="total-bookings">
-                                    Total Bookings
+                                    Total Bookings <img src="{% static 'assets/down-arrow.png'%}" alt="" style="height: 10%; width: 10%; display:flex; float: inline-end;">
                                 </a>
-
                             </li>
-                            <li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'crmApp:booking' %}">
-                                    <img src="{% static 'assets/bookings.png' %}" class="" alt="bookings"> Bookings
+                            <li class="nav-item hidden" id="total-pending">
+                                <a class="nav-link" href="{% url 'crmApp:total_booking' %}" style="font-size: 0.8rem; border: 1px solid#CCE0FF; border-radius: 10px; ">
+                                    <img src="{% static 'assets/blue-dot1.png' %}" class="" alt="booking-status">
+                                    Pending
+                                </a>
+                            </li>
+                            <li class="nav-item hidden" id="total-inprocess">
+                                <a class="nav-link" href="#" style="font-size: 0.8rem; border: 1px solid#CCE0FF; border-radius: 10px;">
+                                    <img src="{% static 'assets/blue-dot2.png' %}" class="" alt="changes">
+                                    In process
+                                </a>
+                            </li>
+                            <li class="nav-item hidden" id="total-approved">
+                                <a class="nav-link" href="#" style="font-size: 0.8rem; border: 1px solid#CCE0FF; border-radius: 10px; ">
+                                    <img src="{% static 'assets/blue-dot2.png' %}" class="" alt="cancellation">
+                                  Approved
+                                </a>
+                            </li>
+                            <li class="nav-item hidden" id="total-cancel">
+                                <a class="nav-link" href="#" style="font-size: 0.8rem; border: 1px solid#CCE0FF; border-radius: 10px; ">
+                                    <img src="{% static 'assets/blue-dot2.png' %}" class="" alt="rebook">
+                                    Cancel
+                                </a>
+                            </li>
+                            <li class="nav-item hidden" id="total-rejected">
+                                <a class="nav-link" href="{% url 'crmApp:rejected' %}" style="font-size: 0.8rem; border: 1px solid#CCE0FF; border-radius: 10px; ">
+                                    <img src="{% static 'assets/blue-dot2.png' %}" class="" alt="rebook">
+                                    Rejected
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="#" id="booking-status-link">
                                     <img src="{% static 'assets/booking-status.png' %}" class="" alt="booking-status">
-                                    Booking Status
+                                    Booking Status <img src="{% static 'assets/down-arrow.png'%}" alt="" style="height: 10%; width: 10%; display:flex; float: inline-end;">
                                 </a>
                             </li>
                             <li class="nav-item hidden" id="new-booking-item">
+
                                 <a class="nav-link" href="{% url 'crmApp:new_booking' %}" style="font-size: 0.8rem; border: 1px solid#CCE0FF; border-radius: 10px; ">
                                     <img src="{% static 'assets/blue-dot1.png' %}" class="" alt="booking-status">
                                     New booking
                                 </a>
                             </li>
-                            <li class="nav-item hidden" id="changes-item" style="">
+                            <li class="nav-item hidden" id="changes-item">
                                 <a class="nav-link" href="#" style="font-size: 0.8rem; border: 1px solid#CCE0FF; border-radius: 10px;">
                                     <img src="{% static 'assets/blue-dot2.png' %}" class="" alt="changes">
                                     Changes
                                 </a>
                             </li>
                             <li class="nav-item hidden" id="cancellation-item">
-                                <a class="nav-link" href="#" style="font-size: 0.8rem; border: 1px solid#CCE0FF; border-radius: 10px; ">
+                                <a class="nav-link" href="{% url 'crmApp:cancellation' %}" style="font-size: 0.8rem; border: 1px solid#CCE0FF; border-radius: 10px; ">
                                     <img src="{% static 'assets/blue-dot2.png' %}" class="" alt="cancellation">
                                     Cancellation
                                 </a>
@@ -135,70 +177,111 @@
                                     Rebook
                                 </a>
                             </li>
+                           
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'crmApp:refund' %}">
-                                    <i class="fas fa-redo-alt mr-2"></i> Refunds
-                                </a>
-                            </li>         
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'crmApp:chargeback' %}">
-                                    <i class="fas fa-ban mr-2"></i> Chargebacks
+                                <a class="nav-link" href="#" id="mco-link">
+                                    <img src="{% static 'assets/MCO.png' %}" class="" alt="MCO"> MCO <img src="{% static 'assets/down-arrow.png'%}" alt="" style="height: 10%; width: 10%; display:flex; float: inline-end;">
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'crmApp:rejected' %}">
-                                    <i class="fas fa-times mr-2"></i> Rejected
+                            <li class="nav-item hidden" id="full-refund">
+                                <a class="nav-link" href="{% url 'crmApp:mco' %}" style="font-size: 0.8rem; border: 1px solid#CCE0FF; border-radius: 10px; ">
+                                    <img src="{% static 'assets/blue-dot1.png' %}" class="" alt="booking-status">
+                                   Full refund
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'crmApp:mco' %}">
-                                    <img src="{% static 'assets/MCO.png' %}" class="" alt="MCO"> MCO
+                            <li class="nav-item hidden" id="partial-refund" >
+                                <a class="nav-link" href="{% url 'crmApp:refund' %}" style="font-size: 0.8rem; border: 1px solid#CCE0FF; border-radius: 10px;">
+                                    <img src="{% static 'assets/blue-dot2.png' %}" class="" alt="changes">
+                                    Partial refund
+                                </a>
+                            </li>
+                            <li class="nav-item hidden" id="chargeback">
+                                <a class="nav-link" href="{% url 'crmApp:chargeback' %}" style="font-size: 0.8rem; border: 1px solid#CCE0FF; border-radius: 10px; ">
+                                    <img src="{% static 'assets/blue-dot2.png' %}" class="" alt="cancellation">
+                                    Chargback
+                                </a>
+                            </li>
+                            <li class="nav-item hidden" id="voided-transaction">
+                                <a class="nav-link" href="#" style="font-size: 0.8rem; border: 1px solid#CCE0FF; border-radius: 10px; ">
+                                    <img src="{% static 'assets/blue-dot2.png' %}" class="" alt="rebook">
+                                    Voided Transactions
                                 </a>
                             </li>
                             <!-- New links -->
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'crmApp:cancellation' %}">
-                                    <i class="fas fa-times-circle mr-2"></i> Cancellations
-                                </a>
-                            </li>
+                          
                             {% if request.user.is_superuser or request.user.role == 'manager' %}
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'crmApp:ecredit' %}">
+                                <a class="nav-link" href="#" id="credit-issuance">
                                     <img src="{% static 'assets/credit.png' %}" class="" alt="Credit issuance">
-                                    Credit issuance
+                                    Credit issuance <img src="{% static 'assets/down-arrow.png'%}" alt="" style="height: 10%; width: 10%; display:flex; float: inline-end;">
+                                </a>
+                            </li>
+                            <li class="nav-item hidden" id="e-credit">
+                                <a class="nav-link" href="{% url 'crmApp:ecredit' %}" style="font-size: 0.8rem; border: 1px solid#CCE0FF; border-radius: 10px; ">
+                                    <img src="{% static 'assets/blue-dot1.png' %}" class="" alt="booking-status">
+                                    E-credit
+                                </a>
+                            </li>
+                            <li class="nav-item hidden" id="voucher">
+                                <a class="nav-link" href="#" style="font-size: 0.8rem; border: 1px solid#CCE0FF; border-radius: 10px;">
+                                    <img src="{% static 'assets/blue-dot2.png' %}" class="" alt="changes">
+                                    Voucher
                                 </a>
                             </li>
                             {% endif %}
+                            
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'crmApp:invoice' %}">
-                                    <i class="fas fa-file-invoice mr-2"></i> Generate Invoice
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'crmApp:pending_invoices' %}">
-                                    <i class="fas fa-file-invoice mr-2"></i> Pending Invoice
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'crmApp:generate_invoice' %}">
+                                <a class="nav-link" href="#" id="invoice">
                                     <img src="{% static 'assets/invoice.png' %}" class="" alt="invoices">
-                                    Sent Invoices
+                                    Invoice <img src="{% static 'assets/down-arrow.png'%}" alt="" style="height: 10%; width: 10%; display:flex; float: inline-end;">
+                                </a>
+                            </li>
+                            <li class="nav-item hidden" id="generate-invoice">
+                                <a class="nav-link" href="{% url 'crmApp:invoice' %}" style="font-size: 0.8rem; border: 1px solid#CCE0FF; border-radius: 10px; ">
+                                    <img src="{% static 'assets/blue-dot1.png' %}" class="" alt="booking-status">
+                                    Generate Invoice
+                                </a>
+                            </li>
+                            <li class="nav-item hidden" id="pending">
+                                <a class="nav-link" href="{% url 'crmApp:pending_invoices' %}" style="font-size: 0.8rem; border: 1px solid#CCE0FF; border-radius: 10px; ">
+                                    <img src="{% static 'assets/blue-dot2.png' %}" class="" alt="booking-status">
+                                    Pending
+                                </a>
+                            </li>
+                            <li class="nav-item hidden" id="sent">
+                                <a class="nav-link" href="{% url 'crmApp:generate_invoice' %}" style="font-size: 0.8rem; border: 1px solid#CCE0FF; border-radius: 10px;">
+                                    <img src="{% static 'assets/blue-dot2.png' %}" class="" alt="changes">
+                                    Sent
+                                </a>
+                            </li>
+                            <li class="nav-item hidden" id="rejected">
+                                <a class="nav-link" href="#" style="font-size: 0.8rem; border: 1px solid#CCE0FF; border-radius: 10px;">
+                                    <img src="{% static 'assets/blue-dot2.png' %}" class="" alt="changes">
+                                    Rejected
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'crmApp:payment' %}">
-                                    <i class="fas fa-money-bill-wave"></i> Payment Record
-                                </a>                                
+                                <a class="nav-link" href="#" id="payment">
+                                    <img src="{% static 'assets/credit-card.png' %}" class="" alt="invoices"  style="height: 30%; width: 14%;">
+                                    Payment <img src="{% static 'assets/down-arrow.png'%}" alt="" style="height: 10%; width: 10%; display:flex; float: inline-end;">
+                                </a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'crmApp:initiatePayment' %}">
-                                    <i class="fas fa-credit-card"></i> Initiate Payment
-                                </a>                                
+                            <li class="nav-item hidden" id="payment-record">
+                                <a class="nav-link" href="{% url 'crmApp:payment' %}" style="font-size: 0.8rem; border: 1px solid#CCE0FF; border-radius: 10px; ">
+                                    <img src="{% static 'assets/blue-dot1.png' %}" class="" alt="booking-status">
+                                    Payment Record
+                                </a>
+                            </li>
+                            <li class="nav-item hidden" id="initiate-payment">
+                                <a class="nav-link" href="{% url 'crmApp:initiatePayment' %}" style="font-size: 0.8rem; border: 1px solid#CCE0FF; border-radius: 10px; ">
+                                    <img src="{% static 'assets/blue-dot2.png' %}" class="" alt="booking-status">
+                                    Initiate Payment
+                                </a>
                             </li>
                             <form action="{% url 'crmApp:logout' %}" method="post" style="padding-top: 40%;">
                                 {% csrf_token %}
-                                <li class="nav-item" style=" border: none; cursor: pointer;" onmouseover="this.style.backgroundColor='#3180ff';" onmouseout="this.style.backgroundColor='#ffffff';">
-                                    <button class="btn" type="submit" >
+                                <li class="nav-item" style=" border: none; cursor: pointer;" onmouseover="this.style.backgroundColor='#3180ff';" onmouseover="this.style.color='#fffff';" onmouseout="this.style.backgroundColor='#ffffff';">
+                                    <button class="btn" type="submit" style="color: #67748E;" >
                                         <img src="{% static 'assets/logout.png' %}" class="" alt="logout">Log Out
                                     </button>
                                     
@@ -213,6 +296,17 @@
             </main>
         </div>
     </div>
+    <script>
+        $(document).ready(function(){
+            $('#total-users').click(function(e){
+                e.preventDefault(); // prevent the default action of the link
+                $('#admin, #manager, #agents').toggleClass('hidden');
+            });
+        });
+        $('#admin, #manager, #agents').click(function(e){
+            e.stopPropagation(); // prevent the click event from bubbling up to the parent element
+        });
+    </script>
 
     <script>
         $(document).ready(function(){
@@ -221,6 +315,21 @@
                 $('#new-booking-item, #changes-item, #cancellation-item, #rebook-item').toggleClass('hidden');
             });
         });
+        $('#new-booking-item, #changes-item, #cancellation-item, #rebook-item').click(function(e){
+            e.stopPropagation(); // prevent the click event from bubbling up to the parent element
+        });
+    </script>
+     <script>
+        $(document).ready(function(){
+            $('#mco-link').click(function(e){
+                e.preventDefault(); // prevent the default action of the link
+                $('#full-refund, #partial-refund, #chargeback, #voided-transaction').toggleClass('hidden');
+            });
+        });
+        $('#new-booking-item, #changes-item, #cancellation-item, #rebook-item').click(function(e){
+            e.stopPropagation(); // prevent the click event from bubbling up to the parent element
+        });
+        
     </script>
     <script>
         $(document).ready(function(){
@@ -229,7 +338,55 @@
                 $('#center1-item, #centersList-item').toggleClass('hidden');
             });
         });
+        $('#center1-item, #centersList-item').click(function(e){
+            e.stopPropagation(); // prevent the click event from bubbling up to the parent element
+        });
     </script>
+      <script>
+        $(document).ready(function(){
+            $('#credit-issuance').click(function(e){
+                e.preventDefault(); // prevent the default action of the link
+                $('#e-credit, #voucher').toggleClass('hidden');
+            });
+        });
+        $('#e-credit, #voucher').click(function(e){
+            e.stopPropagation(); // prevent the click event from bubbling up to the parent element
+        });
+    </script>
+    <script>
+        $(document).ready(function(){
+            $('#invoice').click(function(e){
+                e.preventDefault(); // prevent the default action of the link
+                $('#generate-invoice, #pending, #sent, #rejected').toggleClass('hidden');
+            });
+        });
+        $('#generate-invoice, #pending, #sent, #rejected').click(function(e){
+            e.stopPropagation(); // prevent the click event from bubbling up to the parent element
+        });
+    </script>
+        <script>
+            $(document).ready(function(){
+                $('#total-bookings').click(function(e){
+                    e.preventDefault(); // prevent the default action of the link
+                    $('#total-pending, #total-inprocess, #total-approved, #total-rejected').toggleClass('hidden');
+                });
+            });
+            $('#total-pending, #total-inprocess, #total-approved, #total-rejected').click(function(e){
+            e.stopPropagation(); // prevent the click event from bubbling up to the parent element
+        });
+        </script>
+         <script>
+            $(document).ready(function(){
+                $('#payment').click(function(e){
+                    e.preventDefault(); // prevent the default action of the link
+                    $('#payment-record, #initiate-payment').toggleClass('hidden');
+                });
+            });
+            $('#payment-record, #initiate-payment').click(function(e){
+                e.stopPropagation(); // prevent the click event from bubbling up to the parent element
+            });
+            
+        </script>
   <!-- Bootstrap 5.3.3 JavaScript -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <!-- Popper.js Core 2.9.3 -->
