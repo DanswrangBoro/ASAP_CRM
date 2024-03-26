@@ -1,0 +1,340 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Center Details</h2>
+            <div class="table-responsive">
+                <table class="table table-striped" style="font-size: 0.7rem">
+                    <tbody>
+                        <tr>
+                            <th>Name</th>
+                            <td>{{ center.name }}</td>
+                        </tr>
+                        <tr>
+                            <th>Email</th>
+                            <td>{{ center.email }}</td>
+                        </tr>
+                        <tr>
+                            <th>Address</th>
+                            <td>{{ center.address }}</td>
+                        </tr>
+                        <tr>
+                            <th>Phone</th>
+                            <td>{{ center.phone }}</td>
+                        </tr>
+                        <tr>
+                            <th>Contact Person</th>
+                            <td>{{ center.contact_person }}</td>
+                        </tr>
+                        <!-- Add more rows for other fields as needed -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container mt-3" style="padding-right: 0; padding-left: 0;">
+    <div class="row">
+        {% comment %} <div class="col-md-3 px-1 mt-md-0">
+            <div class="card shadow-lg col-custom-color card-with-background">
+                <div class="card-body">
+                    {% if request.user.is_superuser %}
+                        <a class="text-decoration-none text-reset" href="{% url 'crmApp:sales' %}">
+                    {% endif %}
+                    <h5 class="card-text" style="color: #fff; text-align: left;">Center Details</h5>
+                    </a>
+                    <div class="container mt-5">
+                        <div class="row">
+                            <div class="col d-flex justify-content-left px-0 mx-0 align-items-center">
+                                <h5><b>{{ total_sales }}</b></h5>
+                            </div>
+                            <div class="col text-right">
+                                <div class="up text-center" style="background-color: rgba(171, 233, 171, 0.5);">
+                                    <h6>up</h6>
+                                   
+                                </div>
+                                <p class="mb-0" style="font-size: 0.5rem;">Since last Month</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> {% endcomment %}
+        <div class="col-md-3 px-1 mt-md-0 mt-1">
+            <div class="card shadow-lg col-custom-color card-with-background3">
+                <div class="card-body">
+                    <h5 class="card-text" style="color: #fff; text-align: left; cursor: default">Total Bookings</h5>
+                    <div class="container mt-5">
+                        <div class="row">
+                            <div class="col d-flex justify-content-left px-0 mx-0  align-items-center">
+                                <h5 style="cursor: default"><b>{{ booking_count }}</b></h5>
+                            </div>
+                            <div class="col text-right">
+                                <button type="button" class="btn btn-primary" style="font-size: 0.7rem" onclick="window.location.href='{% url 'crmApp:centers_related_booking' center.name %}'">
+                                    View More <i class="fas fa-angle-double-right"></i>
+                                </button>
+                                <p class="mb-0" style="font-size: 0.5rem;">Since last Month</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 px-1 mt-md-0 mt-1">
+            <div class="card shadow-lg col-custom-color card-with-background4">
+                <div class="card-body">
+                    <h5 class="card-text" style="color: #fff;text-align: left; cursor: default">Pending</h5>
+                    <div class="container mt-5">
+                        <div class="row">
+                            <div class="col d-flex justify-content-left px-0 mx-0  align-items-center">
+                                <h5 style="cursor: default"><b>{{ pending_count }}</b></h5>
+                            </div>
+                            <div class="col text-right">
+                                <div class="up text-center">
+                                    <button type="button" class="btn btn-primary" style="font-size: 0.7rem" onclick="window.location.href='{% url 'crmApp:centers_related_pending' center.name %}'">
+                                        View More <i class="fas fa-angle-double-right"></i>
+                                    </button>
+                                   
+                                </div>
+                                <p class="mb-0" style="font-size: 0.5rem;">Since last Month</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3 px-1 mt-md-0 mt-1">
+            <div class="card shadow-lg col-custom-color card-with-background5">
+                <div class="card-body">
+                    <h5 class="card-text" style="color: #fff; text-align: left; cursor: default">Confirmed</h5>
+                    <div class="container mt-5">
+                        <div class="row">
+                            <div class="col d-flex justify-content-left px-0 mx-0 align-items-center">
+                                <h5 style="cursor: default"><b>{{ confirmed_count }}</b></h5>
+                            </div>
+                            <div class="col text-right">
+                                <div class="up text-center">
+                                    <button type="button" class="btn btn-primary" style="font-size: 0.7rem" onclick="window.location.href='{% url 'crmApp:centers_related_confirmed' center.name %}'">
+                                        View More <i class="fas fa-angle-double-right"></i>
+                                    </button>
+                                </div>
+                                <p class="mb-0" style="font-size: 0.5rem;">Since last Month</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 px-1 mt-md-0 mt-1">
+            <div class="card shadow-lg col-custom-color card-with-background5">
+                <div class="card-body">
+                    <h5 class="card-text" style="color: #fff; text-align: left;cursor: default">Cancelled</h5>
+                    <div class="container mt-5">
+                        <div class="row">
+                            <div class="col d-flex justify-content-left px-0 mx-0 align-items-center">
+                                <h5 style="cursor: default"><b>{{ cancelled_count }}</b></h5>
+                            </div>
+                            <div class="col text-right">
+                                <div class="up text-center">
+                                    <button type="button" class="btn btn-primary" style="font-size: 0.7rem" onclick="window.location.href='{% url 'crmApp:centers_related_cancel' center.name %}'">
+                                        View More <i class="fas fa-angle-double-right"></i>
+                                    </button>
+                                </div>
+                                <p class="mb-0" style="font-size: 0.5rem;">Since last Month</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container mt-3" style="padding-right: 0; padding-left: 0;">
+    <div class="row">
+        <div class="col-md-3 px-1 mt-md-0">
+            <div class="card shadow-lg col-custom-color card-with-background">
+                <div class="card-body">
+                    <h5 class="card-text" style="color: #fff; text-align: left; cursor: default">Total Sales</h5>
+                    </a>
+                    <div class="container mt-5">
+                        <div class="row">
+                            <div class="col d-flex justify-content-left px-0 mx-0 align-items-center">
+                                <h5 style="cursor: default"><b>{{ total_sales }}</b></h5>
+                            </div>
+                            <div class="col text-right">
+                                <div class="up text-center" style="background-color: rgba(171, 233, 171, 0.5);">
+                                    <h6>up</h6>
+                                   
+                                </div>
+                                <p class="mb-0" style="font-size: 0.5rem;">Since last Month</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 px-1 mt-md-0 mt-1">
+            <div class="card shadow-lg col-custom-color card-with-background3">
+                <div class="card-body">
+                    <h5 class="card-text" style="color: #fff; text-align: left;cursor: default">Total MCO</h5>
+                    <div class="container mt-5">
+                        <div class="row">
+                            <div class="col d-flex justify-content-left px-0 mx-0  align-items-center">
+                                <h5 style="cursor: default"><b>{{ total_sales }}</b></h5>
+                            </div>
+                            <div class="col text-right">
+                                <div class="up text-center" style="background-color: rgba(171, 233, 171, 0.5);">
+                                    <h6>up</h6>
+                                   
+                                </div>
+                                <p class="mb-0" style="font-size: 0.5rem;">Since last Month</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 px-1 mt-md-0 mt-1">
+            <div class="card shadow-lg col-custom-color card-with-background4">
+                <div class="card-body">
+                    <h5 class="card-text" style="color: #fff;text-align: left; cursor: default">Total Refund</h5>
+                    <div class="container mt-5">
+                        <div class="row">
+                            <div class="col d-flex justify-content-left px-0 mx-0  align-items-center">
+                                <h5 style="cursor: default"><b>{{ refund_count }}</b></h5>
+                            </div>
+                            <div class="col text-right">
+                                <div class="up text-center">
+                                    <button type="button" class="btn btn-primary" style="font-size: 0.7rem" onclick="window.location.href='{% url 'crmApp:centers_related_refund' center.name %}'">
+                                        View More <i class="fas fa-angle-double-right"></i>
+                                    </button>
+                                   
+                                </div>
+                                <p class="mb-0" style="font-size: 0.5rem;">Since last Month</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3 px-1 mt-md-0 mt-1">
+            <div class="card shadow-lg col-custom-color card-with-background5">
+                <div class="card-body">
+                    <h5 class="card-text" style="color: #fff; text-align: left; cursor: default">Profit</h5>
+                    <div class="container mt-5">
+                        <div class="row">
+                            <div class="col d-flex justify-content-left px-0 mx-0 align-items-center">
+                                <h5 style="cursor: default"><b>{{ total_sales }}</b></h5>
+                            </div>
+                            <div class="col text-right">
+                                <div class="up text-center" style="background-color: rgba(171, 233, 171, 0.5);">
+                                    <h6>up</h6>
+                                   
+                                </div>
+                                <p class="mb-0" style="font-size: 0.5rem;">Since last Month</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mt-md-0">
+            <div class="card px-0 mx-0shadow-lg col-custom-color card-with-background">
+                <div class="card-body">
+                    <h5 class="card-text" style="color: #fff; text-align: left; cursor: default">Total Chargeback</h5>
+                    <div class="container mt-5">
+                        <div class="row">
+                            <div class="col d-flex justify-content-left px-0 mx-0 align-items-center">
+                                <h5 style="cursor: default"><b>{{ total_sales }}</b></h5>
+                            </div>
+                            <div class="col text-right">
+                                <div class="up text-center" style="background-color: rgba(171, 233, 171, 0.5);">
+                                    <h6>up</h6>
+                                   
+                                </div>
+                                <p class="mb-0" style="font-size: 0.5rem;">Since last Month</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container mt-3" style="padding-right: 0; padding-left: 0;">
+    <div class="row">
+        {% comment %} <div class="col-md-3 px-1 mt-md-0 mt-1"> {% endcomment %}
+            <div class="card shadow-lg col-custom-color card-with-background3">
+                <div class="card-body">
+                    <h5 class="card-text" style="color: #fff; text-align: left; cursor: default">Total Flight Request</h5>
+                    <div class="container mt-5">
+                        <div class="row">
+                            <div class="col d-flex justify-content-left px-0 mx-0  align-items-center">
+                                <h5 style="cursor: default"><b>{{ total_sales }}</b></h5>
+                            </div>
+                            <div class="col text-right">
+                                <div class="up text-center" style="background-color: rgba(171, 233, 171, 0.5);">
+                                    <h6>up</h6>
+                                   
+                                </div>
+                                <p class="mb-0" style="font-size: 0.5rem;">Since last Month</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% comment %} </div> {% endcomment %}<br>
+{% comment %} <table border="1">
+    <thead>
+        <tr>
+            <th>Booking ID</th>
+            <th>Confirmation No</th>
+            <th>Passenger Name</th>
+            <th>Phone Number</th>
+            <th>Email</th>
+            <th>Trip Type</th>
+            <th>Reference ID</th>
+            <th>Departure</th>
+            <th>Departure Date</th>
+            <th>Arrival</th>
+            <th>Arrival Date</th>
+            <th>Num Passengers</th>
+            <th>Price</th>
+            <th>Status</th>
+            <th>Change Date</th>
+            <th>Lead Agent</th>
+            <th>Card Number</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for booking in booking %}
+        <tr>
+            <td>{{ booking.booking_id }}</td>
+            <td>{{ booking.confirmation_no }}</td>
+            <td>{{ booking.passenger_name }}</td>
+            <td>{{ booking.phone_number }}</td>
+            <td>{{ booking.email }}</td>
+            <td>{{ booking.trip_type }}</td>
+            <td>{{ booking.reference_id }}</td>
+            <td>{{ booking.departure }}</td>
+            <td>{{ booking.departure_date }}</td>
+            <td>{{ booking.arrival }}</td>
+            <td>{{ booking.arrival_date }}</td>
+            <td>{{ booking.num_passengers }}</td>
+            <td>{{ booking.price }}</td>
+            <td>{{ booking.status }}</td>
+            <td>{{ booking.change_date }}</td>
+            <td>{{ booking.lead_agent }}</td>
+            <td>{{ booking.card_number }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table> {% endcomment %}
+
+{% endblock %}

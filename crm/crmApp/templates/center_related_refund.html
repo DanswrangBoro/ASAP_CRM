@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Refund Data</h2>
+            <div class="table-responsive">
+                <table class="table table-striped" style="font-size: 0.7rem">
+                    <thead>
+                        <tr>
+                            <th>Booking ID</th>
+                            <th>Refund Amount</th>
+                            <th>Refund Reason</th>
+                            <th>Refund Type</th>
+                            <th>Status</th>
+                            <!-- Add more fields as needed -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if refund_data %}
+                            {% for refund in refund_data %}
+                            <tr>
+                                <td  style="font-weight: bolder; color: Blue; cursor: pointer" onclick="viewBooking('{{ refund.booking_id.booking_id }}')">{{ refund.booking_id.booking_id }}</td>
+                                <td>{{ refund.refund_amount }}</td>
+                                <td>{{ refund.refund_reason }}</td>
+                                <td>{{ refund.refund_type }}</td>
+                                <td>{{ refund.status }}</td>
+                                <!-- Add more fields as needed -->
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                        <tr>
+                            <td colspan = 5 style="text-align: center"> No refund has been initiated</td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Form to submit booking ID -->
+<form id="bookingForm" method="post" action="{% url 'crmApp:related_booking' %}" style="display: none;">
+    {% csrf_token %}
+    <input type="hidden" id="bookingIdInput" name="booking_id">
+</form>
+<script>
+    function viewBooking(bookingId) {
+        console.log(bookingId)
+        document.getElementById("bookingIdInput").value = bookingId;
+        document.getElementById('bookingForm').submit();
+}
+</script>
+{% endblock %}
