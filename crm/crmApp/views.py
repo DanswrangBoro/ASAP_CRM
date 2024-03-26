@@ -152,6 +152,7 @@ def flight_results(request):
                 infants=infants,
                 travelClass=class_type
                 ).data
+                lastId = len(response)
 
                 response_return = amadeus.shopping.flight_offers_search.get(
                 originLocationCode=to_location,
@@ -163,13 +164,17 @@ def flight_results(request):
                 travelClass=class_type
                 ).data
                 # Store the response as JSON format
+                for res in response_return:
+                    res["id"] = f'{lastId + 1}'
+                    lastId = lastId + 1
+                    print(res["id"])
                 context = {
                     "flights_departure" : response,
                     "flights_return": response_return,
                     "flights_departure1" : json.dumps(response),
                     "flights_return1" : json.dumps(response_return),
                 }
-                print(context)
+                # print(context)
                 file_path = "round.txt"
                 with open(file_path, "w") as file:
                     json.dump(context, file, indent= 4)
@@ -248,8 +253,33 @@ def total_booking(request):
             "agents": agents
         }
         return render(request, "total_booking.html", context)
-    else:
+    elif request.user.role == 'manager':
         original = Booking.objects.filter(status__in=['inprocess', 'rejected', 'confirmed', 'cancelled'],center=request.user.center)
+        agents = CustomUser.objects.filter(role='agent')
+        confirmed_bookings = original.filter(status='confirmed')
+
+        total_price = Decimal(0.0)
+        total_mco = Decimal(0.0)
+        for booking in confirmed_bookings:
+            total_price += Decimal(booking.price)
+        
+        total_revenue = total_price + total_mco
+        # Rounding to two decimal points
+        total_price_str = "${:.2f}".format(round(total_price, 2))
+        total_mco_str = "${:.2f}".format(round(total_mco, 2))
+        total_revenue_str = "${:.2f}".format(round(total_revenue, 2))
+
+        context = {
+            "original": original,
+            "length": original.count(),
+            "total_price": total_price_str,
+            "total_mco": total_mco_str,
+            "total_revenue": total_revenue_str,
+            "agents": agents
+        }
+        return render(request, "total_booking.html", context)
+    else:
+        original = Booking.objects.filter(status__in=['inprocess', 'rejected', 'confirmed', 'cancelled'],lead_agent = request.user.pk)
         agents = CustomUser.objects.filter(role='agent')
         confirmed_bookings = original.filter(status='confirmed')
 
@@ -1847,6 +1877,7 @@ def detect_device(user_agent):
 
 def ack_agree(request, center_id):
     # Get the client's IP address from the request object
+    print(center_id)
     client_ip_address = '103.219.61.205'  # Example IP address for testing
     api_url = f"http://ipinfo.io/{client_ip_address}/json"
     ipDetails = requests.get(api_url).json()

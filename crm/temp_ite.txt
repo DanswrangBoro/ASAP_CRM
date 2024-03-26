@@ -4,39 +4,40 @@
         "flightOffers": [
             {
                 "type": "flight-offer",
-                "id": "1",
+                "id": "93",
                 "source": "GDS",
                 "instantTicketingRequired": false,
                 "nonHomogeneous": false,
                 "paymentCardRequired": false,
-                "lastTicketingDate": "2024-03-26",
+                "lastTicketingDate": "2024-03-31",
                 "itineraries": [
                     {
                         "segments": [
                             {
                                 "departure": {
-                                    "iataCode": "CCU",
-                                    "at": "2024-03-26T17:00:00"
+                                    "iataCode": "BOM",
+                                    "terminal": "2",
+                                    "at": "2024-03-31T13:00:00"
                                 },
                                 "arrival": {
-                                    "iataCode": "MAA",
-                                    "terminal": "4",
-                                    "at": "2024-03-26T19:30:00"
+                                    "iataCode": "DEL",
+                                    "terminal": "3",
+                                    "at": "2024-03-31T15:15:00"
                                 },
                                 "carrierCode": "AI",
-                                "number": "785",
+                                "number": "677",
                                 "aircraft": {
                                     "code": "32N"
                                 },
                                 "operating": {
                                     "carrierCode": "AI"
                                 },
-                                "duration": "PT2H30M",
-                                "id": "85",
+                                "duration": "PT2H15M",
+                                "id": "58",
                                 "numberOfStops": 0,
                                 "co2Emissions": [
                                     {
-                                        "weight": 89,
+                                        "weight": 90,
                                         "weightUnit": "KG",
                                         "cabin": "ECONOMY"
                                     }
@@ -47,8 +48,8 @@
                 ],
                 "price": {
                     "currency": "EUR",
-                    "total": "105.00",
-                    "base": "88.00",
+                    "total": "71.01",
+                    "base": "62.00",
                     "fees": [
                         {
                             "amount": "0.00",
@@ -63,7 +64,7 @@
                             "type": "FORM_OF_PAYMENT"
                         }
                     ],
-                    "grandTotal": "105.00",
+                    "grandTotal": "71.01",
                     "billingCurrency": "EUR"
                 },
                 "pricingOptions": {
@@ -82,19 +83,19 @@
                         "travelerType": "ADULT",
                         "price": {
                             "currency": "EUR",
-                            "total": "105.00",
-                            "base": "88.00",
+                            "total": "71.01",
+                            "base": "62.00",
                             "taxes": [
                                 {
                                     "amount": "2.61",
                                     "code": "P2"
                                 },
                                 {
-                                    "amount": "8.00",
-                                    "code": "IN"
+                                    "amount": "1.31",
+                                    "code": "YM"
                                 },
                                 {
-                                    "amount": "4.50",
+                                    "amount": "3.20",
                                     "code": "K3"
                                 },
                                 {
@@ -102,16 +103,138 @@
                                     "code": "YR"
                                 }
                             ],
-                            "refundableTaxes": "28.00"
+                            "refundableTaxes": "20.01"
                         },
                         "fareDetailsBySegment": [
                             {
-                                "segmentId": "85",
+                                "segmentId": "58",
                                 "cabin": "ECONOMY",
-                                "fareBasis": "GIP",
-                                "class": "G",
+                                "fareBasis": "TIP",
+                                "class": "T",
                                 "includedCheckedBags": {
-                                    "weight": 25,
+                                    "weight": 20,
+                                    "weightUnit": "KG"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "flight-offer",
+                "id": "1",
+                "source": "GDS",
+                "instantTicketingRequired": false,
+                "nonHomogeneous": false,
+                "paymentCardRequired": false,
+                "lastTicketingDate": "2024-03-28",
+                "itineraries": [
+                    {
+                        "segments": [
+                            {
+                                "departure": {
+                                    "iataCode": "DEL",
+                                    "terminal": "3",
+                                    "at": "2024-03-28T20:10:00"
+                                },
+                                "arrival": {
+                                    "iataCode": "BOM",
+                                    "terminal": "2",
+                                    "at": "2024-03-28T22:25:00"
+                                },
+                                "carrierCode": "AI",
+                                "number": "410",
+                                "aircraft": {
+                                    "code": "77L"
+                                },
+                                "operating": {
+                                    "carrierCode": "AI"
+                                },
+                                "duration": "PT2H15M",
+                                "id": "49",
+                                "numberOfStops": 0,
+                                "co2Emissions": [
+                                    {
+                                        "weight": 90,
+                                        "weightUnit": "KG",
+                                        "cabin": "ECONOMY"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "price": {
+                    "currency": "EUR",
+                    "total": "72.48",
+                    "base": "62.00",
+                    "fees": [
+                        {
+                            "amount": "0.00",
+                            "type": "SUPPLIER"
+                        },
+                        {
+                            "amount": "0.00",
+                            "type": "TICKETING"
+                        },
+                        {
+                            "amount": "0.00",
+                            "type": "FORM_OF_PAYMENT"
+                        }
+                    ],
+                    "grandTotal": "72.48",
+                    "billingCurrency": "EUR"
+                },
+                "pricingOptions": {
+                    "fareType": [
+                        "PUBLISHED"
+                    ],
+                    "includedCheckedBagsOnly": true
+                },
+                "validatingAirlineCodes": [
+                    "AI"
+                ],
+                "travelerPricings": [
+                    {
+                        "travelerId": "1",
+                        "fareOption": "STANDARD",
+                        "travelerType": "ADULT",
+                        "price": {
+                            "currency": "EUR",
+                            "total": "72.48",
+                            "base": "62.00",
+                            "taxes": [
+                                {
+                                    "amount": "2.61",
+                                    "code": "P2"
+                                },
+                                {
+                                    "amount": "0.69",
+                                    "code": "IN"
+                                },
+                                {
+                                    "amount": "3.20",
+                                    "code": "K3"
+                                },
+                                {
+                                    "amount": "2.09",
+                                    "code": "WO"
+                                },
+                                {
+                                    "amount": "1.89",
+                                    "code": "YR"
+                                }
+                            ],
+                            "refundableTaxes": "21.48"
+                        },
+                        "fareDetailsBySegment": [
+                            {
+                                "segmentId": "49",
+                                "cabin": "ECONOMY",
+                                "fareBasis": "TIP",
+                                "class": "T",
+                                "includedCheckedBags": {
+                                    "weight": 20,
                                     "weightUnit": "KG"
                                 }
                             }
@@ -125,7 +248,7 @@
             "mobilePhoneNumberRequired": true
         }
     },
-    "flight1": "{\"type\": \"flight-offers-pricing\", \"flightOffers\": [{\"type\": \"flight-offer\", \"id\": \"1\", \"source\": \"GDS\", \"instantTicketingRequired\": false, \"nonHomogeneous\": false, \"paymentCardRequired\": false, \"lastTicketingDate\": \"2024-03-26\", \"itineraries\": [{\"segments\": [{\"departure\": {\"iataCode\": \"CCU\", \"at\": \"2024-03-26T17:00:00\"}, \"arrival\": {\"iataCode\": \"MAA\", \"terminal\": \"4\", \"at\": \"2024-03-26T19:30:00\"}, \"carrierCode\": \"AI\", \"number\": \"785\", \"aircraft\": {\"code\": \"32N\"}, \"operating\": {\"carrierCode\": \"AI\"}, \"duration\": \"PT2H30M\", \"id\": \"85\", \"numberOfStops\": 0, \"co2Emissions\": [{\"weight\": 89, \"weightUnit\": \"KG\", \"cabin\": \"ECONOMY\"}]}]}], \"price\": {\"currency\": \"EUR\", \"total\": \"105.00\", \"base\": \"88.00\", \"fees\": [{\"amount\": \"0.00\", \"type\": \"SUPPLIER\"}, {\"amount\": \"0.00\", \"type\": \"TICKETING\"}, {\"amount\": \"0.00\", \"type\": \"FORM_OF_PAYMENT\"}], \"grandTotal\": \"105.00\", \"billingCurrency\": \"EUR\"}, \"pricingOptions\": {\"fareType\": [\"PUBLISHED\"], \"includedCheckedBagsOnly\": true}, \"validatingAirlineCodes\": [\"AI\"], \"travelerPricings\": [{\"travelerId\": \"1\", \"fareOption\": \"STANDARD\", \"travelerType\": \"ADULT\", \"price\": {\"currency\": \"EUR\", \"total\": \"105.00\", \"base\": \"88.00\", \"taxes\": [{\"amount\": \"2.61\", \"code\": \"P2\"}, {\"amount\": \"8.00\", \"code\": \"IN\"}, {\"amount\": \"4.50\", \"code\": \"K3\"}, {\"amount\": \"1.89\", \"code\": \"YR\"}], \"refundableTaxes\": \"28.00\"}, \"fareDetailsBySegment\": [{\"segmentId\": \"85\", \"cabin\": \"ECONOMY\", \"fareBasis\": \"GIP\", \"class\": \"G\", \"includedCheckedBags\": {\"weight\": 25, \"weightUnit\": \"KG\"}}]}]}], \"bookingRequirements\": {\"emailAddressRequired\": true, \"mobilePhoneNumberRequired\": true}}",
+    "flight1": "{\"type\": \"flight-offers-pricing\", \"flightOffers\": [{\"type\": \"flight-offer\", \"id\": \"93\", \"source\": \"GDS\", \"instantTicketingRequired\": false, \"nonHomogeneous\": false, \"paymentCardRequired\": false, \"lastTicketingDate\": \"2024-03-31\", \"itineraries\": [{\"segments\": [{\"departure\": {\"iataCode\": \"BOM\", \"terminal\": \"2\", \"at\": \"2024-03-31T13:00:00\"}, \"arrival\": {\"iataCode\": \"DEL\", \"terminal\": \"3\", \"at\": \"2024-03-31T15:15:00\"}, \"carrierCode\": \"AI\", \"number\": \"677\", \"aircraft\": {\"code\": \"32N\"}, \"operating\": {\"carrierCode\": \"AI\"}, \"duration\": \"PT2H15M\", \"id\": \"58\", \"numberOfStops\": 0, \"co2Emissions\": [{\"weight\": 90, \"weightUnit\": \"KG\", \"cabin\": \"ECONOMY\"}]}]}], \"price\": {\"currency\": \"EUR\", \"total\": \"71.01\", \"base\": \"62.00\", \"fees\": [{\"amount\": \"0.00\", \"type\": \"SUPPLIER\"}, {\"amount\": \"0.00\", \"type\": \"TICKETING\"}, {\"amount\": \"0.00\", \"type\": \"FORM_OF_PAYMENT\"}], \"grandTotal\": \"71.01\", \"billingCurrency\": \"EUR\"}, \"pricingOptions\": {\"fareType\": [\"PUBLISHED\"], \"includedCheckedBagsOnly\": true}, \"validatingAirlineCodes\": [\"AI\"], \"travelerPricings\": [{\"travelerId\": \"1\", \"fareOption\": \"STANDARD\", \"travelerType\": \"ADULT\", \"price\": {\"currency\": \"EUR\", \"total\": \"71.01\", \"base\": \"62.00\", \"taxes\": [{\"amount\": \"2.61\", \"code\": \"P2\"}, {\"amount\": \"1.31\", \"code\": \"YM\"}, {\"amount\": \"3.20\", \"code\": \"K3\"}, {\"amount\": \"1.89\", \"code\": \"YR\"}], \"refundableTaxes\": \"20.01\"}, \"fareDetailsBySegment\": [{\"segmentId\": \"58\", \"cabin\": \"ECONOMY\", \"fareBasis\": \"TIP\", \"class\": \"T\", \"includedCheckedBags\": {\"weight\": 20, \"weightUnit\": \"KG\"}}]}]}, {\"type\": \"flight-offer\", \"id\": \"1\", \"source\": \"GDS\", \"instantTicketingRequired\": false, \"nonHomogeneous\": false, \"paymentCardRequired\": false, \"lastTicketingDate\": \"2024-03-28\", \"itineraries\": [{\"segments\": [{\"departure\": {\"iataCode\": \"DEL\", \"terminal\": \"3\", \"at\": \"2024-03-28T20:10:00\"}, \"arrival\": {\"iataCode\": \"BOM\", \"terminal\": \"2\", \"at\": \"2024-03-28T22:25:00\"}, \"carrierCode\": \"AI\", \"number\": \"410\", \"aircraft\": {\"code\": \"77L\"}, \"operating\": {\"carrierCode\": \"AI\"}, \"duration\": \"PT2H15M\", \"id\": \"49\", \"numberOfStops\": 0, \"co2Emissions\": [{\"weight\": 90, \"weightUnit\": \"KG\", \"cabin\": \"ECONOMY\"}]}]}], \"price\": {\"currency\": \"EUR\", \"total\": \"72.48\", \"base\": \"62.00\", \"fees\": [{\"amount\": \"0.00\", \"type\": \"SUPPLIER\"}, {\"amount\": \"0.00\", \"type\": \"TICKETING\"}, {\"amount\": \"0.00\", \"type\": \"FORM_OF_PAYMENT\"}], \"grandTotal\": \"72.48\", \"billingCurrency\": \"EUR\"}, \"pricingOptions\": {\"fareType\": [\"PUBLISHED\"], \"includedCheckedBagsOnly\": true}, \"validatingAirlineCodes\": [\"AI\"], \"travelerPricings\": [{\"travelerId\": \"1\", \"fareOption\": \"STANDARD\", \"travelerType\": \"ADULT\", \"price\": {\"currency\": \"EUR\", \"total\": \"72.48\", \"base\": \"62.00\", \"taxes\": [{\"amount\": \"2.61\", \"code\": \"P2\"}, {\"amount\": \"0.69\", \"code\": \"IN\"}, {\"amount\": \"3.20\", \"code\": \"K3\"}, {\"amount\": \"2.09\", \"code\": \"WO\"}, {\"amount\": \"1.89\", \"code\": \"YR\"}], \"refundableTaxes\": \"21.48\"}, \"fareDetailsBySegment\": [{\"segmentId\": \"49\", \"cabin\": \"ECONOMY\", \"fareBasis\": \"TIP\", \"class\": \"T\", \"includedCheckedBags\": {\"weight\": 20, \"weightUnit\": \"KG\"}}]}]}], \"bookingRequirements\": {\"emailAddressRequired\": true, \"mobilePhoneNumberRequired\": true}}",
     "airlines": {
         "AI": "AIR INDIA"
     },

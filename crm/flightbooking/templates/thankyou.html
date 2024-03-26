@@ -1,0 +1,25 @@
+{% extends "formBase.html" %} {% load static %}{% block content %}
+<div class="jumbotron text-center">
+  <h1 class="display-3">Thank You!</h1>
+  <p>Your reference id is : <span id="referId"></span></p>
+  <p class="lead">
+    <strong>Please continue to payment</strong> for your Ticket
+    Confirmation<button class="btn primary">Continue to payment</button>
+  </p>
+  <hr />
+  <p>Having trouble? <a href="">Contact us</a></p>
+  <p class="lead">
+    <a class="btn btn-primary btn-sm" href="" role="button"
+      >Continue to homepage</a
+    >
+  </p>
+</div>
+<script>
+  const order_data = JSON.parse(localStorage.getItem("Order_data"));
+  console.log(order_data);
+  const refId = order_data.id;
+  console.log(refId);
+  const element = document.getElementById("referId");
+  element.textContent = `${refId}`;
+</script>
+{% endblock %}

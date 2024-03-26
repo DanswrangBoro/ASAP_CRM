@@ -1,0 +1,429 @@
+/* Base styles for all devices */
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: #f9f9f9;
+  margin: 0;
+  padding: 0;
+}
+.cHolder {
+  display: flex;
+  justify-content: space-between;
+  background-color: #26577c;
+  width: 83%;
+  margin: auto;
+  padding-left: 1%;
+  padding-right: 1%;
+}
+#cd {
+  margin-top: 1%;
+  font-size: 1rem;
+  font-weight: 500;
+  color: white;
+}
+#acd {
+  margin-top: 1%;
+  padding: 0%;
+  font-size: 1rem;
+  font-weight: 500;
+  color: white;
+  cursor: pointer;
+  height: 1.7rem;
+}
+#acd:hover {
+  color: rgb(213, 213, 223);
+}
+.container {
+  display: grid;
+  background-color: rgba(232, 232, 232, 0.497);
+  grid-template-areas: 3fr 2fr;
+  gap: 20px; /* Reduced gap for smaller screens */
+  padding: 20px; /* Reduced padding for smaller screens */
+  /* background: linear-gradient(45deg, #00bcd4, #009688); */
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1); /* Reduced shadow for smaller screens */
+}
+
+.left,
+.right {
+  padding: 40px;
+  border-radius: 8px; /* Reduced border-radius for smaller screens */
+  background-color: #fff;
+}
+.right {
+  border-radius: 8px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1); /* Reduced shadow for smaller screens */
+}
+p {
+  margin: 10px 0;
+}
+
+ul#customerNamesList {
+  list-style-type: none;
+  padding: 0;
+}
+
+ul#customerNamesList li {
+  margin: 5px 0;
+  font-size: 16px;
+}
+
+.icon {
+  margin-right: 10px;
+}
+
+label {
+  font-weight: 500;
+  display: block;
+  margin-bottom: 8px;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+button {
+  padding: 12px 24px;
+  background-color: #00bcd4;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #009688;
+}
+
+.traveler-form {
+  border-top: 1px solid #eee;
+  padding-top: 20px;
+}
+.traveler-form label {
+  margin-top: 2%;
+  font-size: 0.9rem;
+}
+.traveler-form #noT {
+  font-size: 1rem;
+  font-weight: 600;
+}
+.traveler-form #ldob {
+  margin-top: 5%;
+}
+.traveler-form #lsex {
+  margin-top: 5%;
+}
+.traveler-form input::placeholder {
+  font-size: 0.9rem;
+}
+.traveler-form input {
+  margin-top: 2%;
+}
+.traveler-form select {
+  font-size: 0.9rem;
+}
+.traveler-form select {
+  margin-top: 2%;
+}
+option {
+  font-size: 0.9rem;
+}
+input[type="file"] {
+  border: 1px dashed #ccc;
+  padding: 8px;
+  cursor: pointer;
+}
+.contactAddress {
+  display: flex;
+
+  width: 84.5%;
+  border-radius: 10px;
+  margin: auto;
+  /* margin-top: 5%; */
+  padding: 0%;
+  /* box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);  */
+}
+/* Additional styling for the Contact and Address forms */
+.contact-form,
+.address-form {
+  margin-top: 30px; /* Space between the forms and the existing content */
+  border-radius: 10px;
+  background-color: #fff;
+  padding: 20px;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+  width: 48%;
+}
+
+.contact-form h3,
+.address-form h3 {
+  color: #333;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.contact-form h3::before,
+.address-form h3::before {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  width: 50px;
+  height: 3px;
+  background-color: #00bcd4;
+}
+
+.contact-form label,
+.address-form label {
+  font-weight: 500;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.contact-form input,
+.address-form input,
+.contact-form select,
+.address-form select {
+  width: 90%;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+}
+.wButton {
+  width: 90%;
+  display: flex;
+}
+#add {
+  background-color: #26577c;
+  transition-duration: 1s;
+  margin-top: 5%;
+  font-size: 0.9rem;
+}
+#add:hover {
+  background-color: #224b6b;
+  scale: 1.01;
+}
+.hidden {
+  padding: 1%;
+  width: 48%;
+  height: 60vh;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+}
+.hiddenAlt {
+  width: 100%;
+  margin-top: 2%;
+  height: 40vh;
+}
+.ads {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.9rem;
+}
+/* Styling for hidden class (if any) */
+#continue {
+  background-color: #26577c;
+  margin-top: 2%;
+  transition-duration: 0.3s;
+  width: 30%;
+  float: inline-end;
+}
+#continue:hover {
+  background-color: #224b6b;
+  scale: 1.01;
+}
+
+/* Media query for small devices (up to 768px) */
+@media (max-width: 768px) {
+  .container {
+    grid-template-columns: 1fr; /* Change to a single column layout for small screens */
+  }
+
+  .left,
+  .right {
+    padding: 40px; /* Adjust padding as needed */
+    margin-bottom: 20px; /* Add some spacing between the blocks on small screens */
+  }
+  .contactAddress {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+  }
+  .hidden {
+    margin-top: 5%;
+    width: 100%;
+  }
+  /* Additional styling for the Contact and Address forms */
+  .contact-form,
+  .address-form {
+    margin-top: 30px; /* Space between the forms and the existing content */
+    border-radius: 10px;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+  }
+}
+
+/* Media query for desktop devices */
+@media (min-width: 1025px) {
+  .container {
+    grid-template-columns: 3fr 2fr; /* Adjusted grid layout */
+    gap: 40px; /* Adjusted gap */
+  }
+
+  .left,
+  .right {
+    padding: 40px;
+  }
+}
+.container1 {
+  margin: auto;
+  background-color: rgba(232, 232, 232, 0.497);
+
+  width: 83%;
+  display: flex;
+  padding: 20px; /* Reduced padding for smaller screens */
+  /* background: linear-gradient(45deg, #00bcd4, #009688); */
+  border-radius: 15px; /* Reduced border-radius for smaller screens */
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1); /* Reduced shadow for smaller screens */
+}
+#termsCheckbox {
+  margin-top: 0.6%;
+  width: 2%;
+  height: 30%;
+}
+.checkbox-container {
+  display: flex;
+  width: 100%;
+  gap: 1%;
+  margin-top: 3%;
+}
+
+/* ------------------------------------------------------------------------------------------------------------ */
+
+.modal-overlay {
+  font-size: 0.6rem;
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 20%;
+  width: 50%;
+  height: 30%;
+  background-color: rgb(199, 199, 199);
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+  padding: 3%;
+}
+.modal {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 80%;
+  max-width: 600px;
+  text-align: left;
+}
+.blur-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(2px);
+  z-index: 0; /* Ensure overlay appears below modal but above content */
+  display: none;
+}
+/* -------------------------------------------------------------------------------------- */
+
+#yo {
+  font-size: 1rem;
+  font-weight: 600;
+}
+#depart {
+  font-size: 1rem;
+}
+#return {
+  font-size: 1rem;
+}
+#travel-details {
+  font-size: 1rem;
+  font-weight: 600;
+}
+#pb {
+  margin-top: 3%;
+  font-size: 1rem;
+}
+#pbt {
+  font-size: 0.9rem;
+}
+#hb {
+  font-size: 1rem;
+  font-weight: 600;
+}
+#weigh {
+  font-size: 0.9rem;
+}
+#cb {
+  font-size: 1rem;
+  font-weight: 600;
+}
+#weight {
+  font-size: 0.9rem;
+}
+#output1 {
+  font-size: 0.9rem;
+  margin-top: 5%;
+}
+#output2 {
+  font-size: 0.9rem;
+  margin: 0%;
+}
+#atp {
+  font-size: 1rem;
+  font-weight: 600;
+}
+/* ------------------------------------------------------------------------------ */
+
+#cdet {
+  font-size: 1rem;
+  font-weight: 600;
+}
+.hidden label {
+  margin-top: 2%;
+  font-size: 0.9rem;
+}
+.hidden input::placeholder {
+  font-size: 0.9rem;
+}
+.hidden input {
+  margin-top: 2%;
+}
+.hidden select {
+  font-size: 0.9rem;
+}
+.hidden select option {
+  font-size: 0.9rem;
+}
+select option:hover {
+  background-color: blue;
+}
+#adet {
+  font-size: 1rem;
+  font-weight: 600;
+}
+.note {
+  background-color: rgba(239, 239, 8, 0.27);
+  height: 3rem;
+  margin: auto;
+  width: 83%;
+  color: rgb(101, 101, 21);
+  font-size: 0.9rem;
+  padding: 1%;
+}

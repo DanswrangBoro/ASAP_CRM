@@ -4,6 +4,7 @@ from email.policy import default
 from unittest.util import _MAX_LENGTH
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.contrib.auth.models import UserManager
 # Create your models here.
 
 
@@ -85,6 +86,15 @@ class MarkupControl(models.Model):
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+
+# ##############################custom manager for creating super user ######################
+class CustomUserManager(UserManager):
+    def create_superuser(self, username, email=None, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('center', Center.objects.get(name='Main'))  # Assign 'main' center by default
+        return self._create_user(username, email, password, **extra_fields)
+# ##############################custom manager for creating super user ######################
 class CustomUser(AbstractUser):
     phoneNumber = models.CharField(max_length=15)
     ROLE_CHOICES = [
@@ -101,8 +111,13 @@ class CustomUser(AbstractUser):
     groups = models.ManyToManyField('auth.Group', related_name='custom_user_set', blank=True, verbose_name='groups')
     user_permissions = models.ManyToManyField('auth.Permission', related_name='custom_user_set', blank=True, verbose_name='user permissions')
 
+    objects = CustomUserManager()
+
     def __str__(self):
         return self.username
+    
+
+
     
 
 class Booking(models.Model):

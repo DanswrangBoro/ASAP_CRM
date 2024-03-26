@@ -1,0 +1,474 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Explore India</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'css/india.css' %}"
+    />
+  </head>
+  <body>
+    <header class="header">
+      <div class="banner">
+        <img
+          src="https://www.viktorianz.com/upload/images/agra-jaipur.jpg"
+          alt="india-banner"
+        />
+      </div>
+      <div class="header-content">
+        <h1>Explore the Rich Heritage of India</h1>
+        <p>Your gateway to unique travel experiences in India</p>
+      </div>
+    </header>
+
+    <br /><br />
+
+    <!-- Japan Flight search form -->
+    <section class="flight-search-form">
+      <div class="flight-search-section1">
+        <select>
+          <option>One-way</option>
+          <option>Round-trip</option>
+        </select>
+
+        <div class="iconHolder">
+          <div id="travelers" name="travelers">
+            <div id="adults" onclick="changeColor(this)">
+              <div id="ano">0</div>
+              <span>X</span>
+              <div id="tType">Adults</div>
+            </div>
+            <div id="children" onclick="changeColor(this)">
+              <div id="cno">0</div>
+              <span>X</span>
+              <div id="cType">Children</div>
+            </div>
+            <div id="infants" onclick="changeColor(this)">
+              <div id="ino">0</div>
+              <span>X</span>
+              <div id="iType">Infants</div>
+            </div>
+          </div>
+          <div class="icon">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              id="increment"
+              onclick="incrementValue()"
+              style="cursor: pointer"
+              width="16"
+              height="14"
+              fill="currentColor"
+              class="bi bi-plus-circle"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"
+              />
+              <path
+                d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"
+              />
+            </svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              id="decrement"
+              onclick="decrementValue()"
+              style="cursor: pointer"
+              width="16"
+              height="14"
+              fill="currentColor"
+              class="bi bi-dash-circle"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"
+              />
+              <path
+                d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8"
+              />
+            </svg>
+          </div>
+        </div>
+      </div>
+      <br />
+      <div class="flight-search-section">
+        <input type="text" placeholder="Origin" id="origin" />
+        <input type="text" placeholder="Destination" id="destination" />
+        <input type="date" placeholder="Departure Date" id="departureDate" />
+        <input type="date" placeholder="Return Date" id="returnDate" disabled />
+      </div>
+
+      <button id="search" onclick="searchFlights()">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          fill="currentColor"
+          class="bi bi-search"
+          viewBox="0 0 16 16"
+        >
+          <path
+            d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"
+          />
+        </svg>
+      </button>
+    </section>
+    <br />
+    <br />
+    <br />
+    <!-- India Search section -->
+    <section class="search-section">
+      <div class="search-container">
+        <h2>Explore India's Hidden Gems</h2>
+        <input type="text" placeholder="Enter your destination in India" />
+        <button>Search</button>
+      </div>
+    </section>
+
+    <!-- Featured Destinations in India -->
+    <section class="featured-destinations">
+      <div class="container">
+        <h2>Featured Destinations in India</h2>
+        <div class="row">
+          <!-- Card 1 -->
+          <div class="col-md-4">
+            <div
+              class="card"
+              style="
+                background-image: url('https://source.unsplash.com/800x600/?delhi');
+              "
+              onclick="toogleClick();"
+            >
+              <div class="card-text-container">
+                <h5 class="card-title">Delhi</h5>
+                <p class="card-price">
+                  <del>$1200</del> $950 <span class="discount">-20%</span>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="col-md-4">
+            <div
+              class="card"
+              style="
+                background-image: url('https://source.unsplash.com/800x600/?mumbai');
+              "
+            >
+              <div class="card-text-container">
+                <h5 class="card-title">Mumbai</h5>
+                <p class="card-price">
+                  <del>$1000</del> $800 <span class="discount">-15%</span>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="col-md-4">
+            <div
+              class="card"
+              style="
+                background-image: url('https://source.unsplash.com/800x600/?jaipur');
+              "
+            >
+              <div class="card-text-container">
+                <h5 class="card-title">Jaipur</h5>
+                <p class="card-price">
+                  <del>$900</del> $750 <span class="discount">-18%</span>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 4 -->
+          <div class="col-md-4">
+            <div
+              class="card"
+              style="
+                background-image: url('https://source.unsplash.com/800x600/?goa');
+              "
+            >
+              <div class="card-text-container">
+                <h5 class="card-title">Goa</h5>
+                <p class="card-price">
+                  <del>$1100</del> $880 <span class="discount">-15%</span>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 5 -->
+          <div class="col-md-4">
+            <div
+              class="card"
+              style="
+                background-image: url('https://source.unsplash.com/800x600/?kolkata');
+              "
+            >
+              <div class="card-text-container">
+                <h5 class="card-title">Kolkata</h5>
+                <p class="card-price">
+                  <del>$950</del> $780 <span class="discount">-18%</span>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 6 -->
+          <div class="col-md-4">
+            <div
+              class="card"
+              style="
+                background-image: url('https://source.unsplash.com/800x600/?agra');
+              "
+            >
+              <div class="card-text-container">
+                <h5 class="card-title">Agra</h5>
+                <p class="card-price">
+                  <del>$1050</del> $890 <span class="discount">-15%</span>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 7 -->
+          <div class="col-md-4">
+            <div
+              class="card"
+              style="
+                background-image: url('https://source.unsplash.com/800x600/?varanasi');
+              "
+            >
+              <div class="card-text-container">
+                <h5 class="card-title">Varanasi</h5>
+                <p class="card-price">
+                  <del>$980</del> $800 <span class="discount">-20%</span>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 8 -->
+          <div class="col-md-4">
+            <div
+              class="card"
+              style="
+                background-image: url('https://source.unsplash.com/800x600/?udaipur');
+              "
+            >
+              <div class="card-text-container">
+                <h5 class="card-title">Udaipur</h5>
+                <p class="card-price">
+                  <del>$920</del> $720 <span class="discount">-22%</span>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 9 -->
+          <div class="col-md-4">
+            <div
+              class="card"
+              style="
+                background-image: url('https://source.unsplash.com/800x600/?kochi');
+              "
+            >
+              <div class="card-text-container">
+                <h5 class="card-title">Kochi</h5>
+                <p class="card-price">
+                  <del>$870</del> $700 <span class="discount">-19%</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Exclusive Discount Coupons for India -->
+    <section class="coupon-section">
+      <h2>Exclusive Discount Coupons for Your India Trip</h2>
+      <div class="coupon-content">
+        <!-- Coupon 1 -->
+        <div class="coupon-card">
+          <img
+            src="https://source.unsplash.com/800x600/?travel,india"
+            alt="India Coupon 1"
+          />
+          <div class="coupon-text-content">
+            <p>Get 15% off on your next trip to India!</p>
+            <span class="coupon-code">CODE: INDIA15</span>
+          </div>
+          <button>Redeem Now</button>
+        </div>
+        <!-- Coupon 2 -->
+        <div class="coupon-card">
+          <img
+            src="https://source.unsplash.com/800x600/?vacation,india"
+            alt="India Coupon 2"
+          />
+          <div class="coupon-text-content">
+            <p>Unlock a special discount for the winter season in India.</p>
+            <span class="coupon-code">CODE: WINTER20IN</span>
+          </div>
+          <button>Claim Yours</button>
+        </div>
+        <!-- Coupon 3 -->
+        <div class="coupon-card">
+          <img
+            src="https://source.unsplash.com/800x600/?explore,india"
+            alt="India Coupon 3"
+          />
+          <div class="coupon-text-content">
+            <p>Experience the wonders of India with a 10% discount.</p>
+            <span class="coupon-code">CODE: EXPLORE-IN</span>
+          </div>
+          <button>Explore Now</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Discover India Section -->
+    <section id="contents">
+      <h2>Discover the Beauty of India</h2>
+
+      <div>
+        <img
+          src="https://source.unsplash.com/800x600/?india"
+          alt="India Flag"
+        />
+        <p>
+          India, located in South Asia, is a country known for its rich cultural
+          heritage, diverse landscapes, and historical landmarks. With a
+          population representing various religions and traditions, India offers
+          a tapestry of experiences for travelers. The country is divided into
+          states and union territories, each with its own unique charm. Iconic
+          cities like Delhi, Mumbai, and Jaipur showcase India's blend of
+          ancient history and modern vibrancy.
+        </p>
+      </div>
+
+      <div>
+        <p>
+          Indian cuisine is renowned for its variety of flavors and spices,
+          influenced by regional ingredients and cooking styles. Popular dishes
+          include biryani, dosa, and samosas. India has a vibrant cultural
+          scene, with contributions to literature, cinema, and the arts. Notable
+          Indian authors include Rabindranath Tagore and Arundhati Roy, and the
+          country hosts numerous festivals celebrating its diversity.
+        </p>
+        <img
+          src="https://source.unsplash.com/800x600/?india,culture"
+          alt="Indian Culture"
+        />
+      </div>
+    </section>
+
+    <!-- India Footer -->
+    <footer class="footer">
+      <p>&copy; 2024 Your Amazing India Experience. All rights reserved.</p>
+    </footer>
+
+    <!-- Custom JavaScript and Additional Scripts -->
+    <script src="{% static 'js/india.js' %}"></script>
+    <script>
+      var activeElement; // Variable to store the currently active element
+
+      function toggleReturnDate() {
+        var returnDateInput = document.getElementById("returnDate");
+        returnDateInput.disabled = !returnDateInput.disabled;
+      }
+
+      function searchFlights() {
+        var origin = document.getElementById("origin").value;
+        var destination = document.getElementById("destination").value;
+        var departureDate = document.getElementById("departureDate").value;
+        var returnDate = document.getElementById("returnDate").value;
+        var roundTrip = document.getElementById("roundTrip").checked;
+        var travelers = document.getElementById("travelers").value;
+
+        // Add your logic for handling the flight search here
+        // You may use JavaScript to gather form data and perform AJAX requests
+
+        // Example: Displaying the gathered information in an alert
+        var message = "Search Flights:\n";
+        message += "Origin: " + origin + "\n";
+        message += "Destination: " + destination + "\n";
+        message += "Departure Date: " + departureDate + "\n";
+        if (roundTrip) {
+          message += "Return Date: " + returnDate + "\n";
+        }
+        message += "Travelers: " + travelers;
+
+        alert(message);
+      }
+
+      function changeColor(clickedElement) {
+        // Remove active class from the previously active element
+        if (activeElement) {
+          activeElement.classList.remove("active");
+        }
+
+        // Add active class to the clicked div
+        clickedElement.classList.add("active");
+
+        // Set the clicked element as the active element
+        activeElement = clickedElement;
+      }
+      changeColor(adults);
+      function incrementValue() {
+        // Check if there is an active element
+        if (activeElement) {
+          // Get the corresponding value element
+          var valueElement = activeElement.querySelector('div[id$="no"]');
+
+          // Increment the value
+          var currentValue = parseInt(valueElement.innerText) || 0;
+
+          // Check if the individual value and total are within the limit
+          if (currentValue < 9 && getTotalValue() < 9) {
+            valueElement.innerText = currentValue + 1;
+          } else {
+            alert(
+              "Maximum limit reached! Individual and total values cannot exceed 9."
+            );
+          }
+        }
+      }
+
+      function decrementValue() {
+        // Check if there is an active element
+        if (activeElement) {
+          // Get the corresponding value element
+          var valueElement = activeElement.querySelector('div[id$="no"]');
+
+          // Decrement the value, but not below 0
+          var currentValue = parseInt(valueElement.innerText) || 0;
+
+          // Check if the individual value is greater than 0
+          if (currentValue > 0) {
+            valueElement.innerText = currentValue - 1;
+          } else {
+            alert("Value cannot be less than 0.");
+          }
+        }
+      }
+
+      function getTotalValue() {
+        // Calculate the total of all three values
+        var adultsValue =
+          parseInt(document.getElementById("ano").innerText) || 0;
+        var childrenValue =
+          parseInt(document.getElementById("cno").innerText) || 0;
+        var infantsValue =
+          parseInt(document.getElementById("ino").innerText) || 0;
+
+        return adultsValue + childrenValue + infantsValue;
+      }
+    </script>
+  </body>
+</html>

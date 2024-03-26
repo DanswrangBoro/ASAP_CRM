@@ -1,0 +1,188 @@
+:root{
+    --color-primary: #070F2B;
+    --color-secondary: #1B1A55;
+    --color-accent: #535C91;
+    --color-background: #9290C3;
+}
+body{
+    background-color: #f3f6fb;
+}
+.black-icon{
+    color: black;
+
+}
+.nav.flex-column {
+    font-size: 14px;
+}
+
+
+.custom-bg-color {
+    background-color: #f3f6fb;
+    /* background-color: red ; */
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    color: black; /* Set text color to white for better visibility */
+    min-height: 100vh !important;
+  }
+
+a{
+    color:black;
+}
+.sticky-side{
+ background-color: #ffffff;
+}
+.custom-bg-color1{
+    /* background-color: #1597BB; */
+    width:100%;
+    color:aliceblue;
+
+}
+main{
+    padding:0 !important;
+}
+/* Base page card CSS */
+
+.col-custom-color{
+    height: 10rem;
+    text-align: center;
+
+}
+.col-custom-color1{
+    background-color: #A5D7E8;
+}
+.card-with-background {
+    background-color: #03A9F4; /* Add your desired background color class here */
+    
+    background-size: 100% 100%;
+}
+.card-with-background3 {
+    background-color: #FA9F1B; /* Add your desired background color class here */
+    background-size: 100% 100%;
+}
+.card-with-background4 {
+    background-color: #f72d7e; /* Add your desired background color class here */
+    background-size: 100% 100%;
+}
+.card-with-background5 {
+    background-color: #ef5b47; /* Add your desired background color class here */
+    background-size: 100% 100%;
+}
+
+
+/* .income{
+    height: 30%;
+    width:20%;
+} */
+
+span{
+    color:red;
+}
+
+
+.profile-section {
+    margin-bottom: 20px;
+}
+
+.profile-icon {
+    width: 70px; /* Adjust the size as needed */
+    height: 70px;
+}
+
+.user-name {
+    color: white;
+    font-size: 14px;
+}
+.user-icon{
+color:white;
+margin:auto;
+}
+
+.online-dot {
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    background-color: green; /* Change the color as needed */
+    border-radius: 50%;
+    margin-left: 5px;
+}
+ul, li{
+    list-style: none!important;
+}
+/* Add a transition effect for a smooth color change and box shadow */
+.nav-link {
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Apply styles on hover */
+.nav-link:hover {
+    background-color:#afafaf;
+    color: #fff;
+    /* Change to your desired background color */
+    /* Change to your desired text color */
+}
+
+.glass-effect {
+    border-radius: 10px;
+    padding: 0%;
+    width: 100%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  /* .white-btn {
+    background-color: white;
+    color: black; 
+    
+} */
+
+
+.custom-table{
+ font-size: 0.7rem ;
+}
+.custom-table1{
+    font-size:0.8rem;
+}
+.card-title{
+    margin-bottom:0;
+}
+
+/* Total booking page css */
+
+.col-custom-total{
+    color: white;
+    text-align: center;
+    background: linear-gradient(to right, #020024, #090979, #05113d);
+}
+
+
+/* Total Users CSS */
+
+.col-custom-color2{
+    color: white;
+    background: linear-gradient(to right, #020024, #090979, #05113d);
+}
+
+/* Booking CSS */
+.custom-booking {
+    padding: 1%;
+    margin: 0;
+    color: white;
+    overflow: hidden;
+    background: radial-gradient(
+      circle,
+      rgb(3, 155, 229) 20%,
+      rgb(1, 51, 75) 120%
+    );
+  }
+  
+#flightBookingForm {
+    max-width: 1200px; /* Set your desired maximum width */
+    margin: 0 auto; /* Center the form horizontally */
+    padding: 0 15px; /* Add some padding for better readability */
+}
+
+/* Add media queries for responsiveness */
+@media (max-width: 768px) {
+    #flightBookingForm {
+        width: 1%; /* Set your desired width for smaller screens */
+    }
+}

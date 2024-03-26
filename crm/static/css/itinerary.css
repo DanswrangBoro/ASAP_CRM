@@ -1,0 +1,106 @@
+.parent-container {
+  width: 83%;
+  margin: auto;
+  padding-top: 1%;
+  padding-bottom: 1%;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1); /* Reduced shadow for smaller screens */
+}
+.itinerary-container {
+  display: block;
+}
+/* ======================================================================================================================================= */
+#blur {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.078);
+  z-index: 9999;
+  display: none; /* Initially hidden */
+  backdrop-filter: blur(3px); /* Adjust the blur effect as needed */
+}
+
+#bag {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgb(218, 218, 218);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 35rem;
+  z-index: 99999;
+  animation: slideDown 0.5s ease;
+  border-radius: 10px;
+  text-align: center;
+}
+
+@keyframes slideDown {
+  from {
+    top: -20rem;
+  }
+  to {
+    top: 50%;
+  }
+}
+
+@keyframes slideUpAndHide {
+  from {
+    top: 50%;
+  }
+  to {
+    top: -20rem;
+  }
+}
+
+/* ======================================================================================================================================= */
+.subcontainer {
+  display: block;
+  border: 1px solid #ccc;
+  margin-top: 1%;
+}
+
+.SubContainFlightDetails {
+  display: flex;
+  width: 95%;
+  padding: 0.5rem;
+  margin: 0;
+  justify-content: space-between;
+  border-radius: 10px;
+  font-size: 0.8rem;
+}
+
+.flight-details {
+  display: flex;
+  justify-content: space-between;
+  width: 20%;
+}
+.time-details,
+.cabin-details {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+.cityDetails {
+  display: flex;
+}
+.departure-time {
+  display: flex;
+}
+.departure-city {
+  display: flex;
+}
+.arrival-city {
+  display: flex;
+}
+.arrival-time {
+  display: flex;
+}
+.logo {
+  width: 90px;
+  height: 50px;
+}
+#logoI {
+  width: 100%;
+  height: 100%;
+}
+/* ------------------------------------------------------------------------------------------------------------------ */

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import MCO, Payment, Center
+from .models import MCO, PNR_TABLE, MarkupControl, Payment, Center, Price_manipulation_amount, Price_manipulation_percentage
 from .models import  AdditionCharge, Booking, Refund, RejectedBooking, CustomUser
 
 from .models import Sale
@@ -89,3 +89,23 @@ admin.site.register(MCO)
 @admin.register(Center)
 class CenterAdmin(admin.ModelAdmin):
     list_display = ('name', 'email', 'address', 'phone', 'contact_person', 'document', 'status')
+
+
+
+@admin.register(PNR_TABLE)
+class PNR_TABLEAdmin(admin.ModelAdmin):
+    list_display = ('email', 'phone', 'ref_id', 'address', 'zip', 'city', 'created_at')
+    search_fields = ('email', 'phone', 'ref_id', 'city')
+    list_filter = ('created_at',)
+
+@admin.register(Price_manipulation_percentage)
+class Price_manipulation_percentageAdmin(admin.ModelAdmin):
+    list_display = ('price',)
+
+@admin.register(Price_manipulation_amount)
+class Price_manipulation_amountAdmin(admin.ModelAdmin):
+    list_display = ('price',)
+
+@admin.register(MarkupControl)
+class MarkupControlAdmin(admin.ModelAdmin):
+    list_display = ('type', 'activation')

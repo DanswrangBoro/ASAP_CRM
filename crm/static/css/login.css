@@ -1,0 +1,7 @@
+.large-width-form {
+    width: 100%; /* Adjust the width as needed */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
