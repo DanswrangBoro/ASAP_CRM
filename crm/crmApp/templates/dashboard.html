@@ -1,14 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<style>
-    .fas.fa-money-bill-alt {
-        font-size: 1.7rem;
-        margin-top: 10px;
-    }
 
-
-</style>
 <!-- Chart.js Script -->
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js/dist/Chart.bundle.min.js"></script>
@@ -44,9 +37,14 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <img src="{% static 'assets/noti.png' %}" style="width: 1.2rem" class="" alt="notification">
-                    </a>
+                    {% for chargeback in pending_chargebacks %}
+                    <span class="position-relative" style="cursor: pointer;" onclick="showNotification('{{ forloop.counter }}')">
+                        <i class="fas fa-bell position-relative" style="cursor: pointer; width: 1.2rem;" onclick="showNotification('{{ forloop.counter }}')"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill text-dark mt-1">
+                            {{ forloop.counter }}
+                        </span>
+                    </span>
+                    {% endfor %}
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">
@@ -88,14 +86,7 @@
 
 
 
-{% for chargeback in pending_chargebacks %}
-<span class="position-relative" style="cursor: pointer" onclick="showNotification('{{ forloop.counter }}')">
-    <i class="fas fa-money-bill-alt"></i>
-    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-light text-dark mt-1">
-        {{ forloop.counter }}
-    </span>
-</span>
-{% endfor %}
+
 
 
 <!-- Display Chargeback Alerts -->

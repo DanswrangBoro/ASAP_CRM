@@ -40,7 +40,8 @@ urlpatterns = [
     path('sales/', views.sales_view, name='sales'),
     path('reassign/', reassign_lead_agent, name='reassign_lead_agent'),
     path('get_agent_data/', views.get_agent_data, name='get_agent_data'),
-    path('check-availability/', views.check_flight, name='check-flight'),    path('submit_chargeback/', views.submit_chargeback, name='submit_chargeback'),
+    path('check-availability/', views.check_flight, name='check-flight'),    
+    path('submit_chargeback/', views.submit_chargeback, name='submit_chargeback'),
     path('update_chargeback_lead_status/', views.update_chargeback_lead_status, name='update_chargeback_lead_status'),
     path('update_chargeback_status/', views.update_chargeback_status, name='update_chargeback_status'),
     # path('chargeback-details/<int:chargeback_id>/', views.chargeback_details, name='chargeback_details'),
@@ -64,8 +65,14 @@ urlpatterns = [
     path('track/',views.track, name="track"),
     path('total_chargeback/',views.total_chargeback, name="total_chargeback"),
     path('total_leads/',views.total_leads, name="total_leads"),
-    path('total_refund/',views.total_refund, name="total_refund")
-
+    path('total_refund/',views.total_refund, name="total_refund"),
+    path('new_booking/', views.new_booking, name='new_booking'),
+    path('center-related/', views.center_related, name='center_related'),
+    path('centers_related_booking/<str:center_name>/', views.centers_related_booking, name='centers_related_booking'),
+    path('centers_related_pending/<str:center_name>/', views.centers_related_pending, name='centers_related_pending'),
+    path('centers_related_confirmed/<str:center_name>/', views.centers_related_confirmed, name='centers_related_confirmed'),
+    path('centers_related_cancel/<str:center_name>/', views.centers_related_cancel, name='centers_related_cancel'),
+    path('centers_related_refund/<str:center_name>/', views.centers_related_refund, name='centers_related_refund'),
 ]
 
 

@@ -47,12 +47,13 @@
                             <th>Reassign</th>
                             {%  endif %}
                             <th>Confirmation Email</th>
+                            <th>Center</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for o in original %}
-                        <tr id="row_{{ o.booking_id }}">
+                        <tr id="row_{{ o.booking_id }}" {% if o.center.name == 'Main' %}style="background-color: lightblue; font-weight: bold;"{% endif %}>
                             <td>{{ o.booking_id }}</td>
                             <td>{{ o.passenger_name }}</td>
                             <td>{{ o.phone_number }}</td>
@@ -110,6 +111,7 @@
                                     <option value="" >Declined</option>
                                 </select>
                             </td>
+                            <td>{{o.center}}</td>
                             <td>
                                 <a href="{% url 'crmApp:booking' %}"><button class="btn btn-info btn-sm">Edit</button></a>
                                 {% if request.user.is_superuser %}

@@ -9,8 +9,28 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 
 # ==========================================================================( €Centers Start)=======================================
 
+# class Center(models.Model):
+#     # Other fields...
+#     name = models.CharField(max_length=100)
+#     email = models.EmailField()
+#     address = models.CharField(max_length=255)
+#     phone = models.CharField(max_length=20)
+#     contact_person = models.CharField(max_length=100)
+#     document = models.FileField(upload_to='center_documents/', null=True, blank=True)
+    
+#     # New field for status
+#     ACTIVE_STATUS_CHOICES = [
+#         ('active', 'Active'),
+#         ('inactive', 'Inactive'),
+#     ]
+#     status = models.CharField(max_length=10, choices=ACTIVE_STATUS_CHOICES, default='inactive')
+
+#     def __str__(self):
+#         return self.name
+
+# ==========================================================================( €Centers Start)=======================================
+
 class Center(models.Model):
-    # Other fields...
     name = models.CharField(max_length=100)
     email = models.EmailField()
     address = models.CharField(max_length=255)
@@ -34,8 +54,6 @@ class Center(models.Model):
     signed_at = models.CharField(max_length=20,default='Not signed yet', blank=True, null=True)
     def __str__(self):
         return self.name
-
-
 
 class PNR_TABLE(models.Model):
     email = models.TextField(max_length=200)
@@ -91,7 +109,7 @@ class CustomUser(AbstractUser):
         ('manager', 'manager'),
         ('agent', 'agent'),
     ]
-    role = models.CharField(max_length=20, choices=ROLE_CHOICES)
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, null=True, blank = True)
     blocked = models.BooleanField(default=False)
 
     # Foreign key to Center
@@ -270,8 +288,5 @@ class Payment(models.Model):
 class MCO(models.Model):
     booking = models.ForeignKey('Booking', on_delete= models.CASCADE)
     price = models.FloatField(null=True, blank = True)
-
-
-# ==========================================================================( €Centers Start)=======================================
 
 
