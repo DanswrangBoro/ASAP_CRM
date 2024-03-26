@@ -54,6 +54,7 @@ class Center(models.Model):
     signed_at = models.CharField(max_length=20,default='Not signed yet', blank=True, null=True)
     def __str__(self):
         return self.name
+
 class PNR_TABLE(models.Model):
     email = models.TextField(max_length=200)
     phone = models.TextField(max_length=10)
@@ -287,6 +288,5 @@ class Payment(models.Model):
 class MCO(models.Model):
     booking = models.ForeignKey('Booking', on_delete= models.CASCADE)
     price = models.FloatField(null=True, blank = True)
-
 
 
