@@ -64,8 +64,8 @@
             <tbody>
                 {% if centers %}
                     {% for center in centers %}
-                    <tr>
-                        <td style="vertical-align: middle">{{ center.name }}</td>
+                    <tr {% if center.name == 'Main' %} style="background-color: lightblue; font-weight: bolder" {% endif %}>
+                        <td style="vertical-align: middle;font-weight: bolder; color: Blue; cursor: pointer" onclick="viewBooking('{{ center.name }}')">{{ center.name }}</td>
                         <td style="vertical-align: middle">{{ center.email }}</td>
                         <td style="vertical-align: middle">{{ center.address }}</td>
                         <td style="vertical-align: middle">{{ center.phone }}</td>
@@ -143,5 +143,16 @@
         });
     });    
 </script>
-
+<!-- Form to submit booking ID -->
+<form id="centerForm" method="post" action="{% url 'crmApp:center_related' %}" style="display: none;">
+    {% csrf_token %}
+    <input type="hidden" id="centerName" name="center_name">
+</form>
+<script>
+    function viewBooking(centerName) {
+        console.log(centerName)
+        document.getElementById("centerName").value = centerName;
+        document.getElementById('centerForm').submit();
+}
+</script>
 {% endblock %}

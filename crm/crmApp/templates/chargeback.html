@@ -88,22 +88,16 @@
         <!-- Table for Chargebacks -->
         <div class="col-md-12">
             <div class="table-responsive mt-3">
-                <table class="table table-striped custom-table" style= "width:200%">
+                <table class="table table-striped custom-table" style= "width:175%">
                     <thead>
                         <tr>
-                            <th>Sl No</th>
-                            <th>Booking Confirmation No</th>
+                            {% comment %} <th>Sl No</th> {% endcomment %}
+                            <th>Booking Id</th>
                             <th>Lead Agent</th>
                             <th>Booking Date</th>
                             <th>Customer Name</th>
                             <th>Customer Ph No</th>
                             <th>Email Address</th>
-                            <th>Departure City</th>
-                            <th>Departure Date</th>
-                            <th>Arrival City</th>
-                            <th>Arrival Date</th>
-                            <th>Price</th>
-                            <th>No Of Pssgr</th>
                             <th>Credit Card No</th>
                             <th>Confirmation Mail Status</th>
                             <th>Reason</th>
@@ -112,25 +106,20 @@
                             <th>Chargeback Status</th>
                             <th>Chargeback Lead Status</th>
                             <th>Chargeback Lead Status</th>
+                            <th>Center</th>
                         </tr>
                     </thead>
                     <tbody>
                         <!-- Chargeback entries here -->
                         {% for chargeback in chargebacks %}
                         <tr>
-                            <td>{{ forloop.counter }}</td>
-                            <td style="width: 10rem;">{{ chargeback.Booking.confirmation_no }}</td>
+                            {% comment %} <td>{{ forloop.counter }}</td> {% endcomment %}
+                            <td style="font-weight: bolder; color: Blue; cursor: pointer" onclick="viewBooking('{{ chargeback.Booking.booking_id }}')">{{ chargeback.Booking.booking_id }}</td>
                             <td>{{chargeback.Booking.lead_agent.username}}</td>
                             <td>{{ chargeback.Booking.change_date }}</td>
                             <td style="width: 10rem;">{{ chargeback.Booking.passenger_name }}</td>
                             <td style="width: 10rem;">{{ chargeback.Booking.phone_number }}</td>
                             <td style="width: 10rem;">{{ chargeback.Booking.email }}</td>
-                            <td>{{ chargeback.Booking.departure }}</td>
-                            <td>{{ chargeback.Booking.departure_date }}</td>
-                            <td>{{ chargeback.Booking.arrival }}</td>
-                            <td>{{ chargeback.Booking.arrival_date }}</td>
-                            <td>{{ chargeback.Booking.price }}</td>
-                            <td>{{ chargeback.no_of_passenger }}</td>
                             <td style="width: 10rem;">{{ chargeback.Booking.card_number }}</td>
                             <td>{{ chargeback.confirmation_mail_status }}</td>
                             <td>{{ chargeback.reason }}</td>
@@ -159,6 +148,7 @@
                                     </select>
                                 </form>
                             </td>
+                            <td>{{ chargeback.Booking.center }}</td>
                         </tr>
                         {% endfor %}
 
@@ -202,6 +192,18 @@
             }
         }
     }
+</script>
+<!-- Form to submit booking ID -->
+<form id="bookingForm" method="post" action="{% url 'crmApp:related_booking' %}" style="display: none;">
+    {% csrf_token %}
+    <input type="hidden" id="bookingIdInput" name="booking_id">
+</form>
+<script>
+    function viewBooking(bookingId) {
+        console.log(bookingId)
+        document.getElementById("bookingIdInput").value = bookingId;
+        document.getElementById('bookingForm').submit();
+}
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-eMNCOe7tC1doHpGoJtKh7z7lGz7fuP4F8nfdFvAOA6Gg/z6Y6J6XqqyGXYM2ntXU" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-pzjw8f+ua7Kw1TIq0v8FqFjcJ6pajs/rfdfs3SO+kD4Ck6BdPtF+to8xMp9MvcJ4" crossorigin="anonymous"></script>

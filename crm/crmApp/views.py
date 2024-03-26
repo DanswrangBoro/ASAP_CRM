@@ -222,6 +222,8 @@ def flight_results(request):
 
 from decimal import Decimal
 
+from django.db.models import Case, Value, When
+
 def total_booking(request):
     if request.user.is_superuser:
         original = Booking.objects.filter(status__in=['inprocess', 'rejected', 'confirmed', 'cancelled'])
@@ -249,7 +251,16 @@ def total_booking(request):
         }
         return render(request, "total_booking.html", context)
     else:
-        original = Booking.objects.filter(status__in=['inprocess', 'rejected', 'confirmed', 'cancelled'],center=request.user.center)
+        original = Booking.objects.filter(status__in=['inprocess', 'rejected', 'confirmed', 'cancelled'], center=request.user.center)
+        # Reorder queryset to place entries with center name "Main" at the top
+        original = original.annotate(
+            is_main=Case(
+                When(center__name='Main', then=Value(1)),
+                default=Value(0),
+                output_field=models.IntegerField(),
+            )
+        ).order_by('-is_main')
+        
         agents = CustomUser.objects.filter(role='agent')
         confirmed_bookings = original.filter(status='confirmed')
 
@@ -273,6 +284,7 @@ def total_booking(request):
             "agents": agents
         }
         return render(request, "total_booking.html", context)
+
 
 
 # =================================================================================dashboard======================================
@@ -1198,27 +1210,21 @@ def check_flight(request):
 def submit_chargeback(request):
     if request.method == 'POST':
         booking_confirmation_no = request.POST.get('booking_confirmation_no')
+        print(booking_confirmation_no)
         reason = request.POST.get('reason')
+        print(reason)
         chargeback_received_date = request.POST.get('chargeback_received_date')
+        print(chargeback_received_date)
         
-        booking = get_object_or_404(Booking, confirmation_no=booking_confirmation_no)
+        booking = get_object_or_404(Booking, booking_id=booking_confirmation_no)
+        print(booking)
         
-        # Create a new Chargeback instance related to the booking
         chargeback = Chargeback.objects.create(
             Booking=booking,
             reason=reason,
             chargeback_received_date=chargeback_received_date,
             # Add other fields as needed
         )
-        
-        # Optionally, you can add additional fields to the Chargeback model
-        # For example:
-        # chargeback.credit_card_no = request.POST.get('credit_card_no')
-        # chargeback.chargeback_amount = request.POST.get('chargeback_amount')
-        # chargeback.confirmation_mail_status = request.POST.get('confirmation_mail_status')
-        # chargeback.chargeback_status = request.POST.get('chargeback_status')
-        # chargeback.chargeback_lead_status = request.POST.get('chargeback_lead_status')
-        # chargeback.save()
         
         messages.success(request, 'Chargeback Submitted Successfully!')
         
@@ -1448,6 +1454,7 @@ def submit_cutomer(request):
             num_passengers = len(traveler_details)
             price = response["flightOffers"][0]["price"]["grandTotal"]
             center_instance = get_object_or_404(Center, pk = request.user.center.pk)
+            user_instance = get_object_or_404(CustomUser, pk = request.user.pk)
             booking_instance = Booking.objects.create(
                 booking_id=booking_id,
                 passenger_name=passenger_name,
@@ -1461,7 +1468,8 @@ def submit_cutomer(request):
                 arrival_date=arrival_date,
                 num_passengers=num_passengers,
                 price=price,
-                center = center_instance
+                center = center_instance,
+                lead_agent = user_instance
             )
             # Add more fields from the response as needed
             return redirect('crmApp:booking')
@@ -1663,9 +1671,14 @@ def gateway(request):
 
 # =========================================================================( Centers Start )================================================
 
+
+
 def centersList(request):
-    centers = Center.objects.all()
+    main_center = Center.objects.filter(name="Main").first()
+    other_centers = Center.objects.exclude(name="Main").order_by('name')
+    centers = [main_center] + list(other_centers)
     return render(request, 'centers_list.html', {'centers': centers})
+
 
 def invoice_form(request):
     if request.method == 'POST':
@@ -1865,8 +1878,8 @@ def ack_agree(request, center_id):
 
     # Retrieve the Center object based on the center_id
     center = get_object_or_404(Center, pk=center_id)
-    center.status = 'active'
-    center.acknowledgment_status = 'acknowledged'
+    center.status = 'Active'
+    center.acknowledgment_status = 'Acknowledged'
     center.signed_at = datetime.now()
     center.save()
     
@@ -1889,3 +1902,65 @@ def track(request):
 
     # Return a JSON response indicating the event was logged successfully
     return JsonResponse({"message": "Email open event logged"})
+
+def new_booking(request):
+    pending_bookings = Booking.objects.filter(status='pending')
+    return render(request, 'new_booking.html', {'pending_bookings': pending_bookings})
+
+def center_related(request):
+    if request.method == 'POST':
+        center_name = request.POST.get('center_name')
+        center_instance = get_object_or_404(Center, name=center_name)
+        try:
+            # Filter bookings by center
+            bookings = Booking.objects.filter(center=center_instance)
+            refunds = Refund.objects.filter(booking_id__center__name=center_name)
+            refund_count = refunds.count()
+            booking_count = bookings.count()
+            pending_count = bookings.filter(status='pending').count()
+            confirmed_count = bookings.filter(status='confirmed').count()
+            cancelled_count = bookings.filter(status='cancelled').count()
+        except Booking.DoesNotExist:
+            # No booking found
+            bookings = None
+            refund_count = 0
+            booking_count = 0
+            pending_count = 0
+            confirmed_count = 0
+            cancelled_count = 0
+
+        print("Center name received: ", center_name)
+        # Check if a center with the received name exists
+        center = get_object_or_404(Center, name=center_name)
+        # Pass all fields of the Center object as context to the template
+        return render(request, 'center_track.html', {
+            'center': center,
+            'bookings': bookings,
+            'refund_count': refund_count,
+            'booking_count': booking_count,
+            'pending_count': pending_count,
+            'confirmed_count': confirmed_count,
+            'cancelled_count': cancelled_count
+        })
+def centers_related_booking(request, center_name):
+    # Assuming 'center_name' is unique, otherwise filter as per your requirement
+    bookings = Booking.objects.filter(center__name=center_name)
+    return render(request, 'center_related_booking.html', {'bookings': bookings})
+
+def centers_related_pending(request, center_name):
+    pending_bookings = Booking.objects.filter(center__name=center_name, status='pending')
+    return render(request, 'center_related_pending.html', {'pending_bookings': pending_bookings})
+
+def centers_related_confirmed(request, center_name):
+    confirmed_bookings = Booking.objects.filter(center__name=center_name, status='confirmed')
+    return render(request, 'center_related_confirmed.html', {'confirmed_bookings': confirmed_bookings})
+
+def centers_related_cancel(request, center_name):
+    # Retrieve canceled status bookings related to the specified center
+    canceled_bookings = Booking.objects.filter(center__name=center_name, status='cancelled')
+    return render(request, 'center_related_cancel.html', {'canceled_bookings': canceled_bookings})
+
+def centers_related_refund(request, center_name):
+    # Retrieve refund-related data related to the specified center
+    refund_data = Refund.objects.filter(booking_id__center__name=center_name)
+    return render(request, 'center_related_refund.html', {'refund_data': refund_data})

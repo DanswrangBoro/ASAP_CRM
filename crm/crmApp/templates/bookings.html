@@ -274,6 +274,7 @@
                 <th>No. of Passengers</th>
                 <th>Price</th>
                 <th>MCO</th>
+                <th>Lead Agent</th>
                 <th>Status</th>
                 <th>Action</th>
             </tr>
@@ -295,6 +296,7 @@
                 <td>{{ ori.num_passengers }}</td>
                 <td>{{ ori.price }}</td>
                 <td>{{ ori.mco }}</td>
+                <td>{{ori.lead_agent}}</td>
                 <td>{{ ori.status }}</td>
                 <td>
                     <form method="POST" action="{% url 'crmApp:update_booking_status' %}">
