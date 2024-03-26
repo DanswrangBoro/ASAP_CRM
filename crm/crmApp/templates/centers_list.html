@@ -47,7 +47,7 @@
 <div class="container border mt-2 py-5">
     <h4 class="mb-4">Centers List</h4>
     <div class="table-responsive">
-        <table class="table table-striped" style="font-size: 0.7rem">
+        <table class="table table-striped" style="font-size: 0.7rem; width: 125%">
             <thead>
                 <tr>
                     <th>Center  Name</th>
@@ -58,44 +58,60 @@
                     <th>Acknowledgement Status</th>
                     <th>Document</th>
                     <th>Status</th>
+                    <td>Acknowledged At</td>
                 </tr>
             </thead>
             <tbody>
-                {% for center in centers %}
-                <tr>
-                    <td>{{ center.name }}</td>
-                    <td>{{ center.email }}</td>
-                    <td>{{ center.address }}</td>
-                    <td>{{ center.phone }}</td>
-                    <td>{{ center.contact_person }}</td>
-                    <td>Pending</td>
-                    <td>
-                        {% if center.document %}
-                            {% with ext=center.document.name|slice:'-4:' %}
-                                {% if ext == '.pdf' %}
-                                {% comment %} <a href="{% url 'crmApp:view_pdf' filename='your_pdf_file.pdf' %}" class="btn btn-danger"> {% endcomment %}
-                                    <a href="{% url 'crmApp:view_pdf' id=center.id %}" class="btn btn-danger" style="font-size: 0.7rem; ">
-                                        <i class="bi bi-file-pdf"></i> View PDF
-                                    </a>
-                                    
-                                {% elif ext|lower == '.jpg' or ext|lower == '.jpeg' or ext|lower == '.png' or ext|lower == '.gif' %}
-                                    <img src="{{ center.document.url }}" alt="{{ center.name }}" style="max-width: 100px; max-height: 100px;">
-                                {% else %}
-                                    Unsupported file type
-                                {% endif %}
-                            {% endwith %}
-                        {% else %}
-                            No document
-                        {% endif %}
-                    </td>
-                    <td style="vertical-align:middle; cursor: default">
-                        <p style="text-align: center; {% if center.status == 'active' %} background-color: green; color: white {% elif center.status == 'inactive' %} background-color: grey; color: white;opacity: 0.5; {% endif %}">
-                            {{ center.status }}
-                        </p>
-                    </td>
-                    
-                </tr>
-                {% endfor %}
+                {% if centers %}
+                    {% for center in centers %}
+                    <tr>
+                        <td style="vertical-align: middle">{{ center.name }}</td>
+                        <td style="vertical-align: middle">{{ center.email }}</td>
+                        <td style="vertical-align: middle">{{ center.address }}</td>
+                        <td style="vertical-align: middle">{{ center.phone }}</td>
+                        <td style="vertical-align: middle">{{ center.contact_person }}</td>
+                        <td style="vertical-align: middle">
+                            <p class="py-2" style="margin-top: 12%; text-align: center; border-radius: 3px; {% if center.acknowledgment_status == 'acknowledged' %} background-color: green; color: white {% elif center.acknowledgment_status == 'pending' %} background-color: grey; color: white; opacity: 0.5; {% endif %}">{{ center.acknowledgment_status }}</p>
+                        </td>
+                        <td style="vertical-align: middle">
+                            {% if center.document %}
+                                {% with ext=center.document.name|slice:'-4:' %}
+                                    {% if ext == '.pdf' %}
+                                        <a href="{% url 'crmApp:view_pdf' id=center.id %}" class="btn btn-danger" style="font-size: 0.7rem; ">
+                                            <i class="bi bi-file-pdf"></i> View PDF
+                                        </a>
+                                    {% elif ext|lower == '.jpg' or ext|lower == '.jpeg' or ext|lower == '.png' or ext|lower == '.gif' %}
+                                        <img src="{{ center.document.url }}" alt="{{ center.name }}" style="max-width: 100px; max-height: 100px;">
+                                    {% else %}
+                                        Unsupported file type
+                                    {% endif %}
+                                {% endwith %}
+                            {% else %}
+                                No document
+                            {% endif %}
+                        </td>
+                        <td style="vertical-align:middle; cursor: default">
+                            <p class="py-2" style="margin-top: 18%; text-align: center;border-radius: 5px;width: 5rem; {% if center.status == 'active' %} background-color: green; color: white {% elif center.status == 'inactive' %} background-color: grey; color: white; opacity: 0.5; {% endif %}">
+                                {{ center.status }}
+                            </p>
+                        </td>
+                        <td style="vertical-align: middle">
+                            {{ center.signed_at }}
+                        </td>
+                        <td style="vertical-align: middle">
+                            <form id="authorizeCenterForm" method="POST" action="{% url 'crmApp:authorize_center' %}">
+                                {% csrf_token %}
+                                <input type="hidden" id="centerIdInput" name="centerId" value="">
+                                <button type="button" class="btn btn-primary authorize-center" data-center-id="{{ center.pk }}" style="font-size: 0.7rem;">Authorize Center</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="10" style="text-align: center; font-size: 1rem">No centers created yet</td>
+                    </tr>
+                {% endif %}
             </tbody>
         </table>
     </div>
@@ -111,6 +127,21 @@
         }
     }
     
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Add click event listener to all "Authorize Center" buttons
+        var authorizeButtons = document.querySelectorAll(".authorize-center");
+        authorizeButtons.forEach(function(button) {
+            button.addEventListener("click", function() {
+                var centerId = this.getAttribute("data-center-id");
+                // Set center ID in hidden input field
+                document.getElementById("centerIdInput").value = centerId;
+                // Submit the form
+                document.getElementById("authorizeCenterForm").submit();
+            });
+        });
+    });    
 </script>
 
 {% endblock %}

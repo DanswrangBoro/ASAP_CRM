@@ -88,4 +88,4 @@ admin.site.register(MCO)
 
 @admin.register(Center)
 class CenterAdmin(admin.ModelAdmin):
-    list_display = ('name', 'email', 'address', 'phone', 'contact_person', 'document', 'status')
+    list_display = ('name', 'email', 'address', 'phone', 'contact_person', 'document', 'status','acknowledgment_status','signed_at')

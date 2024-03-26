@@ -265,3 +265,14 @@ class MCO(models.Model):
 
 
 
+
+    # New field for acknowledgment status
+    ACKNOWLEDGEMENT_STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('acknowledged', 'Acknowledged'),
+    ]
+    acknowledgment_status = models.CharField(max_length=20, choices=ACKNOWLEDGEMENT_STATUS_CHOICES, default='pending')
+    signed_at = models.CharField(max_length=20,default='Not signed yet', blank=True, null=True)
+    def __str__(self):
+        return self.name
+
