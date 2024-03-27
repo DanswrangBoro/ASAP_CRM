@@ -7,6 +7,13 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js/dist/Chart.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 
+<style>
+    body{
+        font-family: 'Lato', sans-serif;
+        font-weight: 400;
+    }
+</style>
+
 <nav class="navbar navbar-expand-lg navbar-light  mb-2">
     <div class="container-fluid">
 
@@ -222,16 +229,21 @@
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center" style="border: none; background-color: #FFFFFF;">
                         <h5 class="mb-0">Income</h5>
-                        <div class="form-group">
+                        <div class="form-group" style="display: flex; align-items: center; gap: 5px">
                             <select style="border: 1px solid #b9c0cf; border-radius: 5px; padding: 6px; ">
                                 <option value="monthly">Monthly</option>
                                 <option value="yearly">Yearly</option>
                             </select>
+                            <a href="{% url 'crmApp:income' %}" class="btn" style="border: 1px solid #b9c0cf; display: flex; align-items: center; text-decoration: none;">
+                                View More  
+                                <img src="{% static 'assets/right-arrow.png' %}" alt="" style="height: 10px; width: 10px; margin-left: 5px;">
+                            </a>
+                                                 
                         </div>
                     </div>
                     <div class="card-body d-flex justify-content-center align-items-center">
                         <div class="chart-container income" style="position: relative; height: 100%; width: 100%; align-items: center;">
-                            <canvas id="incomeChart"></canvas>
+                            <canvas id="multiDoughnutChart" style="max-height: 270px"></canvas>
                         </div>
                 </div>
             </div>
@@ -285,47 +297,85 @@ var salesChart = new Chart(salesCtx, {
 
 
 // income chart
-var incomeCtx = document.getElementById('incomeChart').getContext('2d');
-  // Income Chart Data
-var incomeData = {
-    labels: ['Income', 'Loss', 'Profit'],
-    datasets: [{
-        label: 'Income',
-        data: [2500, 2000, 1800], // Adjusted income data for pie chart
-        backgroundColor: [
-                'rgba(27, 195, 73, 0.5)',
-                'rgba(224, 51, 101, 0.5)',
-                'rgba(34, 129, 246, 0.5)', 
-        ],
-        borderColor: [
-                'rgba(27, 195, 73, 0.5)',
-                'rgba(224, 51, 101, 0.5)',
-                'rgba(34, 129, 246, 0.5)', 
-        ],
-        borderWidth: 1
-    }]
-};
+var chartJSv4Script = document.createElement('script');
+chartJSv4Script.src = "https://cdn.jsdelivr.net/npm/chart.js@^4";
+chartJSv4Script.onload = function() {
+    var ctx = document.getElementById('multiDoughnutChart').getContext('2d');
+    var gradient1 = ctx.createLinearGradient(0, 0, 0, 400);
+    gradient1.addColorStop(0, 'rgba(144, 238, 144, 0.8)'); // lightgreen
+    gradient1.addColorStop(1, 'rgba(0, 128, 0, 1)');     // darker green
 
+    var gradient2 = ctx.createLinearGradient(0, 0, 0, 400);
+    gradient2.addColorStop(0, 'rgba(240, 128, 128, 0.8)'); // lightcoral
+    gradient2.addColorStop(1, 'rgba(220, 20, 60, 1)');   // darker red
 
-// Initialize pie chart
-var incomeChart = new Chart(incomeCtx, {
-    type: 'pie', // Set chart type to pie
-    data: incomeData,
-    options: {
-        legend: {
-            position: 'bottom' // Display legend at the bottom
+    var gradient3 = ctx.createLinearGradient(0, 0, 0, 400);
+    gradient3.addColorStop(0, 'rgba(173, 216, 230, 0.8)'); // lightblue
+    gradient3.addColorStop(1, 'rgba(0, 191, 255, 1)');   // darker blue
+
+    new Chart('multiDoughnutChart', {
+      type: "doughnut",
+      data: {
+        labels: ['Income', 'Loss', 'Profit'],
+        datasets: [{
+            data: [300, 100],
+            backgroundColor: [gradient1, '#EFEFEF'],
+            borderWidth: 15,
+            borderRadius: [20, 0]
+          },
+          {
+            data: [25, 75],
+            backgroundColor: [gradient2, '#EFEFEF'],
+            borderWidth: 15,
+            borderRadius: [20, 0]
+          },
+          {
+            data: [10, 90],
+            backgroundColor: [gradient3, '#EFEFEF'],
+            borderWidth: 15,
+            borderRadius: [20, 0]
+          }
+        ]
+      },
+      options: {
+        cutout: '30%', // Corrected syntax: cutout instead of cutoutPercentage
+        hover: {
+          mode: null
         },
         plugins: {
+          legend: {
+            position: 'bottom',
             labels: {
-                render: 'label',
-                fontColor: 'black',
-                fontSize: 14,
-                position: 'outside'
+              generateLabels: chart => chart.data.labels.map((label, i) => ({
+                text: label,
+                idx: i,
+                fillStyle: chart.data.datasets[i].backgroundColor[0],
+                strokeStyle: '#fff',
+                hidden: !chart.isDatasetVisible(i)
+              }))
+            },
+            onClick: (event, legendItem, legend) => {
+              legend.chart.getDatasetMeta(legendItem.idx).hidden = legend.chart.isDatasetVisible(legendItem.idx);
+              legend.chart.update();
             }
+          },
+          tooltip: {
+            filter: tooltipItem => tooltipItem.dataIndex == 0,
+            callbacks: {
+              label: ctx => ctx.raw + '%',
+              labelColor: ctx => ({
+                backgroundColor: ['lightgreen', 'lightcoral', 'lightblue'][ctx.datasetIndex],
+                borderWidth: 0,          
+              })
+            }
+          }
         }
-    }
-});
-    </script>
+      }
+    });
+};
+document.head.appendChild(chartJSv4Script);
+</script>
+
       <div class="container mt-4" style="padding-right: 0; padding-left: 0;">
         <div class="row">
             <div class="col-md-9 px-1 mt-md-0">
@@ -448,10 +498,10 @@ var incomeChart = new Chart(incomeCtx, {
                                 <option value="monthly">Monthly</option>
                                 <option value="yearly">Yearly</option>
                             </select>
-                            <button class="btn" style="border: 1px solid #b9c0cf; display: flex; align-items: center;">
+                            <a href="{% url 'crmApp:total_leads' %}" class="btn" style="border: 1px solid #b9c0cf; display: flex; align-items: center; text-decoration: none;">
                                 View More  
                                 <img src="{% static 'assets/right-arrow.png' %}" alt="" style="height: 10px; width: 10px; margin-left: 5px;">
-                            </button>                       
+                            </a>                       
                         </div>
                     </div>
                     <div class="card-body">
@@ -519,16 +569,16 @@ var incomeChart = new Chart(incomeCtx, {
             <div class="col-md-6 px-1 mt-md-0">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center" style="border: none; background-color: #FFFFFF;" >
-                        <h3>Refund Ratio</h3>        
+                        <h5>Refund Ratio</h5>        
                         <div class="form-group" style="display: flex; align-items: center; gap: 5px">
                             <select style="border: 1px solid #b9c0cf; border-radius: 5px; padding: 6px; ">
                                 <option value="monthly">Monthly</option>
                                 <option value="yearly">Yearly</option>
                             </select>
-                            <button class="btn" style="border: 1px solid #b9c0cf; display: flex; align-items: center;">
+                            <a href="{% url 'crmApp:total_refund' %}" class="btn" style="border: 1px solid #b9c0cf; display: flex; align-items: center; text-decoration: none;">
                                 View More  
                                 <img src="{% static 'assets/right-arrow.png' %}" alt="" style="height: 10px; width: 10px; margin-left: 5px;">
-                            </button>                       
+                            </a>                     
                         </div>
                     </div>
                     <div class="card-body">
@@ -542,11 +592,11 @@ var incomeChart = new Chart(incomeCtx, {
             <div class="col-md-6 px-1 mt-md-0">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center" style="border: none; background-color: #FFFFFF;">
-                        <h3>Chargeback Ratio</h3>
-                        <button class="btn" style="border: 1px solid #b9c0cf; display: flex; align-items: center;">
+                        <h5>Chargeback Ratio</h5>
+                        <a href="{% url 'crmApp:total_chargeback' %}" class="btn" style="border: 1px solid #b9c0cf; display: flex; align-items: center; text-decoration: none;">
                             View More  
                             <img src="{% static 'assets/right-arrow.png' %}" alt="" style="height: 10px; width: 10px; margin-left: 5px;">
-                        </button>
+                        </a>
                         </div>
                     <div class="card-body d-flex justify-content-center align-items-center">
                         <div class="chart-container" style="position: relative; height: 100%; width: 100%; align-items: center;">

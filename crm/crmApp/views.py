@@ -372,7 +372,7 @@ def booking(request):
     user_center = request.user.center
 
     # Check if the user's center is a main center
-    if user_center.is_main_center:
+    if (user_center == 'Main'):
         original = Booking.objects.filter(center=user_center)
         context = {
             "original": original
@@ -1928,13 +1928,17 @@ def total_leads(request):
 def total_refund(request):
     return render(request,'total_refund.html')
 
+def income(request):
+    return render(request,'income.html')
+
 def new_booking(request):
     pending_bookings = Booking.objects.filter(status='pending')
     return render(request, 'new_booking.html', {'pending_bookings': pending_bookings})
 
 def center_related(request):
-    if request.method == 'POST':
-        center_name = request.POST.get('center_name')
+    if request.method == 'GET':
+        print("inside post")
+        center_name = request.GET.get('center')
         center_instance = get_object_or_404(Center, name=center_name)
 
         try:
@@ -1997,6 +2001,8 @@ def center_related(request):
             'remaining_time': remaining_time,
             'total_api_requests': total_api_requests
         })
+    return HttpResponse("something went wrong")
+    
 
 def centers_related_booking(request, center_name):
     # Assuming 'center_name' is unique, otherwise filter as per your requirement

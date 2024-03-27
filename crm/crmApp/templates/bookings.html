@@ -59,6 +59,14 @@
                 </select>
             </div>
             <div class="mb-3 me-3" style="flex: 1;">
+                <label for="tripType" class="form-label"><i class="bi bi-geo-alt"></i> Trip Type</label>
+                <select class="form-select" id="tripType" name="tripType">
+                    <option value="oneWay">One Way</option>
+                    <option value="roundTrip">Round Trip</option>
+                    <option value="multi">Multi-City</option>
+                </select>
+            </div>
+            <div class="mb-3 me-3" style="flex: 1;">
                 <label for="passengerCount" class="form-label"><i class="bi bi-geo-alt"></i> Passenger</label>
                 <input type="number" class="form-control" id="passengerCount" name="passengerCount" min="1" {% if exp.expiry_value == 'expired' %}disabled{% endif %}>
             </div>

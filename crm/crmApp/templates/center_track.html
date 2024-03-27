@@ -2,34 +2,100 @@
 {% load static %}
 
 {% block content %}
-<div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <h2>Center Details</h2>
-            <div class="table-responsive">
-                <table class="table table-striped" style="font-size: 0.7rem">
-                    <tbody>
+<script src="https://cdn.jsdelivr.net/npm/chart.js/dist/Chart.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+<style>
+    button{
+        border: none;
+        cursor: pointer;
+        color: white;
+        background: none;
+        transition: all .3s ease-in-out;
+    }
+
+    .slide{
+        width: 100%;
+        height: 25%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: white;
+    }
+
+    .carousel-view {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        padding: 44px 0;
+        transition: all 0.25s ease-in;
+    }
+
+    .carousel-view .item-list {
+        max-width: 950px;
+        width: 70vw;
+        padding: 50px 10px;
+        display: flex;
+        gap: 48px;
+        scroll-behavior: smooth;
+        transition: all 0.25s ease-in;
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
+        overflow: auto;
+        scroll-snap-type: x mandatory;
+    }
+
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    .item-list::-webkit-scrollbar {
+        display: none;
+    }
+
+    .prev-btn {
+        background: none;
+        cursor: pointer;
+    }
+
+    .next-btn {
+        cursor: pointer;
+    }
+
+    .item {
+        scroll-snap-align: center;
+        min-width: 120px;
+        height: 120px;
+        padding: 0%;
+        margin: 0%;
+        background-color: deeppink;
+        border-radius:8px;
+    }
+
+</style>
+
+<div class="container hero">
+    <div class="row mt-3">
+        <div class="col-md-12 px-1 mt-md-0" style="background-color: white; padding-left: 0%; padding-right: 0%;">
+           
+            <div class="table-responsive" >
+                <table class="table " style="border-color:#74c9f7ab">
+                    <thead style="background-color:#EAF2FF; border:2px solid white; font-size: 0.8rem;">
+                        <tr>
+                            <td colspan='5' style="background-color: white;">Center Details</td>
+                        </tr>
                         <tr>
                             <th>Name</th>
-                            <td>{{ center.name }}</td>
-                        </tr>
-                        <tr>
                             <th>Email</th>
-                            <td>{{ center.email }}</td>
-                        </tr>
-                        <tr>
                             <th>Address</th>
-                            <td>{{ center.address }}</td>
-                        </tr>
-                        <tr>
                             <th>Phone</th>
-                            <td>{{ center.phone }}</td>
-                        </tr>
-                        <tr>
                             <th>Contact Person</th>
+                        </tr>
+                    </thead>
+                        <tr>
+                            <td>{{ center.name }}</td>
+                            <td>{{ center.email }}</td>
+                            <td>{{ center.phone }}</td>
+                            <td>{{ center.address }}</td>
                             <td>{{ center.contact_person }}</td>
                         </tr>
-                        <!-- Add more rows for other fields as needed -->
                     </tbody>
                 </table>
             </div>
@@ -44,57 +110,42 @@
     <p id="remaining-time">Remaining Time: {{ remaining_time }}</p>
 </div>
 {% endif %}
-<div class="container mt-3" style="padding-right: 0; padding-left: 0;">
-    <div class="row">
-        {% comment %} <div class="col-md-3 px-1 mt-md-0">
-            <div class="card shadow-lg col-custom-color card-with-background">
-                <div class="card-body">
-                    {% if request.user.is_superuser %}
-                        <a class="text-decoration-none text-reset" href="{% url 'crmApp:sales' %}">
-                    {% endif %}
-                    <h5 class="card-text" style="color: #fff; text-align: left;">Center Details</h5>
-                    </a>
-                    <div class="container mt-5">
-                        <div class="row">
-                            <div class="col d-flex justify-content-left px-0 mx-0 align-items-center">
-                                <h5><b>{{ total_sales }}</b></h5>
-                            </div>
-                            <div class="col text-right">
-                                <div class="up text-center" style="background-color: rgba(171, 233, 171, 0.5);">
-                                    <h6>up</h6>
-                                   
-                                </div>
-                                <p class="mb-0" style="font-size: 0.5rem;">Since last Month</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> {% endcomment %}
-        <div class="col-md-3 px-1 mt-md-0 mt-1">
+<div class="container slide mt-3">
+    <div class="carousel-view">
+        <button id="prev-btn" class="prev-btn">
+            <svg viewBox="0 0 512 512" width="20" title="chevron-circle-left">
+                <path d="M256 504C119 504 8 393 8 256S119 8 256 8s248 111 248 248-111 248-248 248zM142.1 273l135.5 135.5c9.4 9.4 24.6 9.4 33.9 0l17-17c9.4-9.4 9.4-24.6 0-33.9L226.9 256l101.6-101.6c9.4-9.4 9.4-24.6 0-33.9l-17-17c-9.4-9.4-24.6-9.4-33.9 0L142.1 239c-9.4 9.4-9.4 24.6 0 34z" />
+            </svg>
+        </button>
+        <div id="item-list" class="item-list">
+            
+          <div class="col-md-4  mt-md-0 mt-1">
             <div class="card shadow-lg col-custom-color card-with-background3">
-                <div class="card-body">
-                    <h5 class="card-text" style="color: #fff; text-align: left; cursor: default">Total Bookings</h5>
-                    <div class="container mt-5">
-                        <div class="row">
-                            <div class="col d-flex justify-content-left px-0 mx-0  align-items-center">
-                                <h5 style="cursor: default"><b>{{ booking_count }}</b></h5>
-                            </div>
-                            <div class="col text-right">
-                                <button type="button" class="btn btn-primary" style="font-size: 0.7rem" onclick="window.location.href='{% url 'crmApp:centers_related_booking' center.name %}'">
-                                    View More <i class="fas fa-angle-double-right"></i>
-                                </button>
-                                <p class="mb-0" style="font-size: 0.5rem;">Since last Month</p>
-                            </div>
-                        </div>
+              <div class="card-body">
+                <h5 class="card-text" style="color: #67748E; text-align: left; cursor: default">Total Bookings <img src="{% static 'assets/right-arrow.png'%}" alt="" style="height: 6%; width: 6%; display:flex; float: inline-end;">
+                </h5>
+                <div class="container mt-5">
+                  <div class="row">
+                    <div class="col d-flex justify-content-left px-0 mx-0 align-items-center">
+                      <h5 style="cursor: default"><b>{{ booking_count }}</b></h5>
                     </div>
+                    <div class="col text-right">
+                      <button type="button" class="btn btn-primary" style="font-size: 0.7rem" onclick="window.location.href='{% url 'crmApp:centers_related_booking' center.name %}'">
+                        View More <i class="fas fa-angle-double-right"></i>
+                      </button>
+                      <p class="mb-0" style="font-size: 0.5rem;">Since last Month</p>
+                    </div>
+                  </div>
                 </div>
+              </div>
             </div>
-        </div>
-        <div class="col-md-3 px-1 mt-md-0 mt-1">
+          </div> 
+
+          <div class="col-md-4 mt-md-0 mt-1">
             <div class="card shadow-lg col-custom-color card-with-background4">
                 <div class="card-body">
-                    <h5 class="card-text" style="color: #fff;text-align: left; cursor: default">Pending</h5>
+                    <h5 class="card-text" style="color:#67748E;text-align: left; cursor: default">Pending <img src="{% static 'assets/right-arrow.png'%}" alt="" style="height: 6%; width: 6%; display:flex; float: inline-end;">
+                    </h5>
                     <div class="container mt-5">
                         <div class="row">
                             <div class="col d-flex justify-content-left px-0 mx-0  align-items-center">
@@ -114,170 +165,157 @@
                 </div>
             </div>
         </div>
-        
-        <div class="col-md-3 px-1 mt-md-0 mt-1">
-            <div class="card shadow-lg col-custom-color card-with-background5">
-                <div class="card-body">
-                    <h5 class="card-text" style="color: #fff; text-align: left; cursor: default">Confirmed</h5>
-                    <div class="container mt-5">
-                        <div class="row">
-                            <div class="col d-flex justify-content-left px-0 mx-0 align-items-center">
-                                <h5 style="cursor: default"><b>{{ confirmed_count }}</b></h5>
-                            </div>
-                            <div class="col text-right">
-                                <div class="up text-center">
-                                    <button type="button" class="btn btn-primary" style="font-size: 0.7rem" onclick="window.location.href='{% url 'crmApp:centers_related_confirmed' center.name %}'">
-                                        View More <i class="fas fa-angle-double-right"></i>
-                                    </button>
-                                </div>
-                                <p class="mb-0" style="font-size: 0.5rem;">Since last Month</p>
-                            </div>
+        <div class="col-md-4 mt-md-0 mt-1">
+          <div class="card shadow-lg col-custom-color card-with-background5">
+              <div class="card-body">
+                  <h5 class="card-text" style="color: #67748E; text-align: left; cursor: default">Confirmed <img src="{% static 'assets/right-arrow.png'%}" alt="" style="height: 6%; width: 6%; display:flex; float: inline-end;">
+                  </h5>
+                  <div class="container mt-5 ">
+                      <div class="row">
+                          <div class="col d-flex justify-content-left px-0 mx-0 align-items-center">
+                              <h5 style="cursor: default"><b>{{ confirmed_count }}</b></h5>
+                          </div>
+                          <div class="col text-right">
+                              <div class="up text-center">
+                                  <button type="button" class="btn btn-primary" style="font-size: 0.7rem" onclick="window.location.href='{% url 'crmApp:centers_related_confirmed' center.name %}'">
+                                      View More <i class="fas fa-angle-double-right"></i>
+                                  </button>
+                              </div>
+                              <p class="mb-0" style="font-size: 0.5rem;">Since last Month</p>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="col-md-4 mt-md-0 ">
+        <div class="card shadow-lg col-custom-color card-with-background5">
+            <div class="card-body">
+                <h5 class="card-text" style="color: #67748E; text-align: left;cursor: default">Cancelled <img src="{% static 'assets/right-arrow.png'%}" alt="" style="height: 6%; width: 6%; display:flex; float: inline-end;">
+                </h5>
+                <div class="container mt-5">
+                    <div class="row">
+                        <div class="col d-flex justify-content-left px-0 mx-0 align-items-center">
+                            <h5 style="cursor: default"><b>{{ cancelled_count }}</b></h5>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3 px-1 mt-md-0 mt-1">
-            <div class="card shadow-lg col-custom-color card-with-background5">
-                <div class="card-body">
-                    <h5 class="card-text" style="color: #fff; text-align: left;cursor: default">Cancelled</h5>
-                    <div class="container mt-5">
-                        <div class="row">
-                            <div class="col d-flex justify-content-left px-0 mx-0 align-items-center">
-                                <h5 style="cursor: default"><b>{{ cancelled_count }}</b></h5>
+                        <div class="col text-right">
+                            <div class="up text-center">
+                                <button type="button" class="btn btn-primary" style="font-size: 0.7rem" onclick="window.location.href='{% url 'crmApp:centers_related_cancel' center.name %}'">
+                                    View More <i class="fas fa-angle-double-right"></i>
+                                </button>
                             </div>
-                            <div class="col text-right">
-                                <div class="up text-center">
-                                    <button type="button" class="btn btn-primary" style="font-size: 0.7rem" onclick="window.location.href='{% url 'crmApp:centers_related_cancel' center.name %}'">
-                                        View More <i class="fas fa-angle-double-right"></i>
-                                    </button>
-                                </div>
-                                <p class="mb-0" style="font-size: 0.5rem;">Since last Month</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="container mt-3" style="padding-right: 0; padding-left: 0;">
-    <div class="row">
-        <div class="col-md-3 px-1 mt-md-0">
-            <div class="card shadow-lg col-custom-color card-with-background">
-                <div class="card-body">
-                    <h5 class="card-text" style="color: #fff; text-align: left; cursor: default">Total Sales</h5>
-                    </a>
-                    <div class="container mt-5">
-                        <div class="row">
-                            <div class="col d-flex justify-content-left px-0 mx-0 align-items-center">
-                                <h5 style="cursor: default"><b>{{ total_sales }}</b></h5>
-                            </div>
-                            <div class="col text-right">
-                                <div class="up text-center" style="background-color: rgba(171, 233, 171, 0.5);">
-                                    <h6>up</h6>
-                                   
-                                </div>
-                                <p class="mb-0" style="font-size: 0.5rem;">Since last Month</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3 px-1 mt-md-0 mt-1">
-            <div class="card shadow-lg col-custom-color card-with-background3">
-                <div class="card-body">
-                    <h5 class="card-text" style="color: #fff; text-align: left;cursor: default">Total MCO</h5>
-                    <div class="container mt-5">
-                        <div class="row">
-                            <div class="col d-flex justify-content-left px-0 mx-0  align-items-center">
-                                <h5 style="cursor: default"><b>{{ total_sales }}</b></h5>
-                            </div>
-                            <div class="col text-right">
-                                <div class="up text-center" style="background-color: rgba(171, 233, 171, 0.5);">
-                                    <h6>up</h6>
-                                   
-                                </div>
-                                <p class="mb-0" style="font-size: 0.5rem;">Since last Month</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3 px-1 mt-md-0 mt-1">
-            <div class="card shadow-lg col-custom-color card-with-background4">
-                <div class="card-body">
-                    <h5 class="card-text" style="color: #fff;text-align: left; cursor: default">Total Refund</h5>
-                    <div class="container mt-5">
-                        <div class="row">
-                            <div class="col d-flex justify-content-left px-0 mx-0  align-items-center">
-                                <h5 style="cursor: default"><b>{{ refund_count }}</b></h5>
-                            </div>
-                            <div class="col text-right">
-                                <div class="up text-center">
-                                    <button type="button" class="btn btn-primary" style="font-size: 0.7rem" onclick="window.location.href='{% url 'crmApp:centers_related_refund' center.name %}'">
-                                        View More <i class="fas fa-angle-double-right"></i>
-                                    </button>
-                                   
-                                </div>
-                                <p class="mb-0" style="font-size: 0.5rem;">Since last Month</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="col-md-3 px-1 mt-md-0 mt-1">
-            <div class="card shadow-lg col-custom-color card-with-background5">
-                <div class="card-body">
-                    <h5 class="card-text" style="color: #fff; text-align: left; cursor: default">Profit</h5>
-                    <div class="container mt-5">
-                        <div class="row">
-                            <div class="col d-flex justify-content-left px-0 mx-0 align-items-center">
-                                <h5 style="cursor: default"><b>{{ total_sales }}</b></h5>
-                            </div>
-                            <div class="col text-right">
-                                <div class="up text-center" style="background-color: rgba(171, 233, 171, 0.5);">
-                                    <h6>up</h6>
-                                   
-                                </div>
-                                <p class="mb-0" style="font-size: 0.5rem;">Since last Month</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3 mt-md-0">
-            <div class="card px-0 mx-0shadow-lg col-custom-color card-with-background">
-                <div class="card-body">
-                    <h5 class="card-text" style="color: #fff; text-align: left; cursor: default">Total Chargeback</h5>
-                    <div class="container mt-5">
-                        <div class="row">
-                            <div class="col d-flex justify-content-left px-0 mx-0 align-items-center">
-                                <h5 style="cursor: default"><b>{{ total_sales }}</b></h5>
-                            </div>
-                            <div class="col text-right">
-                                <div class="up text-center" style="background-color: rgba(171, 233, 171, 0.5);">
-                                    <h6>up</h6>
-                                   
-                                </div>
-                                <p class="mb-0" style="font-size: 0.5rem;">Since last Month</p>
-                            </div>
+                            <p class="mb-0" style="font-size: 0.5rem;">Since last Month</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <div class="col-md-4 mt-md-0 ">
+      <div class="card shadow-lg col-custom-color card-with-background4">
+          <div class="card-body">
+              <h5 class="card-text" style="color:#67748E;text-align: left; cursor: default">Total Refund</h5>
+              <div class="container mt-5">
+                  <div class="row">
+                      <div class="col d-flex justify-content-left px-0 mx-0  align-items-center">
+                          <h5 style="cursor: default"><b>{{ refund_count }}</b></h5>
+                      </div>
+                      <div class="col text-right">
+                          <div class="up text-center">
+                              <button type="button" class="btn btn-primary" style="font-size: 0.7rem" onclick="window.location.href='{% url 'crmApp:centers_related_refund' center.name %}'">
+                                  View More <i class="fas fa-angle-double-right"></i>
+                              </button>
+                          </div>
+                          <p class="mb-0" style="font-size: 0.5rem;">Since last Month</p>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+  <div class="col-md-4 mt-md-0">
+    <div class="card shadow-lg col-custom-color card-with-background5">
+        <div class="card-body">
+            <h5 class="card-text" style="color: #67748E; text-align: left; cursor: default">Profit</h5>
+            <div class="container mt-5">
+                <div class="row">
+                    <div class="col d-flex justify-content-left px-0 mx-0 align-items-center">
+                        <h5 style="cursor: default"><b>{{ total_sales }}</b></h5>
+                    </div>
+                    <div class="col text-right">
+                        <div class="up text-center" style="background-color: rgba(171, 233, 171, 0.5);">
+                            <h6>up</h6>
+                        </div>
+                        <p class="mb-0" style="font-size: 0.5rem;">Since last Month</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+<div class="col-md-4 mt-md-0">
+  <div class="card px-0 mx-0 shadow-lg col-custom-color card-with-background">
+      <div class="card-body">
+          <h5 class="card-text" style="color: #67748E; text-align: left; cursor: default">Total Chargeback</h5>
+          <div class="container mt-5">
+              <div class="row">
+                  <div class="col d-flex justify-content-left px-0 mx-0 align-items-center">
+                      <h5 style="cursor: default"><b>{{ total_sales }}</b></h5>
+                  </div>
+                  <div class="col text-right">
+                      <div class="up text-center" style="background-color: rgba(171, 233, 171, 0.5);">
+                          <h6>up</h6>
+                      </div>
+                      <p class="mb-0" style="font-size: 0.5rem;">Since last Month</p>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+        </div>
+        <button id="next-btn" class="next-btn">
+          <svg viewBox="0 0 512 512" width="20" title="chevron-circle-right">
+              <path d="M369.9 273l-135.5 135.5c-9.4 9.4-24.6 9.4-33.9 0l-17-17c-9.4-9.4-9.4-24.6 0-33.9L285.1 256 183.5 154.4c-9.4-9.4-9.4-24.6 0-33.9l17-17c9.4-9.4 24.6-9.4 33.9 0L369.9 239c9.4 9.4 9.4 24.6 0 34z" />
+          </svg>
+      </button>
+      </div>
+      </div>
+      <script>
+          const prev = document.getElementById('prev-btn')
+            const next = document.getElementById('next-btn')
+            const list = document.getElementById('item-list')
+
+            const itemWidth = 100
+            const padding = 2
+
+            prev.addEventListener('click',()=>{
+                list.scrollLeft -= itemWidth + padding
+            })
+
+            next.addEventListener('click',()=>{
+                list.scrollLeft += itemWidth + padding
+            })
+     </script>
+  
+
 <div class="container mt-3" style="padding-right: 0; padding-left: 0;">
     <div class="row">
-        {% comment %} <div class="col-md-3 px-1 mt-md-0 mt-1"> {% endcomment %}
-            <div class="card shadow-lg col-custom-color card-with-background3">
+        <div class="col-md-6 px-1 mt-md-0">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center" style="border: none; background-color: #FFFFFF;">
+                    <h5 class="mb-0">Total sales overview</h5>
+                    <div class="form-group" style="display: flex; align-items: center; gap: 5px">
+                        <select style="border: 1px solid #b9c0cf; border-radius: 5px; padding: 6px; ">
+                            <option value="monthly">Monthly</option>
+                            <option value="yearly">Yearly</option>
+                        </select>
+                        <button class="btn"  style="border: 1px solid #b9c0cf; display: flex; align-items: center;">
+                            View more
+                            <img src="{% static 'assets/right-arrow.png' %}" alt="" style="height: 10px; width: 10px; margin-left: 5px;">
+                        </button>
+                    </div>
+                </div>
                 <div class="card-body">
                     <h5 class="card-text" style="color: #fff; text-align: left; cursor: default">Total Flight Request</h5>
                     <div class="container mt-5">
@@ -295,57 +333,142 @@
                                 <p class="mb-0" style="font-size: 0.5rem;">Since last Month</p>
                             </div>
                         </div>
+                        <canvas id="centersalesChart"></canvas>
                     </div>
+                </div>
+                <div class="card-body">
+                    <canvas id="totalMCOChart"></canvas>
                 </div>
             </div>
         </div>
-{% comment %} </div> {% endcomment %}<br>
-{% comment %} <table border="1">
-    <thead>
-        <tr>
-            <th>Booking ID</th>
-            <th>Confirmation No</th>
-            <th>Passenger Name</th>
-            <th>Phone Number</th>
-            <th>Email</th>
-            <th>Trip Type</th>
-            <th>Reference ID</th>
-            <th>Departure</th>
-            <th>Departure Date</th>
-            <th>Arrival</th>
-            <th>Arrival Date</th>
-            <th>Num Passengers</th>
-            <th>Price</th>
-            <th>Status</th>
-            <th>Change Date</th>
-            <th>Lead Agent</th>
-            <th>Card Number</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for booking in booking %}
-        <tr>
-            <td>{{ booking.booking_id }}</td>
-            <td>{{ booking.confirmation_no }}</td>
-            <td>{{ booking.passenger_name }}</td>
-            <td>{{ booking.phone_number }}</td>
-            <td>{{ booking.email }}</td>
-            <td>{{ booking.trip_type }}</td>
-            <td>{{ booking.reference_id }}</td>
-            <td>{{ booking.departure }}</td>
-            <td>{{ booking.departure_date }}</td>
-            <td>{{ booking.arrival }}</td>
-            <td>{{ booking.arrival_date }}</td>
-            <td>{{ booking.num_passengers }}</td>
-            <td>{{ booking.price }}</td>
-            <td>{{ booking.status }}</td>
-            <td>{{ booking.change_date }}</td>
-            <td>{{ booking.lead_agent }}</td>
-            <td>{{ booking.card_number }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table> {% endcomment %}
+        <script>
+           var ctx = document.getElementById('totalMCOChart').getContext('2d');
+var totalMCOChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+        labels: ['Weekly', 'Monthly', 'Yearly'],
+        datasets: [{
+            data: [300, 100, 200], // Update with your data
+            backgroundColor: [
+                'rgba(144, 238, 144, 0.8)', // lightgreen
+                'rgba(240, 128, 128, 0.8)', // lightcoral
+                'rgba(173, 216, 230, 0.8)' // lightblue
+            ],
+            borderWidth: 0
+        }]
+    },
+    options: {
+        cutoutPercentage: 50, // Adjust the cutout percentage as needed
+        hover: {
+            mode: null
+        },
+        legend: {
+            position: 'bottom', // Place legend at the bottom
+            align: 'center' // Align legend to the start of the chart
+        },
+        plugins: {
+            datalabels: {
+                color: '#fff',
+                font: {
+                    weight: 'bold'
+                },
+                formatter: function(value, context) {
+                    return value;
+                }
+            }
+        }
+    }
+});
+
+        </script>
+                
+                <div class="container mt-4">
+                    <div class="row">
+                        <!-- Total Flight Request Bar Graph -->
+                        <div class="col-md-12 px-1 mt-md-0">
+                            <div class="card">
+                                <div class="card-header d-flex justify-content-between align-items-center" style="border: none; background-color: #FFFFFF;">
+                                    <h5 class="mb-0">Total Flight Request</h5>
+                                    <div class="form-group" style="display: flex; align-items: center; gap: 5px">
+                                        <select style="border: 1px solid #b9c0cf; border-radius: 5px; padding: 6px; ">
+                                            <option value="monthly">Monthly</option>
+                                            <option value="yearly">Yearly</option>
+                                        </select>
+                                        <button class="btn"  style="border: 1px solid #b9c0cf; display: flex; align-items: center;">
+                                            View more
+                                            <img src="{% static 'assets/right-arrow.png' %}" alt="" style="height: 10px; width: 10px; margin-left: 5px;">
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <!-- Placeholder for total flight request bar graph -->
+                                    <canvas id="totalFlightRequestGraph" height="90%"></canvas>
+                                </div>
+                            </div>
+                        </div> <!-- Total Flight Request Bar Graph -->
+                    </div>
+                </div>
+                
+                <script>
+                    var totalFlightRequestCanvas = document.getElementById('totalFlightRequestGraph');
+                    var totalFlightRequestData = {
+                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                        datasets: [{
+                            label: 'Total Flight Request',
+                            data: [110, 200, 150, 300, 250, 400],
+                            backgroundColor: 'rgba(54, 162, 235, 0.8)', // Blue color for bars with increased alpha
+                            borderColor: 'rgba(54, 162, 235, 1)', // Border color for bars
+                            borderWidth: 1,
+                            barThickness: 25 // Define bar thickness here
+                        }]
+                    };
+                
+                    var totalFlightRequestOptions = {
+                        legend: {
+                            display: false // Hide the legend
+                        },
+                        scales: {
+                            xAxes: [{
+                                gridLines: {
+                                    display: false // Hide x-axis gridlines
+                                }
+                            }],
+                            yAxes: [{
+                                gridLines: {
+                                    borderDash: [5, 5], // Set border dash style [5, 5]
+                                    zeroLineWidth: 0 // Hide the zero line
+                                }
+                            }]
+                        },
+                        plugins: {
+                            datalabels: {
+                                formatter: function (value, context) {
+                                    return ''; // Hide default data labels
+                                }
+                            }
+                        },
+                        annotation: {
+                            annotations: [{
+                                type: 'line',
+                                mode: 'horizontal',
+                                scaleID: 'y',
+                                value: 0,
+                                borderColor: 'red', // Line color
+                                borderWidth: 1,
+                                label: {
+                                    enabled: false
+                                }
+                            }]
+                        }
+                    };
+                
+                    var totalFlightRequestChart = new Chart(totalFlightRequestCanvas, {
+                        type: 'bar',
+                        data: totalFlightRequestData,
+                        options: totalFlightRequestOptions
+                    });
+                </script>
+                
 <script>
     // Function to update remaining time dynamically
     function updateRemainingTime(endDate) {
