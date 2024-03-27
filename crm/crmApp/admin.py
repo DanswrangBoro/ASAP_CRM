@@ -1,6 +1,6 @@
 from django.contrib import admin
-from .models import MCO, Payment, Center
-from .models import  AdditionCharge, Booking, Refund, RejectedBooking, CustomUser
+from .models import MCO, APIRequest, Payment, Center, Plans, Validity
+from .models import  AdditionCharge, Booking, Refund, RejectedBooking, CustomUser,MarkupControl, PNR_TABLE, Price_manipulation_amount, Price_manipulation_percentage
 
 from .models import Sale
 from .models import Invoice
@@ -89,3 +89,31 @@ admin.site.register(MCO)
 @admin.register(Center)
 class CenterAdmin(admin.ModelAdmin):
     list_display = ('name', 'email', 'address', 'phone', 'contact_person', 'document', 'status','acknowledgment_status','signed_at')
+
+
+@admin.register(MarkupControl)
+class MarkupControlAdmin(admin.ModelAdmin):
+    list_display = ('type', 'activation')
+
+@admin.register(PNR_TABLE)
+class PNR_TABLEAdmin(admin.ModelAdmin):
+    list_display = ('email', 'phone', 'ref_id', 'address', 'zip', 'city', 'created_at')
+
+@admin.register(Price_manipulation_amount)
+class PriceManipulationAmountAdmin(admin.ModelAdmin):
+    list_display = ('price',)
+
+@admin.register(Price_manipulation_percentage)
+class PriceManipulationPercentageAdmin(admin.ModelAdmin):
+    list_display = ('price',)
+
+@admin.register(Validity)
+class ValidityAdmin(admin.ModelAdmin):
+    list_display = ['center', 'start_date', 'end_date','expiry_value']
+
+# Register your models here.
+admin.site.register(Plans)
+
+@admin.register(APIRequest)
+class APIRequestAdmin(admin.ModelAdmin):
+    list_display = ('center', 'request_date', 'request_time','type')

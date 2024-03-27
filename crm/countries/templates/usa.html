@@ -1,0 +1,396 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link
+  rel="stylesheet"
+  type="text/css"
+  href="{% static 'css/usa.css' %}"
+/>
+</head>
+  <body>
+    <header class="header">
+        <div class="header-content">
+            <h1>Explore the Beauty of destinations in USA</h1>
+            <p>Your gateway to unforgettable travel experiences</p>
+        </div>
+    </header>
+
+    {% comment %} <nav class="navigation">
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Destinations</a></li>
+            <li><a href="#">Flights</a></li>
+            <li><a href="#">Hotels</a></li>
+            <li><a href="#">Deals</a></li>
+        </ul>
+    </nav> {% endcomment %}
+    <br><br>
+  <!-- Flight search form -->
+  <section class="flight-search-form">
+    <div class="flight-search-section1">
+        <select>
+            <option>One-way</option>
+            <option>Round-trip</option>
+        </select>
+      {% comment %} <input type="checkbox" id="roundTrip" onclick="toggleReturnDate()"> {% endcomment %}
+        <div class="iconHolder">
+            <div id="travelers" name="travelers">
+                <div id="adults" onclick="changeColor(this)">
+                    <div id="ano">0</div>
+                        <span>X</span>
+                    <div id="tType">Adults</div>
+                </div>
+                <div id="children"  onclick="changeColor(this)">
+                    <div id="cno">0</div>
+                        <span>X</span>
+                    <div id="cType">Children</div>
+                </div>
+                <div id="infants"  onclick="changeColor(this)">
+                    <div id="ino">0</div>
+                        <span>X</span>
+                    <div id="iType">Infants</div>
+                </div>
+            </div>
+            <div class="icon">
+                <svg xmlns="http://www.w3.org/2000/svg" id = 'increment'  onclick="incrementValue()" style="cursor:pointer" width="16" height="14" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" id="decrement"  onclick="decrementValue()" style="cursor:pointer" width="16" height="14" fill="currentColor" class="bi bi-dash-circle" viewBox="0 0 16 16">
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                    <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <div class="flight-search-section">
+      <input type="text" placeholder="Origin" id="origin">
+      <input type="text" placeholder="Destination" id="destination">
+      <input type="date" placeholder="Departure Date" id="departureDate">
+      <input type="date" placeholder="Return Date" id="returnDate" disabled>
+    </div>
+
+    <button onclick="searchFlights()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+      </svg></button>
+  </section>
+  <br>
+  <br>
+  <br>
+  <section class="search-section">
+    <div class="search-container">
+        <h2>Find Your Perfect Destination</h2>
+        <input type="text" placeholder="Enter your destination">
+        <button>Search</button>
+    </div>
+</section>
+<section class="featured-destinations">
+    <div class="container">
+        <h2>Featured Destinations</h2>
+        <div class="row">
+
+            <!-- Card 1 -->
+            <div class="col-md-4">
+                <div class="card" style="background-image: url('https://source.unsplash.com/800x600/?new-york');">
+                    <div class="card-text-container">
+                        <h5 class="card-title">New York</h5>
+                        <p class="card-price">
+                            <del>$800</del> $500 <span class="discount">-20%</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="col-md-4">
+                <div class="card" style="background-image: url('https://source.unsplash.com/800x600/?los-angeles');">
+                    <div class="card-text-container">
+                        <h5 class="card-title">Los Angeles</h5>
+                        <p class="card-price">
+                            <del>$750</del> $600 <span class="discount">-20%</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="col-md-4">
+                <div class="card" style="background-image: url('https://source.unsplash.com/800x600/?miami');">
+                    <div class="card-text-container">
+                        <h5 class="card-title">Miami</h5>
+                        <p class="card-price">
+                            <del>$900</del> $700 <span class="discount">-20%</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="col-md-4">
+                <div class="card" style="background-image: url('https://source.unsplash.com/800x600/?san-francisco');">
+                    <div class="card-text-container">
+                        <h5 class="card-title">San Francisco</h5>
+                        <p class="card-price">
+                            <del>$950</del> $800 <span class="discount">-15%</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 5 -->
+            <div class="col-md-4">
+                <div class="card" style="background-image: url('https://source.unsplash.com/800x600/?las-vegas');">
+                    <div class="card-text-container">
+                        <h5 class="card-title">Las Vegas</h5>
+                        <p class="card-price">
+                            <del>$1200</del> $950 <span class="discount">-20%</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 6 -->
+            <div class="col-md-4">
+                <div class="card" style="background-image: url('https://source.unsplash.com/800x600/?chicago');">
+                    <div class="card-text-container">
+                        <h5 class="card-title">Chicago</h5>
+                        <p class="card-price">
+                            <del>$850</del> $700 <span class="discount">-18%</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 7 -->
+            <div class="col-md-4">
+                <div class="card" style="background-image: url('https://source.unsplash.com/800x600/?seattle');">
+                    <div class="card-text-container">
+                        <h5 class="card-title">Seattle</h5>
+                        <p class="card-price">
+                            <del>$700</del> $550 <span class="discount">-21%</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 8 -->
+            <div class="col-md-4">
+                <div class="card" style="background-image: url('https://source.unsplash.com/800x600/?orlando');">
+                    <div class="card-text-container">
+                        <h5 class="card-title">Orlando</h5>
+                        <p class="card-price">
+                            <del>$950</del> $750 <span class="discount">-21%</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 9 -->
+            <div class="col-md-4">
+                <div class="card" style="background-image: url('https://source.unsplash.com/800x600/?new-orleans');">
+                    <div class="card-text-container">
+                        <h5 class="card-title">New Orleans</h5>
+                        <p class="card-price">
+                            <del>$800</del> $650 <span class="discount">-19%</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<section class="coupon-section">
+    <h2>Exclusive Discount Coupons</h2>
+    <div class="coupon-content">
+        <div class="coupon-card">
+            <img src="https://source.unsplash.com/800x600/?travel,discount" alt="Coupon 1">
+            <p>Get 20% off on your next booking!</p>
+            <span class="coupon-code">CODE: SAVE20</span>
+            <button>Redeem Now</button>
+        </div>
+        <div class="coupon-card">
+            <img src="https://source.unsplash.com/800x600/?vacation,savings" alt="Coupon 2">
+            <p>Unlock a special discount for Prime members.</p>
+            <span class="coupon-code">CODE: PRIME10</span>
+            <button>Claim Yours</button>
+        </div>
+        <div class="coupon-card">
+            <img src="https://source.unsplash.com/800x600/?adventure,offer" alt="Coupon 3">
+            <p>Enjoy a 15% discount on your favorite destinations.</p>
+            <span class="coupon-code">CODE: TRAVEL15</span>
+            <button>Activate Discount</button>
+        </div>
+    </div>
+</section>
+
+
+
+    {% comment %} <section class="advert-banner">
+        <img src="ad-banner.jpg" alt="Advertisement Banner">
+    </section> {% endcomment %}
+    <section id="contents">
+        <h2>Discover the USA</h2>
+    
+        <div>
+            <img src="https://images.unsplash.com/photo-1508433957232-3107f5fd5995?q=80&w=886&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="USA Flag">
+            <p>
+                The United States of America is mainly situated in North America. a federal republic made up of fifty states, many regions, and federal districts. Mountains, 
+                plains, deserts, and coasts are just a few of the diverse terrain types found in the USA. Together with the 48 conterminous states located in the central latitudes 
+                of the continent, these states make up the United States. America, or the United States of America, is the most famous nation on earth. Numerous famous landmarks 
+                and numerous cultural icons can be attributed to it. The United States of America is the fourth-largest nation in the world. Perhaps the most apparent element about 
+                the United States is its diversity. Although the population of the United States is large overall, it is not as populated as other nations. The world's largest 
+                economy is the United States, measured by gross domestic product. The nation's wealth is mostly due to its highly developed industry; however, its vast agricultural 
+                output and wealth of natural resources also play a considerable role. The central part of the United States is a vast interior region that extends from the Gulf of 
+                Mexico on the south to the historic Canadian shield on the north.
+            </p>
+        </div>
+    
+        <div>
+            <p>
+                The population of the United States is incredibly diversified. At less than 250 years old, the United States is relatively young by global standards. America was the first 
+                European colony to successfully secede from its home country and the first to be founded on the idea that the people, not the government, should have sovereign authority. 
+                The majority of the crystalline platform in the United States is hidden beneath a thick layer of sedimentary rocks. There's a sharp change in the environment just south of 
+                the Adirondack Mountains and the superior upland where sedimentary and crystalline rocks meet. The Great Central Lowland, which runs 1500 miles from New York to central Texas 
+                and a further 1000 miles to the Canadian province of Saskatchewan, is the centre of this sedimentary region, which is known as the United States heartland. Part of the 
+                outermost frontiers of the continental platform, the eastern and south-eastern borders of the United States are frequently attacked by the sea and covered in layer after 
+                layer of young. Because of the gentle slope of the Atlantic Plain, even a small amount of crustal uplift can cause the shoreline to shift far out to sea, displacing the 
+                continental shelf.
+            </p>
+            <img src="https://images.unsplash.com/photo-1530959106156-50f49c30932d?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="New York City Skyline">
+
+        </div>
+    </section>
+{% comment %} <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo ipsum necessitatibus libero eaque maxime 
+    labore? Incidunt quod velit officia aut voluptatum quam labore alias provident? Eaque ipsa amet labore
+     vero ex itaque unde deserunt nemo debitis, recusandae ab vel ducimus qui quo animi ratione reiciendis temporibus 
+     tenetur minima, doloremque esse nesciunt! Aliquid nobis beatae doloremque suscipit autem et, consectetur qui libero, 
+     rerum magni quam quia nisi tempora voluptates dolore asperiores impedit dolores esse labore! Facilis enim error ducimus 
+     reiciendis dignissimos nostrum a accusantium corporis tempora quisquam sunt, sint, eveniet illum, excepturi vitae. Ut, 
+     libero! Corporis quaerat nihil soluta! Dolores consectetur sapiente ea commodi obcaecati repellat natus in nesciunt a 
+     nisi, nostrum deleniti totam, perspiciatis exercitationem accusantium voluptate quaerat saepe nam fuga voluptas sint 
+     minima numquam! Aut, placeat harum ratione explicabo id accusamus inventore magni ut ullam blanditiis doloremque nihil 
+     temporibus repellat deleniti, maxime impedit delectus minus nulla rem consequatur expedita quasi iste in. Sed, soluta voluptatum 
+     corrupti eius id dolorem pariatur? Possimus, voluptatum. Incidunt quos ipsam voluptate cumque tenetur recusandae exercitationem totam 
+     aspernatur architecto animi, porro officiis maiores error minus explicabo vel possimus distinctio labore libero assumenda hic asperiores
+     quaerat velit! Voluptatibus, itaque dolor. In animi reiciendis itaque tempora facere pariatur suscipit aliquam eum maiores quibusdam minima 
+     possimus eius dolorum aperiam, repellat magni, repellendus consectetur nam dicta a perferendis maxime. Eius, nam debitis! Rerum, veniam. Beatae, 
+     deleniti recusandae nihil excepturi doloremque, sint quaerat eos harum aperiam reprehenderit rerum explicabo sed numquam dolorem quos necessitatibus 
+     fuga saepe suscipit. In ad rem magni itaque dignissimos. Ipsa, voluptas natus earum id ipsum harum quos obcaecati numquam autem debitis nisi 
+     ullam veniam facilis enim, repellat quae praesentium molestias tenetur distinctio, nesciunt omnis perspiciatis voluptatibus est. Autem, similique? 
+     Maxime accusantium repudiandae numquam illo, optio vel, odio labore molestiae eum illum rerum. Libero esse laborum, odio unde omnis, quis illum nam 
+     quae harum nulla quisquam eligendi aliquam fugit ut nisi magnam maiores. Aut ab ullam assumenda nam temporibus sint earum eligendi culpa vel vero modi 
+     dolore enim omnis recusandae nisi est, consequatur labore deserunt. Dolorem, quidem nobis! Obcaecati asperiores sunt sed sequi facere animi porro, 
+     fugiat possimus velit, cum nobis! Quaerat ipsa tempora, facere itaque numquam voluptatum molestiae maxime necessitatibus doloribus perspiciatis 
+     nihil at officiis rem veniam aliquid, excepturi quae iste voluptas distinctio. Dolor possimus sunt nulla aperiam esse nostrum inventore, magni, 
+     culpa itaque voluptate eos molestias eligendi qui assumenda ipsum nam? Quisquam, tempore hic pariatur perspiciatis aliquid assumenda quibusdam 
+     deserunt maiores nesciunt error tempora iusto totam ducimus voluptates dicta, repellendus deleniti quasi quis distinctio maxime. Eveniet corrupti 
+     illum veritatis aspernatur repudiandae at assumenda quos eum. Quia doloremque necessitatibus harum, numquam eos illum, facere nemo commodi ullam 
+     pariatur accusantium ab officiis accusamus minima earum autem nam consectetur ipsa corporis perferendis ut! Beatae modi quam ullam deleniti. 
+     Quam nesciunt repellendus distinctio eligendi temporibus, quis veritatis maiores atque ratione nemo optio sed itaque error saepe. Eaque facilis 
+     rem, minima eligendi cum nihil. Vitae reiciendis corporis nobis inventore voluptatibus amet repellat deleniti illum voluptatem rem. Excepturi
+     repudiandae consequatur dolore!</p> {% endcomment %}
+    <footer class="footer">
+        <p>&copy; 2024 Your Amazing Travel Experience. All rights reserved.</p>
+    </footer>
+    <script>
+        var activeElement;  // Variable to store the currently active element
+    
+        function toggleReturnDate() {
+            var returnDateInput = document.getElementById("returnDate");
+            returnDateInput.disabled = !returnDateInput.disabled;
+        }
+    
+        function searchFlights() {
+            var origin = document.getElementById("origin").value;
+            var destination = document.getElementById("destination").value;
+            var departureDate = document.getElementById("departureDate").value;
+            var returnDate = document.getElementById("returnDate").value;
+            var roundTrip = document.getElementById("roundTrip").checked;
+            var travelers = document.getElementById("travelers").value;
+    
+            // Add your logic for handling the flight search here
+            // You may use JavaScript to gather form data and perform AJAX requests
+    
+            // Example: Displaying the gathered information in an alert
+            var message = "Search Flights:\n";
+            message += "Origin: " + origin + "\n";
+            message += "Destination: " + destination + "\n";
+            message += "Departure Date: " + departureDate + "\n";
+            if (roundTrip) {
+                message += "Return Date: " + returnDate + "\n";
+            }
+            message += "Travelers: " + travelers;
+    
+            alert(message);
+        }
+    
+        function changeColor(clickedElement) {
+            // Remove active class from the previously active element
+            if (activeElement) {
+                activeElement.classList.remove("active");
+            }
+    
+            // Add active class to the clicked div
+            clickedElement.classList.add("active");
+    
+            // Set the clicked element as the active element
+            activeElement = clickedElement;
+        }
+        changeColor(adults)
+        function incrementValue() {
+            // Check if there is an active element
+            if (activeElement) {
+                // Get the corresponding value element
+                var valueElement = activeElement.querySelector('div[id$="no"]');
+        
+                // Increment the value
+                var currentValue = parseInt(valueElement.innerText) || 0;
+                
+                // Check if the individual value and total are within the limit
+                if (currentValue < 9 && getTotalValue() < 9) {
+                    valueElement.innerText = currentValue + 1;
+                } else {
+                    alert("Maximum limit reached! Individual and total values cannot exceed 9.");
+                }
+            }
+        }
+        
+        function decrementValue() {
+            // Check if there is an active element
+            if (activeElement) {
+                // Get the corresponding value element
+                var valueElement = activeElement.querySelector('div[id$="no"]');
+        
+                // Decrement the value, but not below 0
+                var currentValue = parseInt(valueElement.innerText) || 0;
+        
+                // Check if the individual value is greater than 0
+                if (currentValue > 0) {
+                    valueElement.innerText = currentValue - 1;
+                } else {
+                    alert("Value cannot be less than 0.");
+                }
+            }
+        }
+        
+        function getTotalValue() {
+            // Calculate the total of all three values
+            var adultsValue = parseInt(document.getElementById('ano').innerText) || 0;
+            var childrenValue = parseInt(document.getElementById('cno').innerText) || 0;
+            var infantsValue = parseInt(document.getElementById('ino').innerText) || 0;
+        
+            return adultsValue + childrenValue + infantsValue;
+        }
+        
+    </script>
+    
+    <script src={% static "js/scripts.js" %}></script>
+</body>
+</html>

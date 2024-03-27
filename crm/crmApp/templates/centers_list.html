@@ -64,7 +64,9 @@
             <tbody>
                 {% if centers %}
                     {% for center in centers %}
-                    <tr {% if center.name == 'Main' %} style="background-color: lightblue; font-weight: bolder" {% endif %}>
+                    {% if not center.name == 'Main' %}
+                    {% comment %} <tr {% if center.name == 'Main' %} style="background-color: lightblue; font-weight: bolder" {% endif %}> {% endcomment %}
+                    <tr>
                         <td style="vertical-align: middle;font-weight: bolder; color: Blue; cursor: pointer" onclick="viewBooking('{{ center.name }}')">{{ center.name }}</td>
                         <td style="vertical-align: middle">{{ center.email }}</td>
                         <td style="vertical-align: middle">{{ center.address }}</td>
@@ -106,6 +108,7 @@
                             </form>
                         </td>
                     </tr>
+                    {% endif %}
                     {% endfor %}
                 {% else %}
                     <tr>

@@ -1,0 +1,21 @@
+[
+  {
+    "id": "1",
+    "dateOfBirth": "1998-12-12",
+    "name": {
+      "firstName": "THIMPU",
+      "lastName": "SENGYUNG"
+    },
+    "gender": "MALE",
+    "contact": {
+      "emailAddress": "thmtymthm@gmail.com",
+      "phones": [
+        {
+          "deviceType": "MOBILE",
+          "countryCallingCode": "44",
+          "number": "09101359626"
+        }
+      ]
+    }
+  }
+]

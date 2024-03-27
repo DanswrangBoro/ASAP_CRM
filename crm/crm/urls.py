@@ -20,5 +20,7 @@ from crmApp import urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('crmApp.urls')),
+    path('crm', include('crmApp.urls')),
+    path('country/',include('countries.urls')),
+    path('',include('flightbooking.urls')),
 ]

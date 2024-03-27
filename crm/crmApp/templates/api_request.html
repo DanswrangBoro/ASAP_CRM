@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container">
+  {% comment %} <h2>API Requests</h2> {% endcomment %}
+  <div class="table-responsive mt-5">
+    <table class="table table-striped" style="font-size: 0.7rem">
+      <thead>
+        <tr>
+          <th>Sl No</th>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Type</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for request in api %}
+        <tr>
+          <td>{{ forloop.counter }}</td>
+          <td>{{ request.request_date }}</td>
+          <td>{{ request.request_time }}</td>
+          <td>{{ request.type }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,612 @@
+/* Styles for the main container */
+.mainCont {
+    display: grid;
+    grid-template-areas: "logo locaTime stops arriTime price";
+    height: auto;
+    width: auto;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    margin: 1% auto;
+    transition-duration: 0.3s;
+    cursor: pointer;
+  }
+  /* Define grid areas for the .mainCont */
+  .logo-area {
+    grid-area: logo;
+    border: none;
+  }
+/* Apply general styles for images and SVGs */
+.logo img {
+  width: 7rem; /* Set a fixed width */
+  height: 4rem; /* Set a fixed height */
+  object-fit: fill; /* Maintain aspect ratio without distorting */
+}
+
+img{
+  margin-top: -20%;
+}
+.logo img{
+  margin-top: -10%;
+}
+
+/* Additional styles can be added as needed */
+
+  .cinp{
+    /* border: 2px solid red; */
+    font-size: 0.8rem;
+    font-weight: 200;
+  }
+  .lowest-price{
+    /* border: 2px solid green; */
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+  .locaTime-area {
+    grid-area: locaTime;
+    border: none;
+  }
+  
+  .stops-area {
+    grid-area: stops;
+    border: none;
+  }
+  
+  .arriTime-area {
+    grid-area: arriTime;
+    border: none;
+  }
+  
+  .price-area {
+    grid-area: price;
+    border: none;
+  }
+  
+  /* General styles for all grid items within .mainCont */
+  .mainCont > div {
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /**/
+  }
+  
+  /* Hover effect for .mainCont */
+  .mainCont:hover {
+    transform: scale(
+      1.005
+    ); /* Corrected the property from "scale" to "transform" */
+    background-color: rgb(234, 234, 234);
+  }
+  /* -------------------------------------------------------------------------------------------- */
+  .logo-area {
+    display: flex;
+    flex-direction: column;
+    /* border: 2px solid red; */
+    width: 10rem;
+  }
+  .airlineDiv {
+    width: 100%;
+    height: 50%;
+  }
+  .logoChildDiv {
+    width: 100%;
+    height: 50%;
+    /* border: 2px solid green; */
+  }
+  #logoI {
+    width: 8em;
+    height: 5rem;
+    position: relative;
+  }
+  /* ------------------------------------------------------------------------------------------- */
+  .locaTime-area {
+    display: flex;
+    flex-direction: column;
+  }
+  .orDiv {
+    width: 100%;
+    height: 50%;
+  }
+  .timeDiv {
+    width: 100%;
+    height: 50%;
+  }
+  /* --------------------------------------------------------------------------------------------- */
+  
+  .stops-area {
+    display: flex;
+    flex-direction: column;
+  }
+  .durDiv {
+    width: 100%;
+    height: 50%;
+  }
+  .arrowDiv {
+    width: 100%;
+    height: 50%;
+    font-size: 2rem;
+  }
+  .stopDiv {
+    width: 100%;
+    height: 50%;
+  }
+  
+  .btn{
+    border-radius: 0%;
+    border-right: 1px solid grey;
+  }
+  .btn:last-child {
+    border-right: none;
+  }
+  
+  .btn-content {
+    width: 100%;
+    height: 50%;
+    font-size: 1rem;
+  }
+  /* --------------------------------------------------------------------------------------------- */
+  
+  .arriTime-area {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .destDiv {
+    width: 100%;
+    height: 50%;
+  }
+  .destTimeDiv {
+    width: 100%;
+    height: 50%;
+  }
+  /* --------------------------------------------------------------------------------------------- */
+  
+  .button {
+    display: flex;
+    justify-content: center;
+    padding: 1%;
+    width: 70%;
+    margin: auto;
+  }
+  
+  /* --------------------------------------------------------------------------------------------- */
+  
+  #results {
+    width: 100%;
+    font-size: 0.9rem;
+  }
+  .rhContainer {
+    width: 60%;
+  }
+  
+  #flightResults {
+    padding: 0%;
+  }
+  
+  #flightResultsReturn {
+    width: 100%;
+  }
+  
+  /* --------------------------------------------------------------------------------------------- */
+  
+  #departureButton {
+    padding: 10px 20px;
+    /* margin: 5px; */
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    border-top-left-radius: 30px;
+    border-bottom-left-radius: 30px;
+    /* border: 2px solid red; */
+  }
+  #returnButton {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    /* margin: 5px; */
+    border: none;
+    cursor: pointer;
+    border-top-right-radius: 30px;
+    border-bottom-right-radius: 30px;
+    /* border: 2px solid red; */
+  }
+  
+  .toggle-button.active {
+    background-color: #007bff;
+    color: #ffffff;
+  }
+  
+  .toggle-button:not(.active):hover {
+    background-color: #e9e9e9;
+  }
+  
+  /* --------------------------------------------------------------------------------------------- */
+  
+  .mainCont.active {
+    background-color: rgb(203, 203, 203);
+    /* color: white; */
+    color: rgb(60, 60, 60);
+  }
+  .mainCont.active:hover {
+    background-color: rgb(177, 177, 177);
+    /* color: white; */
+    color: black;
+  }
+  
+  /* --------------------------------------------------------------------------------------------- */
+  
+  /*------------------------------------------------------------------------------------------------------*/
+  .fa{
+    /* border: 2px solid green; */
+    width: 100%;
+  }
+  .fra {
+    display: flex;
+    /* justify-content: space-between; */
+    flex-wrap: wrap;
+    gap: 2%;
+    padding: 1%;
+  }
+  #lowToHigh {
+    margin-top: 10%;
+  }
+  .af {
+    margin-top: 10%;
+  }
+  #afa {
+    margin-top: 10%;
+  }
+  /* Filters Container Styles */
+  .filters-container {
+    width: 21%;
+    padding: 20px;
+    transition: background-color 0.3s, transform 0.3s;
+    border-right: 1px solid #e0e0e0;
+  }
+  
+  .filters-container label {
+    font-size: 0.9rem;
+    font-weight: 100;
+  }
+  .filters-container input {
+    width: 0.8rem;
+  }
+  .filter-option {
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Advertisement Container Styles */
+  .advertisement-container {
+    padding: 20px;
+    width: 15%;
+    transition: background-color 0.3s, transform 0.3s;
+    border: 1px solid rgb(219, 219, 219);
+    display: flex;
+  }
+  .advertisement-container #ads {
+    margin: auto;
+  }
+  
+  /* Hover effects */
+  .filters-container:hover,
+  .advertisement-container:hover {
+    transform: translateY(-5px);
+    background-color: #f7f7f7;
+  }
+  #apply {
+    background-color: #2e72cc; /* Green color for a futuristic feel */
+    color: white; /* Text color */
+    padding: 3%;
+    width: 60%; /* Padding for some space around the text */
+    border: none; /* Remove default border */
+    border-radius: 25px; /* Larger border-radius for a rounded futuristic feel */
+    font-size: 0.9rem; /* Slightly larger font size */
+    font-weight: bold; /* Bold text for emphasis */
+    letter-spacing: 1px; /* Slightly increased letter spacing for clarity */
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1); /* Shadow for a floating effect */
+    transition: background-color 0.3s, transform 0.3s; /* Smooth transition effects */
+    cursor: pointer; /* Cursor style */
+  }
+  
+  /* Hover effect */
+  #apply:hover {
+    background-color: #2a64b0; /* Darker shade of green for hover effect */
+    transform: translateY(-3px); /* Push button slightly upwards on hover */
+    box-shadow: 0px 15px 20px rgba(46, 96, 204, 0.4); /* Enhanced shadow on hover */
+  }
+  
+  /* Active effect when button is pressed */
+  #apply:active {
+    transform: translateY(1px); /* Push button slightly down when pressed */
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2); /* Lighter shadow when pressed */
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .filters-container,
+    .advertisement-container {
+      width: 100%;
+      border-right: none;
+      border-bottom: 1px solid #e0e0e0;
+    }
+  }
+  
+  /*-------------------------------------------------------------------------------------------------------*/
+  
+  /* Responsive Design */
+  @media (max-width: 1200px) {
+    .filters-container,
+    .advertisement-container {
+      width: 25%;
+    }
+  
+    .mainCont {
+      grid-template-areas:
+        "logo locaTime"
+        "stops stops"
+        "arriTime price";
+    }
+  }
+  
+  @media (max-width: 992px) {
+    .filters-container,
+    .advertisement-container {
+      width: 100%;
+      border-right: none;
+      border-bottom: 1px solid #e0e0e0;
+    }
+  
+    .mainCont {
+      display: flex; /* Change to block display for mobile */
+      width: 100%;
+      margin-bottom: 20px; /* Add some spacing between flight results on mobile */
+    }
+    #results {
+      width: 100%;
+    }
+    #flightResults {
+      width: 100%;
+    }
+    #flightResultsReturn {
+      width: 100%;
+    }
+  }
+  @media (max-width: 997px) {
+    .mainCont {
+      display: flex;
+      width: 100%;
+    }
+  }
+  @media (max-width: 768px) {
+    .mainCont {
+      display: flex;
+      width: 100%;
+    }
+    #results {
+      width: 100%;
+    }
+    #flightResults {
+      width: 100%;
+    }
+    #flightResultsReturn {
+      width: 100%;
+    }
+  }
+  
+  /* Set a maximum height for the results container */
+  #results {
+    /* Take full width */
+    max-height: 600px; /* Set a maximum height */
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  #results::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* ------------------------------------------------------------------------------------------------- */
+  
+  #flightResultsHeader {
+    display: flex;
+    justify-content: left;
+    border: 1px solid rgb(202, 201, 201);
+    border-radius: 10px;
+    padding: 3%;
+    color: white;
+    background-color: #1f2937d1;
+  }
+  .arrow-icon-mod {
+    cursor: pointer;
+    float: right;
+    font-size: 1rem;
+    width: 40px; /* Set width and height to create a circular shape */
+    height: 40px;
+    display: flex;
+    justify-content: center; /* Center content horizontally */
+    align-items: center; /* Center content vertically */
+    border-radius: 50%; /* Make it circular */
+    background-color: #111723; /* Background color for the circle */
+    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1); /* Optional: Add a box shadow */
+    margin-right: 2%;
+    color: #858585;
+    transition-duration: 0.3s;
+  }
+  .arrow-icon-mod:hover {
+    transform: translateY(-5%);
+  }
+  
+  .modal-header {
+    padding: 0%;
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .total {
+    position: fixed;
+    width: 100%;
+    left: 0%;
+    bottom: 0%;
+    display: none;
+    z-index: 10;
+    padding: 1%;
+    height: auto;
+    background-color: #202c46;
+    transition: background-color 0.1s ease; /* Smooth transition for background-color */
+  }
+  #totalPriceModal.transparent {
+    background-color: transparent; /* Transparent background when the modal is minimized */
+  }
+  .total #modalContent {
+    display: flex;
+    flex-wrap: wrap;
+    /* border: 2px solid black; */
+    justify-content: space-between;
+    color: rgb(255, 255, 255);
+    transition-duration: 2s;
+    font-size: 0.9rem;
+  }
+  #bNow {
+    display: flex;
+    align-items: center;
+  }
+  #book {
+    height: 2.5rem;
+    width: 10rem;
+    background-color: #255ba1;
+    border: none;
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08); /* Slight shadow for depth */
+    color: white;
+    font-size: 1rem; /* Adjust font size for better readability */
+    font-weight: 600; /* Bold text */
+    text-align: center; /* Center align text */
+    line-height: 2.5rem; /* Vertically center text */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s; /* Smooth transitions */
+  }
+  
+  #book:hover {
+    background-color: #1e4a8e; /* Darken the background color on hover */
+    transform: translateY(
+      -3px
+    ); /* Move the button slightly up on hover for a lifting effect */
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15), 0 3px 6px rgba(0, 0, 0, 0.1); /* Enhance shadow on hover */
+  }
+  .image-time {
+    width: 3rem;
+  }
+  #tp {
+    display: flex;
+    align-items: center;
+  }
+  #dTime {
+    display: flex;
+    justify-content: space-between;
+    width: 10rem;
+    margin-top: 25%;
+  }
+  #rdTime {
+    display: flex;
+    justify-content: space-between;
+    width: 10rem;
+    margin-top: 25%;
+  }
+  .returnAirline {
+    display: none;
+  }
+  .muti-header-btn{
+    display: flex !important;
+    
+  }
+  
+  .btn-content-holder{
+    display: flex;
+  }
+  /* ================================================================ */
+  #selectedFlightsList{
+    /* border: 2px solid red; */
+    width: 60%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5%;
+  }
+  .flight-details{
+    background-color: #f3f3f3; /* Light gray background */
+    width: 10rem;
+    height: 10rem;
+    /* border: 2px solid purple; */
+    padding: 0%;
+  }
+  
+  .flight-details .flight-info {
+    padding: 10px;
+    width: 10rem;
+    color: #111723;
+    /* border: 2px solid palegreen; */
+  }
+  
+  .flight-details .logo {
+    width: 50px; /* Width of the logo placeholder */
+    height: 50px; /* Height of the logo placeholder */
+    margin-right: 16px; /* Margin for spacing */
+    margin-bottom: 5%;
+  }
+  .flight-details #tirpWay{
+    font-weight: bolder;
+  }
+  .flight-details #footPrice{
+    font-weight: bold;
+  }
+  .flight-details #tirpWay,
+  .flight-details #footDuration,
+  .flight-details #footPrice {
+    margin-top: 1%;
+    width: 100%; 
+    padding: 1px;
+    margin-bottom: 8px; /* Margin for vertical spacing */
+    background-size: 200% 100%; /* Double the width to cover the entire element */
+  }
+  
+  /* ================================================================skeleton */
+
+  @keyframes reflection {
+    0% {
+      background-position: -200% 0; /* Initial position, outside the element */
+    }
+    100% {
+      background-position: 200% 0; /* Final position, all the way to the right */
+    }
+  }
+  
+  .flight-details.skeleton {
+    background-color: #f3f3f3; /* Light gray background */
+    padding: 16px; /* Padding for spacing */
+    width: 10rem;
+    height: 10rem;
+    padding: 0%;
+  }
+  
+  .flight-details.skeleton .flight-info {
+    padding: 10px;
+    width: 10rem;
+  }
+  
+  .flight-details.skeleton .logo {
+    width: 50px; /* Width of the logo placeholder */
+    height: 50px; /* Height of the logo placeholder */
+    background-color: #ddd; /* Darker gray background for logo placeholder */
+    margin-right: 16px; /* Margin for spacing */
+    margin-bottom: 5%;
+  }
+  
+  .flight-details.skeleton #tirpWay,
+  .flight-details.skeleton #footDuration,
+  .flight-details.skeleton #footPrice {
+    width: 100%; /* Width of the text placeholders */
+    height: 25px; /* Height of the text placeholders */
+    background-color: #ddd; /* Darker gray background for text placeholders */
+    margin-bottom: 8px; /* Margin for vertical spacing */
+    animation: reflection 1.5s infinite linear; /* Apply the reflection animation infinitely */
+    background: linear-gradient(to right, #ddd 30%, #f3f3f3 50%, #ddd 70%); /* Gradient for reflection effect */
+    background-size: 200% 100%; /* Double the width to cover the entire element */
+  }
+  

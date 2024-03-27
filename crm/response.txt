@@ -1,0 +1,150 @@
+{
+  "type": "flight-offer",
+  "id": "1",
+  "source": "GDS",
+  "instantTicketingRequired": false,
+  "nonHomogeneous": false,
+  "oneWay": false,
+  "lastTicketingDate": "2024-03-27",
+  "lastTicketingDateTime": "2024-03-27",
+  "numberOfBookableSeats": 9,
+  "itineraries": [
+    {
+      "duration": "PT2H30M",
+      "segments": [
+        {
+          "departure": {
+            "iataCode": "GAU",
+            "at": "2024-03-30T18:15:00"
+          },
+          "arrival": {
+            "iataCode": "DEL",
+            "terminal": "3",
+            "at": "2024-03-30T20:45:00"
+          },
+          "carrierCode": "UK",
+          "number": "722",
+          "aircraft": {
+            "code": "320"
+          },
+          "operating": {
+            "carrierCode": "UK"
+          },
+          "duration": "PT2H30M",
+          "id": "57",
+          "numberOfStops": 0,
+          "blacklistedInEU": false
+        }
+      ]
+    }
+  ],
+  "price": {
+    "currency": "EUR",
+    "total": "81.06",
+    "base": "72.00",
+    "fees": [
+      {
+        "amount": "0.00",
+        "type": "SUPPLIER"
+      },
+      {
+        "amount": "0.00",
+        "type": "TICKETING"
+      }
+    ],
+    "grandTotal": "81.06"
+  },
+  "pricingOptions": {
+    "fareType": [
+      "PUBLISHED"
+    ],
+    "includedCheckedBagsOnly": true
+  },
+  "validatingAirlineCodes": [
+    "UK"
+  ],
+  "travelerPricings": [
+    {
+      "travelerId": "1",
+      "fareOption": "STANDARD",
+      "travelerType": "ADULT",
+      "price": {
+        "currency": "EUR",
+        "total": "81.06",
+        "base": "72.00"
+      },
+      "fareDetailsBySegment": [
+        {
+          "segmentId": "57",
+          "cabin": "ECONOMY",
+          "fareBasis": "V0GRPRYS",
+          "brandedFare": "ECOYS",
+          "brandedFareLabel": "ECO STANDARD",
+          "class": "V",
+          "includedCheckedBags": {
+            "weight": 15,
+            "weightUnit": "KG"
+          },
+          "amenities": [
+            {
+              "description": "EXCESS HAND BAGGAGE 5KG",
+              "isChargeable": true,
+              "amenityType": "BAGGAGE",
+              "amenityProvider": {
+                "name": "BrandedFare"
+              }
+            },
+            {
+              "description": "VISTARA SELECT",
+              "isChargeable": false,
+              "amenityType": "PRE_RESERVED_SEAT",
+              "amenityProvider": {
+                "name": "BrandedFare"
+              }
+            },
+            {
+              "description": "MEAL SERVICES",
+              "isChargeable": false,
+              "amenityType": "MEAL",
+              "amenityProvider": {
+                "name": "BrandedFare"
+              }
+            },
+            {
+              "description": "PRIORITY CHECK IN",
+              "isChargeable": true,
+              "amenityType": "TRAVEL_SERVICES",
+              "amenityProvider": {
+                "name": "BrandedFare"
+              }
+            },
+            {
+              "description": "PRIORITY BOARDING",
+              "isChargeable": true,
+              "amenityType": "TRAVEL_SERVICES",
+              "amenityProvider": {
+                "name": "BrandedFare"
+              }
+            },
+            {
+              "description": "PRIORITY BAGGAGE HANDLING",
+              "isChargeable": true,
+              "amenityType": "TRAVEL_SERVICES",
+              "amenityProvider": {
+                "name": "BrandedFare"
+              }
+            },
+            {
+              "description": "UPGRADE ELIGIBILITY",
+              "isChargeable": true,
+              "amenityType": "BRANDED_FARES",
+              "amenityProvider": {
+                "name": "BrandedFare"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+{% load static %}
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@200&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" type="text/css" href="{% static 'css/seat.css' %}" />
+  <link
+    rel="stylesheet"
+    type="text/css"
+    href="{% static 'css/seatRes.css' %}"
+  />
+</head>
+<script
+  id="create-order-url"
+  data-base-url="{% url 'flightbooking:create_order' %}"
+></script>
+<script
+  id="thankyou-page"
+  data-base-url="{% url 'flightbooking:thankyou_page' %}"
+></script>
+<script>
+  // var seatData = JSON.parse("{{ seats|escapejs|safe }}");
+  // var flightData = JSON.parse("{{ data|escapejs|safe }}");
+</script>
+
+<div class="navbar" id="navbar"></div>
+
+<!-- Container Wrapper for Left Guide, Main Container, and Right Info -->
+<div class="container-wrapper">
+  <!-- Left Guide -->
+  <div class="left-guide">
+    <!-- Add futuristic and elegant content for the left guide -->
+    <div class="lHolder">
+      <h4 id="iPara">Seat Instruction</h4>
+      <hr />
+      <div class="aligner">
+        <div class="avail"></div>
+        <p id="avail">Available</p>
+      </div>
+      <div class="aligner">
+        <div class="not-avail"></div>
+        <p id="avail">Not Available</p>
+      </div>
+      <div class="aligner">
+        <div class="wSeat"></div>
+        <p id="avail">Wing Seat</p>
+      </div>
+      <div class="aligner">
+        <div class="seatSelected"></div>
+        <p id="avail">Selected</p>
+      </div>
+    </div>
+    <!-- Ads Section -->
+    <div class="ads-section">
+      <!-- Video Ad -->
+      <div class="ad">
+        <iframe
+          style="border-radius: 5px"
+          width="100%"
+          height="190"
+          src="https://www.youtube.com/embed/kurk8oQaUds"
+          frameborder="0"
+          allowfullscreen
+        ></iframe>
+      </div>
+
+      <!-- Add more ads as needed -->
+    </div>
+  </div>
+
+  <!-- Main Container -->
+  <div class="mainContainer" id="mainContainer">
+    <!-- Add any additional content or styling for the main container -->
+  </div>
+
+  <!-- Right Info -->
+  <div class="right-info">
+    <div class="rInfo"></div>
+  </div>
+</div>
+<!-- <button id="Payment-continue" type="submit">Continue</button> -->
+<button id="continueButton">Continue</button>
+
+<!-- <button id="nextSeatMapBtn">Next Seat Map</button> -->
+<script>
+
+</script>

@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import ack_agree, centersList, pending_invoices, relatedBooking, send_signature_request, update_booking_status
+from .views import ack_agree, assign_plan, centersList, pending_invoices, relatedBooking, send_signature_request, subscription_plans, update_booking_status
 from .views import fetch_passenger_data,submit_refund_form,update_refund_status
 from django.contrib.auth.views import LoginView
 from .views import reassign_lead_agent
@@ -73,6 +73,15 @@ urlpatterns = [
     path('centers_related_confirmed/<str:center_name>/', views.centers_related_confirmed, name='centers_related_confirmed'),
     path('centers_related_cancel/<str:center_name>/', views.centers_related_cancel, name='centers_related_cancel'),
     path('centers_related_refund/<str:center_name>/', views.centers_related_refund, name='centers_related_refund'),
+    path('income/',views.income, name="income"),
+    path('centers_related_apiRequest/<str:center_name>/', views.centers_related_apiRequest, name='centers_related_apiRequest'),
+    path('renew_plan/', views.renew_plan, name='renew_plan'),
+    path('renew_plan_submit/', views.renew_plan_submit, name='renew_plan_submit'),
+    path('subscription-plans/', subscription_plans, name='subscription_plans'),
+    path('basic-plan/', views.basic_plan, name='basic_plan'),
+    path('standard-plan/', views.standard_plan, name='standard_plan'),
+    path('premium-plan/', views.premium_plan, name='premium_plan'),
+    path('assign_plan/', assign_plan, name='assign_plan'),
 ]
 
 
