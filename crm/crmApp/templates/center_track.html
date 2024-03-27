@@ -74,9 +74,8 @@
 <div class="container hero">
     <div class="row mt-3">
         <div class="col-md-12 px-1 mt-md-0" style="background-color: white; padding-left: 0%; padding-right: 0%;">
-           
             <div class="table-responsive" >
-                <table class="table " style="border-color:#74c9f7ab">
+                <table class="table " style="border-color:#74c9f7ab; font-size: 0.7rem">
                     <thead style="background-color:#EAF2FF; border:2px solid white; font-size: 0.8rem;">
                         <tr>
                             <td colspan='5' style="background-color: white;">Center Details</td>
@@ -102,14 +101,14 @@
         </div>
     </div>
 </div>
-{% if center.name != 'Main' %}
+{% comment %} {% if center.name != 'Main' %}
 <div class="card-body">
     <p class="lead">This is the Validity for {{ center.name }}.</p>
     <p>Validity Start Date: {{ validity.start_date }}</p>
     <p>Validity End Date: {{ validity.end_date }}</p>
     <p id="remaining-time">Remaining Time: {{ remaining_time }}</p>
 </div>
-{% endif %}
+{% endif %} {% endcomment %}
 <div class="container slide mt-3">
     <div class="carousel-view">
         <button id="prev-btn" class="prev-btn">
@@ -254,6 +253,29 @@
     </div>
 </div>
 <div class="col-md-4 mt-md-0">
+    <div class="card shadow-lg col-custom-color card-with-background5">
+        <div class="card-body">
+            <h5 class="card-text" style="color: #67748E; text-align: left; cursor: default">Total Flight Request</h5>
+            <div class="container mt-5">
+                <div class="row">
+                    <div class="col d-flex justify-content-left px-0 mx-0 align-items-center">
+                        <h5 style="cursor: default"><b>{{ total_api_requests }}</b></h5>
+                    </div>
+                    <div class="col text-right">
+                        <div class="up text-center">
+                            <button type="button" class="btn btn-primary" style="font-size: 0.7rem" onclick="window.location.href='{% url 'crmApp:centers_related_apiRequest' center.name %}'">
+                                View More <i class="fas fa-angle-double-right"></i>
+                            </button>
+                        </div>
+                        <p class="mb-0" style="font-size: 0.5rem;">Since last Month</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-4 mt-md-0">
   <div class="card px-0 mx-0 shadow-lg col-custom-color card-with-background">
       <div class="card-body">
           <h5 class="card-text" style="color: #67748E; text-align: left; cursor: default">Total Chargeback</h5>
@@ -317,23 +339,69 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <h5 class="card-text" style="color: #fff; text-align: left; cursor: default">Total Flight Request</h5>
-                    <div class="container mt-5">
-                        <div class="row">
-                            <div class="col d-flex justify-content-left px-0 mx-0  align-items-center">
-                                <h5 style="cursor: default"><b>{{ total_api_requests }}</b></h5>
-                            </div>
-                            <div class="col text-right">
-                                <div class="up text-center">
-                                    <button type="button" class="btn btn-primary" style="font-size: 0.7rem" onclick="window.location.href='{% url 'crmApp:centers_related_apiRequest' center.name %}'">
-                                        View More <i class="fas fa-angle-double-right"></i>
-                                    </button>
-                                   
-                                </div>
-                                <p class="mb-0" style="font-size: 0.5rem;">Since last Month</p>
-                            </div>
-                        </div>
-                        <canvas id="centersalesChart"></canvas>
+                    <canvas id="centersalesChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <script>
+            var salesData = {
+                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                datasets: [{
+                    label: '', // Set an empty string to hide the legend label
+                    data: [1000, 2000, 1500, 3000, 2500, 1800, 4000],
+                    backgroundColor: 'rgba(54, 162, 235, 0.06)',
+                    borderColor: '#1CABF7',
+                    borderWidth: 3
+                }]
+            };
+        
+            // Render Charts
+            var salesCtx = document.getElementById('centersalesChart').getContext('2d');
+        
+            var salesChart = new Chart(salesCtx, {
+                type: 'line',
+                data: salesData,
+                options: {
+                    legend: {
+                        display: false // Hide the legend
+                    },
+                    scales: {
+                        xAxes: [{
+                            gridLines: {
+                                display: false // Hide x-axis gridlines
+                            },
+                            ticks: {
+                                callback: function(value, index, values) {
+                                    // Display point style for labels
+                                    return '\u25CF ' + value; // Unicode for black circle
+                                }
+                            }
+                        }],
+                        yAxes: [{
+                            gridLines: {
+                                borderDash: [5, 5], // Set border dash style [5, 5]
+                                zeroLineWidth: 0 // Hide the zero line
+                            }
+                        }]
+                    }
+                }
+            });
+        </script>
+        
+        <div class="col-md-6 px-1 mt-md-0">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center" style="border: none; background-color: #FFFFFF;">
+                    <h5 class="mb-0">Total MCO</h5>
+                    <div class="form-group" style="display: flex; align-items: center; gap: 5px">
+                        <select style="border: 1px solid #b9c0cf; border-radius: 5px; padding: 6px; ">
+                            <option value="monthly">Monthly</option>
+                            <option value="yearly">Yearly</option>
+                        </select>
+                        <button class="btn"  style="border: 1px solid #b9c0cf; display: flex; align-items: center;">
+                            View more
+                            <img src="{% static 'assets/right-arrow.png' %}" alt="" style="height: 10px; width: 10px; margin-left: 5px;">
+                        </button>
                     </div>
                 </div>
                 <div class="card-body">
@@ -469,32 +537,34 @@ var totalMCOChart = new Chart(ctx, {
                     });
                 </script>
                 
-<script>
-    // Function to update remaining time dynamically
-    function updateRemainingTime(endDate) {
-        var now = new Date();
-        var endTime = new Date(endDate);
-        var timeDifference = endTime - now;
-    
-        if (timeDifference <= 0) {
-            document.getElementById("remaining-time").innerHTML = "Subscription Expired";
-        } else {
-            var days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-            var hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            var minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
-            var seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
-    
-            var remainingTime = days + "d " + hours + "h " + minutes + "m " + seconds + "s";
-            document.getElementById("remaining-time").innerHTML = "Remaining Time: " + remainingTime;
-    
-            // Update remaining time every second
-            setTimeout(function() {
-                updateRemainingTime(endDate);
-            }, 1000);
-        }
-    }
-    
-    // Call the function initially with the end date from the server
-    updateRemainingTime('{{ validity.end_date }}');
-    </script>
+
+                        <script>
+                            // Function to update remaining time dynamically
+                            function updateRemainingTime(endDate) {
+                                var now = new Date();
+                                var endTime = new Date(endDate);
+                                var timeDifference = endTime - now;
+                            
+                                if (timeDifference <= 0) {
+                                    document.getElementById("remaining-time").innerHTML = "Subscription Expired";
+                                } else {
+                                    var days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+                                    var hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                                    var minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+                                    var seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+                            
+                                    var remainingTime = days + "d " + hours + "h " + minutes + "m " + seconds + "s";
+                                    document.getElementById("remaining-time").innerHTML = "Remaining Time: " + remainingTime;
+                            
+                                    // Update remaining time every second
+                                    setTimeout(function() {
+                                        updateRemainingTime(endDate);
+                                    }, 1000);
+                                }
+                            }
+                            
+                            // Call the function initially with the end date from the server
+                            updateRemainingTime('{{ validity.end_date }}');
+                            </script>
+
 {% endblock %}
