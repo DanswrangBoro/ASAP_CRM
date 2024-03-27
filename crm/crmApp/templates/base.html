@@ -116,6 +116,11 @@
                                     Total Bookings <img src="{% static 'assets/down-arrow.png'%}" alt="" style="height: 10%; width: 10%; display:flex; float: inline-end;">
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'crmApp:booking' %}">
+                                    <img src="{% static 'assets/bookings.png' %}" class="" alt="bookings"> Bookings
+                                </a>
+                            </li>
                             <li class="nav-item hidden" id="total-pending">
                                 <a class="nav-link" href="{% url 'crmApp:total_booking' %}" style="font-size: 0.8rem; border: 1px solid#CCE0FF; border-radius: 10px; ">
                                     <img src="{% static 'assets/blue-dot1.png' %}" class="" alt="booking-status">
