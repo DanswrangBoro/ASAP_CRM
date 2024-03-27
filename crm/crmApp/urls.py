@@ -73,6 +73,7 @@ urlpatterns = [
     path('centers_related_confirmed/<str:center_name>/', views.centers_related_confirmed, name='centers_related_confirmed'),
     path('centers_related_cancel/<str:center_name>/', views.centers_related_cancel, name='centers_related_cancel'),
     path('centers_related_refund/<str:center_name>/', views.centers_related_refund, name='centers_related_refund'),
+    path('income/',views.income, name="income"),
 ]
 
 

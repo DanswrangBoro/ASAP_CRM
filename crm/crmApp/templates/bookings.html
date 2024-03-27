@@ -38,14 +38,7 @@
 <div id="flightBookingForm" class="container hidden">
     <h2 class="mb-4">Flight Booking Form</h2>
     <!-- Flight booking form content -->
-    <div class="mb-3 me-3" style="flex: 1;">
-        <label for="tripType" class="form-label"><i class="bi bi-geo-alt"></i> Trip Type</label>
-        <select class="form-select" id="tripType" name="tripType">
-            <option value="oneWay">One Way</option>
-            <option value="roundTrip">Round Trip</option>
-            <option value="multi">Multi-City</option>
-        </select>
-    </div>
+    
     <form id="flightSearchForm" class="custom-booking" action="{% url 'crmApp:flight_results' %}" method="GET">
         <div class="row col-md-5">
 
@@ -56,6 +49,14 @@
                     <option value="PREMIUM ECONOMY">Business</option>
                     <option value="FIRST">First</option>
                     <option value="BUSINESS">Business</option>
+                </select>
+            </div>
+            <div class="mb-3 me-3" style="flex: 1;">
+                <label for="tripType" class="form-label"><i class="bi bi-geo-alt"></i> Trip Type</label>
+                <select class="form-select" id="tripType" name="tripType">
+                    <option value="oneWay">One Way</option>
+                    <option value="roundTrip">Round Trip</option>
+                    <option value="multi">Multi-City</option>
                 </select>
             </div>
             <div class="mb-3 me-3" style="flex: 1;">

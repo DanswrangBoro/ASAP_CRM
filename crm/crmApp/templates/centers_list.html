@@ -65,7 +65,8 @@
                 {% if centers %}
                     {% for center in centers %}
                     <tr {% if center.name == 'Main' %} style="background-color: lightblue; font-weight: bolder" {% endif %}>
-                        <td style="vertical-align: middle;font-weight: bolder; color: Blue; cursor: pointer" onclick="viewBooking('{{ center.name }}')">{{ center.name }}</td>
+                        <td style="vertical-align: middle;font-weight: bolder; color: Blue; cursor: pointer"><a href="{% url 'crmApp:center_related' %}?center={{ center.name }}">{{ center.name }}</td>
+                        {% comment %} <td style="vertical-align: middle;font-weight: bolder; color: Blue; cursor: pointer" onclick="viewBooking('{{ center.name }}')">{{ center.name }}</td> {% endcomment %}
                         <td style="vertical-align: middle">{{ center.email }}</td>
                         <td style="vertical-align: middle">{{ center.address }}</td>
                         <td style="vertical-align: middle">{{ center.phone }}</td>
