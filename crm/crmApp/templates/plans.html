@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .card {
+        border: none;
+        border-radius: 15px;
+    }
+    
+    .card-header {
+        border-radius: 15px 15px 0 0;
+    }
+    
+    .plan-card {
+        border: 1px solid #f0f0f0;
+        border-radius: 15px;
+        transition: all 0.3s ease;
+    }
+    
+    .plan-card:hover {
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .plan-header {
+        padding: 20px;
+        border-radius: 15px 15px 0 0;
+    }
+    
+    .plan-body {
+        padding: 20px;
+    }
+    
+    .plan-footer {
+        padding: 20px;
+    }
+    
+    .btn-block {
+        border-radius: 10px;
+    }
+    
+    /* Plan specific styles */
+    .plan-header h4 {
+        margin-bottom: 0;
+    }
+    
+    .plan-body ul {
+        list-style: none;
+        padding: 0;
+    }
+    
+    .plan-body ul li {
+        padding: 8px 0;
+        border-bottom: 1px solid #ddd;
+    }
+    
+    .plan-footer .btn {
+        font-weight: bold;
+    }
+    
+</style>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-light">
+                    <h2 class="mb-0">Subscription Plans</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 mb-4">
+                            <div class="plan-card">
+                                <div class="plan-header bg-primary text-light">
+                                    <h4>Basic Plan</h4>
+                                </div>
+                                <div class="plan-body">
+                                    <ul>
+                                        <h5>Monthly</h5>
+                                        <li>2000 Amadeus API requests</li>
+                                        <li>Per lead submission: $0.30</li>
+                                        <li>Docusign: $0.20 per sign</li>
+                                    </ul>
+                                    <ul>
+                                        <h5>Quarterly</h5>
+                                        <li>5000 Amadeus API requests</li>
+                                        <li>Per lead submission: $0.20</li>
+                                        <li>Docusign: $0.10 per sign</li>
+                                    </ul>
+                                </div>
+                                <div class="plan-footer">
+                                    <a href="{% url 'crmApp:basic_plan' %}" class="btn btn-primary btn-block">Select Plan</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="plan-card">
+                                <div class="plan-header bg-info text-light">
+                                    <h4>Standard Plan</h4>
+                                </div>
+                                <div class="plan-body">
+                                    <ul>
+                                        <li>Feature 1</li>
+                                        <li>Feature 2</li>
+                                        <li>Feature 3</li>
+                                    </ul>
+                                </div>
+                                <div class="plan-footer">
+                                    <a href="{% url 'crmApp:standard_plan' %}" class="btn btn-info btn-block">Select Plan</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="plan-card">
+                                <div class="plan-header bg-warning text-light">
+                                    <h4>Premium Plan</h4>
+                                </div>
+                                <div class="plan-body">
+                                    <ul>
+                                        <li>Feature 1</li>
+                                        <li>Feature 2</li>
+                                        <li>Feature 3</li>
+                                    </ul>
+                                </div>
+                                <div class="plan-footer">
+                                    <a href="{% url 'crmApp:premium_plan' %}" class="btn btn-warning btn-block">Select Plan</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

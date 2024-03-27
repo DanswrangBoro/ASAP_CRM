@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-lg">
+                <div class="card-header bg-primary text-light">
+                    <h2 class="mb-0">Basic Plan</h2>
+                </div>
+                <div class="card-body">
+                    <p class="lead">This is the Basic Plan.</p>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                    <ul class="list-group">
+                        <h5>Monthly</h5>
+                        <li class="list-group-item">2000 Amadeus API requests</li>
+                        <li class="list-group-item">Per lead submission: $0.30</li>
+                        <li class="list-group-item">Docusign: $0.20 per sign</li>
+                    </ul>
+                    <ul class="list-group">
+                        <h5>Quarterly</h5>
+                        <li class="list-group-item">5000 Amadeus API requests</li>
+                        <li class="list-group-item">Per lead submission: $0.20</li>
+                        <li class="list-group-item">Docusign: $0.10 per sign</li>
+                    </ul>
+                    <form method="post" action="{% url 'crmApp:assign_plan' %}">
+                        {% csrf_token %}
+                        <div class="form-group mt-4">
+                            <label for="plan_type" class="form-label">Select Plan Type:</label><br>
+                            <input type="radio" id="monthly" name="plan_type" value="Monthly">
+                            <label for="monthly">Monthly</label><br>
+                            <input type="radio" id="quarterly" name="plan_type" value="Quarterly">
+                            <label for="quarterly">Quarterly</label><br>
+                        </div>
+                    
+                        <!-- Monthly Plan -->
+                        <ul class="list-group monthly-plan" style="display: none;">
+                            <h5>Monthly</h5>
+                            <li class="list-group-item">2000 Amadeus API requests</li>
+                            <li class="list-group-item">Per lead submission: $0.30</li>
+                            <li class="list-group-item">Docusign: $0.20 per sign</li>
+                        </ul>
+                    
+                        <!-- Quarterly Plan -->
+                        <ul class="list-group quarterly-plan" style="display: none;">
+                            <h5>Quarterly</h5>
+                            <li class="list-group-item">5000 Amadeus API requests</li>
+                            <li class="list-group-item">Per lead submission: $0.20</li>
+                            <li class="list-group-item">Docusign: $0.10 per sign</li>
+                        </ul>   
+                        <div class="form-group mt-4">
+                            <label for="center" class="form-label">Select Center:</label>
+                            <select class="form-select" id="center" name="center">
+                                <option selected>Select Center</option>
+                                {% for center in centers %}
+                                    <option value="{{ center.name }}">{{ center.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <input type="hidden" name="type" value=basic>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block mt-3">Assign Plan</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

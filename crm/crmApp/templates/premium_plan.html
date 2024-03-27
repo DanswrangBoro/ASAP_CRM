@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-lg">
+                <div class="card-header bg-warning text-light">
+                    <h2 class="mb-0">Premium Plan</h2>
+                </div>
+                <div class="card-body">
+                    <p class="lead">This is the Premium Plan.</p>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                    <ul class="list-group">
+                        <li class="list-group-item">Feature 1</li>
+                        <li class="list-group-item">Feature 2</li>
+                        <li class="list-group-item">Feature 3</li>
+                    </ul>
+                    {% comment %} <form method="post" action="{% url 'crmApp:assign_plan' %}"> {% endcomment %}
+                        <form>
+                        {% csrf_token %}
+                        <div class="form-group mt-4">
+                            <label for="center" class="form-label">Select Center:</label>
+                            <select class="form-select" id="center" name="center">
+                                <option selected>Select Center</option>
+                                <option value="center1">Center 1</option>
+                                <option value="center2">Center 2</option>
+                                <option value="center3">Center 3</option>
+                                <!-- Add more options as needed -->
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-warning btn-block mt-3">Assign Plan</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
