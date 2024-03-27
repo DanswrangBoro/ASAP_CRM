@@ -7,6 +7,85 @@
     .hidden {
         display: none;
     }
+    
+  #travelers{
+    display: flex;
+    /* flex-wrap: wrap; */
+    /* justify-content: space-between; */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.223);
+    width: 20rem;
+    /* padding: 5px; */
+  }
+  
+  #adults{
+    display: flex;
+    flex-wrap: wrap;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.223);
+    width: 33.5%;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+  #ano{
+    /* border: 1px solid red; */
+    padding: 5%;
+  }
+  span{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* padding-top: 5%; */
+    font-size: 0.7rem;
+    font-weight: bold;
+  }
+  #tType{
+    /* border: 1px solid red; */
+    padding: 5%;
+  }
+  #cno{
+    padding: 5%;
+  }
+  #cType{
+    padding: 5%;
+  }
+  #ino{
+    padding: 5%;
+  }
+  #iType{
+    padding: 10%;
+  }
+  .active {
+    background-color: blue;
+    color: white;
+}
+  #children{
+    display: flex;
+    flex-wrap: wrap;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.223);
+    width: 33.5%;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+  #infants{
+    display: flex;
+    width: 33.5%;
+    flex-wrap: wrap;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.223);
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+  .iconHolder{
+    display: flex;
+    gap: 3%;
+  }
+.icon{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
 </style>
 
 {% if request.GET.success_message %}
@@ -59,6 +138,7 @@
                 </select>
             </div>
             <div class="mb-3 me-3" style="flex: 1;">
+<<<<<<< HEAD
                 <label for="tripType" class="form-label"><i class="bi bi-geo-alt"></i> Trip Type</label>
                 <select class="form-select" id="tripType" name="tripType">
                     <option value="oneWay">One Way</option>
@@ -69,6 +149,40 @@
             <div class="mb-3 me-3" style="flex: 1;">
                 <label for="passengerCount" class="form-label"><i class="bi bi-geo-alt"></i> Passenger</label>
                 <input type="number" class="form-control" id="passengerCount" name="passengerCount" min="1" {% if exp.expiry_value == 'expired' %}disabled{% endif %}>
+=======
+                <div class="iconHolder">
+                    <div id="travelers" name="travelers">
+                        <div id="adults" onclick="changeColor(this)">
+                            <div id="ano">1</div>
+                                <input type = "text" id="adultno" name="adult" value="1" hidden>
+                                <span>X</span>
+                            <div id="tType">Adults</div>
+                        </div>
+                        <div id="children"  onclick="changeColor(this)">
+                            <div id="cno">0</div>
+                                <input type = "text" id="childno" name="child" value="0" hidden>
+                                <span>X</span>
+                            <div id="cType">Children</div>
+                        </div>
+                        <div id="infants"  onclick="changeColor(this)">
+                            <div id="ino">0</div>
+                                <input type = "text" id="infantno" name="infant" value="0" hidden>
+                                <span>X</span>
+                            <div id="iType">Infants</div>
+                        </div>
+                    </div>
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" id = 'increment'  onclick="incrementValue()" style="cursor:pointer" width="16" height="14" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                        </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" id="decrement"  onclick="decrementValue()" style="cursor:pointer" width="16" height="14" fill="currentColor" class="bi bi-dash-circle" viewBox="0 0 16 16">
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                            <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8"/>
+                        </svg>
+                    </div>
+                </div>
+>>>>>>> merge_ASAP
             </div>
         </div>
         <div style="display: flex; flex-wrap: wrap">
@@ -124,8 +238,38 @@
         <hr class="my-4">
         <!-- Remaining form fields -->
         <div class="form-group">
-            <label for="passengerCount">Passengers:</label>
-            <input type="number" class="form-control" name="passengerCount" min="1" value="1">
+            <div class="iconHolder">
+                <div id="travelers" name="travelers">
+                    <div id="adults" onclick="changeColor(this)">
+                        <div id="ano">1</div>
+                            <input type="text" id="adultno" name="adult" value="1" hidden>
+                            <span>X</span>
+                        <div id="tType">Adults</div>
+                    </div>
+                    <div id="children"  onclick="changeColor(this)">
+                        <div id="cno">0</div>
+                            <input type="text" id="childno" name="child" value="0" hidden>
+                            <span>X</span>
+                        <div id="cType">Children</div>
+                    </div>
+                    <div id="infants"  onclick="changeColor(this)">
+                        <div id="ino">0</div>
+                            <input type="text" id="infantno" name="infant" value="0" hidden>
+                            <span>X</span>
+                        <div id="iType">Infants</div>
+                    </div>
+                </div>
+                <div class="icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" id = 'increment'  onclick="incrementValue()" style="cursor:pointer" width="16" height="14" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" id="decrement"  onclick="decrementValue()" style="cursor:pointer" width="16" height="14" fill="currentColor" class="bi bi-dash-circle" viewBox="0 0 16 16">
+                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                        <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8"/>
+                    </svg>
+                </div>
+            </div>
         </div>
         <div class="form-group">
             <label for="travelClass">Travel Class:</label>
@@ -488,7 +632,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             if (inputVal.length >= 3) {
                                 console.log("its working")
                                 $.ajax({
-                                    url: '/get_location_suggestions/',
+                                    url: "{% url 'crmApp:get_location_suggestions' %}",
                                     method: 'GET',
                                     data: {
                                         keyword: inputVal
@@ -526,6 +670,72 @@ document.addEventListener('DOMContentLoaded', function() {
                         $('.location-list').hide();
                     });
                     });
+
+
+        function changeColor(clickedElement) {
+            // Remove active class from the previously active element
+            if (activeElement) {
+                activeElement.classList.remove("active");
+            }
+    
+            // Add active class to the clicked div
+            clickedElement.classList.add("active");
+    
+            // Set the clicked element as the active element
+            activeElement = clickedElement;
+        }
+        var activeElement;
+        changeColor(adults)
+        function incrementValue() {
+            // Check if there is an active element
+            if (activeElement) {
+                // Get the corresponding value element
+                var valueElement = activeElement.querySelector('div[id$="no"]');
+            
+                // Increment the value
+                var currentValue = parseInt(valueElement.innerText) || 0;
+                var inputfield = activeElement.querySelector('input[id$="no"]');
+                // Check if the individual value and total are within the limit
+                if (currentValue < 9 && getTotalValue() < 9) {
+                    valueElement.innerText = currentValue + 1;
+                    inputfield.value = currentValue + 1;
+                    console.log(inputfield  )
+                } else {
+                    alert("Maximum limit reached! Individual and total values cannot exceed 9.");
+                }
+            }
+        }
+        
+        function decrementValue() {
+            // Check if there is an active element
+            if (activeElement) {
+                // Get the corresponding value element
+                var valueElement = activeElement.querySelector('div[id$="no"]');
+        
+                // Decrement the value, but not below 0
+                var currentValue = parseInt(valueElement.innerText) || 0;
+                var inputfield = activeElement.querySelector('input[id$="no"]');
+        
+                // Check if the individual value is greater than 0
+                if (currentValue > 0) {
+                    valueElement.innerText = currentValue - 1;
+                    inputfield.value = currentValue - 1;
+
+                } else {
+                    alert("Value cannot be less than 0.");
+                }
+            }
+        }
+        
+        function getTotalValue() {
+            // Calculate the total of all three values
+            var adultsValue = parseInt(document.getElementById('ano').innerText) || 0;
+            var childrenValue = parseInt(document.getElementById('cno').innerText) || 0;
+            var infantsValue = parseInt(document.getElementById('ino').innerText) || 0;
+        
+            return adultsValue + childrenValue + infantsValue;
+        }
+        
     </script>
     
 
