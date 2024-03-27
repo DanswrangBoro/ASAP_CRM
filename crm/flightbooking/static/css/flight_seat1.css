@@ -1,0 +1,105 @@
+@media (max-width: 768px){
+  .container1{
+    border-radius: 0%;
+    width: 100%;
+  }
+  #continue{
+    height: 2rem;
+    font-size: 0.8rem;
+    padding-bottom: 7%;
+  }
+  #termsCheckbox {
+    margin-top: 1%;
+    width: 4%;
+    height: 30%;
+  }
+  .hidden label{
+    font-size: 0.8rem;
+  }
+.container label{
+  font-size: 0.8rem;
+}
+.hidden input{
+  font-size: 0.7rem;
+}
+.container input{
+font-size: 0.7rem;
+}
+.hidden input::placeholder{
+  font-size: 0.7rem;
+}
+.container input::placeholder{
+font-size: 0.7rem;
+}
+.container select{
+  font-size: 0.7rem;
+}
+.container1 label{
+  font-size: 0.8rem;
+}
+.hidden select{
+  font-size: 0.7rem;
+}
+.note {
+  background-color: rgba(239, 239, 8, 0.27);
+  height: 3.5rem;
+  margin: auto;
+  width: 83%;
+  color:rgb(101, 101, 21);
+  font-size: 0.7rem;
+  padding: 1%;
+}
+#cd{
+  font-size: 0.8rem;
+  margin-top: 2%;
+}
+#acd{
+  font-size: 0.8rem;
+  margin-top: 2%;
+}
+.cHolder{
+  height: 2rem;
+}
+#add{
+  font-size: 0.8rem;
+}
+#yo{
+  font-size: 0.8rem;
+}
+#depart{
+  font-size: 0.7rem;
+}
+#return{
+  font-size: 0.7rem;
+}
+.arrow{
+  font-size: 0.8rem;
+}
+#travel-details{
+  font-size: 0.8rem;
+}
+#pb{
+  font-size: 0.7rem;
+}
+#pbt{
+  font-size: 0.7rem;
+}
+#hb{
+  font-size: 0.8rem;
+}
+#weigh{
+  font-size: 0.7rem;
+}
+#cb{
+  font-size: 0.8rem;
+}
+#weight{
+  font-size: 0.7rem;
+}
+#output1{
+  font-size: 0.8rem;
+}
+#output2{
+  font-size: 0.8rem;
+}
+}

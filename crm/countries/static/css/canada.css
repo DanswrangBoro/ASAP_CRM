@@ -1,0 +1,434 @@
+/* Add this to your existing CSS file or create a new one, like 'japan.css' */
+
+body {
+  font-family: "Arial", sans-serif;
+  /* background-color: rgb(249, 207, 194);  */
+  color: rgb(15, 15, 15); /* Dark purple text color */
+  margin: 0;
+  padding: 0;
+}
+.header {
+  position: relative;
+  height: auto;
+  text-align: center;
+  padding: 20px 0;
+  color: rgb(7, 7, 7);
+}
+
+.header-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1; /* Ensure header-content is above the banner */
+}
+
+.banner {
+  position: relative;
+  /* border: 2px solid red; */
+}
+
+.banner img {
+  width: 100%;
+  height: 250px; /* Adjust this value as needed */
+  object-position: center;
+  object-fit: cover;
+}
+
+.banner::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(
+    0,
+    0,
+    0,
+    0.33
+  ); /* Adjust the alpha value to control the darkness */
+  z-index: 0;
+}
+
+.header h1 {
+  font-size: 2.5em;
+  margin-bottom: 10px;
+  color: white;
+}
+
+.header p {
+  font-size: 1.2em;
+  color: white;
+}
+.flight-search-section1 {
+  /* border: 2px solid red; */
+  display: flex;
+  /* justify-content: space-around; */
+  justify-content: left;
+  /* align-items: center; */
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+#travelers {
+  display: flex;
+  /* flex-wrap: wrap; */
+  /* justify-content: space-between; */
+  box-shadow: 0 0 2px rgb(163, 163, 163);
+  width: 20rem;
+  /* padding: 5px; */
+}
+
+#adults {
+  display: flex;
+  flex-wrap: wrap;
+  width: 33.5%;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+#ano {
+  /* border: 1px solid red; */
+  padding: 5%;
+}
+span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* padding-top: 5%; */
+  font-size: 0.7rem;
+  font-weight: bold;
+}
+#tType {
+  /* border: 1px solid red; */
+  padding: 5%;
+}
+#cno {
+  padding: 5%;
+}
+#cType {
+  padding: 5%;
+}
+#ino {
+  padding: 5%;
+}
+#iType {
+  padding: 10%;
+}
+.active {
+  background-color: rgb(151, 0, 1);
+  color: rgb(255, 255, 255);
+}
+#children {
+  display: flex;
+  flex-wrap: wrap;
+  width: 33.5%;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+#infants {
+  display: flex;
+  width: 33.5%;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.iconHolder {
+  display: flex;
+  gap: 3%;
+}
+.icon {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.flight-search-form {
+  background-color: #ede9e9; /* Light brown form background */
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(173, 167, 167, 0.235);
+  padding: 20px;
+  margin-top: 20px;
+  /* display: flex;
+      flex-wrap: wrap; */
+  max-width: 1000px;
+  margin: auto;
+  justify-content: space-around;
+}
+
+.flight-search-form input {
+  width: calc(33.33% - 120px);
+  padding: 10px;
+  margin-bottom: 10px;
+  /* box-shadow: 0 0 5px yellow; */
+  border: 1px solid #fff;
+  border-radius: 4px;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.flight-search-form #search {
+  width: 3rem;
+  height: 3rem; /* Set equal height to make it a perfect circle */
+  background-color: rgb(151, 0, 1); /* Dark purple button background */
+  box-shadow: 0 0 10px rgb(255, 255, 255);
+  color: #ffffff;
+  padding: 10px;
+  border: none;
+  border-radius: 50%; /* Set border-radius to half of the width or height */
+  cursor: pointer;
+  float: right;
+}
+
+.search-section {
+  background: rgb(151, 0, 1);
+  padding: 20px;
+  margin-top: 20px;
+  color: white;
+}
+
+.search-container {
+  text-align: center;
+}
+
+.search-container h2 {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
+
+.search-container input {
+  padding: 10px;
+  width: 60%;
+  border: 1px solid #fff; /* Dark brown border */
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.search-container button {
+  background-color: rgb(151, 0, 1); /* Dark purple button background */
+  box-shadow: 0 0 10px rgb(255, 255, 255);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.featured-destinations {
+  background-color: rgba(248, 233, 218, 0.229);
+  padding: 10px 50px 10px 50px;
+  margin-top: 5px;
+  /* border: 2px solid red; */
+}
+.featured-destinations .container h2 {
+  color: rgb(151, 0, 1);
+  text-align: center;
+}
+.featured-destinations .container .row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 50px;
+  /* border: 2px solid black; */
+}
+.card {
+  background-size: cover;
+  background-position: center;
+  width: 20rem;
+  height: 15rem;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 20px;
+  transition: transform 0.3s;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+.card:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(rgba(255, 255, 255, 0.045), rgba(0, 0, 0, 0.908));
+}
+
+.card-text-container {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  color: #fff;
+  z-index: 1;
+}
+
+.card-title {
+  font-size: 1.5em;
+  margin-bottom: 5px;
+}
+
+.card-price {
+  font-size: 1.2em;
+  margin: 0;
+}
+
+.discount {
+  color: rgb(151, 0, 1);
+  font-weight: bold;
+  margin-left: 5px;
+}
+
+.footer {
+  text-align: center;
+  padding: 20px;
+  background-color: rgb(151, 0, 1);
+  color: #fff;
+}
+.coupon-section {
+  background: url("https://plus.unsplash.com/premium_photo-1691088247344-375914e6db74?q=80&w=1683&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+  background-position: center;
+  background-size: 100% 100%;
+  padding: 5px;
+  text-align: center;
+  position: relative;
+  z-index: -1;
+}
+
+.coupon-section h2 {
+  z-index: 2;
+  color: #fff;
+}
+
+.coupon-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.301);
+  z-index: -1;
+}
+
+.coupon-content {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+
+.coupon-card {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  margin: 20px;
+  padding-bottom: 20px;
+  color: rgb(255 255 255);
+  font-size: 0.8rem;
+  max-width: 200px;
+  transition: transform 0.3s, box-shadow 0.3s;
+  background: linear-gradient(45deg, rgb(159, 100, 42), rgb(70, 101, 109));
+}
+.coupon-text-content {
+  padding: 10px;
+}
+.coupon-card:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    45deg,
+    rgba(20, 20, 20, 0),
+    rgba(255, 255, 255, 0)
+  );
+  z-index: 1;
+}
+
+.coupon-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+}
+
+.coupon-card img {
+  max-width: 100%;
+  border-radius: 12px 12px 0 0; /* Rounded top corners */
+}
+
+.coupon-content {
+  padding: 20px;
+}
+
+.coupon-code {
+  display: block;
+  margin-top: 15px;
+  font-size: 0.9rem;
+  /* Use the following gradient for gold mix */
+  background: linear-gradient(45deg, #000000, rgb(151, 0, 1));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent; /* Set text color to transparent to show the gradient */
+}
+
+.coupon-section button {
+  background: linear-gradient(45deg, rgb(19, 19, 18), rgb(151, 0, 1));
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+  border: none;
+  color: #fff;
+  /* border-radius: 8px; */
+  padding: 8px;
+  margin-top: 2%;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s;
+}
+#contents {
+  margin: 50px auto;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+#contents h2 {
+  background-color: rgb(151, 0, 1);
+  padding: 20px;
+  text-align: center;
+  margin: 0;
+  color: #fff;
+}
+
+#contents div {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(60, 60, 60, 0.057);
+  padding: 30px 50px 30px 50px;
+  /* border: 2px solid red; */
+}
+
+#contents img {
+  max-width: 30%;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+#contents p {
+  width: 55%;
+  text-align: justify;
+  margin: 0;
+  padding: 15px;
+  font-size: 0.9rem;
+  line-height: 20px;
+  cursor: default;
+}

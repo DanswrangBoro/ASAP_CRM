@@ -1,0 +1,2002 @@
+{% extends "formBase.html" %}
+{% load static %} 
+{% block content %}
+<script src="{% static 'js/flightbook.js' %}"></script>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200&display=swap" rel="stylesheet">
+<!-- Font Awesome Icons for "+" and "-" -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  </head>
+  <script id='country_key' data-base-url="{% url 'countries:country' country_name='placeholder' %}"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<body>
+  <div id="signupSec">
+    <div id="exitIcon">&#10005;</div>
+
+        <!-- Signup and Social Login Buttons -->
+      <div id="signupFields">
+        <div class="alert alert-success" role="alert" style="display: none;" id="successAlert">
+          Signup successfull , Try Logging in Now 
+        </div>
+        <div class="alert alert-danger" role="alert" style="display: none;" id="dangerAlert">
+          
+        </div>
+       
+            <h2 id='or'>Sign Up</h2>
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password:</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required>
+            </div>
+
+            <button type="submit" onclick="signup()">Signup</button>
+            <div class="socialIcon">
+              <!-- Facebook -->
+              <i class="fab fa-facebook-f fa-1x" style="color: #3b5998; cursor: pointer"></i>
+    
+              <!-- Twitter -->
+              <i class="fab fa-twitter fa-1x" style="color: #55acee; margin-left:1%;cursor: pointer"></i>
+    
+              <!-- Google -->
+              <i class="fab fa-google fa-1x" style="color: #dd4b39;margin-left:1%;cursor: pointer"></i>
+    
+              <!-- Instagram -->
+              <i class="fab fa-instagram fa-1x" style="color: #ac2bac;margin-left:1%;cursor: pointer"></i>
+    
+              <!-- Linkedin -->
+              <i class="fab fa-linkedin-in fa-1x" style="color: #0082ca;margin-left:1%;cursor: pointer"></i>
+              <!-- Your existing signup form -->
+            </div>
+            <p id="text">Already signed in? <span id="logIn">Login now</span></p>
+          
+      </div>
+
+    <!-- Login Fields (Initially Hidden) -->
+    <div id="loginFields" style="display: none;">
+      <div class="socialIcon">
+        <p>Sig-in using</p>
+        <!-- Facebook -->
+        <i class="fab fa-facebook-f fa-1x" style="color: #3b5998; cursor: pointer"></i>
+
+        <!-- Twitter -->
+        <i class="fab fa-twitter fa-1x" style="color: #55acee; margin-left:1%;cursor: pointer"></i>
+
+        <!-- Google -->
+        <i class="fab fa-google fa-1x" style="color: #dd4b39;margin-left:1%;cursor: pointer"></i>
+
+        <!-- Instagram -->
+        <i class="fab fa-instagram fa-1x" style="color: #ac2bac;margin-left:1%;cursor: pointer"></i>
+
+        <!-- Linkedin -->
+        <i class="fab fa-linkedin-in fa-1x" style="color: #0082ca;margin-left:1%;cursor: pointer"></i>
+
+        <!-- Your existing signup form -->
+      </div>
+      <h2 id='or'>or</h2>
+        <!-- Your existing login form -->
+        <div class="form-group">
+            <label for="loginUsername">Username:</label>
+            <input type="text" id="loginUsername" name="loginUsername" required>
+        </div>
+
+        <div class="form-group">
+            <label for="loginPassword">Password:</label>
+            <input type="password" id="loginPassword" name="loginPassword" required>
+        </div>
+
+        <button type="button" id="loginBtn" onclick="login()">Login</button>
+        <p id="notSignedUp">Not signed up? <span id="signUpNow">Signup now</span></p>
+    </div>
+</div>
+<section id="main" style="border-radius: none;">
+  <section class="section__container booking__container" id="home" style="background-image: url('{% static 'assets/maldiv.png' %}')">
+    <header class="section__container header__container">
+      <p class="header-text">WHERE DO YOU WANT TO FLY?<br> <span id="companyName">Discover amazing places at exclusive deals!</span></p>
+    </header>
+    <!-- Add buttons for cloning and removing -->
+    <div class="container" style="background-color: #8eb3d35b; border-radius: 1%;">
+        <div class="row">
+          <div class="col mt-3">
+            <div class="trip float-left">
+              <div class="toggle-container">
+                <div class="mb-3 me-3" style="flex: 1;">
+                  <label class="form-label"><i class="bi bi-geo-alt"></i> Trip Type</label>
+                  <div>
+                      <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" id="oneWay" name="tripType" value="oneWay" checked>
+                          <label class="form-check-label" for="oneWay">One Way</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" id="roundTrip" name="tripType" value="roundTrip">
+                          <label class="form-check-label" for="roundTrip">Round Trip</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" id="multi" name="tripType" value="multi">
+                          <label class="form-check-label" for="multi">Multi-City</label>
+                      </div>
+                  </div>
+              </div>
+              
+              </div>
+            </div>
+          </div>
+          
+          <div class="col mt-3">
+            <div class="dropdown float-right">
+              <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color: transparent; border: transparent;">
+                Class
+              </button>
+              
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="background-color: transparent; border: none;">
+                <a class="dropdown-item" href="#" onclick="setActive(0)" data-class-type="ECONOMY">Economy</a>
+                <a class="dropdown-item" href="#" onclick="setActive(1)" data-class-type="PREMIUM_ECONOMY">Premium Economy</a>
+                <a class="dropdown-item" href="#" onclick="setActive(2)" data-class-type="FIRST">First Class</a>
+                <a class="dropdown-item" href="#" onclick="setActive(3)" data-class-type="BUSINESS">Business</a>
+              </div>
+            </div>
+          </div>
+                    
+        </div>
+      
+      <form id="flightSearchForm" class="custom-booking" action="{% url 'flightbooking:flight_search' %}" method="GET">
+          <div class="row col-md-5">
+  
+              <div class="mb-3 me-3" style="flex: 1;">
+                  <label for="flightClass" class="form-label"><i class="bi bi-geo-alt"></i> Flight Class</label>
+                  <select class="form-select" id="flightClass" name="flightClass">
+                      <option value="ECONOMY">Economy</option>
+                      <option value="PREMIUM ECONOMY">Business</option>
+                      <option value="FIRST">First</option>
+                      <option value="BUSINESS">Business</option>
+                  </select>
+              </div>
+              <!-- <div class="mb-3 me-3" style="flex: 1;">
+                  <label for="passengerCount" class="form-label"><i class="bi bi-geo-alt"></i> Passenger</label>
+                  <input type="number" class="form-control" id="passengerCount" name="passengerCount" min="1">
+              </div> -->
+              <div class="trigger form-group form-group-lg form-group-icon-left"><i class="fa fa-users input-icon input-icon-highlight"></i>
+                <label>Passenger</label>
+                <input type="number" name="passengers" id="passengers" class="form-control" value="1" disabled>
+            </div>
+            <div class="content hide">
+                <div class="form-group">
+                     <label class="control-label col-md-5"><strong>Adult</strong><br> <i> (above 17)</i></label>
+                     <div class="input-group number-spinner col-md-7">
+                        <span class="input-group-btn">
+                            <a class="btn btn-danger" data-dir="dwn"><span class="glyphicon glyphicon-minus"></span></a>
+                        </span>
+                        <input type="text" disabled name="adult" id="adult" class="form-control text-center" value="1" max=9 min=1>
+                        <span class="input-group-btn">
+                            <a class="btn btn-info" data-dir="up"><span class="glyphicon glyphicon-plus"></span></a>
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group">
+                   <label class="control-label col-md-5"><strong>Child</strong><br> <i> (3 - 17)</i></label>
+                   <div class="input-group number-spinner col-md-7">
+                        <span class="input-group-btn">
+                            <a class="btn btn-danger" data-dir="dwn"><span class="glyphicon glyphicon-minus"></span></a>
+                        </span>
+                        <input type="text" disabled name="child" id="child" class="form-control text-center" value="0" max=9 min=0>
+                        <span class="input-group-btn">
+                            <a class="btn btn-info" data-dir="up"><span class="glyphicon glyphicon-plus"></span></a>
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group">
+                   <label class="control-label col-md-5"><strong>Infant</strong><br> <i> (belove 2)</i></label>
+                   <div class="input-group number-spinner col-md-7">
+                        <span class="input-group-btn">
+                            <a class="btn btn-danger" data-dir="dwn"><span class="glyphicon glyphicon-minus"></span></a>
+                        </span>
+                        <input type="text" disabled name="infant" id="infant" class="form-control text-center" value="0" max=9 min=0>
+                        <span class="input-group-btn">
+                            <a class="btn btn-info" data-dir="up"><span class="glyphicon glyphicon-plus"></span></a>
+                        </span>
+                    </div>
+                </div>
+                <a class="btn btn-default btn-block demise">Select</a>
+            </div>
+          </div>
+          <div style="display: flex; flex-wrap: wrap">
+              <div class="mb-3 me-3" style="flex: 1;">
+                  <label for="fromLocation" class="form-label"><i class="bi bi-geo-alt"></i> From</label>
+                  <input type="text" class="form-control" id="fromLocation" name="fromLocation">
+                  <input type="hidden" class="form-control" id="from" name="from">
+                  <ul id="fromLocationList" class="location-list"></ul>
+              </div>
+              <div class="mb-3 me-3" style="flex: 1;">
+                  <label for="toLocation" class="form-label"><i class="bi bi-geo-alt"></i> To</label>
+                  <input type="text" class="form-control" id="toLocation" name="toLocation">
+                  <input type="hidden" class="form-control" id="to" name="to">
+                  <ul id="toLocationList" class="location-list"></ul>
+              </div>
+              <div class="mb-3 me-3" style="flex: 1;">
+                  <label for="departureDate" class="form-label"><i class="bi bi-calendar3"></i> Departure Date</label>
+                  <input type="date" class="form-control" id="departureDate" name="departureDate">
+              </div>
+              <div class="mb-3 me-3" style="flex: 1;" id="returnDateField">
+                  <label for="returnDate" class="form-label"><i class="bi bi-calendar3"></i> Return Date</label>
+                  <input type="date" class="form-control" id="returnDate" name="returnDate">
+              </div>
+              <div class="mb-3" style="flex: 1;">
+                  <button type="submit" class="btn btn-primary" style="margin-top: 32px;">Search</button>
+              </div>
+          </div>
+      </form>
+        
+
+
+</div>
+
+    <!-- Flight search form -->
+  <section class="flight-search-form">
+
+    <form  method="POST" action="{% url 'flightbooking:multiSearch' %}" style="display: none;" id="formMulti">
+      {% csrf_token %}
+      <div class="flight-search-section1">
+        <div class="iconHolder">
+      </div>
+        <span><i class="ri-user-3-line"></i></span>
+        <div class="input__content">
+          <div class="input__group" id="travellersInput">
+            <input type="number" id="MtravellerNo" name="travelerNo" min="0" readonly placeholder="Travellers" onclick="openModal();" />
+            <input type="number" id="MadultsInt" name="adults" hidden/>
+            <input type="number" id="MchildrenInt" name="children" hidden/>
+            <input type="number" id="MinfantsInt" name="infants" hidden/>
+          </div>
+          <p>Add guests</p>
+        </div>
+        <input type="text" id="Mcurrency" name="currency" hidden="true" />
+        <input type="text" id="Mclass" name="class" hidden="true" />
+        <div class="form row city">
+          <div class="form-group col-md-4">
+              <label for="departureCity1">Departure City:</label>
+              <input type="text" class="form-control" name="departureCity[]" required>
+          </div>
+          <div class="form-group col-md-4">
+              <label for="arrivalCity1">Arrival City:</label>
+              <input type="text" class="form-control" name="arrivalCity[]" required>
+          </div>
+          <div class="form-group col-md-3">
+              <label for="departureDate1">Departure Date:</label>
+              <input type="date" class="form-control" name="departureDate[]" required>
+          </div>
+          <div class="form-group col-md-1">
+              <button type="button" class="btn btn-danger deleteCityBtn">Delete</button>
+          </div>
+      </div>
+      <div id="additionalCities">
+          <!-- Additional input fields will be appended here -->
+      </div>
+      <button type="button" id="addCityBtn" class="btn btn-primary">Add More</button>
+      <hr class="my-4">
+      <!-- Remaining form fields -->
+      <div class="form-group">
+          <label for="passengerCount">Passengers:</label>
+          <input type="number" class="form-control" name="passengerCount" min="1" value="1">
+      </div>
+      <div class="form-group">
+          <label for="travelClass">Travel Class:</label>
+          <select class="form-select" id="flightClass" name="flightClass">
+              <option value="ECONOMY">Economy</option>
+              <option value="PREMIUM ECONOMY">Business</option>
+              <option value="FIRST">First</option>
+              <option value="BUSINESS">Business</option>
+          </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+  </section>
+
+
+
+
+
+
+  </div>
+  
+</section>
+<section id="popular" style="background-color: #F9F2E9;">
+  <br><br><br>
+  <!-- <div class="moving-text-container">
+    <div class="moving-text">
+      CALL US +1(800)886-8942 COMPARE FLIGHT PRICES AND FIND THE BEST DEAL CALL US +1(800)886-8942 PHONE ONLY DEALS-FIND OUT MORE
+    </div>
+  </div> -->
+</section>
+
+  <!-- {% comment %} ===========================================(HOT SECTION)================================================== {% endcomment %} -->
+
+
+  <!-- {% comment %} ============================================(END HOT SECTION)================================================= {% endcomment %} -->
+  <br><br>
+  <strong>Popular Flight Destinations</strong>
+  <div class="places-container" id="placesContainer">
+    <!-- JavaScript will populate this section -->
+</div>
+<section class="section__container plan__container" style="background-color: #F9F2E9;">
+  <div class="container">
+  <div>
+    <h5>EASY DEALS & OFFERS</h5>
+    <P>to our visitors</P>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <img src="{% static 'assets/easy1.png' %}" alt="Bumper Deals" class="img-fluid">
+    </div>
+    <div class="col-md-6">
+      <img src="{% static 'assets/easy2.png' %}" alt="Bumper Deals" class="img-fluid">
+    </div>
+  </div>
+</div>
+ 
+</section>
+<section class="section__container plan__container" style="background-color: #F9F2E9;">
+  <div class="container">
+  <div>
+    <h5>YOUR MEMORABLE TRIP</h5>
+    <P>with Asapreservation</P>
+  </div>
+  <div class="row align-items-right">
+    <div class="col-md-6 mt-5">
+      <p>
+        We understand that planning a trip can be stressful,
+        which is why our team of travel experts is always available to help you through the flight booking process.
+        We take care of all the details for you, so you can focus on enjoying your trip.
+        Our travel experts work with you to understand your specific needs and preferences and create personalized travel solutions. 
+      </p>
+    </div>
+    <div class="col-md-6">
+      <img src="{% static 'assets/call-lady.png' %}" alt="Bumper Deals" class="img-fluid">
+    </div>
+  </div>
+  
+</div>
+ 
+</section>
+<section id="more">
+  <bnr><br><br>
+    <p id="text2"> Ready for your next adventure?</p>
+    <br>
+  <div class="flight-container">
+    <div class="flight-btn-group">
+      <button class="flight-btn" onclick="displayFlights('Countries')">Popular Countries</button>
+      <button class="flight-btn" onclick="displayFlights('Cities')">Popular Cities</button>
+      <button class="flight-btn" onclick="displayFlights('Airlines')">Popular Airlines</button>
+      <button class="flight-btn" onclick="displayFlights('Routes')">Popular Flight Routes</button>
+    </div>
+  
+    <div class="flight-content" id="flightContent">
+      <!-- Content will be populated here based on the clicked button -->
+    </div>
+  </div>
+  
+</section>
+
+<section class="section__container plan__container" style="background-color: #F9F2E9;">
+  <div class="container">
+  <div>
+    <h5>EXCELLENT SERVICES</h5>
+    <P>we offer to our customers</P>
+  </div>
+
+  <div class="row justify-content-center">
+    <div class="col-md-4 text-center">
+      <img class="logo-exce mx-auto d-block mb-3" src="{% static 'assets/celen.png' %}" alt="calender-logo" class="img-fluid">
+      <p>We provide a fast, efficient, and hassle-free booking experience for users.</p>
+    </div>
+    <div class="col-md-4 text-center">
+      <img class="logo-exce mx-auto d-block mb-3" src="{% static 'assets/tick.png' %}" alt="tick-logo" class="img-fluid">
+      <p>Take advantage of our exclusive offer on unpublished deals. Call us to know more</p>
+    </div>
+    <div class="col-md-4 text-center">
+      <img class="logo-exce mx-auto d-block mb-3" src="{% static 'assets/calling.png' %}" alt="calling-logo" class="img-fluid">
+      <p>Get the support you need when you travel, with our 24/7 assistance</p>
+    </div>
+  </div>
+ 
+  
+</div>
+ 
+</section>
+
+
+
+
+  <section class="section__container reviews__container">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <h2>TESTIMONIALS</h2>
+          <p>Your feedback is important for us</p>
+        </div>
+        <div class="col-auto">
+          <button class="view__all float-right">View All</button>
+        </div>
+      </div>
+    </div>
+    <div class="reviews__grid">
+        <!-- Review Card 1 -->
+        <div class="review__card">
+            <div class="review__header">
+              <img src="{% static 'assets/client-3.jpg' %}" alt="client" />
+                <div class="review__details">
+                    <h4>Emily Johnson</h4>
+                    <i class="fas fa-star" style="color: green;"></i>
+                    <i class="fas fa-star" style="color: green;"></i>
+                    <i class="fas fa-star" style="color: green;"></i>
+                    <i class="fas fa-star" style="color: green;"></i>
+                    <i class="fas fa-star" style="color: green;"></i>
+                </div>
+            </div>
+            <div class="review__content">
+                <p>
+                    "I had an amazing experience traveling with ASAP Reservation.
+                    Their service was top-notch, and the journey was comfortable."
+                </p>
+            </div>
+        </div>
+        <!-- Review Card 2 -->
+        <div class="review__card">
+            <div class="review__header">
+              <img src="{%static 'assets/client-4.jpg' %}" alt="client" />
+                <div class="review__details">
+                    <h4>David Smith</h4>
+                    <i class="fas fa-star" style="color: green;"></i>
+                    <i class="fas fa-star" style="color: green;"></i>
+                    <i class="fas fa-star" style="color: green;"></i>
+                    <i class="fas fa-star" style="color: green;"></i>
+                    <i class="fas fa-star" style="color: green;"></i>
+                </div>
+            </div>
+            <div class="review__content">
+                <p>
+                    "I had a fantastic experience flying with ASAP Reservation. 
+                    The staff was courteous, and the flight was on time."
+                </p>
+            </div>
+        </div>
+        <!-- Review Card 3 -->
+        <div class="review__card">
+            <div class="review__header">
+              <img src="{% static 'assets/client-1.jpg' %}" alt="client" />
+                <div class="review__details">
+                    <h4>Olivia Brown</h4>
+                    <i class="fas fa-star" style="color: green;"></i>
+                    <i class="fas fa-star" style="color: green;"></i>
+                    <i class="fas fa-star" style="color: green;"></i>
+                    <i class="fas fa-star" style="color: green;"></i>
+                    <i class="fas fa-star" style="color: green;"></i>
+                </div>
+            </div>
+            <div class="review__content">
+                <p>
+                    "The service provided by ASAP Reservation was exceptional. 
+                    I would highly recommend their services to anyone."
+                </p>
+            </div>
+        </div>
+        <!-- Review Card 4 -->
+        <div class="review__card">
+            <div class="review__header">
+              <img src="{% static 'assets/client-2.jpg' %}" alt="client" />
+                <div class="review__details">
+                    <h4>Daniel Taylor</h4>
+                    <i class="fas fa-star" style="color: green;"></i>
+                    <i class="fas fa-star" style="color: green;"></i>
+                    <i class="fas fa-star" style="color: green;"></i>
+                    <i class="fas fa-star" style="color: green;"></i>
+                    <i class="fas fa-star" style="color: green;"></i>
+
+                </div>
+            </div>
+            <div class="review__content">
+                <p>
+                    "I've traveled with ASAP Reservation multiple times, and they never disappoint.
+                    The quality of service is consistently excellent."
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<br><br>
+<!-- <section class="section__container contact__container" id="contacts">
+  <h2 class="section__header">Contact Us</h2>
+  
+  <form action="/submit-contact-form/" method="post" class="contact-form">
+      {% csrf_token %}
+      
+      <div class="form__group">
+          <input type="text" id="name" name="name" required>
+          <label for="name">Name</label>
+      </div>
+      
+      <div class="form__group">
+          <input type="email" id="email" name="email" required>
+          <label for="email">Email</label>
+      </div>
+      
+      <div class="form__group">
+          <textarea id="message" name="message" rows="4" required></textarea>
+          <label for="message">Message</label>
+      </div>
+      
+      <button type="submit" class="btn">Submit</button>
+  </form>
+</section> -->
+<section class="section__container contact__container" id="contacts">
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <img src="{% static 'assets/subs-img.png'%}" alt="Image-Frame">
+      </div>
+      <div class="col">
+        <div class="container mb-5">
+        <h5>Subscribe to receive an exclusive personal deals!</h5>
+        <p>Be the first to hear about exclusive discounted private deals and travel inspiration to help you plan your next getaway</p>
+      </div>
+        <div class="input-group">
+          <input type="email" class="form-control" placeholder="E-mail">
+          <div class="input-group-append">
+            <button class="btn btn-primary" type="button">SEARCH</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+</section>
+<br>
+<footer class="footer" style="background-color: #F9F2E9;">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-3">
+        <h5>Contacts</h5>
+        <ul  style="list-style: none;">
+          <li>+1(800)886-8942</li>
+          <li>ticketing@asapreservation.com</li>
+          <li>155 Willowbrook Blvd Wayne, NJ 07470, USA</li>
+        </ul>
+      </div>
+      <div class="col-md-3">
+        <h5>Important Links</h5>
+        <ul  style="list-style: none;">
+          <li><a href="#">Booking Terms & Conditions</a></li>
+          <li><a href="#">Terms & Conditions</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Bagagge Policy</a></li>
+        </ul>
+      </div>
+      <div class="col-md-3">
+        <h5>Support</h5>
+        <ul  style="list-style: none;">
+          <li><a href="#">About us</a></li>
+          <li><a href="#">FAQ's</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+      <div class="col-md-3">
+        <h5>Find us</h5>
+        <ul  style="list-style: none;">
+          <li>
+            <a href="#">Facebook</a>
+          </li>
+          <li>
+            <a href="#">Twitter</a>
+          </li>
+          <li>
+            <a href="#">Instagram</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
+<div class="container-fluid">
+  <div class="row align-items-center mb-4" >
+    <div class="col" style="width: 70%; margin-left: 5%;">
+      <img src="{% static 'assets/footer-logo.png'%}" alt="footer-logo" class="img-fluid" style="height: 10%; width: 10%;">
+    </div>
+    <div class="col d-flex align-items-left" style="margin-right: 20%;">
+      <p class="m-0">2034 © Asapreservation.com. All rights reserved.</p>
+    </div>
+  </div>
+</div>
+
+
+
+  
+   <!-- Travelers Modal -->
+   <div id="travelersModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal();">&times;</span>
+      <h2>Select Travelers</h2>
+
+      <div class="traveler-section">
+        <label for="adults">Adults</label>
+        <input type="number" id="adults" name="adults" value="1" min="1">
+      </div>
+
+      <div class="traveler-section">
+        <label for="children">Children</label>
+        <input type="number" id="children" name="children" value="0" min="0">
+      </div>
+
+      <div class="traveler-section">
+        <label for="infants">Infants</label>
+        <input type="number" id="infants" name="infants" value="0" min="0">
+      </div>
+
+      <div class="button-section">
+        <button onclick="closeModal();">Close</button>
+        <button onclick="updateInput();">Update</button>
+        <button onclick="clearModalInputs();">Clear</button>
+      </div>
+    </div>
+  </div>
+
+
+</section>
+    <!-- {% comment %} -----------------------------------------------------------------------------------------Loader {% endcomment %} -->
+
+    <div id="loading-container">
+      <div class="airplane-icon"></div>
+      <div id="flight-details" class="hidden">
+        <div class="search-details">
+          <div class="departLoad">
+            <h2>Departure</h2>
+            <p>December 25, 2023</p>
+          </div>
+          <div class="returnLoad">
+            <h2>Arrival</h2>
+            <p>December 26, 2023</p>
+          </div>
+        </div>
+        
+      </div>
+
+      
+      <!-- {% comment %} <h2>Loading...</h2> {% endcomment %} -->
+        
+<!-- {% comment %} -----------------------------------------------------------------------------------------Loader {% endcomment %} -->
+
+</body>
+
+<script>
+  /* CANCUN, SAN JUAN, BOGOTA, BELIZE, PUERTO RICO, SAL SALVADOR, GUATEMALA, MONTEGO BAY, SANTO DOMINGO*/
+  document.addEventListener('DOMContentLoaded', function() {
+    // Get all the buttons in the button group
+    const buttons = document.querySelectorAll('.flight-btn-group .flight-btn');
+    
+    // Add click event listener to each button
+    buttons.forEach(button => {
+        button.addEventListener('click', function(event) {
+            // Remove active class from all buttons
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Add active class to the clicked button
+            event.target.classList.add('active');
+            
+            // Display flights based on the button clicked (you can use a data attribute or another method to determine which flights to display)
+            const category = event.target.dataset.category; // Assuming you have a data-category attribute on each button
+            if (category) {
+                displayFlights(category);
+            }
+        });
+    });
+
+    // Set the first button as active by default
+    if (buttons.length > 0) {
+        buttons[0].classList.add('active');
+        displayFlights('Countries'); // Or any default category you want
+    }
+});
+
+
+//     {% comment %} displayFlights('Countries'); {% endcomment %}
+
+// Sample data for six popular international places with actual image URLs
+const placesData = [
+    {
+        title: 'Cancun, Mexico',
+        dateRange: 'Jan 15 - Feb 15',
+        startingPrice: '$500',
+        city: 'CANCUN',
+        discount: '20%',
+        primePrice: '$400',
+        image: 'https://wallpaperaccess.com/full/1292243.jpg'
+    },
+    {
+        title: 'San Juan, Puerto Rico',
+        dateRange: 'Feb 10 - Mar 10',
+        startingPrice: '$550',
+        city: 'Puerto',
+        discount: '15%',
+        primePrice: '$468',
+        image: 'https://wallpaperaccess.com/full/2858547.jpg'
+    },
+    {
+        title: 'Bogota, Colombia',
+        dateRange: 'Mar 20 - Apr 20',
+        startingPrice: '$480',
+        city: 'Bogota',
+        discount: '10%',
+        primePrice: '$432',
+        image: 'https://plus.unsplash.com/premium_photo-1697730030651-3a7aa391b9d6?q=80&w=1588&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+    },
+    {
+        title: 'Belize City, Belize',
+        dateRange: 'Apr 5 - May 5',
+        startingPrice: '$520',
+        city: 'Belize',
+        discount: '25%',
+        primePrice: '$390',
+        image: 'https://wallpaperaccess.com/full/496100.jpg'
+    },
+    {
+        title: 'Sal Salvador, El Salvador',
+        dateRange: 'May 15 - Jun 15',
+        startingPrice: '$450',
+        city: 'Salvador',
+        discount: '18%',
+        primePrice: '$369',
+        image: 'https://www.tourist-destinations.com/wp-content/uploads/2011/08/Teopan-Lake-Coatepeque-1980x1080-1.jpg'
+    },
+    {
+        title: 'Guatemala City, Guatemala',
+        dateRange: 'Jun 20 - Jul 20',
+        startingPrice: '$490',
+        city: 'Guatemala',
+        discount: '22%',
+        primePrice: '$382',
+        image: 'https://wallpaperaccess.com/full/2073946.jpg'
+    },
+    {
+        title: 'Montego Bay, Jamaica',
+        dateRange: 'Jul 10 - Aug 10',
+        startingPrice: '$530',
+        city: 'Montego',
+        discount: '16%',
+        primePrice: '$445',
+        image: 'https://images.unsplash.com/photo-1542356670-bdf906b3ac87?q=80&w=1530&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+    },
+    {
+        title: 'Santo Domingo, Dominican Republic',
+        dateRange: 'Aug 15 - Sep 15',
+        startingPrice: '$560',
+        city: 'Domingo',
+        discount: '19%',
+        primePrice: '$453',
+        image: 'https://wallpapercave.com/wp/wp4203009.jpg'
+    },
+    {
+        title: 'Asuncion, Paraguay',
+        dateRange: 'Sep 10 - Oct 10',
+        startingPrice: '$440',
+        city: 'Paraguay',
+        discount: '21%',
+        primePrice: '$348',
+        image: 'https://wallpaperaccess.com/full/2074292.jpg'
+    },
+];
+
+// Get the container div
+const placesContainer = document.getElementById('placesContainer');
+
+// Populate the places
+placesData.forEach((place) => {
+    const placeCard = document.createElement('div');
+    placeCard.classList.add('place-card');
+
+    const placeImage = document.createElement('div');
+    placeImage.classList.add('place-image');
+    placeImage.style.backgroundImage = `url(${place.image})`;
+
+    const placeDetails = document.createElement('div');
+    placeDetails.classList.add('place-details');
+
+    const placeTitle = document.createElement('h2');
+    placeTitle.classList.add('place-title');
+    placeTitle.textContent = place.title;
+
+    const dateRange = document.createElement('p');
+    dateRange.textContent = `Date: ${place.dateRange}`;
+    dateRange.style.marginBottom = '5px';
+    dateRange.style.fontSize = '0.9rem';
+
+
+    const pricingDetails = document.createElement('div');
+    pricingDetails.classList.add('pricing-details');
+
+    const priceHolder = document.createElement('div');
+    priceHolder.classList.add('priceHolder');
+
+    const startingPrice = document.createElement('span');
+    startingPrice.textContent = `Starting at: ${place.startingPrice}`;
+    startingPrice.style.fontSize = '0.9rem'
+
+
+    const discount = document.createElement('span');
+    discount.textContent = `- ${place.discount}`;
+    discount.classList.add("discount");
+
+    const primePrice = document.createElement('span');
+    primePrice.textContent = 'Now at: ';
+    primePrice.style.color = 'black';
+    primePrice.style.fontSize = '0.9rem';
+
+    
+    // Create a span specifically for the prime price text and style it
+    const priceValue = document.createElement('span');
+    priceValue.textContent = `${place.primePrice}`;
+    priceValue.style.fontSize = '1.5rem';  // Set the font size for the prime price value
+    priceValue.style.color = 'maroon';  // Set the font size for the prime price value
+    
+    // Apply the 'prime-price' class to the entire span for consistent styling
+    primePrice.classList.add('prime-price');
+    
+    // Append the priceValue span to the primePrice span
+    primePrice.appendChild(priceValue);
+    
+
+    // Add a strike-through style for the original price and apply discount
+    startingPrice.classList.add('original-price');
+    startingPrice.style.textDecoration = 'line-through';
+
+    pricingDetails.appendChild(startingPrice);
+    pricingDetails.appendChild(priceHolder);
+
+    priceHolder.appendChild(discount);
+    priceHolder.appendChild(primePrice);
+
+    placeDetails.appendChild(placeTitle);
+    placeDetails.appendChild(dateRange);
+    placeDetails.appendChild(pricingDetails);
+
+    placeCard.appendChild(placeImage);
+    placeCard.appendChild(placeDetails);
+    // Add click event listener to each place card
+    placeCard.addEventListener('click', function() {
+        // Assuming your form has a class "form"
+  // Assuming your form has a tag name "form"
+  const formElement = document.querySelector('#mix');
+
+  // Check if the form element exists
+  if (formElement) {
+    // Scroll to the form element
+    formElement.scrollIntoView({ behavior: 'smooth' });
+  }
+      const destinationCode = document.getElementById('destinationCode');
+
+      if (destinationCode) {
+          console.log("Here is the destinationCode:", destinationCode);
+      } else {
+          console.error("Could not find an element with the id 'destinationCode'");
+      }
+
+      console.log("I am clicked")
+      // Extract the title from the clicked place card
+      const clickedTitle = place.city;
+      console.log("title: "+clickedTitle)
+
+      // Update the content of the destinationCode element
+      destinationCode.value = clickedTitle;
+      destinationCity.value = clickedTitle;
+
+      if(destinationCity.value.trim()!==''){
+        let inputEvent = new Event("input", { bubbles: true });
+        function destination_term1_search(){
+          const destinationCodeInput = document.getElementById("destinationCode");
+          const destinationCity = document.getElementById("destinationCity");
+          const IList = document.getElementById("ListDestination");
+        
+          destinationCodeInput.addEventListener("input", async function () {
+            const destinationCodeValue = destinationCodeInput.value.trim();
+            // Clear the existing list
+            IList.innerHTML = "";
+        
+            // Show the list only if there's something in the input
+            if (destinationCodeValue.length >= 3) {
+              try {
+                // Replace 'YOUR_API_ENDPOINT' with the actual URL of your API endpoint
+                const destinationURLComponent =
+                  document.getElementById("destination-url");
+                const apiEndpoint =
+                  destinationURLComponent.getAttribute("data-base-url");
+                // const apiEndpoint = '{% url 'flightbooking:destination_search' %}';
+        
+                // Make a GET request to the API endpoint with the originCode as a part of the URL
+                const response = await fetch(
+                  `${apiEndpoint}?term=${encodeURIComponent(destinationCodeValue)}`
+                );
+        
+                if (!response.ok) {
+                  throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+        
+                // Handle the data returned from the server
+                const data = await response.json();
+                console.log(data);
+                var destinationIataCode = document.getElementById(
+                  "destinationIataCode"
+                );
+                // Populate the list with the data
+                data.data.forEach((item,index) => {
+                  const listItem = document.createElement("li");
+                  listItem.classList.add("searchLists");
+                  if (item.subType === "AIRPORT") {
+                    listItem.textContent =
+                      item.iataCode +
+                      "  " +
+                      item.address.cityName +
+                      "-" +
+                      item.name +
+                      ", " +
+                      item.address.countryName;
+                    listItem.addEventListener("click", () => {
+                      destinationCodeInput.value =
+                        item.iataCode +
+                        "  " +
+                        item.address.cityName +
+                        "-" +
+                        item.name +
+                        ", " +
+                        item.address.countryName;
+                      destinationIataCode.value = item.iataCode;
+                      destinationCity.value = item.address.cityName;
+                      IList.style.display = "none"; // Hide the list after selection
+                    });
+                    IList.appendChild(listItem);
+                    // Automatically select the first item
+                    if (index === 0) {
+                      listItem.click();
+                    }
+                  }
+                  // Assuming each item is a string
+                });
+        
+                IList.style.display = "block";
+              } catch (error) {
+                // Handle errors during the fetch
+                console.error("Fetch error:", error);
+              }
+            } else {
+              IList.style.display = "none"; // Hide the list if input is empty
+            }
+          });
+          destinationCodeInput.dispatchEvent(inputEvent);
+        };
+        destination_term1_search();
+      }
+      
+  });
+
+    placesContainer.appendChild(placeCard);
+});
+
+// {% comment %} ========================================================================================================================= {% endcomment %}
+
+
+// Add event listeners after populating the places
+const bookButtons = document.querySelectorAll('.book-button');
+
+bookButtons.forEach(button => {
+    button.addEventListener('click', function(event) {
+      // Sample data for six popular international places with corresponding IATA codes
+const placesData = [
+{ title: 'Eiffel Tower', iataCode: 'CDG' },
+{ title: 'Statue of Liberty', iataCode: 'JFK' },
+{ title: 'Great Wall of China', iataCode: 'PEK' },
+{ title: 'Taj Mahal', iataCode: 'DEL' },
+{ title: 'Machu Picchu', iataCode: 'CUZ' },
+{ title: 'Sydney Opera House', iataCode: 'SYD' }
+];
+        const dataIndex = button.getAttribute('data-index');
+        
+        if (dataIndex !== null && dataIndex >= 0 && dataIndex < placesData.length) {
+            // Retrieve the IATA code based on the dataIndex
+            const destinationIataCode = placesData[dataIndex].iataCode; // Ensure you have the iataCode property in your placesData
+            
+            // Set the destination IATA code in the form field
+            document.getElementById('destinationCode').value = destinationIataCode;
+
+            // Set "Guwahati" as the default origin IATA code
+            document.getElementById('originCode').value = 'GAU';
+        } else {
+            console.error('Invalid dataIndex or missing data in placesData.');
+        }
+
+        // Prevent the default action of the button (e.g., form submission)
+        event.preventDefault();
+    });
+});
+  // {% comment %} -------------------------------------------------------------------------------------------------------------------- {% endcomment %}
+  document.getElementById('signup').addEventListener('click', function() {
+    var modal = document.getElementById('signupSec');
+    modal.style.display = 'block';
+    
+    // Create overlay element
+    var overlay = document.createElement('div');
+    overlay.id = 'overlay';
+    
+    // Style the overlay
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100%';
+    overlay.style.height = '100%';
+    overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+    overlay.style.zIndex = '11';
+    
+    // Append overlay to the document body
+    document.body.appendChild(overlay);
+    
+    document.getElementById('exitIcon').addEventListener('click', function() {
+        modal.style.display = 'none';
+        overlay.remove();
+        clearInputFields();
+        showSignupFields();
+    });
+
+    document.getElementById('logIn').addEventListener('click', function() {
+        document.getElementById('signupFields').style.display = 'none';
+        document.getElementById('loginFields').style.display = 'block';
+    });
+
+    // Event listener for "Signup now" text
+    document.getElementById('signUpNow').addEventListener('click', function() {
+        document.getElementById('loginFields').style.display = 'none';
+        document.getElementById('signupFields').style.display = 'block';
+    });
+
+    // Close modal and remove overlay when overlay is clicked
+    overlay.addEventListener('click', function() {
+        modal.style.display = 'none';
+        overlay.remove();
+        clearInputFields();
+        showSignupFields();
+    });
+});
+
+// Function to clear input fields
+function clearInputFields() {
+    document.getElementById('username').value = '';
+    document.getElementById('email').value = '';
+    document.getElementById('password').value = '';
+    document.getElementById('confirmPassword').value = '';
+    document.getElementById('loginUsername').value = '';
+    document.getElementById('loginPassword').value = '';
+}
+
+// Function to show signupFields and hide loginFields
+function showSignupFields() {
+    document.getElementById('signupFields').style.display = 'block';
+    document.getElementById('loginFields').style.display = 'none';
+}
+
+// Initially show signupFields and hide loginFields
+showSignupFields();
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('signupForm');
+    
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        const username = document.getElementById('username').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        
+        // Simple validation: Check if passwords match
+        if (password !== confirmPassword) {
+            alert('Passwords do not match!');
+            return;
+        }
+        
+        // Here, you can add more logic like sending the data to a server
+        console.log('Username:', username);
+        console.log('Email:', email);
+        console.log('Password:', password);
+        
+        alert('Signup successful!');
+        
+        // Clear the form fields
+        form.reset();
+    });
+});
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('signupForm');
+    
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        const username = document.getElementById('username').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        
+        // Simple validation: Check if passwords match
+        if (password !== confirmPassword) {
+            alert('Passwords do not match!');
+            return;
+        }
+        
+        // Here, you can add more logic like sending the data to a server
+        console.log('Username:', username);
+        console.log('Email:', email);
+        console.log('Password:', password);
+        
+        alert('Signup successful!');
+        
+        // Clear the form fields
+        form.reset();
+    });
+});
+
+  // {% comment %} ------------------------------------------------------------------------------------------------------- {% endcomment %}
+
+
+// {% comment %} let cloneIndex = 0;
+// let lastClonedForm;  {% endcomment %}
+
+// Function to set the indicator based on its position
+function setIndicator(leftPosition = 0) {
+    const indicator = document.getElementById('toggle-indicator');
+    const options = document.querySelectorAll('.toggle-option');
+    const returnDateInput = document.getElementById('returnDate');
+    const cal = document.getElementById('cal');
+    const para = document.getElementById('para');
+    const multiCityDiv = document.getElementById('multiCityDiv');
+    const addIcon = document.getElementById('addIcon');
+    const removeIcon = document.getElementById('removeIcon');
+
+    // Reset cloned forms and icons when moving away from Multi-City
+    if (leftPosition !== 200) {
+        const clonedFormsContainer = document.getElementById('clonedFormsContainer');
+        clonedFormsContainer.innerHTML = ''; // Clear all cloned forms
+        cloneIndex = 0; // Reset clone index
+        addIcon.style.display = 'none'; // Hide the "+" icon
+        removeIcon.style.display = 'none'; // Hide the "-" icon
+    }
+
+    // Remove active class from all options by default
+    options.forEach((opt) => opt.classList.remove('active'));
+
+    if (leftPosition === 0) {
+        indicator.textContent = 'One Way';
+        indicator.style.color = '#ffffff';
+        returnDateInput.disabled = true;
+        returnDateInput.parentNode.style.display = 'block'; // Display return date input for One Way
+        cal.parentNode.style.display = 'block';
+        para.style.display = 'block';
+        const oneWayOption = document.querySelector('.toggle-option.one-way');
+        oneWayOption.classList.add('active');
+
+
+        const formOneway = document.getElementById("formOneway")
+        formOneway.style.display="block";
+        const formMulti = document.getElementById("formMulti")
+        formMulti.style.display="none";
+
+    } else if (leftPosition === 100) {
+        indicator.textContent = 'Round Trip';
+        indicator.style.color = '#ffffff';
+        returnDateInput.disabled = false;
+        returnDateInput.parentNode.style.display = 'block'; // Display return date input for Round Trip
+        cal.parentNode.style.display = 'block';
+        para.style.display = 'block';
+        const roundTripOption = document.querySelector('.toggle-option.round-trip');
+        roundTripOption.classList.add('active');
+
+
+        const formOneway = document.getElementById("formOneway")
+        formOneway.style.display="block";
+        const formMulti = document.getElementById("formMulti")
+        formMulti.style.display="none";
+
+
+
+    } else if (leftPosition === 200) {
+        indicator.textContent = 'Multi-City';
+        indicator.style.color = '#ffffff';
+        if (multiCityDiv) {
+            multiCityDiv.style.display = 'block';
+        }
+        returnDateInput.value = '';
+        returnDateInput.parentNode.style.display = 'none';
+        cal.parentNode.style.display = 'none';
+        para.style.display = 'none';
+        addIcon.style.display = 'inline';
+        //removeIcon.style.display = 'inline';
+        const multiCityOption = document.querySelector('.toggle-option.multi-city');
+        multiCityOption.classList.add('active');
+
+
+        const formOneway = document.getElementById("formOneway")
+        formOneway.style.display="none";
+        const formMulti = document.getElementById("formMulti")
+        formMulti.style.display="block";
+
+    }
+
+    indicator.style.left = `${leftPosition}px`;
+    const clickedOption = document.querySelector(`.toggle-option:nth-child(${Math.floor(leftPosition / 100) + 1})`);
+    if (clickedOption) {
+        clickedOption.classList.add('active');
+    }
+}
+// {% comment %} =====================================================(clone and origin/destination)======================================= {% endcomment %
+
+
+
+
+
+function addOriginSearch(form) {
+  const originCodeInput = form.querySelector("#originCode");
+  const originCityName = form.querySelector("#originCity");
+  const IList = form.querySelector("#List");
+
+  originCodeInput.addEventListener("input", async function () {
+    const originCodeValue = originCodeInput.value.trim();
+    IList.innerHTML = "";
+
+    if (originCodeValue.length >= 3) {
+      try {
+        var originUrlElement = document.getElementById("origin-url");
+        const apiEndpoint = originUrlElement.getAttribute("data-base-url");
+
+        const response = await fetch(
+          `${apiEndpoint}?term=${encodeURIComponent(originCodeValue)}`
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log(data);
+        var originIataCode = form.querySelector("#originIataCode");
+
+        data.data.forEach((item) => {
+          const listItem = document.createElement("li");
+          listItem.classList.add("searchLists");
+          if (item.subType === "AIRPORT") {
+            listItem.textContent =
+              item.iataCode +
+              "  " +
+              item.address.cityName +
+              "-" +
+              item.name +
+              ", " +
+              item.address.countryName;
+            listItem.addEventListener("click", () => {
+              originCodeInput.value =
+                item.iataCode +
+                "  " +
+                item.address.cityName +
+                "-" +
+                item.name +
+                ", " +
+                item.address.countryName;
+              originIataCode.value = item.iataCode;
+              originCityName.value = item.address.cityName;
+              IList.style.display = "none";
+            });
+            IList.appendChild(listItem);
+          }
+        });
+
+        IList.style.display = "block";
+      } catch (error) {
+        console.error("Fetch error:", error);
+      }
+    } else {
+      IList.style.display = "none";
+    }
+  });
+}
+
+function addDestinationSearch(form) {
+  const destinationCodeInput = form.querySelector("#destinationCode");
+  const destinationCity = form.querySelector("#destinationCity");
+  const IList = form.querySelector("#ListDestination");
+
+  destinationCodeInput.addEventListener("input", async function () {
+    const destinationCodeValue = destinationCodeInput.value.trim();
+    IList.innerHTML = "";
+
+    if (destinationCodeValue.length >= 3) {
+      try {
+        const destinationURLComponent =
+        document.getElementById("destination-url");
+      const apiEndpoint =
+        destinationURLComponent.getAttribute("data-base-url");
+
+        const response = await fetch(
+          `${apiEndpoint}?term=${encodeURIComponent(destinationCodeValue)}`
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log(data);
+        var destinationIataCode = form.querySelector("#destinationIataCode");
+
+        data.data.forEach((item) => {
+          const listItem = document.createElement("li");
+          listItem.classList.add("searchLists");
+          if (item.subType === "AIRPORT") {
+            listItem.textContent =
+              item.iataCode +
+              "  " +
+              item.address.cityName +
+              "-" +
+              item.name +
+              ", " +
+              item.address.countryName;
+            listItem.addEventListener("click", () => {
+              destinationCodeInput.value =
+                item.iataCode +
+                "  " +
+                item.address.cityName +
+                "-" +
+                item.name +
+                ", " +
+                item.address.countryName;
+              destinationIataCode.value = item.iataCode;
+              destinationCity.value = item.address.cityName;
+              IList.style.display = "none";
+            });
+            IList.appendChild(listItem);
+          }
+        });
+
+        IList.style.display = "block";
+      } catch (error) {
+        console.error("Fetch error:", error);
+      }
+    } else {
+      IList.style.display = "none";
+    }
+  });
+}
+
+function logIdsAndNames(form, label) {
+  console.log(`${label} - Form ID: ${form.id}, Form Name: ${form.name}`);
+
+  const formElements = form.querySelectorAll("[id], [name]");
+  formElements.forEach((element) => {
+    console.log(`Element ID: ${element.id}, Element Name: ${element.name}`);
+  });
+}
+
+  
+
+
+// {% comment %} ================================================================================================================== {% endcomment %}
+const x = document.getElementById("demo");
+
+// Function to fetch the user's public IP address using ipify service
+function fetchUserIpAddress() {
+  return fetch('https://api.ipify.org?format=json')
+    .then(response => response.json())
+    .then(data => data.ip);
+}
+
+// Function to fetch geolocation data using the detected IP address and IPinfo API
+function fetchGeolocationData(ipAddress) {
+  const accessToken = 'd03e1049718d69'; // Replace with your actual IPinfo access token
+  
+  // Fetch geolocation data using IPinfo API
+  return fetch(`https://ipinfo.io/${ipAddress}/json?token=${accessToken}`)
+    .then(response => response.json())
+    .then(data => data);
+}
+
+function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition((position)=> showPosition(position), showError);
+  } else { 
+    x.innerHTML = "Geolocation is not supported by this browser.";
+  }
+}
+
+async function showPosition(position) {
+  // Fetch the user's public IP address
+  const ipAddress = await fetchUserIpAddress();
+
+  // Fetch geolocation data using the detected IP address
+  const geolocationData = await fetchGeolocationData(ipAddress);
+
+  // Log the geolocation data to the console
+  console.log('Geolocation Data:', geolocationData);
+
+  // Extract city name, postal code, and region from the geolocation data
+  const cityName = geolocationData.city || "City not found";
+  const postal = geolocationData.postal || "Postal code not found";
+  const region = geolocationData.region || "Region unidentified";
+
+  // Extract latitude and longitude coordinates from the geolocation data
+  const latitude = geolocationData.loc.split(',')[0]; // Extract latitude
+  const longitude = geolocationData.loc.split(',')[1]; // Extract longitude
+
+  // Log the latitude and longitude coordinates to the console
+  console.log('Latitude:', latitude);
+  console.log('Longitude:', longitude);
+
+  x.innerHTML = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+      <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6"/>
+    </svg>
+     ${cityName}, ${region}
+  `;
+
+  // Set the city name as the origin code in an input field with id 'originCode'
+  document.getElementById('originCode').value = cityName;
+  document.getElementById('originCity').value = cityName;
+  city = document.getElementById('originCity').value;
+  console.log("test city is: " + city);
+
+  // Check if originCity has a value before executing destination_term_search
+  if (originCity.value.trim() !== '') {
+    // Create an "input" event
+    let inputEvent = new Event("input", { bubbles: true });
+    function origin_term1_search(){
+      getCurrency();
+      const originCodeInput = document.getElementById("originCode");
+      console.log("originCode: "+originCodeInput)
+      const originCityName = document.getElementById("originCity");
+      const IList = document.getElementById("List");
+
+      originCodeInput.addEventListener("input", async function () {
+        const originCodeValue = originCodeInput.value.trim();
+        console.log("Here is origin code value "+originCodeValue)
+
+        // Clear the existing list
+        IList.innerHTML = "";
+
+        // Show the list only if there's something in the input
+        if (originCodeValue.length >= 3) {
+          // console.log('three keys captured');
+          try {
+            // Replace 'YOUR_API_ENDPOINT' with the actual URL of your API endpoint
+            var originUrlElement = document.getElementById("origin-url");
+            const apiEndpoint = originUrlElement.getAttribute("data-base-url");
+            // const apiEndpoint = '{% url 'flightbooking:origin_search'%}';
+
+            // Make a GET request to the API endpoint with the originCode as a part of the URL
+            const response = await fetch(
+              `${apiEndpoint}?term=${encodeURIComponent(originCodeValue)}`
+            );
+
+            if (!response.ok) {
+              throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            
+            // Handle the data returned from the server
+            const data = await response.json();
+            console.log(data);
+            var originIataCode = document.getElementById("originIataCode");
+            // Populate the list with the data
+            data.data.forEach((item,index) => {
+              const listItem = document.createElement("li");
+              listItem.classList.add("searchLists");
+              if (item.subType === "AIRPORT") {
+                listItem.textContent =
+                  item.iataCode +
+                  "  " +
+                  item.address.cityName +
+                  "-" +
+                  item.name +
+                  ", " +
+                  item.address.countryName;
+                listItem.addEventListener("click", () => {
+                  originCodeInput.value =
+                    item.iataCode +
+                    "  " +
+                    item.address.cityName +
+                    "-" +
+                    item.name +
+                    ", " +
+                    item.address.countryName;
+                  originIataCode.value = item.iataCode;
+                  originCityName.value = item.address.cityName;
+                  IList.style.display = "none"; // Hide the list after selection
+                });
+                IList.appendChild(listItem);
+                // Automatically select the first item
+                if (index === 0) {
+                  listItem.click();
+                }
+              }
+              // Assuming each item is a string
+            });
+
+            IList.style.display = "block"; // Show the list
+            
+          } catch (error) {
+            // Handle errors during the fetch
+            console.error("Fetch error:", error);
+          }
+        } else {
+          IList.style.display = "none"; // Hide the list if input is empty
+        }
+      });
+      // Dispatch the "input" event to trigger the event listener
+      originCodeInput.dispatchEvent(inputEvent);
+    };
+  }
+  //origin_term1_search();
+  
+}
+
+function showError(error) {
+  switch(error.code) {
+    case error.PERMISSION_DENIED:
+      x.innerHTML = "User denied the request for Geolocation.";
+      break;
+    case error.POSITION_UNAVAILABLE:
+      x.innerHTML = "Location information is unavailable.";
+      break;
+    case error.TIMEOUT:
+      x.innerHTML = "The request to get user location timed out.";
+      break;
+    case error.UNKNOWN_ERROR:
+      x.innerHTML = "An unknown error occurred.";
+      break;
+  }
+}
+
+// Call the getLocation function to initiate the process
+getLocation();
+
+
+
+// {% comment %} =====================================(reverse location)================================ {% endcomment %}
+
+getLocation1();
+function getLocation1() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition1, showError);
+  } else { 
+    x.innerHTML = "Geolocation is not supported by this browser.";
+  }
+}
+
+async function showPosition1(position) {
+  const latitude = position.coords.latitude;
+  const longitude = position.coords.longitude;
+  console.log(latitude+' '+longitude)
+
+  // Construct the OpenStreetMap Nominatim API URL
+  const apiUrl = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`;
+
+  // Fetch the location details using Nominatim
+  const response1 = await fetch(apiUrl);
+  const data1= await response1.json();
+  console.log("Nominatim data: ",data1);
+
+//==================================================================================================================
+
+if (data1 && data1.address && data1.address.county) {
+  const county = data1.address.county;
+  const post = data1.address.postcode;
+  console.log("This is Nominatim fetched exact Location: "+county+", "+post);
+}
+
+//==================================================================================================================
+}
+
+// {% comment %} function showError(error) {
+//   switch(error.code) {
+//     case error.PERMISSION_DENIED:
+//       x.innerHTML = "User denied the request for Geolocation.";
+//       break;
+//     case error.POSITION_UNAVAILABLE:
+//       x.innerHTML = "Location information is unavailable.";
+//       break;
+//     case error.TIMEOUT:
+//       x.innerHTML = "The request to get user location timed out.";
+//       break;
+//     case error.UNKNOWN_ERROR:
+//       x.innerHTML = "An unknown error occurred.";
+//       break;
+//   }
+// } {% endcomment %}
+
+// {% comment %} =========================================================================(End reverse location)============================ {% endcomment %}
+
+function displayFlights(category) {
+  const nestedData = {
+    'Countries': [
+      ['USA', 'Canada', 'Mexico', 'Brazil','Italy'],
+      ['UK', 'France', 'Germany',  'India','Poland'],
+      ['Japan', 'Australia', 'China', 'Nigeria', 'Argentina'],
+      ['Russia', 'Turkey', 'Greece', 'South Africa', 'Egypt'],
+    ],
+    'Cities': [
+      ['New York', 'London', 'Paris', 'Berlin','Toronto'],
+      ['Tokyo', 'Sydney', 'Rome', 'Beijing', 'Dubai'],
+      ['Madrid', 'Moscow', 'Athens', 'Rio de Janeiro', 'Cairo' ],
+      ['Mumbai','Amsterdam', 'Singapore', 'Istanbul', 'Stockholm'],
+    ],
+    'Airlines': [
+      ['Delta', 'British Airways', 'Air France', 'Lufthansa', 'Turkish Airlines'],
+      ['Emirates', 'Qatar Airways', 'Etihad Airways', 'ANA', 'Air China'],
+      ['Singapore Airlines', 'Cathay Pacific', 'EasyJet', 'Southwest Airlines', 'JetBlue'],
+      ['Ryanair','American Airlines', 'United Airlines', 'Air Canada', 'KLM']
+    ],
+    'Routes': [
+      ['New York to London', 'Paris to Berlin', 'LA to Tokyo', 'Dubai to New York', 'Beijing to New York'],
+      ['London to Sydney', 'Tokyo to Singapore', 'Mumbai to Dubai', 'Toronto to London', 'Sydney to Los Angeles'],
+      ['Paris to Rome', 'Berlin to Madrid', 'Istanbul to London', 'Cairo to Dubai', 'Singapore to Tokyo'],
+      ['Moscow to Paris','New York to Miami', 'LA to San Francisco', 'Tokyo to Seoul', 'Sydney to Auckland'],
+    ]
+  };
+
+  const contentDiv = document.getElementById('flightContent');
+  contentDiv.innerHTML = '';
+
+  const flightsText = document.createElement('p');
+
+  const categoryList = document.createElement('ul');
+  categoryList.style.display = 'flex';
+  categoryList.style.flexDirection = 'row';
+  
+
+  nestedData[category].forEach((itemRow, rowIndex) => {
+    const list = document.createElement('div');
+    list.style.display = 'flex';
+    list.style.flexDirection = 'column';
+
+    itemRow.forEach((item, itemIndex) => {
+      const listItem = document.createElement('div');
+      listItem.style.display = 'flex';
+      listItem.style.flexDirection = 'column';
+
+      const span = document.createElement("span");
+      span.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-airplane" viewBox="0 0 16 16"></svg>`;
+      const itemBlock = document.createElement('div');
+      const para = document.createElement('p');
+
+      if (category === 'Airlines') {
+        para.textContent = `${item}`;
+      } else if (category === 'Routes') {
+        para.textContent = `Flights: ${item}`;
+      } else {
+        para.textContent = `Flights to ${item}`;
+      }
+
+      itemBlock.appendChild(span);
+      itemBlock.appendChild(para);
+      itemBlock.style.marginBottom = '20px';
+      itemBlock.style.cursor = 'pointer';
+      itemBlock.classList.add('item-block');
+
+      listItem.appendChild(itemBlock);
+      list.appendChild(listItem);
+
+      // Log data with index
+      console.log(`Row ${rowIndex}, Item ${itemIndex}: ${item}`);
+    });
+
+    categoryList.appendChild(list);
+  });
+
+  contentDiv.appendChild(flightsText);
+  contentDiv.appendChild(categoryList);
+
+  // Add "Load More" and "Show Less" functionality
+  const loadMoreBtn = document.createElement('button');
+  loadMoreBtn.classList.add('loadMore');
+
+  loadMoreBtn.textContent = 'Load More';
+  loadMoreBtn.addEventListener('click', loadMore);
+
+  const showLessBtn = document.createElement('button');
+  showLessBtn.classList.add('showLess');
+
+  showLessBtn.textContent = 'Show Less';
+  showLessBtn.style.display = 'none';
+  showLessBtn.addEventListener('click', showLess);
+
+  contentDiv.appendChild(loadMoreBtn);
+  contentDiv.appendChild(showLessBtn);
+
+  let displayedItems = 3; // Display 3 items by default
+
+
+  function loadMore() {
+    displayedItems = nestedData[category].flat().length; // Display all items
+    showLessBtn.style.display = 'inline-block';
+    loadMoreBtn.style.display = 'none';
+    renderFlights();
+    loadMoreBtn.classList.add('active');
+    showLessBtn.classList.remove('active');
+  }
+  
+  function showLess() {
+    displayedItems = 3; // Display 3 items by default
+    showLessBtn.style.display = 'none';
+    loadMoreBtn.style.display = 'inline-block';
+    renderFlights();
+    showLessBtn.classList.add('active');
+    loadMoreBtn.classList.remove('active');
+  }
+  
+  function renderFlights() {
+    const newCategoryList = document.createElement('ul');
+    newCategoryList.style.display = 'flex';
+    newCategoryList.style.flexDirection = 'row';
+  
+    nestedData[category].forEach((itemRow, rowIndex) => {
+      const newList = document.createElement('div');
+      newList.style.display = 'flex';
+      newList.style.flexDirection = 'column';
+  
+      itemRow.slice(0, displayedItems).forEach((item, itemIndex) => {
+        const newListItem = document.createElement('div');
+        newListItem.style.display = 'flex';
+        newListItem.style.flexDirection = 'column';
+  
+        const newSpan = document.createElement("span");
+        newSpan.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-airplane" viewBox="0 0 16 16"></svg>`;
+        const newItemBlock = document.createElement('div');
+        const newPara = document.createElement('p');
+  
+        if (category === 'Airlines') {
+          newPara.textContent = `${item}`;
+        } else if (category === 'Routes') {
+          newPara.textContent = `Flights: ${item}`;
+        } else {
+          newPara.textContent = `Flights to ${item}`;
+          // Add click event listener to navigate to a new page with the country name as a parameter
+          newItemBlock.addEventListener('click', () => redirectToCountryPage(item.toLowerCase()));
+        }
+  
+        newItemBlock.appendChild(newSpan);
+        newItemBlock.appendChild(newPara);
+        newItemBlock.style.marginBottom = '20px';
+        newItemBlock.style.cursor = 'pointer';
+        newItemBlock.classList.add('item-block');
+  
+        newListItem.appendChild(newItemBlock);
+        newList.appendChild(newListItem);
+  
+        // Log data with index
+        console.log(`Row ${rowIndex}, Item ${itemIndex}: ${item}`);
+      });
+  
+      newCategoryList.appendChild(newList);
+    });
+  
+    contentDiv.replaceChild(newCategoryList, contentDiv.querySelector('ul'));
+  }
+  
+
+  // Trigger showLess by default
+  showLess();
+}
+
+function redirectToCountryPage(countryName) {
+  const countryPage = document.getElementById('country_key');
+  let countryPageUrl = countryPage.getAttribute('data-base-url');
+
+  // Replace the placeholder with the actual countryName
+  countryPageUrl = countryPageUrl.replace('placeholder', countryName);
+
+  // Check if countryName is not empty
+  if (countryName.trim() !== '') {
+    // Redirect to the Django view using the generated URL
+    window.location.href = countryPageUrl;
+  } else {
+    console.error('Country name is empty.');
+    // Handle the case where countryName is empty, display an error message, or take appropriate action.
+  }
+}
+
+
+// {% comment %} ============================================================================================= {% endcomment %}
+
+// Function to chunk an array into smaller arrays
+function chunkArray(array, size) {
+  const chunkedArr = [];
+  let index = 0;
+  
+  while (index < array.length) {
+    chunkedArr.push(array.slice(index, size + index));
+    index += size;
+  }
+  
+  return chunkedArr;
+}
+
+// Function to toggle active class on buttons
+function toggleActiveButton(clickedButton) {
+  // Remove active class from all buttons
+  const buttons = document.querySelectorAll('.flight-btn');
+  buttons.forEach(button => {
+    button.classList.remove('active');
+  });
+
+  // Set active class to clicked button
+  clickedButton.classList.add('active');
+}
+
+
+
+// {% comment %} ================================================================================================================================ {% endcomment %}
+ 
+let tripCounter = 1;
+
+
+        // Function to add input fields
+        function addInputFields() {
+            const flightSearchSection = document.getElementById('dynamicInputs');
+            const clonedSection = flightSearchSection.cloneNode(true);
+
+            // Increment IDs and names of cloned inputs
+            clonedSection.querySelectorAll('[id]').forEach((element) => {
+                element.id += `${tripCounter}`;
+            });
+            clonedSection.querySelectorAll('[name]').forEach((element) => {
+                element.name += `${tripCounter}`;
+            });
+
+            // Append the cloned section
+            flightSearchSection.parentNode.appendChild(clonedSection);
+            tripCounter = tripCounter + 1;
+        }
+
+        // Function to remove last set of input fields
+        function removeInputFields() {
+            const flightSearchSection = document.getElementById('dynamicInputs');
+            if (flightSearchSection.parentNode.children.length > 1) {
+                flightSearchSection.parentNode.removeChild(flightSearchSection.parentNode.lastChild);
+            }
+            tripCounter = tripCounter - 1;
+        }
+ 
+ </script>
+ <script>
+  
+  $(document).ready(function () {
+                        $('#fromLocation, #toLocation').on('input', function () {
+                            const inputField = $(this);
+                            const inputVal = inputField.val().trim();
+
+                            if (inputVal.length >= 3) {
+                                console.log("its working")
+                                $.ajax({
+                                    url: "{% url 'crmApp:get_location_suggestions' %}",
+                                    method: 'GET',
+                                    data: {
+                                        keyword: inputVal
+                                    },
+                                    success: function (response) {
+                                        const locationList = inputField.attr('id') === 'fromLocation' ? $('#fromLocationList') : $('#toLocationList');
+                                        locationList.empty();
+
+                                        response.locations.forEach(function (location) {
+                                            locationList.append(`<li data-iata="${location.iataCode}">${location.name} (${location.iataCode}) - ${location.cityName} </li>`);
+                                        });
+
+                                        locationList.show();
+                                    },
+                                    error: function (xhr, status, error) {
+                                        console.error('Error fetching locations:', error);
+                                    }
+                                });
+                            } else {
+                                $('.location-list').hide();
+                            }
+                        });
+
+                        $(document).on('click', '.location-list li', function () {
+                        const selectedLocation = $(this).text();
+                        const iataCode = $(this).data('iata');
+                        const inputField = $(this).closest('.mb-3').find('input');
+
+                        // Set the value of the input field with the airport name
+                        inputField.val(selectedLocation);
+                        
+                        // Set the value of the hidden input field with the IATA code
+                        inputField.siblings("input[type='hidden']").val(iataCode);
+
+                        $('.location-list').hide();
+                    });
+                    });
+ 
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const multiForm = document.getElementById('formMulti');
+        const regularForm = document.getElementById('flightSearchForm');
+        const multiRadioButton = document.getElementById('multi');
+
+        // Function to handle radio button change event
+        function handleTripTypeChange() {
+            if (multiRadioButton.checked) {
+                multiForm.style.display = 'block';
+                regularForm.style.display = 'none';
+            } else {
+                multiForm.style.display = 'none';
+                regularForm.style.display = 'block';
+            }
+        }
+
+        // Trigger the initial trip type change
+        handleTripTypeChange();
+
+        // Add event listener for radio button change event
+        multiRadioButton.addEventListener('change', handleTripTypeChange);
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+    var addCityBtn = document.getElementById('addCityBtn');
+    var additionalCities = document.getElementById('additionalCities');
+    var cityIndex = 2; // Starting index for additional cities
+
+    addCityBtn.addEventListener('click', function() {
+        var cityDiv = document.createElement('div');
+        cityDiv.classList.add('form', 'row', 'city');
+        cityDiv.innerHTML = `
+            <div class="form-group col-md-4">
+                <label for="departureCity${cityIndex}">Departure City:</label>
+                <input type="text" class="form-control" name="departureCity[]" required>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="arrivalCity${cityIndex}">Arrival City:</label>
+                <input type="text" class="form-control" name="arrivalCity[]" required>
+            </div>
+            <div class="form-group col-md-3">
+                <label for="departureDate${cityIndex}">Departure Date:</label>
+                <input type="date" class="form-control" name="departureDate[]" required>
+            </div>
+            <div class="form-group col-md-1">
+                <button type="button" class="btn btn-danger deleteCityBtn">Delete</button>
+            </div>
+        `;
+        additionalCities.appendChild(cityDiv);
+        cityIndex++;
+
+        // Add event listener for delete button
+        var deleteButtons = document.querySelectorAll('.deleteCityBtn');
+        deleteButtons.forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var cityRow = btn.closest('.city');
+                cityRow.remove();
+            });
+        });
+    });
+});
+                    
+ </script>
+ <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-eMNCOe7tC1doHpGoJtKh7z7lGz7fuP4F8nfdFvAOA6Gg/z6Y5J6XqqyGXYM2ntXU" crossorigin="anonymous"></script>
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-pzjw8f+ua7Kw1TIq0v8FqFjcJ6pajs/rfdfs3SO+kD4Ck5BdPtF+to8xMp9MvcJ4" crossorigin="anonymous"></script>
+{% endblock %}
