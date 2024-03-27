@@ -34,8 +34,9 @@
         </div>
     </div>
 </div>
-
-<div id="flightBookingForm" class="container hidden">
+<div class="hidden bg-danger text-light py-2 px-2 mt-2 mb-2" style="{% if exp.expiry_value == 'expired' %}display: block{% endif %}">You plan has expired. Contact sales team to continue Subscription</div>
+<div id="flightBookingForm"  class="container hidden" >
+    {% comment %} {{ exp.expiry_value }} {% endcomment %}
     <h2 class="mb-4">Flight Booking Form</h2>
     <!-- Flight booking form content -->
     <div class="mb-3 me-3" style="flex: 1;">
@@ -46,12 +47,11 @@
             <option value="multi">Multi-City</option>
         </select>
     </div>
-    <form id="flightSearchForm" class="custom-booking" action="{% url 'crmApp:flight_results' %}" method="GET">
-        <div class="row col-md-5">
-
+    <form id="flightSearchForm" {% if exp.expiry_value == 'expired' %}disabled{% endif %} class="custom-booking"  action="{% url 'crmApp:flight_results' %}" method="GET" >
+        <div class="row col-md-5" >
             <div class="mb-3 me-3" style="flex: 1;">
                 <label for="flightClass" class="form-label"><i class="bi bi-geo-alt"></i> Flight Class</label>
-                <select class="form-select" id="flightClass" name="flightClass">
+                <select class="form-select" id="flightClass" name="flightClass" {% if exp.expiry_value == 'expired' %}disabled{% endif %}>
                     <option value="ECONOMY">Economy</option>
                     <option value="PREMIUM ECONOMY">Business</option>
                     <option value="FIRST">First</option>
@@ -60,32 +60,32 @@
             </div>
             <div class="mb-3 me-3" style="flex: 1;">
                 <label for="passengerCount" class="form-label"><i class="bi bi-geo-alt"></i> Passenger</label>
-                <input type="number" class="form-control" id="passengerCount" name="passengerCount" min="1">
+                <input type="number" class="form-control" id="passengerCount" name="passengerCount" min="1" {% if exp.expiry_value == 'expired' %}disabled{% endif %}>
             </div>
         </div>
         <div style="display: flex; flex-wrap: wrap">
             <div class="mb-3 me-3" style="flex: 1;">
                 <label for="fromLocation" class="form-label"><i class="bi bi-geo-alt"></i> From</label>
-                <input type="text" class="form-control" id="fromLocation" name="fromLocation">
+                <input type="text" class="form-control" id="fromLocation" name="fromLocation" {% if exp.expiry_value == 'expired' %}disabled{% endif %}>
                 <input type="hidden" class="form-control" id="from" name="from">
                 <ul id="fromLocationList" class="location-list"></ul>
             </div>
             <div class="mb-3 me-3" style="flex: 1;">
                 <label for="toLocation" class="form-label"><i class="bi bi-geo-alt"></i> To</label>
-                <input type="text" class="form-control" id="toLocation" name="toLocation">
+                <input type="text" class="form-control" id="toLocation" name="toLocation" {% if exp.expiry_value == 'expired' %}disabled{% endif %}>
                 <input type="hidden" class="form-control" id="to" name="to">
                 <ul id="toLocationList" class="location-list"></ul>
             </div>
             <div class="mb-3 me-3" style="flex: 1;">
                 <label for="departureDate" class="form-label"><i class="bi bi-calendar3"></i> Departure Date</label>
-                <input type="date" class="form-control" id="departureDate" name="departureDate">
+                <input type="date" class="form-control" id="departureDate" name="departureDate" {% if exp.expiry_value == 'expired' %}disabled{% endif %}>
             </div>
             <div class="mb-3 me-3" style="flex: 1;" id="returnDateField">
                 <label for="returnDate" class="form-label"><i class="bi bi-calendar3"></i> Return Date</label>
-                <input type="date" class="form-control" id="returnDate" name="returnDate">
+                <input type="date" class="form-control" id="returnDate" name="returnDate" {% if exp.expiry_value == 'expired' %}disabled{% endif %}>
             </div>
             <div class="mb-3" style="flex: 1;">
-                <button type="submit" class="btn btn-primary" style="margin-top: 32px;">Search</button>
+                <button type="submit" class="btn btn-primary" style="margin-top: 32px;" {% if exp.expiry_value == 'expired' %}disabled{% endif %}>Search</button>
             </div>
         </div>
     </form>

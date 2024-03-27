@@ -283,6 +283,16 @@
                                     Initiate Payment
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'crmApp:renew_plan' %}">
+                                    <i class="fas fa-sync-alt"></i> Renew Plan
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'crmApp:subscription_plans' %}">
+                                    <i class="fas fa-clipboard-list"></i> Subscription
+                                </a>
+                            </li>
                             <form action="{% url 'crmApp:logout' %}" method="post" style="padding-top: 40%;">
                                 {% csrf_token %}
                                 <li class="nav-item" style=" border: none; cursor: pointer;" onmouseover="this.style.backgroundColor='#3180ff';" onmouseover="this.style.color='#fffff';" onmouseout="this.style.backgroundColor='#ffffff';">

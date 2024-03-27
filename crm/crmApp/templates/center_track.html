@@ -36,6 +36,14 @@
         </div>
     </div>
 </div>
+{% if center.name != 'Main' %}
+<div class="card-body">
+    <p class="lead">This is the Validity for {{ center.name }}.</p>
+    <p>Validity Start Date: {{ validity.start_date }}</p>
+    <p>Validity End Date: {{ validity.end_date }}</p>
+    <p id="remaining-time">Remaining Time: {{ remaining_time }}</p>
+</div>
+{% endif %}
 <div class="container mt-3" style="padding-right: 0; padding-left: 0;">
     <div class="row">
         {% comment %} <div class="col-md-3 px-1 mt-md-0">
@@ -275,11 +283,13 @@
                     <div class="container mt-5">
                         <div class="row">
                             <div class="col d-flex justify-content-left px-0 mx-0  align-items-center">
-                                <h5 style="cursor: default"><b>{{ total_sales }}</b></h5>
+                                <h5 style="cursor: default"><b>{{ total_api_requests }}</b></h5>
                             </div>
                             <div class="col text-right">
-                                <div class="up text-center" style="background-color: rgba(171, 233, 171, 0.5);">
-                                    <h6>up</h6>
+                                <div class="up text-center">
+                                    <button type="button" class="btn btn-primary" style="font-size: 0.7rem" onclick="window.location.href='{% url 'crmApp:centers_related_apiRequest' center.name %}'">
+                                        View More <i class="fas fa-angle-double-right"></i>
+                                    </button>
                                    
                                 </div>
                                 <p class="mb-0" style="font-size: 0.5rem;">Since last Month</p>
@@ -336,5 +346,32 @@
         {% endfor %}
     </tbody>
 </table> {% endcomment %}
-
+<script>
+    // Function to update remaining time dynamically
+    function updateRemainingTime(endDate) {
+        var now = new Date();
+        var endTime = new Date(endDate);
+        var timeDifference = endTime - now;
+    
+        if (timeDifference <= 0) {
+            document.getElementById("remaining-time").innerHTML = "Subscription Expired";
+        } else {
+            var days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+    
+            var remainingTime = days + "d " + hours + "h " + minutes + "m " + seconds + "s";
+            document.getElementById("remaining-time").innerHTML = "Remaining Time: " + remainingTime;
+    
+            // Update remaining time every second
+            setTimeout(function() {
+                updateRemainingTime(endDate);
+            }, 1000);
+        }
+    }
+    
+    // Call the function initially with the end date from the server
+    updateRemainingTime('{{ validity.end_date }}');
+    </script>
 {% endblock %}

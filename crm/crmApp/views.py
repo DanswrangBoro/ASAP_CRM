@@ -3,8 +3,8 @@ from django.http import JsonResponse
 import requests
 import os
 from django.http import FileResponse
-from .models import AdditionCharge, Booking, Center, Payment, Refund
-from datetime import datetime
+from .models import APIRequest, AdditionCharge, Booking, Center, Payment, Plans, Refund, Validity
+from datetime import datetime, timedelta
 from django.db.models import Sum
 from .models import Refund
 from django.http import HttpResponse
@@ -78,7 +78,9 @@ def get_location_suggestions(request):
 
     try:
         response = amadeus.reference_data.locations.get(keyword=keyword, subType='AIRPORT')
-
+        term = "location and iataCode"
+        requestCounter(request.user.center,term)
+        print(response)
         locations = []
         for location in response.data:
             locations.append({
@@ -128,7 +130,8 @@ def flight_results(request):
                 infants=infants,
                 travelClass=class_type
                 ).data
-                
+                term = "one way flight search"
+                requestCounter(request.user.center,term)
                 # Store the response as JSON format
                 context = {
                     "flights" : response,
@@ -152,7 +155,8 @@ def flight_results(request):
                 infants=infants,
                 travelClass=class_type
                 ).data
-
+                term = "round trip"
+                requestCounter(request.user.center,term)
                 response_return = amadeus.shopping.flight_offers_search.get(
                 originLocationCode=to_location,
                 destinationLocationCode=from_location,
@@ -162,6 +166,8 @@ def flight_results(request):
                 infants=infants,
                 travelClass=class_type
                 ).data
+                requestCounter(request.user.center,term)
+
                 # Store the response as JSON format
                 context = {
                     "flights_departure" : response,
@@ -363,18 +369,23 @@ def sales_view(request):
     return render(request, 'sales.html', context)
 
 def booking(request):
-    if request.user.is_superuser:
-        original = Booking.objects.all()
+    user_center = request.user.center
+
+    # Check if the user's center is a main center
+    if user_center.is_main_center:
+        original = Booking.objects.filter(center=user_center)
         context = {
-            "original" : original
+            "original": original
         }
-        return render(request,"bookings.html", context)
+        return render(request, "bookings.html", context)
     else:
-        original = Booking.objects.filter(center = request.user.center)
+        original = Booking.objects.filter(center=user_center)
+        exp = get_object_or_404(Validity, center=user_center)
         context = {
-            "original" : original
+            "original": original,
+            "exp": exp
         }
-        return render(request,"bookings.html", context)
+        return render(request, "bookings.html", context)
 
 def refund(request):
     refund_data = Refund.objects.all()
@@ -1167,7 +1178,8 @@ def check_flight(request):
         # print(flight)
         try:
             response = amadeus.shopping.flight_offers.pricing.post(flight).data
-            print(response)
+            term="check flight availability"
+            requestCounter(request.user.center,term)
             validating_airline_codes_set = set()
             
             for data in response["flightOffers"]:
@@ -1423,7 +1435,8 @@ def submit_cutomer(request):
 
         try:
             response = amadeus.booking.flight_orders.post(flight, traveler_details).data
-            print(response)
+            term = "create order"
+            requestCounter(request.user.center,term)
             context = {
                 "data":response
             }
@@ -1586,6 +1599,7 @@ def flight_search_multi(request):
                     infants=infant,
                     travelClass=travel_class
                     ).data
+                requestCounter(request.user.center)
                 print(response)
                 for fdata in response:
                     fdata["id"] = f'{id}'
@@ -1878,8 +1892,8 @@ def ack_agree(request, center_id):
 
     # Retrieve the Center object based on the center_id
     center = get_object_or_404(Center, pk=center_id)
-    center.status = 'Active'
-    center.acknowledgment_status = 'Acknowledged'
+    center.status = 'active'
+    center.acknowledgment_status = 'acknowledged'
     center.signed_at = datetime.now()
     center.save()
     
@@ -1922,15 +1936,38 @@ def center_related(request):
     if request.method == 'POST':
         center_name = request.POST.get('center_name')
         center_instance = get_object_or_404(Center, name=center_name)
+
         try:
             # Filter bookings by center
             bookings = Booking.objects.filter(center=center_instance)
             refunds = Refund.objects.filter(booking_id__center__name=center_name)
+            api_requests = APIRequest.objects.filter(center=center_instance)
+            total_api_requests = api_requests.count()
             refund_count = refunds.count()
             booking_count = bookings.count()
             pending_count = bookings.filter(status='pending').count()
             confirmed_count = bookings.filter(status='confirmed').count()
             cancelled_count = bookings.filter(status='cancelled').count()
+
+           # Check if the center is the main center
+            main_center = Center.objects.filter(name = 'Main').exists()
+
+            if main_center:
+                validity = None
+                remaining_time = None
+            else:
+                # Retrieve validity for the center
+                validity = center_instance.subscription_validity
+
+                # Calculate remaining time
+                current_date = timezone.now().date()
+                remaining_days = (validity.end_date - current_date).days
+                remaining_time = str(timedelta(days=remaining_days)) if remaining_days > 0 else "Subscription Expired"
+                
+                # Update expiry value if subscription has expired
+                if remaining_days <= 0:
+                    validity.expiry_value = "expired"
+                    validity.save()
         except Booking.DoesNotExist:
             # No booking found
             bookings = None
@@ -1939,10 +1976,14 @@ def center_related(request):
             pending_count = 0
             confirmed_count = 0
             cancelled_count = 0
+            validity = None
+            remaining_time = None
+            total_api_requests = 0
 
         print("Center name received: ", center_name)
         # Check if a center with the received name exists
         center = get_object_or_404(Center, name=center_name)
+
         # Pass all fields of the Center object as context to the template
         return render(request, 'center_track.html', {
             'center': center,
@@ -1951,8 +1992,12 @@ def center_related(request):
             'booking_count': booking_count,
             'pending_count': pending_count,
             'confirmed_count': confirmed_count,
-            'cancelled_count': cancelled_count
+            'cancelled_count': cancelled_count,
+            'validity': validity,
+            'remaining_time': remaining_time,
+            'total_api_requests': total_api_requests
         })
+
 def centers_related_booking(request, center_name):
     # Assuming 'center_name' is unique, otherwise filter as per your requirement
     bookings = Booking.objects.filter(center__name=center_name)
@@ -1976,3 +2021,75 @@ def centers_related_refund(request, center_name):
     refund_data = Refund.objects.filter(booking_id__center__name=center_name)
     return render(request, 'center_related_refund.html', {'refund_data': refund_data})
 
+def centers_related_apiRequest(request, center_name):
+    # Retrieve refund-related data related to the specified center
+    api = APIRequest.objects.filter(center__name=center_name)
+    return render(request, 'api_request.html', {'api': api})
+
+def renew_plan(request):
+    return render(request,'renew_plan.html')
+
+def renew_plan_submit(request):
+    if request.method == 'POST':
+        # Assuming you have a form field named 'plan' in your HTML form
+        plan = request.POST.get('plan')
+
+        # Process the plan renewal logic here
+        # For demonstration, let's just show a success message
+        messages.success(request, f'Successfully renewed {plan} plan.')
+
+        # Redirect to a success page or any other appropriate page
+        return redirect('success_page')  
+
+    return redirect('renew_plan')
+
+def subscription_plans(request):
+    return render(request, 'plans.html')
+
+def basic_plan(request):
+    centers = Center.objects.filter(status='active')
+    print(centers)
+    return render(request, 'basic_plan.html', {'centers': centers})
+
+def standard_plan(request):
+    return render(request, 'standard_plan.html')
+
+def premium_plan(request):
+    return render(request, 'premium_plan.html')
+
+def assign_plan(request):
+    if request.method == 'POST':
+        center_name = request.POST.get('center')
+        type = request.POST.get('type')
+        duration = request.POST.get('plan_type')
+        center = Center.objects.get(name=center_name)
+
+        plan = Plans(center=center, type = type, duration = duration)
+        
+        plan.save()
+
+        # return redirect('success_url_name')
+
+    # If the request method is not POST, render the form template again
+    # return redirect(request, 'plans.html', {'centers': Center.objects.all()})
+    return redirect('crmApp:subscription_plans')
+
+
+
+def requestCounter(center,term):
+    try:
+        current_datetime = datetime.now()
+        current_date = current_datetime.date()
+        current_time = current_datetime.time()
+        print("Request made by:", center)
+        print("Date:", current_date)
+        print("Time:", current_time)
+
+        # Create an instance of the Center model
+        center_instance = Center.objects.get(name=center)
+
+        # Create an instance of the APIRequest model and save it to the database
+        api_request = APIRequest.objects.create(center=center_instance, request_date=current_date, request_time=current_time,type=term)
+        api_request.save()
+    except Exception as e:
+        print("excepton has occured", e)

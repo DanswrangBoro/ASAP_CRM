@@ -54,6 +54,15 @@ class Center(models.Model):
     signed_at = models.CharField(max_length=20,default='Not signed yet', blank=True, null=True)
     def __str__(self):
         return self.name
+    
+class Validity(models.Model):
+    center = models.OneToOneField(Center, on_delete=models.CASCADE, related_name='subscription_validity')
+    start_date = models.DateField()
+    end_date = models.DateField()
+    expiry_value = models.CharField(max_length=20, default='valid')
+
+    def __str__(self):
+        return f"Validity for {self.center.name}"
 
 class PNR_TABLE(models.Model):
     email = models.TextField(max_length=200)
@@ -290,3 +299,18 @@ class MCO(models.Model):
     price = models.FloatField(null=True, blank = True)
 
 
+class Plans(models.Model):
+    center = models.ForeignKey('Center', on_delete = models.CASCADE)
+    type = models.CharField(max_length=30)
+    duration = models.CharField(max_length = 30)
+
+    def  __str__(self):
+        return  self.center.name
+
+class APIRequest(models.Model):
+    center = models.ForeignKey(Center, on_delete=models.CASCADE)
+    request_date = models.DateField()
+    request_time = models.TimeField()
+    type = models.CharField(max_length = 255,default="",null=True, blank= True)
+    def __str__(self):
+        return f'Request by {self.center} on {self.request_date} at {self.request_time}'
