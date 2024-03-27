@@ -70,6 +70,7 @@ def create_main_center(sender, **kwargs):
 
 
 def get_location_suggestions(request):
+    print("inside this ")
     keyword = request.GET.get('keyword', '')
     amadeus = AmadeusClient(
         client_id=os.environ.get('AMADEUS_CLIENT_ID', ''),
@@ -102,9 +103,9 @@ def flight_results(request):
         departure_date = request.GET.get('departureDate')
         return_date = request.GET.get('returnDate')
         print("return",return_date)
-        adults = request.GET.get('passengerCount')
-        child = 0
-        infants = 0
+        adults = request.GET.get('adult')
+        child = request.GET.get('child')
+        infants = request.GET.get('infant')
         class_type = request.GET.get('flightClass')
 
         print("From Location:", from_location)
@@ -1560,9 +1561,9 @@ def flight_search_multi(request):
         departure_cities = request.GET.getlist('departureCity[]')
         arrival_cities = request.GET.getlist('arrivalCity[]')
         departure_dates = request.GET.getlist('departureDate[]')
-        adult = request.GET.get('passengerCount')
-        childrens = 0
-        infant = 0
+        adult = request.GET.get('adult')
+        childrens = request.GET.get('child')
+        infant = request.GET.get('infant')
         travel_class = request.GET.get('flightClass')
 
         print("Departure Cities:", departure_cities)
