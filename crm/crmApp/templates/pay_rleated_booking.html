@@ -6,8 +6,8 @@
     {% comment %} {{ itineries.id}} {% endcomment %}
     <div class="table-responsive mt-3">
         <table class="table table-striped" style="font-size: 0.7rem">
-    <tr class="bg-dark text-warning text-uppercase">
-        <th colspan="2" class="py-3"><h1 style="font-size: 0.9rem">Flight Details</h1></th>
+    <tr class="text-uppercase" style="background-color: #3F88BD; color: white;">
+        <th colspan="2" class="py-3"><h1 style="font-size: 0.9rem; text-align: center;">Flight Details</h1></th>
     </tr>
     {% for data in itineries.flightOffers %}
         <tr>
@@ -59,8 +59,8 @@
         <tr>
             <th>Grand Total Price</th><td> {{ data.price.grandTotal }}</td>
         </tr>
-            <tr class="bg-dark text-warning text-uppercase">
-                <th colspan="2" class="py-3"><h1 style="font-size: 0.9rem">Pricing Details</h1></th>
+            <tr class="text-uppercase" style="background-color: #3F88BD; color: white;">
+                <th colspan="2" class="py-3"><h1 style="font-size: 0.9rem; text-align: center;">Pricing Details</h1></th>
             </tr>
             {% for pricing in data.travelerPricings %}
                 <tr>
@@ -78,8 +78,8 @@
                 <tr>
                     <th>Price Base</th><td> {{ pricing.price.base }}</td>
                 </tr>
-                    <tr class="bg-dark text-warning text-uppercase">
-                        <th colspan="2" class="py-3"><h1 style="font-size: 0.9rem">Taxes</h1></th>
+                    <tr class="text-uppercase" style="background-color: #3F88BD; color: white;">
+                        <th colspan="2" class="py-3"><h1 style="font-size: 0.9rem; text-align: center;">Taxes</h1></th>
                     </tr>
                 {% for tax in pricing.price.taxes %}
                     <tr>
@@ -90,8 +90,8 @@
                     </tr>
                 {% endfor %}
 
-                <tr class="bg-dark text-warning text-uppercase">
-                    <th colspan="2" class="py-3"><h1 style="font-size: 0.9rem">Fare Details</h1></th>
+                <tr class="text-uppercase" style="background-color: #3F88BD; color: white;">
+                    <th colspan="2" class="py-3"><h1 style="font-size: 0.9rem; text-align: center;">Fare Details</h1></th>
                 </tr>
                 {% for segment in pricing.fareDetailsBySegment %}
                     <tr>
@@ -112,8 +112,8 @@
                     <tr>
                         <th>Included Checked Bags Weight Unit</th><td> {{ segment.includedCheckedBags.weightUnit }}</td>
                     </tr>
-                    <tr class="bg-dark text-warning text-uppercase">
-                        <th colspan="2" class="py-3"><h1 style="font-size: 0.9rem">Meal Services</h1></th>
+                    <tr class="text-uppercase" style="background-color: #3F88BD; color: white;">
+                        <th colspan="2" class="py-3"><h1 style="font-size: 0.9rem; text-align: center;">Meal Services</h1></th>
                     </tr>
                     {% for meal in segment.mealServices %}
                         <tr>
@@ -123,8 +123,8 @@
                 {% endfor %}
             {% endfor %}
     {% endfor %}
-    <tr class="bg-dark text-warning text-uppercase">
-        <th colspan="2" class="py-3"><h1 style="font-size: 0.9rem">Passenger Details</h1></th>
+    <tr class="text-uppercase" style="background-color: #3F88BD; color: white;">
+        <th colspan="2" class="py-3"><h1 style="font-size: 0.9rem;text-align: center;">Passenger Details</h1></th>
     </tr>
 
     {% for traveler in itineries.travelers %}
@@ -152,7 +152,7 @@
     {% endfor %}
 </table>
 </div>
-    <h1 style="font-size: 0.9rem" class="bg-dark text-warning text-uppercase py-3 px-2">Booking Details ( Booking ID: {{ booking.booking_id }})</h1>
+    <h1 style="font-size: 0.9rem;text-align: center; background-color: #3F88BD; color: white;" class=" text-uppercase py-3 px-2">Booking Details ( Booking ID: {{ booking.booking_id }})</h1>
     <div class="table-responsive mt-3">
         <table class="table table-striped" style="font-size: 0.7rem">
                 <tr>

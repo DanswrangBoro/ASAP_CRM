@@ -16,12 +16,12 @@
                             {
                                 "departure": {
                                     "iataCode": "GAU",
-                                    "at": "2024-03-30T18:15:00"
+                                    "at": "2024-03-31T18:15:00"
                                 },
                                 "arrival": {
                                     "iataCode": "DEL",
                                     "terminal": "3",
-                                    "at": "2024-03-30T20:45:00"
+                                    "at": "2024-03-31T20:45:00"
                                 },
                                 "carrierCode": "UK",
                                 "number": "722",
@@ -32,7 +32,7 @@
                                     "carrierCode": "UK"
                                 },
                                 "duration": "PT2H30M",
-                                "id": "58",
+                                "id": "47",
                                 "numberOfStops": 0,
                                 "co2Emissions": [
                                     {
@@ -102,7 +102,7 @@
                         },
                         "fareDetailsBySegment": [
                             {
-                                "segmentId": "58",
+                                "segmentId": "47",
                                 "cabin": "ECONOMY",
                                 "fareBasis": "V0GRPRYS",
                                 "brandedFare": "ECOYS",
@@ -122,7 +122,7 @@
             "mobilePhoneNumberRequired": true
         }
     },
-    "flight1": "{\"type\": \"flight-offers-pricing\", \"flightOffers\": [{\"type\": \"flight-offer\", \"id\": \"1\", \"source\": \"GDS\", \"instantTicketingRequired\": false, \"nonHomogeneous\": false, \"paymentCardRequired\": false, \"lastTicketingDate\": \"2024-03-28\", \"itineraries\": [{\"segments\": [{\"departure\": {\"iataCode\": \"GAU\", \"at\": \"2024-03-30T18:15:00\"}, \"arrival\": {\"iataCode\": \"DEL\", \"terminal\": \"3\", \"at\": \"2024-03-30T20:45:00\"}, \"carrierCode\": \"UK\", \"number\": \"722\", \"aircraft\": {\"code\": \"320\"}, \"operating\": {\"carrierCode\": \"UK\"}, \"duration\": \"PT2H30M\", \"id\": \"58\", \"numberOfStops\": 0, \"co2Emissions\": [{\"weight\": 112, \"weightUnit\": \"KG\", \"cabin\": \"ECONOMY\"}]}]}], \"price\": {\"currency\": \"USD\", \"total\": \"87.80\", \"base\": \"78.00\", \"fees\": [{\"amount\": \"0.00\", \"type\": \"SUPPLIER\"}, {\"amount\": \"0.00\", \"type\": \"TICKETING\"}, {\"amount\": \"0.00\", \"type\": \"FORM_OF_PAYMENT\"}], \"grandTotal\": \"87.80\", \"billingCurrency\": \"USD\"}, \"pricingOptions\": {\"fareType\": [\"PUBLISHED\"], \"includedCheckedBagsOnly\": true}, \"validatingAirlineCodes\": [\"UK\"], \"travelerPricings\": [{\"travelerId\": \"1\", \"fareOption\": \"STANDARD\", \"travelerType\": \"ADULT\", \"price\": {\"currency\": \"USD\", \"total\": \"87.80\", \"base\": \"78.00\", \"taxes\": [{\"amount\": \"2.80\", \"code\": \"P2\"}, {\"amount\": \"6.00\", \"code\": \"IN\"}, {\"amount\": \"1.00\", \"code\": \"YR\"}], \"refundableTaxes\": \"9.80\"}, \"fareDetailsBySegment\": [{\"segmentId\": \"58\", \"cabin\": \"ECONOMY\", \"fareBasis\": \"V0GRPRYS\", \"brandedFare\": \"ECOYS\", \"class\": \"V\", \"includedCheckedBags\": {\"weight\": 15, \"weightUnit\": \"KG\"}}]}]}], \"bookingRequirements\": {\"emailAddressRequired\": true, \"mobilePhoneNumberRequired\": true}}",
+    "flight1": "{\"type\": \"flight-offers-pricing\", \"flightOffers\": [{\"type\": \"flight-offer\", \"id\": \"1\", \"source\": \"GDS\", \"instantTicketingRequired\": false, \"nonHomogeneous\": false, \"paymentCardRequired\": false, \"lastTicketingDate\": \"2024-03-28\", \"itineraries\": [{\"segments\": [{\"departure\": {\"iataCode\": \"GAU\", \"at\": \"2024-03-31T18:15:00\"}, \"arrival\": {\"iataCode\": \"DEL\", \"terminal\": \"3\", \"at\": \"2024-03-31T20:45:00\"}, \"carrierCode\": \"UK\", \"number\": \"722\", \"aircraft\": {\"code\": \"320\"}, \"operating\": {\"carrierCode\": \"UK\"}, \"duration\": \"PT2H30M\", \"id\": \"47\", \"numberOfStops\": 0, \"co2Emissions\": [{\"weight\": 112, \"weightUnit\": \"KG\", \"cabin\": \"ECONOMY\"}]}]}], \"price\": {\"currency\": \"USD\", \"total\": \"87.80\", \"base\": \"78.00\", \"fees\": [{\"amount\": \"0.00\", \"type\": \"SUPPLIER\"}, {\"amount\": \"0.00\", \"type\": \"TICKETING\"}, {\"amount\": \"0.00\", \"type\": \"FORM_OF_PAYMENT\"}], \"grandTotal\": \"87.80\", \"billingCurrency\": \"USD\"}, \"pricingOptions\": {\"fareType\": [\"PUBLISHED\"], \"includedCheckedBagsOnly\": true}, \"validatingAirlineCodes\": [\"UK\"], \"travelerPricings\": [{\"travelerId\": \"1\", \"fareOption\": \"STANDARD\", \"travelerType\": \"ADULT\", \"price\": {\"currency\": \"USD\", \"total\": \"87.80\", \"base\": \"78.00\", \"taxes\": [{\"amount\": \"2.80\", \"code\": \"P2\"}, {\"amount\": \"6.00\", \"code\": \"IN\"}, {\"amount\": \"1.00\", \"code\": \"YR\"}], \"refundableTaxes\": \"9.80\"}, \"fareDetailsBySegment\": [{\"segmentId\": \"47\", \"cabin\": \"ECONOMY\", \"fareBasis\": \"V0GRPRYS\", \"brandedFare\": \"ECOYS\", \"class\": \"V\", \"includedCheckedBags\": {\"weight\": 15, \"weightUnit\": \"KG\"}}]}]}], \"bookingRequirements\": {\"emailAddressRequired\": true, \"mobilePhoneNumberRequired\": true}}",
     "airlines": {
         "UK": "VISTARA"
     },
