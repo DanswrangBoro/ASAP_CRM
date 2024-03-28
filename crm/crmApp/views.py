@@ -373,7 +373,7 @@ def booking(request):
     user_center = request.user.center
 
     # Check if the user's center is a main center
-    if (user_center == 'Main'):
+    if user_center.name == 'Main':
         original = Booking.objects.filter(center=user_center)
         context = {
             "original": original
