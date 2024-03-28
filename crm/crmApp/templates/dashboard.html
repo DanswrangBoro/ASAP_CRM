@@ -600,7 +600,7 @@ document.head.appendChild(chartJSv4Script);
                         </div>
                     <div class="card-body d-flex justify-content-center align-items-center">
                         <div class="chart-container" style="position: relative; height: 100%; width: 100%; align-items: center;">
-                            <canvas id="chargebackRatioGraph"></canvas>
+                            <canvas id="chargebackRatioGraph" style="max-height: 270px;"></canvas>
                         </div>
                     </div>
                 </div>
@@ -679,120 +679,116 @@ var totalLeadsChart = new Chart(totalLeadsCanvas, {
 
     </script>
     
-   <!-- Chargeback Ratio Circle Graph -->
-   <script>
-var xitems = ['Weekly', 'Monthly', 'Quarterly', 'Yearly'];
-var yitems = [478, 522, 200, 300]; // Update with your desired data
-
-new Chart(document.getElementById("chargebackRatioGraph"), {
-    type: 'doughnut',
-    data: {
-        labels: xitems,
-        datasets: [{
-            data: yitems,
-            backgroundColor: ["#35E0F7", "#0AB4FD", "#00D27A", "#004ECC"],
-            fill: false
-        }]
-    },
-    options: {
-        tooltips: {
-            enabled: false,
-        },
-        showPercentage: true,
-        elements: {
-            arc: {
-                borderWidth: 1,
-                borderRadius: 10, // Set border radius to 10
+    <!-- Chargeback Ratio Circle Graph -->
+    <script>
+        var xitems = ['Weekly', 'Monthly', 'Quarterly', 'Yearly'];
+        var yitems = [478, 522, 200, 300]; // Update with your desired data
+        
+        new Chart(document.getElementById("chargebackRatioGraph"), {
+            type: 'doughnut',
+            data: {
+                labels: xitems,
+                datasets: [{
+                    data: yitems,
+                    backgroundColor: ["#35E0F7", "#0AB4FD", "#00D27A", "#004ECC"],
+                    fill: false
+                }]
+            },
+            options: {
+                tooltips: {
+                    enabled: false,
+                },
+                showPercentage: true,
+                elements: {
+                    arc: {
+                        borderWidth: 1,
+                        borderRadius: 10, // Set border radius to 10
+                    }
+                },
+                legend: {
+                    display: true,
+                    position: 'bottom',
+                    labels: {
+                        fontColor: 'black', // Set label font color
+                        fontSize: 14, // Set label font size
+                        usePointStyle: true, // Use round icons
+                        padding: 20 // Set padding to 5
+                    }
+                }
             }
-        },
-        legend: {
-            display: true,
-            position: 'bottom',
-            labels: {
-                fontColor: 'black', // Set label font color
-                fontSize: 14, // Set label font size
-                usePointStyle: true, // Use round icons
-                padding: 20 // Set padding to 5
+        });
+        
+        Chart.pluginService.register({
+            afterDraw: function(chart, easing) {
+                if (chart.config.options.showPercentage || chart.config.options.showLabel) {
+                    var self = chart.config;
+                    var ctx = chart.chart.ctx;
+        
+                    ctx.textAlign = "center";
+                    ctx.textBaseline = "middle";
+                    ctx.fillStyle = "white"; // Change text color to black for better visibility
+                    ctx.font = 'bold 0.6rem Arial'; // Change font style and size
+        
+                    self.data.datasets.forEach(function(dataset, datasetIndex) {
+                        var total = 0,
+                            labelxy = [],
+                            offset = Math.PI / 2,
+                            radius,
+                            centerx,
+                            centery,
+                            lastend = 0;
+        
+                        for (var val of dataset.data) {
+                            total += +val;
+                        }
+        
+                        var i = 0;
+                        var meta = dataset._meta[i];
+                        while (!meta) {
+                            i++;
+                            meta = dataset._meta[i];
+                        }
+        
+                        var element;
+                        for (index = 0; index < meta.data.length; index++) {
+                            element = meta.data[index];
+                            radius = 0.9 * element._view.outerRadius - element._view.innerRadius;
+                            centerx = element._model.x;
+                            centery = element._model.y;
+                            var thispart = dataset.data[index];
+                            var arcsector = Math.PI * (2 * thispart / total);
+                            if (element.hasValue() && dataset.data[index] > 0) {
+                                labelxy.push(lastend + arcsector / 2 + Math.PI + offset);
+                            } else {
+                                labelxy.push(-1);
+                            }
+                            lastend += arcsector;
+        
+                            // Apply border radius of 10 to each segment
+                            element._model.borderRadius = 10;
+        
+                            // Check if label is 'Weekly' and apply border width of 15
+                            if (chart.config.data.labels[index] === 'Weekly') {
+                                element._model.borderWidth = 15;
+                            }
+                        }
+        
+                        var lradius = radius * 3 / 1.6;
+                        for (var idx in labelxy) {
+                            if (labelxy[idx] === -1) continue;
+                            var langle = labelxy[idx];
+                            var dx = centerx + lradius * Math.cos(langle);
+                            var dy = centery + lradius * Math.sin(langle);
+                            var val = (dataset.data[idx] / total * 100).toFixed(1);
+        
+                            if (chart.config.options.showPercentage) {
+                                ctx.fillText(val + '%', dx, dy);
+                            }
+                        }
+                    });
+                }
             }
-        }
-    }
-});
-
-Chart.pluginService.register({
-    afterDraw: function(chart, easing) {
-        if (chart.config.options.showPercentage || chart.config.options.showLabel) {
-            var self = chart.config;
-            var ctx = chart.chart.ctx;
-
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
-            ctx.fillStyle = "white"; // Change text color to black for better visibility
-            ctx.font = 'bold 0.6rem Arial'; // Change font style and size
-
-            self.data.datasets.forEach(function(dataset, datasetIndex) {
-                var total = 0,
-                    labelxy = [],
-                    offset = Math.PI / 2,
-                    radius,
-                    centerx,
-                    centery,
-                    lastend = 0;
-
-                for (var val of dataset.data) {
-                    total += +val;
-                }
-
-                var i = 0;
-                var meta = dataset._meta[i];
-                while (!meta) {
-                    i++;
-                    meta = dataset._meta[i];
-                }
-
-                var element;
-                for (index = 0; index < meta.data.length; index++) {
-                    element = meta.data[index];
-                    radius = 0.9 * element._view.outerRadius - element._view.innerRadius;
-                    centerx = element._model.x;
-                    centery = element._model.y;
-                    var thispart = dataset.data[index];
-                    var arcsector = Math.PI * (2 * thispart / total);
-                    if (element.hasValue() && dataset.data[index] > 0) {
-                        labelxy.push(lastend + arcsector / 2 + Math.PI + offset);
-                    } else {
-                        labelxy.push(-1);
-                    }
-                    lastend += arcsector;
-
-                    // Apply border radius of 10 to each segment
-                    element._model.borderRadius = 10;
-
-                    // Check if label is 'Weekly' and apply border width of 15
-                    if (chart.config.data.labels[index] === 'Weekly') {
-                        element._model.borderWidth = 15;
-                    }
-                }
-
-                var lradius = radius * 3 / 1.6;
-                for (var idx in labelxy) {
-                    if (labelxy[idx] === -1) continue;
-                    var langle = labelxy[idx];
-                    var dx = centerx + lradius * Math.cos(langle);
-                    var dy = centery + lradius * Math.sin(langle);
-                    var val = (dataset.data[idx] / total * 100).toFixed(1);
-
-                    if (chart.config.options.showPercentage) {
-                        ctx.fillText(val + '%', dx, dy);
-                    }
-                }
-            });
-        }
-    }
-});
-
-
-
-
+        });
 
 </script>
 

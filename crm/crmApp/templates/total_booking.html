@@ -2,10 +2,10 @@
 {% load static %}
 {% block content %}
 <h1 class="text-center mt-5">CRM <span>Dash</span>board - Total Booking</h1>  <br>
-<div class="col-md-4">
+<div class="col-md-4 mb-3 shadow">
     <div class="card">
-        <div class="card-header col-custom-total mb-0">
-            <h6 class="card-title">Total Booking</h6>
+        <div class="card-header" style="background-color:#EAF2FF;">
+            <h6 >Total Booking</h6>
         </div>
         <div class="card-body custom-table1">
 
@@ -18,13 +18,12 @@
 </div>
 <div class="col-md-15">
     <div class="card">
-        <div class="card-header col-custom-total">
-            <h6 class="card-title text-center">Total Bookings Overview</h6>
+        <div class="container mt-2">
+            <h6>Total Bookings Overview</h6>
         </div>
-        <div class="card-body ">
-            <div class="table-responsive">
-                <table class="table table-striped custom-table ">
-                    <thead>
+        <div class="table-responsive">
+            <table style="border-color:#74c9f7ab; width:170%">
+                <thead style="background-color:#EAF2FF; border:2px solid white; font-size: 0.8rem;">
                         <tr>
                             <th>Booking ID</th>
                             <th>Passenger Name</th>
@@ -52,81 +51,87 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for o in original %}
-                        <tr id="row_{{ o.booking_id }}" {% if o.center.name == 'Main' %}style="background-color: lightblue; font-weight: bold;"{% endif %}>
-                            <td>{{ o.booking_id }}</td>
-                            <td>{{ o.passenger_name }}</td>
-                            <td>{{ o.phone_number }}</td>
-                            <td>{{ o.email }}</td>
-                            <td>{{ o.flight_details }}</td>
-                            <td>{{ o.trip_type }}</td>
-                            <td>{{ o.reference_id }}</td>
-                            <td>{{ o.departure }}</td>
-                            <td>{{ o.departure_date }}</td>
-                            <td>{{ o.arrival }}</td>
-                            <td>{{ o.arrival_date }}</td>
-                            <td>{{ o.num_passengers }}</td>
-                            <td>{{ o.price }}</td>
-                            <td>{{ o.mco }}</td>
-                            <td>{{ o.status }}</td>
-                            <td>{{ o.lead_agent }}</td>
+                        {% if original %}
+                            {% for o in original %}
+                            <tr id="row_{{ o.booking_id }}" {% if o.center.name == 'Main' %}style="background-color: lightblue; font-weight: bold;"{% endif %}>
+                                <td>{{ o.booking_id }}</td>
+                                <td>{{ o.passenger_name }}</td>
+                                <td>{{ o.phone_number }}</td>
+                                <td>{{ o.email }}</td>
+                                <td>{{ o.flight_details }}</td>
+                                <td>{{ o.trip_type }}</td>
+                                <td>{{ o.reference_id }}</td>
+                                <td>{{ o.departure }}</td>
+                                <td>{{ o.departure_date }}</td>
+                                <td>{{ o.arrival }}</td>
+                                <td>{{ o.arrival_date }}</td>
+                                <td>{{ o.num_passengers }}</td>
+                                <td>{{ o.price }}</td>
+                                <td>{{ o.mco }}</td>
+                                <td>{{ o.status }}</td>
+                                <td>{{ o.lead_agent }}</td>
 
-                            <td>
-                                <form id="booking_status_form_{{ o.booking_id }}" method="POST" action="{% url 'crmApp:update_booking_status' %}">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="booking_id" value="{{ o.booking_id }}">
-                                    <select name="status" onchange="submitForm('{{ o.booking_id }}')">
-                                        <option value="inprocess" {% if o.status == 'inprocess' %} selected {% endif %}>In Process</option>
-                                        {% if request.user.is_superuser or request.user.role == 'manager' %}
-                                        <option value="confirmed" {% if o.status == 'confirmed' %} selected {% endif %}>Confirmed</option>
-                                        <option value="pending" {% if o.status == 'pending' %} selected {% endif %}>Pending</option>
-                                        <option value="rejected" {% if o.status == 'rejected' %} selected {% endif %}>Reject</option>
-                                        <option value="cancelled" {% if o.status == 'cancelled' %} selected {% endif %}>Cancel</option>
-                                        {% endif %}
-                                    </select> 
-                                </form>
-                            </td>
-                            {% if request.user.is_superuser or request.user.role == 'manager' %}
-                            <td>
-                                <!-- Reassign form -->
-                                <form id="reassign_form_{{ o.booking_id }}" method="POST" action="{% url 'crmApp:reassign_lead_agent' %}">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="booking_id" value="{{ o.booking_id }}">
-                                    <select name="lead_agent">
-                                        <!-- Loop through available agents -->
-                                        {% for agent in agents %}
-                                            <option value="{{ agent.id }}">{{ agent.username }}</option>
-                                        {% endfor %}
-                                    </select>
-                                    <button type="submit" class="btn btn-primary btn-sm mt-1">Reassign</button>
-                                </form>
-                            </td>
-                            {% endif %}
-                            <td>
-                                <select>
-                                    {% comment %} <option value="" selected disabled>----------</option> {% endcomment %}
-                                    <option value="" selected>Pending</option>
-                                    <option value="" >Sent</option>
-                                    <option value="" >Recieved</option>
-                                    <option value="" >Declined</option>
-                                </select>
-                            </td>
-                            <td>{{o.center}}</td>
-                            <td>
-                                <a href="{% url 'crmApp:booking' %}"><button class="btn btn-info btn-sm">Edit</button></a>
-                                {% if request.user.is_superuser %}
-                                <form id="delete_form_{{ o.booking_id }}" method="POST" action="{% url 'crmApp:delete_booking' %}">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="booking_id" value="{{ o.booking_id }}">
-                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirmDelete()">Delete</button>
-                                </form>
+                                <td>
+                                    <form id="booking_status_form_{{ o.booking_id }}" method="POST" action="{% url 'crmApp:update_booking_status' %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="booking_id" value="{{ o.booking_id }}">
+                                        <select name="status" onchange="submitForm('{{ o.booking_id }}')">
+                                            <option value="inprocess" {% if o.status == 'inprocess' %} selected {% endif %}>In Process</option>
+                                            {% if request.user.is_superuser or request.user.role == 'manager' %}
+                                            <option value="confirmed" {% if o.status == 'confirmed' %} selected {% endif %}>Confirmed</option>
+                                            <option value="pending" {% if o.status == 'pending' %} selected {% endif %}>Pending</option>
+                                            <option value="rejected" {% if o.status == 'rejected' %} selected {% endif %}>Reject</option>
+                                            <option value="cancelled" {% if o.status == 'cancelled' %} selected {% endif %}>Cancel</option>
+                                            {% endif %}
+                                        </select> 
+                                    </form>
+                                </td>
+                                {% if request.user.is_superuser or request.user.role == 'manager' %}
+                                <td>
+                                    <!-- Reassign form -->
+                                    <form id="reassign_form_{{ o.booking_id }}" method="POST" action="{% url 'crmApp:reassign_lead_agent' %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="booking_id" value="{{ o.booking_id }}">
+                                        <select name="lead_agent">
+                                            <!-- Loop through available agents -->
+                                            {% for agent in agents %}
+                                                <option value="{{ agent.id }}">{{ agent.username }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <button type="submit" class="btn btn-primary btn-sm mt-1">Reassign</button>
+                                    </form>
+                                </td>
                                 {% endif %}
-                            </td>
-                        </tr>
-                        {% endfor %}
+                                <td>
+                                    <select>
+                                        {% comment %} <option value="" selected disabled>----------</option> {% endcomment %}
+                                        <option value="" selected>Pending</option>
+                                        <option value="" >Sent</option>
+                                        <option value="" >Recieved</option>
+                                        <option value="" >Declined</option>
+                                    </select>
+                                </td>
+                                <td>{{o.center}}</td>
+                                <td>
+                                    <a href="{% url 'crmApp:booking' %}"><button class="btn btn-info btn-sm">Edit</button></a>
+                                    {% if request.user.is_superuser %}
+                                    <form id="delete_form_{{ o.booking_id }}" method="POST" action="{% url 'crmApp:delete_booking' %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="booking_id" value="{{ o.booking_id }}">
+                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirmDelete()">Delete</button>
+                                    </form>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan=9 style="text-align: center;font-size: 0.7rem; padding: 0.5%"> No Bookings Found </td>
+                            </tr>
+                        {% endif %}
                     </tbody>
                 </table>
-            </div>
+       
         </div>
     </div>
 </div>
