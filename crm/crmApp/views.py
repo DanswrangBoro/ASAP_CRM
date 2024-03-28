@@ -129,7 +129,8 @@ def flight_results(request):
                 adults=adults,
                 children=child,
                 infants=infants,
-                travelClass=class_type
+                travelClass=class_type,
+                currencyCode = 'USD'
                 ).data
                 term = "one way flight search"
                 requestCounter(request.user.center,term)
@@ -154,7 +155,8 @@ def flight_results(request):
                 adults=adults,
                 children=child,
                 infants=infants,
-                travelClass=class_type
+                travelClass=class_type,
+                currencyCode = 'USD'
                 ).data
                 term = "round trip"
                 requestCounter(request.user.center,term)
@@ -165,7 +167,8 @@ def flight_results(request):
                 adults=adults,
                 children=child,
                 infants=infants,
-                travelClass=class_type
+                travelClass=class_type,
+                currencyCode = 'USD'
                 ).data
                 requestCounter(request.user.center,term)
 
@@ -1588,19 +1591,21 @@ def flight_search_multi(request):
         
         resultLists = []
         id = 1
+        term = "multi search"
         for index, (departure_city, arrival_city, departure_date) in enumerate(zip(departure_cities, arrival_cities, departure_dates)):
             data = []
             try:
                 response = amadeus.shopping.flight_offers_search.get(
-                    originLocationCode=departure_city,
-                    destinationLocationCode=arrival_city,
+                    originLocationCode=departure_city.upper(),
+                    destinationLocationCode=arrival_city.upper(),
                     departureDate=departure_date,
                     adults=adult,
                     children=childrens,
                     infants=infant,
-                    travelClass=travel_class
+                    travelClass=travel_class,
+                    currencyCode = 'USD'
                     ).data
-                requestCounter(request.user.center)
+                requestCounter(request.user.center,term)
                 print(response)
                 for fdata in response:
                     fdata["id"] = f'{id}'
@@ -1609,7 +1614,7 @@ def flight_search_multi(request):
                 # data.append(response)
                 resultLists.append(response)    
             except ResponseError as e:
-                print(e["error"])
+                return render(request, "error.html", {"error":e.response.result["errors"]})
         file_path = 'multiResult.txt'
         with open(file_path,'w') as file:
             json.dump(resultLists,file, indent=2)
