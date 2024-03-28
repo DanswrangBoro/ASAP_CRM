@@ -35,34 +35,11 @@
                         <ul class="nav flex-column">
                             <li class="nav-item">
                                 <a class="nav-link active" href="{% url 'crmApp:dashboard' %}">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <g clip-path="url(#clip0_33_624)">
-                                            <path
-                                                d="M22 8.52V3.98C22 2.57 21.36 2 19.77 2H15.73C14.14 2 13.5 2.57 13.5 3.98V8.51C13.5 9.93 14.14 10.49 15.73 10.49H19.77C21.36 10.5 22 9.93 22 8.52Z"
-                                                stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"
-                                                stroke-linejoin="round" />
-                                            <path
-                                                d="M22 19.77V15.73C22 14.14 21.36 13.5 19.77 13.5H15.73C14.14 13.5 13.5 14.14 13.5 15.73V19.77C13.5 21.36 14.14 22 15.73 22H19.77C21.36 22 22 21.36 22 19.77Z"
-                                                stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"
-                                                stroke-linejoin="round" />
-                                            <path
-                                                d="M10.5 8.52V3.98C10.5 2.57 9.86 2 8.27 2H4.23C2.64 2 2 2.57 2 3.98V8.51C2 9.93 2.64 10.49 4.23 10.49H8.27C9.86 10.5 10.5 9.93 10.5 8.52Z"
-                                                stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"
-                                                stroke-linejoin="round" />
-                                            <path
-                                                d="M10.5 19.77V15.73C10.5 14.14 9.86 13.5 8.27 13.5H4.23C2.64 13.5 2 14.14 2 15.73V19.77C2 21.36 2.64 22 4.23 22H8.27C9.86 22 10.5 21.36 10.5 19.77Z"
-                                                stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"
-                                                stroke-linejoin="round" />
-                                        </g>
-                                        <defs>
-                                            <clipPath id="clip0_33_624">
-                                                <rect width="24" height="24" fill="white" />
-                                            </clipPath>
-                                        </defs>
-                                    </svg> Dashboard
+                                    <img src="{% static 'assets/dashboard.png' %}" class="" alt="dashboard">
+                                    Dashboard
                                 </a>
                             </li>
+                            
                             {% comment %} <li class="nav-item">
                                 <a class="nav-link" href="#">
                                     <img src="{% static 'assets/centers.png' %}" class="" alt="centers">
@@ -91,13 +68,20 @@
                             </li>
                             {% if request.user.is_superuser or request.user.role == 'manager' %}
                             <li class="nav-item">
-                                <a class="nav-link" href="#" id="total-users">
+                                <a class="nav-link" href="{% url 'crmApp:total_user' %}" >
                                     <img src="{% static 'assets/total-users.png' %}" class="" alt="total-users"> Total
+                                    Users
+                                </a>
+                            </li>
+                            {% endif %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" id="users">
+                                    <img src="{% static 'assets/total-users.png' %}" class="" alt="users">
                                     Users<img src="{% static 'assets/down-arrow.png'%}" alt="" style="height: 10%; width: 10%; display:flex; float: inline-end;">
                                 </a>
                             </li>
                             <li class="nav-item hidden" id="admin">
-                                <a class="nav-link" href="{% url 'crmApp:total_user' %}" style="font-size: 0.8rem; border: 1px solid#CCE0FF; border-radius: 10px; ">
+                                <a class="nav-link" href="" style="font-size: 0.8rem; border: 1px solid#CCE0FF; border-radius: 10px; ">
                                     <img src="{% static 'assets/blue-dot1.png' %}" class="" alt="img">
                                     Admin
                                 </a>
@@ -114,18 +98,18 @@
                                    Agents
                                 </a>
                             </li>
-                            {% endif %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'crmApp:booking' %}">
+                                    <img src="{% static 'assets/bookings.png' %}" class="" alt="bookings"> Bookings
+                                </a>
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="#" id="total-bookings">
                                     <img src="{% static 'assets/total-bookings.png' %}" class="" alt="total-bookings">
                                     Total Bookings <img src="{% static 'assets/down-arrow.png'%}" alt="" style="height: 10%; width: 10%; display:flex; float: inline-end;">
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'crmApp:booking' %}">
-                                    <img src="{% static 'assets/bookings.png' %}" class="" alt="bookings"> Bookings
-                                </a>
-                            </li>
+                            
                             <li class="nav-item hidden" id="total-pending">
                                 <a class="nav-link" href="{% url 'crmApp:total_booking' %}" style="font-size: 0.8rem; border: 1px solid#CCE0FF; border-radius: 10px; ">
                                     <img src="{% static 'assets/blue-dot1.png' %}" class="" alt="booking-status">
@@ -321,96 +305,98 @@
         </div>
     </div>
     <script>
-        $(document).ready(function(){
-            $('#total-users').click(function(e){
-                e.preventDefault(); // prevent the default action of the link
-                $('#admin, #manager, #agents').toggleClass('hidden');
-            });
-        });
-        $('#admin, #manager, #agents').click(function(e){
-            e.stopPropagation(); // prevent the click event from bubbling up to the parent element
-        });
-    </script>
-
-    <script>
-        $(document).ready(function(){
-            $('#booking-status-link').click(function(e){
-                e.preventDefault(); // prevent the default action of the link
-                $('#new-booking-item, #changes-item, #cancellation-item, #rebook-item').toggleClass('hidden');
-            });
-        });
-        $('#new-booking-item, #changes-item, #cancellation-item, #rebook-item').click(function(e){
-            e.stopPropagation(); // prevent the click event from bubbling up to the parent element
-        });
-    </script>
-     <script>
-        $(document).ready(function(){
-            $('#mco-link').click(function(e){
-                e.preventDefault(); // prevent the default action of the link
-                $('#full-refund, #partial-refund, #chargeback, #voided-transaction').toggleClass('hidden');
-            });
-        });
-        $('#new-booking-item, #changes-item, #cancellation-item, #rebook-item').click(function(e){
-            e.stopPropagation(); // prevent the click event from bubbling up to the parent element
-        });
-        
-    </script>
-    <script>
-        $(document).ready(function(){
-            $('#centers-link').click(function(e){
-                e.preventDefault(); // prevent the default action of the link
-                $('#center1-item, #centersList-item').toggleClass('hidden');
-            });
-        });
-        $('#center1-item, #centersList-item').click(function(e){
-            e.stopPropagation(); // prevent the click event from bubbling up to the parent element
-        });
-    </script>
-      <script>
-        $(document).ready(function(){
-            $('#credit-issuance').click(function(e){
-                e.preventDefault(); // prevent the default action of the link
-                $('#e-credit, #voucher').toggleClass('hidden');
-            });
-        });
-        $('#e-credit, #voucher').click(function(e){
-            e.stopPropagation(); // prevent the click event from bubbling up to the parent element
-        });
-    </script>
-    <script>
-        $(document).ready(function(){
-            $('#invoice').click(function(e){
-                e.preventDefault(); // prevent the default action of the link
-                $('#generate-invoice, #pending, #sent, #rejected').toggleClass('hidden');
-            });
-        });
-        $('#generate-invoice, #pending, #sent, #rejected').click(function(e){
-            e.stopPropagation(); // prevent the click event from bubbling up to the parent element
-        });
-    </script>
-        <script>
-            $(document).ready(function(){
-                $('#total-bookings').click(function(e){
-                    e.preventDefault(); // prevent the default action of the link
-                    $('#total-pending, #total-inprocess, #total-approved, #total-rejected').toggleClass('hidden');
+        document.addEventListener('DOMContentLoaded', function() {
+            // Function to toggle visibility of elements with smooth transition
+            function toggleVisibility(elementId) {
+                var element = document.getElementById(elementId);
+                element.classList.toggle('hidden');
+                // Adding a short delay before toggling the 'hidden' class to allow the transition to take effect
+                setTimeout(function() {
+                    element.classList.toggle('transitioning');
+                    setTimeout(function() {
+                        element.classList.toggle('transitioning');
+                    }, 500); // Adjust the duration of the transition as needed (here, it's 0.5 seconds)
+                }, 10);
+            }
+    
+            // Function to toggle active class
+            function toggleActive(elementId) {
+                var elements = document.querySelectorAll('.nav-item .nav-link');
+                elements.forEach(function(el) {
+                    el.classList.remove('active');
                 });
+                document.getElementById(elementId).classList.add('active');
+            }
+    
+            // Event listeners for toggling visibility and active class
+            document.getElementById('users').addEventListener('click', function(e) {
+                e.preventDefault();
+                toggleVisibility('admin');
+                toggleVisibility('manager');
+                toggleVisibility('agents');
+                toggleActive('users');
             });
-            $('#total-pending, #total-inprocess, #total-approved, #total-rejected').click(function(e){
-            e.stopPropagation(); // prevent the click event from bubbling up to the parent element
+    
+            document.getElementById('booking-status-link').addEventListener('click', function(e) {
+                e.preventDefault();
+                toggleVisibility('new-booking-item');
+                toggleVisibility('changes-item');
+                toggleVisibility('cancellation-item');
+                toggleVisibility('rebook-item');
+                toggleActive('booking-status-link');
+            });
+    
+            document.getElementById('mco-link').addEventListener('click', function(e) {
+                e.preventDefault();
+                toggleVisibility('full-refund');
+                toggleVisibility('partial-refund');
+                toggleVisibility('chargeback');
+                toggleVisibility('voided-transaction');
+                toggleActive('mco-link');
+            });
+    
+            document.getElementById('centers-link').addEventListener('click', function(e) {
+                e.preventDefault();
+                toggleVisibility('center1-item');
+                toggleVisibility('centersList-item');
+                toggleActive('centers-link');
+            });
+    
+            document.getElementById('credit-issuance').addEventListener('click', function(e) {
+                e.preventDefault();
+                toggleVisibility('e-credit');
+                toggleVisibility('voucher');
+                toggleActive('credit-issuance');
+            });
+    
+            document.getElementById('invoice').addEventListener('click', function(e) {
+                e.preventDefault();
+                toggleVisibility('generate-invoice');
+                toggleVisibility('pending');
+                toggleVisibility('sent');
+                toggleVisibility('rejected');
+                toggleActive('invoice');
+            });
+    
+            document.getElementById('total-bookings').addEventListener('click', function(e) {
+                e.preventDefault();
+                toggleVisibility('total-pending');
+                toggleVisibility('total-inprocess');
+                toggleVisibility('total-approved');
+                toggleVisibility('total-rejected');
+                toggleActive('total-bookings');
+            });
+    
+            document.getElementById('payment').addEventListener('click', function(e) {
+                e.preventDefault();
+                toggleVisibility('payment-record');
+                toggleVisibility('initiate-payment');
+                toggleActive('payment');
+            });
         });
-        </script>
-         <script>
-            $(document).ready(function(){
-                $('#payment').click(function(e){
-                    e.preventDefault(); // prevent the default action of the link
-                    $('#payment-record, #initiate-payment').toggleClass('hidden');
-                });
-            });
-            $('#payment-record, #initiate-payment').click(function(e){
-                e.stopPropagation(); // prevent the click event from bubbling up to the parent element
-            });
-            
-        </script>
+    </script>
+    
+    
   <!-- Bootstrap 5.3.3 JavaScript -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <!-- Popper.js Core 2.9.3 -->
