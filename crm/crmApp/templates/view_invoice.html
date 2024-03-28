@@ -18,9 +18,9 @@
                 Phone: +1234567890
             </td>
             <td style="text-align: right; vertical-align: top;">
-                <strong>John Doe</strong><br>
-                johndoe@example.com<br>
-                +9876543210
+                <strong>{{ order.travelers.0.name.firstName }} {{ order.travelers.0.name.lastName }}</strong><br>
+                {{ order.travelers.0.contact.emailAddress }}<br>
+                +{{ order.travelers.0.contact.phones.0.countryCallingCode }} {{ order.travelers.0.contact.phones.0.number }}
             </td>
         </tr>
     </table>
@@ -34,17 +34,17 @@
                     <th style="width: 20%; padding: 5px; text-align: center;">Email</th>
                     <th style="width: 20%; padding: 5px; text-align: center;">Phone</th>
                     <th style="width: 20%; padding: 5px; text-align: center;">Type</th>
-                    <th style="width: 20%; padding: 5px; text-align: center;">DOB</th>
                     <th style="width: 20%; text-align: center;padding: 5px;">Sex</th>
                 </tr>
-                <tr style="border-style: dashed;border-width: 1px;font-size: 0.6rem">
-                    <td style="width: 20%; padding: 5px; text-align: center; border-right: 1px dashed;">John Doe</td>
-                    <td style="width: 20%; padding: 5px; text-align: center; border-right: 1px dashed;">john@example.com</td>
-                    <td style="width: 20%; padding: 5px; text-align: center; border-right: 1px dashed;">1234567890</td>
-                    <td style="width: 20%; padding: 5px; text-align: center; border-right: 1px dashed;">Adult</td>
-                    <td style="width: 20%; padding: 5px; text-align: center; border-right: 1px dashed;">25/02/1996</td>
-                    <td style="width: 20%; text-align: center; padding: 5px;">Male</td>
-                </tr>
+                {% for traveler in order.travelers %}
+                        <tr style="border-style: dashed; border-width: 1px; font-size: 0.6rem">
+                            <td style="width: 20%; padding: 5px; text-align: center; border-right: 1px dashed;">{{ traveler.name.firstName }}</td>
+                            <td style="width: 20%; padding: 5px; text-align: center; border-right: 1px dashed;">{{ traveler.contact.emailAddress }}</td>
+                            <td style="width: 20%; padding: 5px; text-align: center; border-right: 1px dashed;">+{{ traveler.contact.phones.0.countryCallingCode }} {{ traveler.contact.phones.0.number }}</td>
+                            <td style="width: 20%; padding: 5px; text-align: center; border-right: 1px dashed;">Adult</td>
+                            <td style="width: 20%; text-align: center; padding: 5px;">Male</td>
+                        </tr>
+                {% endfor %}
             </table>                
         </div>
     </div>
@@ -54,10 +54,8 @@
             <thead style="font-size: 0.6rem; text-align: center">
                 <tr style="border-style: dashed; border-width: 1px;">
                     <th>Airline</th>
-                    <th>Depart City</th>
-                    <th>Arrival City</th>
-                    <th>Depart Airport</th>
-                    <th>Arrival Airport</th>
+                    <th>Departure</th>
+                    <th>Arrival</th>
                     <th>Departure Time</th>
                     <th>Arrival Time</th>
                     <th>Class</th>
@@ -65,60 +63,63 @@
                 </tr>
             </thead>
             <tbody>
-                <tr style="font-size: 0.6rem; text-align: center;">
-                    <td style="text-align: left;padding: 5px; border-right: 1px dashed;">
-                        <img class="airline-logo" src="airline_logo.jpg" alt="Airline Logo">
-                        <div class="info-value">Spice Jet</div>
-                        <div class="info-value">SG123</div>
-                    </td>
-                    <td style="text-align: center;padding: 5px; border-right: 1px dashed;">
-                        Delhi
-                    </td>
-                    <td style="text-align: center;padding: 5px; border-right: 1px dashed;">
-                        Guwahati
-                    </td>
-                    <td style="text-align: center;padding: 5px; border-right: 1px dashed;">
-                        Indira Gandhi International Airport
-                    </td>
-                    <td style="text-align: center;padding: 5px; border-right: 1px dashed;">
-                        Lokhpriya Gopinath Bordoloi International Airport
-                    </td>
-                    <td style="text-align: center;padding: 5px; border-right: 1px dashed;">
-                        19:20
-                    </td>
-                    <td style="text-align: center;padding: 5px; border-right: 1px dashed;">
-                        20:24
-                    </td>
-                    <td style="text-align: center;padding: 5px; border-right: 1px dashed;">
-                        Premium Economy
-                    </td>
-                    <td style="text-align: center;padding: 5px; border-right: 1px dashed;">
-                        1Kg
-                    </td>
-                </tr>
+                {% for flight in order.flightOffers %}
+                    {% for itinery in flight.itineraries %}
+                        {% for segment in itinery.segments %}
+                        <tr style="font-size: 0.6rem; text-align: center;">
+                            <td style="text-align: left;padding: 5px; border-right: 1px dashed;">
+                                <img class="airline-logo" src="airline_logo.jpg" alt="Airline Logo">
+                                <div class="info-value">{{ segment.carrierCode }}</div>
+                                <div class="info-value">{{ segment.carrierCode }}{{ segment.number }}</div>
+                            </td>
+                            <td style="text-align: center;padding: 5px; border-right: 1px dashed;">
+                                {{segment.departure.iataCode}}
+                            </td>
+                            <td style="text-align: center;padding: 5px; border-right: 1px dashed;">
+                                {{segment.arrival.iataCode}}
+                            </td>
+                            <!-- <td style="text-align: center;padding: 5px; border-right: 1px dashed;">
+                                {{segment.departure.iataCode}}
+                            </td>
+                            <td style="text-align: center;padding: 5px; border-right: 1px dashed;">
+                                {{segment.arrival.iataCode}}
+                            </td> -->
+                            <td style="text-align: center;padding: 5px; border-right: 1px dashed;">
+                                {{segment.departure.at}}
+                            </td>
+                            <td style="text-align: center;padding: 5px; border-right: 1px dashed;">
+                                {{segment.arrival.at}}
+                            </td>
+                            <td style="text-align: center;padding: 5px; border-right: 1px dashed;">
+                                {{segment.co2Emissions.0.cabin}}
+                            </td>
+                            <td style="text-align: center;padding: 5px; border-right: 1px dashed;">
+                                {{flight.travelerPricings.0.fareDetailsBySegment.0.includedCheckedBags.weight}}kg/person
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% endfor %}
+                
+                {% endfor %}
             </tbody>
         </table>
     </div>
     <table style="width: 50%; text-align: left; border-collapse: collapse; margin-top: 20px; font-size: 0.6rem;">
         <tr>
             <th style="width: 50%; padding: 5px; font-weight: bold;">Airfare Charges</th>
-            <td style="width: 50%; padding: 5px; text-align: right; font-size: 0.6rem;" id="airfarecharges"></td>
-        </tr>
-        <tr>
-            <th style="width: 50%; padding: 5px; font-weight: bold;">Agency Fees</th>
-            <td style="width: 50%; padding: 5px; text-align: right; font-size: 0.6rem;">$100</td>
+            <td style="width: 50%; padding: 5px; text-align: right; font-size: 0.6rem;" id="airfarecharges">${{airlinefare}}</td>
         </tr>
         <tr>
             <th style="width: 50%; padding: 5px; font-weight: bold;">Miscellaneous Fees</th>
-            <td id="additionChargesTotal" style="width: 50%; padding: 5px; text-align: right; font-size: 0.6rem;">$0</td>
+            <td id="additionChargesTotal" style="width: 50%; padding: 5px; text-align: right; font-size: 0.6rem;">${{ miscellaneous }}</td>
         </tr>
         <tr>
             <th style="width: 50%; padding: 5px; font-weight: bold;">Tax</th>
-            <td id="taxAmount" style="width: 50%; padding: 5px; text-align: right; font-size: 0.6rem;">$0</td>
+            <td id="taxAmount" style="width: 50%; padding: 5px; text-align: right; font-size: 0.6rem;">${{tax}}</td>
         </tr>
         <tr>
             <th style="width: 50%; padding: 5px; font-weight: bold;">Discount</th>
-            <td id="discountAmount" style="width: 50%; padding: 5px; text-align: right; font-size: 0.6rem;">$0</td>
+            <td id="discountAmount" style="width: 50%; padding: 5px; text-align: right; font-size: 0.6rem;">${{discount}}</td>
         </tr>
         <tr style="border-top: 1px solid grey">
             <th style="width: 50%; padding: 5px; font-weight: bold;"><b>Total Charge</b></th>

@@ -84,7 +84,6 @@ urlpatterns = [
     path('assign_plan/', assign_plan, name='assign_plan'),
     path('customer_authorization/<int:pk>/', customer_authorization, name='customer_authorization'),
     path('view_invoice/<str:pk>/', views.view_invoice, name = "view_invoice"),
-
 ]
 
 
