@@ -1991,9 +1991,30 @@ def customer_authorization(request, pk):
     # center.acknowledgment_status = 'acknowledged'
     # center.signed_at = datetime.now()
     booking.save()
+    bookingid = booking.booking_id
+    response = amadeus.booking.flight_order(bookingid).get().data
+    booking = get_object_or_404(Booking, booking_id = bookingid)
+    validating_airline_codes_set = set()
+    
+    for data in response["flightOffers"]:
+        for dats in data["itineraries"]:
+            for segment in dats["segments"]:
+                # print(segment["carrierCode"])
+                validating_airline_codes_set.add(segment["carrierCode"])
+
+    # Convert the set to a list if needed
+    validating_airline_codes_list = list(validating_airline_codes_set)
+    airline_codes_string = ','.join(validating_airline_codes_list)
+    airlines = amadeus.reference_data.airlines.get(airlineCodes=airline_codes_string).data
+    # print(airlines)
+    result_dict = {item['iataCode']: item["businessName"] for item in airlines}
+    result_dict2 = {item['iataCode']: item.get('icaoCode', item['iataCode']) for item in airlines}
     
     context = {
         # 'SERVER_USER_AGENT': user_agent,
+        'flight' : response,
+        "airlines":result_dict,
+        "airlines2":result_dict2,
         'booking': booking,
         'client_ip_address': client_ip_address,
         'os_info': os_info,

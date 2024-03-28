@@ -1,3 +1,6 @@
+{% load static %}
+{% load custom_filters %}
+{% load time_tags %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,16 +12,88 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@200&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
 <style>
     *{
         margin: 0;
         padding:0;
     
     }
-    body {
-        font-family: Arial, sans-serif;
-        padding: 2%;
+    .text-right {
+        text-align: right !important; /* Ensure text alignment is set to right */
     }
+
+    /* Adjust margin to push the button to the right */
+    #addChargeRow {
+        margin-left: auto;
+    }
+    .itinerary-container {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+
+    .itinerary-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .airline-logo {
+        width: 80px;
+        height: auto;
+    }
+
+    .flight-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 5px;
+        gap: 20%;
+    }
+
+    .flight-info .info-value {
+        flex-grow: 1;
+    }
+    .banner {
+        /* {% comment %} background-image: url('https://source.unsplash.com/1200x300/?airplane'); {% endcomment %} */
+        background-size: cover;
+        /* {% comment %} height: 200px; {% endcomment %} */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        text-align: center;
+    }
+    .title{
+            font-family: "Great Vibes", cursive;
+            font-weight: 400;
+            font-style: normal;
+    }
+    body {
+        font-family: "Open Sans", sans-serif;
+        font-optical-sizing: auto;
+        font-weight: <weight>;
+        font-style: normal;
+        font-variation-settings:
+          "wdth" 100;
+        font-size: 0.8rem;
+    }
+    {% comment %} body {
+        font-family: Arial, sans-serif;
+        width: 100%;
+        margin: 0;
+        display: flex; 
+        justify-content: center; 
+    } {% endcomment %}
     .alert {
         padding: 15px;
         margin-bottom: 20px;
@@ -34,15 +109,134 @@
         white-space: nowrap;
         font-size: 0.7rem;
     }
+        @media screen and (min-width: 768px) {
+            .section {
+                max-width: 60%;
+            }
+        }
+    
+        @media screen and (max-width: 767px) {
+            .section {
+                max-width: 95%;
+            }
+        }
 </style>
 </head>
 <body>
-<div id="acknowledgmentMessage" style="display: flex; align-items: center" >
+    <div class="section border" style="margin: auto; padding: 2%">
+        <h2 style="margin-top: 1%; text-align: center">Flight Confirmation Acknowledgement</h2>
+        <div class="row">
+            <div class="col">
+                <h6 class="mt-5">Itinerary Details:</h6>
+                <!-- Overall container for all itineraries -->
+               
+                    <!-- Itinerary 1 -->
+                    {% for flights in flight.flightOffers %}
+                        {% for itinary in flights.itineraries.0.segments %}
+                        <div class="itinerary-container bg-light">
+                        <div class="itinerary">
+                            <div class="itinerary-header">
+                                <div class="flight">
+                                    {% with airline_code=itinary.carrierCode%} 
+                                    {% if airline_code in airlines2 %}
+                                    <!-- Display airline logo with alt attribute as the airline name -->
+                                    <img
+                                        id="logoI"
+                                        src="https://thimpu.pythonanywhere.com/logo/api/airline/{{ airlines2|get_value:airline_code }}"
+                                        alt=" " style="max-width: 100px; max-height: 100px;"
+                                    />
+                                    {% endif %} 
+                                    {% endwith %}
+                                    <div class="info-value">{{ itinary.carrierCode }}</div>
+                                    <div class="info-value">{{ itinary.carrierCode }}{{ itinary.number }}</div>
+                                    <div class="info-value">{{ itinary.aircraft.code }}</div>
+                                </div>
+                                <div class="itinerary-route">
+                                    <div class="flight-info">
+                                        <div>{{ itinary.departure.iataCode }}</div>
+                                        <div><i class="fas fa-arrow-right"></i></div>
+                                        <div>{{ itinary.arrival.iataCode }}</div>
+                                    </div>
+                                    <div class="flight-info" style="margin: 5px;">
+                                        <div class="info-value">{{ itinary.departure.at | format_time}}</div>
+                                        <div class="info-value">{{ itinary.arrival.at  | format_time}}</div>
+                                    </div>
+                                </div>
+                                <div class="itinerary-class">{{ itinary.co2Emissions.0.cabin }}</div>
+                                <div class="itinerary-baggage">Baggage Info</div>
+                            </div>
+        
+                        </div>
+                </div>
+
+                        {% endfor %}
+                    {% endfor %}
+                    <!-- Add more itineraries as needed -->
+            </div>
+        </div>
+        
+
+    {% comment %} <div style="background-image: url('{% static 'images/caetificate.png' %}'); background-size: 100% 100%; height: 80vh; margin-top: 5%">
+        <table style="width: 100%">
+            <tr>
+              <td style="width: 100%">
+                <img src="{% static 'images/ASAP-logo.png' %}" alt="logo" style="float: right; margin-right: 9%; margin-top: 2%; display: none">
+              </td>
+            </tr>
+          </table>  
+          <div class="title" style="text-align: center;margin-top: 20%">
+            <P style="font-weight:bolder; margin: 0">Certificate</P>
+            <p style="margin: 0">Of Acknowledgement</p>
+            <hr style="width: 40%; margin: auto; margin-top: 2%">
+        </div>     {% endcomment %}
+        {% comment %} <div class="title" style="text-align: center;">
+            Signature Certificate
+        </div> {% endcomment %}
+        {% comment %} <table style="width: 80%; margin: auto; margin-top: 20%;">
+            <tr style="border-bottom: 2px solid grey;">
+                <th>Signer</th>
+                <th style="text-align: center">Time Stamp</th>
+                <th style=" text-align: right">Signature</th>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <p style="margin: 0;">Signer Name</p>
+                    <p style="margin: 0;">Signer Email</p>
+                </td>   
+                <td rowspan="4" style="border: 1px solid grey; padding: 1%">
+                    Signature
+                </td>         
+            </tr>
+            <tr>
+                <td>Sent</td>
+                <td style="text-align: center">Sent Time</td>
+            </tr>
+            <tr>
+                <td>View</td>
+                <td style="text-align: center">Viewd Time</td>
+            </tr>
+            <tr>
+                <td>Signed</td>
+                <td style="text-align: center">Signed Time</td>
+            </tr>
+            <tr>
+                <td colspan="2">Recipient Verification</td>
+                <td>Signer IP Address</td>
+            </tr>
+            <tr>
+                <td><i class="fas fa-envelope"></i> Email Verified
+                </td>
+                <td style="text-align: center">Verification Time</td>
+                <td>Signer Location</td>
+            </tr>
+        </table>
+    </div> {% endcomment %}
+{% comment %} <div id="acknowledgmentMessage" style="display: flex; align-items: center" >
     <p class="alert alert-success" >Acknowledgment Success. Thank you for acknowledging.</p>
-</div>
-<div class="table-responsive">
+</div> {% endcomment %}
+{% comment %} <div class="table-responsive" style= " margin-top: 3%">
     <table class="table table-bordered">
-        <thead class="thead-light">
+        <thead class="thead" style="background-color: royalblue; color: white">
             <tr>
                 <th>Information</th>
                 <th>Details</th>
@@ -99,131 +293,44 @@
             </tr>
         </tbody>
     </table>
+</div> {% endcomment %}
+
+
+<div style="text-align: justify; padding: 2%;font-size: 0.8rem; margin-top: 2%; background: rgb(255,243,205);">
+    <b>Note: </b>Please be aware that the charges for your booking might show up as two separate transactions on your credit/debit 
+    card statement. However, the total amount you pay will remain the same. These charges will appear separately under the airline and reservation/
+    billing desk.
+  </div>
+  <div style="margin:auto; margin-top:0.8rem; font-size: 0.8rem; text-align: justify;">
+    <div style="line-height:26px;">
+        <p style="font-size:1rem; margin-bottom: 10px;"><b>Terms & Conditions</b></p>
+        <p style="margin-bottom: 10px; line-height: 1.5;"><b>Flight Change Policy:</b> Changes to your flight booking are subject to the airline's policy and may incur change fees. Please contact us promptly if you need to modify your itinerary</p>
+        <p style="margin-bottom: 10px; line-height: 1.5;"><b>Flight Cancellation & Refund Policy: </b>Cancellations and refunds are subject to the airline's policy and may be subject to cancellation fees. We will assist you in processing refund requests according to the airline's terms and conditions.</p>  
+        <p style="margin-bottom: 10px; line-height: 1.5;"><b>Flight Delays/Cancellations:</b> In the event of flight disruptions, follow the airline's instructions and contact us for assistance as needed.</p>
+        <p style="margin-bottom: 10px; line-height: 1.5;"><b>Baggage Policy:</b> Baggage allowances, fees, and restrictions vary by airline and ticket type. Please review the baggage policy of your airline for detailed information.</p>
+        <p style="margin-bottom: 10px; line-height: 1.5;"><b>E-Credit Policy: </b>In case of flight cancellations or changes resulting in credits, we will assist you in redeeming and utilizing the e-credits in accordance with the airline's policy.</p>
+        <p style="margin-bottom: 10px; line-height: 1.5;"><b>Travel Documents: </b>Ensure you have all necessary travel documents, including passports, visas, and health certificates, as required by the destination country and airline regulations.</p>
+        <p style="margin-bottom: 10px; line-height: 1.5;"><b>Check-In:</b> Check in for your flight according to the airline's requirements and arrive at the airport well in advance of your departure time.</p>
+        <p style="margin-bottom: 10px; line-height: 1.5;">This is a common practice in the industry for administrative purposes. If you have any questions about these charges, feel free to reach out to our customer service team.</p>
+
+        <div class="mt-5" style="padding: 10px 20px; background-color: royalblue; color: white; border: none; border-radius: 5px; width: 40%;">
+            <p style="width: 100%; letter-spacing: 3px; margin-bottom:5px">Your Signature:</p>
+            <input type="text" id="nameInput" name="sign" placeholder="Type your name" style="border: none; width: 100%; border-radius: 5px; height: 7vh; padding: 1%; padding-left: 3%; outline: none;">
+        </div>
+
+        {% comment %} <button style="margin-top:5%; font-weight:bold;border:none;padding:10px;width:150px; background:green;color:white;border-radius:3px;">Confirm</button> {% endcomment %}
+        <p style="margin-top:15px; line-height: 1.5;">By signing the above document, you acknowledge that you have read, understood, and agree to abide by the terms and conditions set forth by Asap Reservation. You further understand that any changes, cancellations, or refunds to your booking are subject to the policies and regulations of the respective airline(s) and may incur additional fees or charges.</p>
+        <button type="submit" style="padding: 10px 20px; background-color: royalblue; color: white; border: none; border-radius: 5px; cursor: pointer;">Acknowledge</button>
+        <p style="margin-top:4%; line-height: 1.5;">Thank you for choosing Asap Reservation. For any inquiries or assistance, please feel free to contact our customer service team at <b>+1(888)350-6579 </b>or <b>ticketing@asapreservation.com.</b></p>
+        <p style="margin-top:20px; line-height: 1.5;">We wish you a pleasant journey and look forward to serving you again in the future.</p>
+    </div>
+
 </div>
 
-
-   <div id="content" style="color: rgb(41, 42, 44);padding-bottom:10px;padding-top:10px; border:6px dashed rgb(57, 56, 56);">
-    {% comment %} <div style='padding:10px; background:rgb(255, 254, 254); margin:auto;' class="main-div"> {% endcomment %}
-    
-      {% comment %} <div style="border:6px dashed rgb(57, 56, 56);"> {% endcomment %}
-        <table style="text-align:center; margin: auto; margin-top:1rem;">
-            <tr>
-                  <td colspan="3">
-                    <p style="text-align:center;font-size:34px;color:rgb(40, 39, 39); margin-top:1rem;">Certificate of Completion</p>
-                  </td>
-            </tr>
-        </table>
-      
-        <table style="width:90%;margin:auto; margin-top:1rem;">
-          <tr style="width:100%;">
-            <td style="width:33.33%; line-height: 26PX;font-size:0.9rem;">
-                <p>Envelope Id: <b>FOUHO89796</b></p>
-                <p>Subject: <b></b></p>
-                <p>Application Id: <b></b></p>
-            </td>   
-            <td style="width:33.33%;">
-               <p style="text-align:center;border-collapse: collapse;">Status:<b style="color: green;">Completed</b></p>
-            </td>
-            <td style="width:33.33%; text-align: right;">
-                <P>Source Envelope:</P>
-                <P>Document Pages:5</P>
-            </td>
-          </tr>
-          <tr>
-            <td style="width:33.33%; line-height: 28px;">
-                <P>AutoNav:Enabled</P>
-                <P>EnvelopeId stamping:Enabled</P>
-                <P>Time Zone: <b>IST 14:30</b></P>
-            </td>
-            <td style="width:33.33%; text-align: center;">
-                <p>Signature:1</p>
-                <p>initials:0</p>
-            </td>
-            <td style="width:33.33%; line-height: 28px; text-align: right; vertical-align: top;">
-                <p>Envelope Originator:</p>
-                <p style="font-weight: bold;">Thimpu Senyung</p>
-                <p>Halflong,Dima Hasou</p>
-                <p>thimpu @adventurecode.io</p>
-                <p>IP Address: <b>141.191.20.20</b></p>
-            </td>
-          </tr>
-        </table>
-     
-        <table style="width:90%;height:5vh; background:#3486b9;margin:auto; margin-top: 10px !important;padding: 10px;">
-            <thead>
-                <th style="text-align: left;color: white;">Record Tracking</th>
-            </thead>
-        </table>
-        
-        <table style="width:90%;margin:auto; margin-top:1rem;">
-                <tr>
-                    <td style="width:33.33%;text-align:left;line-height:28px;">
-                        <p><b>Status: </b>original</p>
-                        <p>4/08/2024</p><span>7:23:18 PM</span>
-                    </td>
-                    <td style="width:33.33%;text-align:center;line-height:28px;">
-                        <p style="font-weight: bold;">Device</p>
-                        <p>OS:Windows11</p>
-                        <p>iphone</p>
-                    </td>
-                    <td style="width:33.33%;text-align:right;line-height:28px;vertical-align: top;">
-                        <p style="font-weight: bold;">Location</p>
-                        <p>Halflong</p>
-                    </td>
-                </tr>
-        </table>
-
-        <table style="width:90%;height:5vh; background:#3486b9;margin:auto; margin-top: 10px !important;padding: 10px;">
-            <thead>
-                <th style="text-align: left;color: white;">Signer Events</th>
-                <th style="text-align:center;color:white;">Signature</th>
-                <th style="text-align:right;color:white;">Timestamp</th>
-            </thead>
-        </table>
-        
-        {% comment %} ================================================================================= {% endcomment %}
-        <table style="margin:auto; margin-top:1rem;font-size:0.8rem;">
-            <tr>
-                <td style="vertical-align: middle">Thimpu Sengyung</td>
-                <td style="vertical-align: middle"><p style="text-transform:uppercase;font-weight: bold;color: green;">completed</p></td>
-                <td style="font-weight: bold; vertical-align: middle">Sent: 4/8/2020 7:26:18AM </td>
-            </tr>
-        </table>
-        {% comment %} ================================================================================= {% endcomment %}
-        <table style="margin:auto; margin-top:1rem;font-size:0.8rem;">
-                <tr style="gap: 10;">
-                    <td style="text-align:left;line-height:28px;">
-
-                        <p>thimpu@adventurecode.io</p>
-                        <p>Security Level: Email,Account Authentication</p>
-                        <p>Baibhav Rajkumar</p>
-                        <p>baibhav@adventurecode.io</p>
-                        <p>Security Level: Email,Account Authentication</p>
-                    </td>
-                    <td style="text-align: center;line-height:28px;vertical-align: top;">
-
-                        <p>docusigned by</p>
-                        <img src="./Baibhav.png" alt="">
-                        <p>Using Ip Address: 141.191.20.10</p>
-                    </td>
-                    <td style="width:33.33%;text-align:right;line-height:28px; vertical-align: top;">
-
-                        <p style="font-weight: bold;">Viewed:<b>4/8/2020</b><span> 7:30:14AM</span></p>
-                        <p style="font-weight: bold;">Sent: <b>4/8/2020</b><span> 7:26:18AM</span></p>
-                        <p style="font-weight: bold;">Viewed:<b>4/8/2020</b><span> 7:30:14AM</span></p>
-                    </td>
-                </tr>
-        </table>
-       
-      {% comment %} </div> {% endcomment %}
-    {% comment %} </div> {% endcomment %}
-   </div>
+</div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script>
-</script>
-
 </body>
 </html>
