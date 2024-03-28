@@ -1,12 +1,12 @@
 {
     "data": {
         "type": "flight-order",
-        "id": "eJzTd9cPCAwKdvUDAAu%2FAn8%3D",
+        "id": "eJzTd9cPCAx19gwFAAuqAn0%3D",
         "queuingOfficeId": "NCE4D31SB",
         "associatedRecords": [
             {
-                "reference": "PQRSEN",
-                "creationDate": "2024-03-28T09:37:00.000",
+                "reference": "PQUCIU",
+                "creationDate": "2024-03-28T09:54:00.000",
                 "originSystemCode": "GDS",
                 "flightOfferId": "1"
             }
@@ -24,12 +24,12 @@
                             {
                                 "departure": {
                                     "iataCode": "GAU",
-                                    "at": "2024-03-30T18:15:00"
+                                    "at": "2024-03-31T18:15:00"
                                 },
                                 "arrival": {
                                     "iataCode": "DEL",
                                     "terminal": "3",
-                                    "at": "2024-03-30T20:45:00"
+                                    "at": "2024-03-31T20:45:00"
                                 },
                                 "carrierCode": "UK",
                                 "number": "722",
@@ -37,7 +37,7 @@
                                     "code": "320"
                                 },
                                 "duration": "PT2H30M",
-                                "id": "58",
+                                "id": "47",
                                 "numberOfStops": 0,
                                 "co2Emissions": [
                                     {
@@ -107,7 +107,7 @@
                         },
                         "fareDetailsBySegment": [
                             {
-                                "segmentId": "58",
+                                "segmentId": "47",
                                 "cabin": "ECONOMY",
                                 "fareBasis": "V0GRPRYS",
                                 "brandedFare": "ECOYS",
@@ -125,11 +125,11 @@
         "travelers": [
             {
                 "id": "1",
-                "dateOfBirth": "1998-11-13",
+                "dateOfBirth": "1998-01-01",
                 "gender": "MALE",
                 "name": {
-                    "firstName": "THIMPU",
-                    "lastName": "SENGYUNG"
+                    "firstName": "TIM",
+                    "lastName": "LIM"
                 },
                 "contact": {
                     "purpose": "STANDARD",
@@ -137,10 +137,10 @@
                         {
                             "deviceType": "MOBILE",
                             "countryCallingCode": "44",
-                            "number": "9101359626"
+                            "number": "1234567890"
                         }
                     ],
-                    "emailAddress": "thmtymthm@gmail.com"
+                    "emailAddress": "dan@gmail.com"
                 }
             }
         ],

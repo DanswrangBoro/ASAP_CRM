@@ -12,8 +12,8 @@
         margin-left: auto;
     }
     .itinerary-container {
-        border: 1px solid #ccc;
-        border-radius: 5px;
+        
+        border-radius: 20px;
         padding: 10px;
         margin-bottom: 20px;
     }
@@ -49,6 +49,11 @@
         align-items: center;
         color: white;
         text-align: center;
+    }
+    body{
+        font-family: 'Lato', sans-serif;
+        font-weight: 400;
+        /* color:#0F6ABC; */
     }
 </style>
 
@@ -108,7 +113,7 @@
         </div>
     
         <hr>
-        <div class="row">
+        <div class="row shadow">
             <div class="col">
                 <h4>Itinerary Details:</h4>
                 <!-- Overall container for all itineraries -->
@@ -130,17 +135,19 @@
                                     />
                                     {% endif %} 
                                     {% endwith %}
-                                    <div class="info-value">{{ itinary.carrierCode }}</div>
-                                    <div class="info-value">{{ itinary.carrierCode }}{{ itinary.number }}</div>
-                                    <div class="info-value">{{ itinary.aircraft.code }}</div>
+                                      <div class="container">
+                                            <div class="info-value">{{ itinary.carrierCode }}</div>
+                                            <div class="info-value">{{ itinary.carrierCode }}{{ itinary.number }}</div>
+                                            <div class="info-value">{{ itinary.aircraft.code }}</div>
+                                     </div>
                                 </div>
-                                <div class="itinerary-route">
+                                <div class="itinerary-route mt-5">
                                     <div class="flight-info">
                                         <div>{{ itinary.departure.iataCode }}</div>
                                         <div><i class="fas fa-arrow-right"></i></div>
                                         <div>{{ itinary.arrival.iataCode }}</div>
                                     </div>
-                                    <div class="flight-info" style="margin: 5px;">
+                                    <div class="flight-info">
                                         <div class="info-value">{{ itinary.departure.at }}</div>
                                         <div class="info-value">{{ itinary.arrival.at }}</div>
                                     </div>
@@ -165,7 +172,7 @@
             <div class="container mt-5">
                 <div class="row">
                     <div class="col">
-                        <div class="form-group row">
+                        <div class="form-group row mb-2">
                             <label for="basePrice" class="col-sm-2 col-form-label">Airline Fare:</label>
                             <div class="col-sm-4">
                                 <input type="number" class="form-control" id="basePrice" name="basePrice" value="{{ airline_price }}" placeholder="Enter base price">
@@ -175,15 +182,15 @@
                                 <input type="number" class="form-control" id="markupPrice" name="markupPrice" placeholder="Enter markup price">
                             </div>
                         </div>
-                        <div class="form-group row">
+                        <div class="form-group row mb-2">
                             <label for="description1" class="col-sm-2 col-form-label">Description:</label>
-                            <div class="col-sm-10">
+                            <div class="col-sm-4">
                                 <input type="text" class="form-control" id="description1" name="description1" placeholder="Enter description">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="total1" class="col-sm-2 col-form-label">Total:</label>
-                            <div class="col-sm-10">
+                            <div class="col-sm-4">
                                 <input type="text" class="form-control" id="total1" name="total1" placeholder="Total" readonly>
                             </div>
                         </div>
@@ -192,19 +199,20 @@
                 <hr>
                 <div class="row">
                     <div class="col">
-                        <div class="form-group row">
-                            <label for="tax" class="col-sm-2 col-form-label">Tax:</label>
-                            <div class="col-sm-4">
-                                <input type="number" class="form-control" id="tax" name="tax" placeholder="Enter tax">
-                            </div>
+                        <div class="form-group row mb-2">
                             <label for="description2" class="col-sm-2 col-form-label">Description:</label>
                             <div class="col-sm-4">
                                 <input type="text" class="form-control" id="description2" name="description2" placeholder="Enter description">
                             </div>
+                            <label for="tax" class="col-sm-2 col-form-label">Tax:</label>
+                            <div class="col-sm-4">
+                                <input type="number" class="form-control" id="tax" name="tax" placeholder="Enter tax">
+                            </div>
+                            
                         </div>
                         <div class="form-group row">
                             <label for="total2" class="col-sm-2 col-form-label">Total:</label>
-                            <div class="col-sm-10">
+                            <div class="col-sm-4">
                                 <input type="text" class="form-control" id="total2" name="total2" placeholder="Total" readonly>
                             </div>
                         </div>
@@ -214,24 +222,25 @@
                 <!-- Additional Charges Section -->
                 <div class="row">
                     <div class="col" id="additionalChargesSection">
-                        <div class="form-group row">
+                        <div class="form-group row mb-2">
+                            <label for="additionalDescription" class="col-sm-2 col-form-label">Description:</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="additionalDescription" name="additionalDescription[]" placeholder="Enter description">
+                            </div>
                             <label for="additionalCharges" class="col-sm-2 col-form-label">Additional Charges:</label>
                             <div class="col-sm-4">
                                 <input type="number" class="form-control additional-charge" id="additionalCharges" name="additionalCharges[]" placeholder="Enter additional charges">
                             </div>
-                            <label for="additionalDescription" class="col-sm-2 col-form-label">Description:</label>
-                            <div class="col-sm-3">
-                                <input type="text" class="form-control" id="additionalDescription" name="additionalDescription[]" placeholder="Enter description">
-                            </div>
+                            
                         </div>
                         <div class="form-group row" id="totalAdditionalRow">
                             <label for="totalAdditional" class="col-sm-2 col-form-label">Total:</label>
-                            <div class="col-sm-10">
+                            <div class="col-sm-4" >
                                 <input type="text" class="form-control" id="totalAdditional" name="totalAdditional" placeholder="Total" readonly>
                             </div>
                         </div>
                         <div class="col text-right">
-                            <button type="button" class="btn btn-secondary btn-sm mt-2" id="addChargeRow">
+                            <button type="button" class="btn btn-success btn-sm mt-2" id="addChargeRow">
                                 <i class="fas fa-plus"></i> Add row
                             </button>
                         </div>
@@ -240,15 +249,15 @@
                 <hr>
                 <div class="row">
                     <div class="col">
-                        <div class="form-group row">
+                        <div class="form-group row mb-2">
                             <label for="discount" class="col-sm-2 col-form-label">Discount:</label>
-                            <div class="col-sm-10">
+                            <div class="col-sm-4">
                                 <input type="number" value='0.00' class="form-control" id="discount" name="discount" placeholder="Enter discount">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="totalDiscount" class="col-sm-2 col-form-label">Total Discount:</label>
-                            <div class="col-sm-10">
+                            <div class="col-sm-4">
                                 <input type="text" class="form-control" id="totalDiscount" name="totalDiscount" placeholder="Total Discount" readonly>
                             </div>
                         </div>
@@ -259,14 +268,16 @@
                     <div class="col">
                         <div class="form-group row">
                             <label for="grandTotal" class="col-sm-2 col-form-label">Grand Total:</label>
-                            <div class="col-sm-10">
+                            <div class="col-sm-4">
                                 <input type="text" class="form-control" id="grandTotal" name="grandTotal" placeholder="Grand Total" readonly>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <button type="submit" class="btn btn-primary mt-5" name="submit">Submit Invoice</button>
+            <div class="container" style="text-align: end;">
+            <button type="submit" class="btn btn-primary mt-5 shadow-sm" name="submit" >Submit Invoice</button>
+        </div>
         </form> 
     </div>
 </div>
@@ -331,7 +342,7 @@
                 '<input type="number" class="form-control additional-charge" id="additionalCharges" name="additionalCharges[]" placeholder="Enter additional charges">' +
                 '</div>' +
                 '<label for="additionalDescription" class="col-sm-2 col-form-label">Description:</label>' +
-                '<div class="col-sm-3">' +
+                '<div class="col-sm-4">' +
                 '<input type="text" class="form-control" id="additionalDescription" name="additionalDescription[]" placeholder="Enter description">' +
                 '</div>' +
                 '</div>';

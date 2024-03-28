@@ -79,24 +79,33 @@
 </script>
 
 <!-- chargeback_form.html -->
-<button id="showFormButton">Add chargeback record</button>
+<button class="shadow-lg" id="showFormButton" style="height:5%;border:none; background-color:#3F88BD; color:white;">Add chargeback record</button>
 
 <div id="formContainer" style="display: none;">
 <!-- chargeback_form.html -->
-<form method="post" action="{% url 'crmApp:submit_chargeback' %}" id="chargebackForm">
+<form method="post" action="{% url 'crmApp:submit_chargeback' %}" id="chargebackForm" class="row g-3">
     {% csrf_token %}
 
-    <label for="booking_confirmation_no">Booking Confirmation No:</label><br>
-    <input type="text" id="booking_confirmation_no" name="booking_confirmation_no"><br><br>
+    <div class="col-md-3">
+        <label for="booking_confirmation_no" class="form-label">Booking Confirmation No:</label>
+        <input type="text" class="form-control" id="booking_confirmation_no" name="booking_confirmation_no">
+    </div>
 
-    <label for="reason">Reason:</label><br>
-    <input type="text" id="reason" name="reason"><br><br>
+    <div class="col-md-3">
+        <label for="reason" class="form-label">Reason:</label>
+        <input type="text" class="form-control" id="reason" name="reason">
+    </div>
 
-    <label for="chargeback_received_date">Chargeback Received Date:</label><br>
-    <input type="date" id="chargeback_received_date" name="chargeback_received_date"><br><br>
+    <div class="col-md-3">
+        <label for="chargeback_received_date" class="form-label">Chargeback Received Date:</label>
+        <input type="date" class="form-control" id="chargeback_received_date" name="chargeback_received_date">
+    </div>
 
-    <input type="submit" value="Submit">
+    <div class="col-md-3" style="margin-top:4%;">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
 </form>
+
 
 </div>
 
@@ -141,6 +150,7 @@
 
 <main class="container mt-6">
     <div class="row mt-5" style="background-color:white;">
+    <h6>Chargeback table</h6>
         <!-- Table for Chargebacks -->
         <div class="col-md-12">
             <div class="table-responsive">

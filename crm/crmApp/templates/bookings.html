@@ -105,7 +105,7 @@
         <!-- Navbar Brand and Description -->
         <div class="container" style="width: 100%; ">
           
-                <a class="navbar-brand" href="#" style="font-size: 1rem;"><b>Welcome to your dashboard</b></a>
+                <a class="navbar-brand" href="#" style="font-size: 1rem;"><b>Welcome to Bookings</b></a>
                 <p style="font-size: 0.8rem; color: #67748E;">This is where you can manage your tasks and view important information.</p>
        
         </div>
@@ -172,17 +172,27 @@
     {% comment %} {{ exp.expiry_value }} {% endcomment %}
     <!-- <h2 class="mb-4">Flight Booking Form</h2> -->
     <!-- Flight booking form content -->
-    <div class="mb-1 me-3" style="flex: 1; width: 15%;">
-        <label for="tripType" class="form-label"><i class="bi bi-geo-alt"></i> Trip Type</label>
-        <select class="form-select" id="tripType" name="tripType">
-            <option value="oneWay">One Way</option>
-            <option value="roundTrip">Round Trip</option>
-            <option value="multi">Multi-City</option>
-        </select>
+    <div class="container custom-booking">
+    <div class="mb-1 me-3" style="display: flex; flex-direction: row;">
+        
+        <div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" id="oneWay" name="tripType" value="oneWay" checked>
+                <label class="form-check-label" for="oneWay">One Way</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" id="roundTrip" name="tripType" value="roundTrip">
+                <label class="form-check-label" for="roundTrip">Round Trip</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" id="multi" name="tripType" value="multi">
+                <label class="form-check-label" for="multi">Multi-City</label>
+            </div>
+        </div>
     </div>
     <form id="flightSearchForm" {% if exp.expiry_value == 'expired' %}disabled{% endif %} class="custom-booking"  action="{% url 'crmApp:flight_results' %}" method="GET" >
         <div class="row col-md-5" >
-            <div class="mb-3 me-3" style="flex: 1;">
+            <div class="mb-3 me-3" style="width: 40%;">
                 <label for="flightClass" class="form-label"><i class="bi bi-geo-alt"></i> Flight Class</label>
                 <select class="form-select" id="flightClass" name="flightClass" {% if exp.expiry_value == 'expired' %}disabled{% endif %}>
                     <option value="ECONOMY">Economy</option>
@@ -191,7 +201,7 @@
                     <option value="BUSINESS">Business</option>
                 </select>
             </div>
-                <div class="iconHolder">
+                <div class="iconHolder mb-3">
                     <div id="travelers" name="travelers">
                         <div id="adults" onclick="changeColor(this)">
                             <div id="ano">1</div>
@@ -250,15 +260,15 @@
             </div>
         </div>
     </form>
-
+<div class="container custom-booking" style="background-color: red;">
     <form id="flightSearchFormMulti" style="display: none;" method="GET" action="{% url 'crmApp:multi_search' %}">
         <!-- Initial set of input fields for first city -->
-        <div class="form-group row">
-            <div class="col-md-4">
+        <div class="form-group row d-flex align-items-center">
+            <div class="col-md-3">
                 <label for="departureCity1">Departure City:</label>
                 <input type="text" class="form-control" name="departureCity[]" required>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <label for="arrivalCity1">Arrival City:</label>
                 <input type="text" class="form-control" name="arrivalCity[]" required>
             </div>
@@ -266,17 +276,20 @@
                 <label for="departureDate1">Departure Date:</label>
                 <input type="date" class="form-control" name="departureDate[]" required>
             </div>
-            <div class="col-md-1">
+            <div class="col-md-3 mt-4">
+                
                 <button type="button" class="btn btn-danger deleteCityBtn">Delete</button>
             </div>
         </div>
+        
+    
         
         
         <div id="additionalCities">
             <!-- Additional input fields will be appended here -->
         </div>
-        <button type="button" id="addCityBtn" class="btn btn-primary">Add More</button>
-        <hr class="my-4">
+        <button type="button" id="addCityBtn" class="btn btn-primary mt-3 mb-3">Add More</button>
+       
         <!-- Remaining form fields -->
         <div class="form-group">
             <div class="iconHolder">
@@ -312,19 +325,25 @@
                 </div>
             </div>
         </div>
-        <div class="form-group">
-            <label for="travelClass">Travel Class:</label>
-            <select class="form-select" id="flightClass" name="flightClass">
-                <option value="ECONOMY">Economy</option>
-                <option value="PREMIUM ECONOMY">Business</option>
-                <option value="FIRST">First</option>
-                <option value="BUSINESS">Business</option>
-            </select>
+        <div class="form-group mt-3" style="display: flex; align-items: center;">
+            <div style="width: 15%;">
+                <label for="travelClass">Travel Class:</label>
+                <select class="form-select" id="flightClass" name="flightClass">
+                    <option value="ECONOMY">Economy</option>
+                    <option value="PREMIUM ECONOMY">Business</option>
+                    <option value="FIRST">First</option>
+                    <option value="BUSINESS">Business</option>
+                </select>
+            </div>
+            <div class="container">
+            <button type="submit" class="btn btn-primary mt-4">Search</button>
         </div>
-        <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+        
     </form>
 </div>
-
+</div>
+</div>
 <div id="refundForm" class="container custom-booking hidden">
     <!-- Refund form content -->
     <h2 class="mb-4">Refund Form</h2>
@@ -450,9 +469,9 @@
     </div>
 </div>
                         
-<div class="table-responsive mt-5 border">
-    <table class="table table-striped custom-table">
-        <thead>
+<div class="table-responsive mt-5">
+    <table style="border-color:#74c9f7ab; width:170%" >
+        <thead style="background-color:#EAF2FF; border:2px solid white; font-size: 0.8rem;">
             <tr>
                 <th>Booking ID</th>
                 <th>Passenger Name</th>
@@ -555,39 +574,38 @@
 </script>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const tripTypeSelect = document.getElementById('tripType');
-        const returnDateField = document.getElementById('returnDateField');
-        const multiform = document.getElementById('flightSearchFormMulti');
-        const nonmultiform = document.getElementById('flightSearchForm');
+   document.addEventListener("DOMContentLoaded", function () {
+    const tripTypeRadios = document.querySelectorAll('input[name="tripType"]');
+    const returnDateField = document.getElementById('returnDateField');
+    const multiform = document.getElementById('flightSearchFormMulti');
+    const nonmultiform = document.getElementById('flightSearchForm');
 
-
-        // Function to handle trip type change
-        function handleTripTypeChange() {
-            if (tripTypeSelect.value === 'oneWay') {
-                returnDateField.style.display = 'none';
-                multiform.style.display = 'none';
-                nonmultiform.style.display = 'block';
-
-            }
-            if(tripTypeSelect.value === 'multi'){
-                returnDateField.style.display = 'none';
-                multiform.style.display = 'block';
-                nonmultiform.style.display = 'none';
-            } 
-            else {
-                returnDateField.style.display = 'block';
-                multiform.style.display = 'none';
-                nonmultiform.style.display = 'block';
-            }
+    // Function to handle trip type change
+    function handleTripTypeChange() {
+        if (this.value === 'oneWay') {
+            returnDateField.style.display = 'none';
+            multiform.style.display = 'none';
+            nonmultiform.style.display = 'block';
+        } else if (this.value === 'multi') {
+            returnDateField.style.display = 'none';
+            multiform.style.display = 'block';
+            nonmultiform.style.display = 'none';
+        } else {
+            returnDateField.style.display = 'block';
+            multiform.style.display = 'none';
+            nonmultiform.style.display = 'block';
         }
+    }
 
-        // Trigger trip type change event on page load
-        handleTripTypeChange();
+    // Trigger trip type change event on page load
+    handleTripTypeChange.call(tripTypeRadios[0]); // Trigger with the default selected radio button
 
-        // Add event listener for trip type change
-        tripTypeSelect.addEventListener('change', handleTripTypeChange);
+    // Add event listener for trip type change for each radio button
+    tripTypeRadios.forEach(function (radio) {
+        radio.addEventListener('change', handleTripTypeChange);
     });
+});
+
 document.addEventListener('DOMContentLoaded', function() {
     var addCityBtn = document.getElementById('addCityBtn');
     var additionalCities = document.getElementById('additionalCities');
@@ -597,19 +615,19 @@ document.addEventListener('DOMContentLoaded', function() {
         var cityDiv = document.createElement('div');
         cityDiv.classList.add('form', 'row', 'city');
         cityDiv.innerHTML = `
-            <div class="form-group col-md-4">
+        <div class="col-md-3">
                 <label for="departureCity${cityIndex}">Departure City:</label>
                 <input type="text" class="form-control" name="departureCity[]" required>
             </div>
-            <div class="form-group col-md-4">
+            <div class="col-md-3">
                 <label for="arrivalCity${cityIndex}">Arrival City:</label>
                 <input type="text" class="form-control" name="arrivalCity[]" required>
             </div>
-            <div class="form-group col-md-3">
+            <div class=" col-md-3">
                 <label for="departureDate${cityIndex}">Departure Date:</label>
                 <input type="date" class="form-control" name="departureDate[]" required>
             </div>
-            <div class="form-group col-md-1">
+            <div class=" col-md-3 mt-4">
                 <button type="button" class="btn btn-danger deleteCityBtn">Delete</button>
             </div>
         `;
