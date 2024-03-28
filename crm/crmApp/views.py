@@ -186,9 +186,10 @@ def flight_results(request):
             # print(context)
                 return render(request, 'roundtrip.html', context)
         except ResponseError as error:
-            return render(request, 'error.html', {'error': error})
+            # print(error["error"])
+            return render(request, 'error.html', {'error': error.response.result["errors"]})
     else:
-        return render(request, 'result1.html')  # Render an empty template for other request methods
+        return render(request, 'result1.html')
     
 # def flight_results(request):
 #     from_location = request.GET.get('fromLocation', '')
@@ -373,7 +374,7 @@ def booking(request):
     user_center = request.user.center
 
     # Check if the user's center is a main center
-    if (user_center == 'Main'):
+    if user_center.name == 'Main':
         original = Booking.objects.filter(center=user_center)
         context = {
             "original": original
@@ -1119,16 +1120,17 @@ def pending_invoices(request):
 def send_email(request):
     if request.method == 'POST':
         id = request.POST.get("invoice_id")
+        print(id)
         invoices = get_object_or_404(Invoice, invoice_id=id)
 
         # Calculate total price including base price and markup price
         total_price = invoices.base_price + invoices.markup_price
 
         # Loop through addition charges and calculate total
-        addition_charges_total = Decimal('0')
+        addition_charges_total = 0.00
         addition_charges = invoices.addition_charges()
         for addition_charge in addition_charges:
-            addition_charges_total += Decimal(str(addition_charge.price))
+            addition_charges_total += float(str(addition_charge.price))
 
         # Calculate grand total
         grand_total = (total_price + addition_charges_total + invoices.tax) - invoices.discount
@@ -1152,7 +1154,8 @@ def send_email(request):
             subject='Your Invoice',
             body=text_content,
             from_email='www.swrang.123@gmail.com',
-            to=[invoices.booking.email],  # Replace with the recipient's email address
+            to=['danswrang@adventurecode.io'],  # Replace with the recipient's email address
+            # to=[invoices.booking.email],  # Replace with the recipient's email address
         )
 
         # Attach the HTML content
@@ -1333,7 +1336,7 @@ def submit_invoice(request):
         grand_total = request.POST.get('grandTotal')
         print("Grand Total:", grand_total)
 
-        booking_instance = get_object_or_404(Booking, booking_id = booking)
+        booking_instance = get_object_or_404(Booking, pk = booking)
         # Create an Invoice object
         invoice = Invoice.objects.create(
             invoice_id = random_invoice_no(),
@@ -1490,8 +1493,8 @@ def submit_cutomer(request):
         except ResponseError as e:
             print(e.response.result["errors"][0]["detail"])
             print(f"catch Error: {type(e)}")
-        # Return an HttpResponse or redirect to another page
-        return HttpResponse("Form submitted successfully!")
+            return HttpResponse(e.response.result["errors"][0]["detail"])
+        
 
     return HttpResponse("success")
 
@@ -1507,7 +1510,35 @@ def date_format(datetime_str):
     
     return date_str
 
-
+    # if request.method == "POST":
+    #     # Get the data from the POST request
+    #     center_id = request.POST.get("centerId")
+        
+    #     # Get the center object
+    #     center = Center.objects.get(pk=center_id)
+        
+    #     # Render the agreement email HTML content
+    #     context = {'center': center}
+    #     agreement_html = render_to_string('agreement_email.html', context)
+        
+    #     # Create a text/plain version of the HTML email content
+    #     text_content = strip_tags(agreement_html)
+        
+    #     # Create the email object
+    #     email = EmailMultiAlternatives(
+    #         subject='Agreement for Center Authorization',
+    #         body=text_content,
+    #         from_email='www.swrang.123@gmail.com',
+    #         to=[center.email],  # Assuming center has an email field
+    #     )
+        
+    #     # Attach the HTML content
+    #     email.attach_alternative(agreement_html, "text/html")
+        
+    #     # Send the email
+    #     email.send()
+        
+    #     return HttpResponseRedirect(reverse('crmApp:centers_list'))
 
 
 
@@ -1565,6 +1596,26 @@ def send_signature_request(request):
             #     except ApiException as e:
             #         print(e)
             #         return HttpResponse("something went wrong")
+                #     # Render the agreement email HTML content
+            context = {'booking': booking}
+            agreement_html = render_to_string('acknowledge_customer.html', context)
+            
+            # Create a text/plain version of the HTML email content
+            text_content = strip_tags(agreement_html)
+            
+            # Create the email object
+            email = EmailMultiAlternatives(
+                subject='Agreement for paymwent authorization',
+                body=text_content,
+                from_email='www.swrang.123@gmail.com',
+                to=[email],
+            )
+            
+            # Attach the HTML content
+            email.attach_alternative(agreement_html, "text/html")
+            
+            # Send the email
+            email.send()
 
             return redirect('crmApp:invoice')
 
@@ -1910,6 +1961,44 @@ def ack_agree(request, center_id):
     
     return render(request, 'ack_agree.html', context)
 
+
+def customer_authorization(request, pk):
+    # Get the client's IP address from the request object
+    client_ip_address = '103.219.61.205'  # Example IP address for testing
+    api_url = f"http://ipinfo.io/{client_ip_address}/json"
+    ipDetails = requests.get(api_url).json()
+    print(ipDetails)
+    print("its comming here", pk)
+    print("Client IP Address:", client_ip_address)
+    
+    # Get the user-agent string from the request headers
+    user_agent = request.headers.get('User-Agent', 'Unknown')
+    
+    # Extracting operating system, browser, and device information from the user-agent string
+    os_info = detect_os(user_agent)
+    browser_info = detect_browser(user_agent)
+    device_info = detect_device(user_agent)
+    # user_agent = request.META.get('HTTP_USER_AGENT', 'Unknown')
+
+    # Retrieve the Center object based on the center_id
+    booking = get_object_or_404(Booking, pk = pk)
+    booking.auth = 'authorized'
+    # center.acknowledgment_status = 'acknowledged'
+    # center.signed_at = datetime.now()
+    booking.save()
+    
+    context = {
+        # 'SERVER_USER_AGENT': user_agent,
+        'booking': booking,
+        'client_ip_address': client_ip_address,
+        'os_info': os_info,
+        'browser_info': browser_info,
+        'device_info': device_info,
+        'ip': ipDetails
+    }
+    
+    return render(request, 'customer_agreement.html', context)
+
 def track(request):
     # Log the email open event
     print("Email is opened")
@@ -2100,3 +2189,13 @@ def requestCounter(center,term):
         api_request.save()
     except Exception as e:
         print("excepton has occured", e)
+
+
+#### veiw selected invoice ###########
+def view_invoice(request, pk):
+    print(pk)
+    invoice = get_object_or_404(Invoice, pk = pk)
+    context={
+        "invoice":invoice
+    }
+    return render(request,'view_invoice.html', context)

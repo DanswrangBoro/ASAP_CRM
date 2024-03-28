@@ -99,7 +99,7 @@
         }, 3000);
     </script>
 {% endif %}
-<h1 class="text-center mt-5">CRM <span>Dash</span>board - New Bookings</h1> 
+<h1 class="text-center mt-5">CRM <b>Dash</b>board - New Bookings</h1> 
 <div class="row justify-content-end">
     <div class="col-md-2 float-right">
         <div class="dropdown">
@@ -116,7 +116,7 @@
 <div class="hidden bg-danger text-light py-2 px-2 mt-2 mb-2" style="{% if exp.expiry_value == 'expired' %}display: block{% endif %}">You plan has expired. Contact sales team to continue Subscription</div>
 <div id="flightBookingForm"  class="container hidden" >
     {% comment %} {{ exp.expiry_value }} {% endcomment %}
-    <h2 class="mb-4">Flight Booking Form</h2>
+    {% comment %} <h2 class="mb-4">Flight Booking Form</h2> {% endcomment %}
     <!-- Flight booking form content -->
     <div class="mb-3 me-3" style="flex: 1;">
         <label for="tripType" class="form-label"><i class="bi bi-geo-alt"></i> Trip Type</label>
@@ -138,18 +138,6 @@
                 </select>
             </div>
             <div class="mb-3 me-3" style="flex: 1;">
-<<<<<<< HEAD
-                <label for="tripType" class="form-label"><i class="bi bi-geo-alt"></i> Trip Type</label>
-                <select class="form-select" id="tripType" name="tripType">
-                    <option value="oneWay">One Way</option>
-                    <option value="roundTrip">Round Trip</option>
-                    <option value="multi">Multi-City</option>
-                </select>
-            </div>
-            <div class="mb-3 me-3" style="flex: 1;">
-                <label for="passengerCount" class="form-label"><i class="bi bi-geo-alt"></i> Passenger</label>
-                <input type="number" class="form-control" id="passengerCount" name="passengerCount" min="1" {% if exp.expiry_value == 'expired' %}disabled{% endif %}>
-=======
                 <div class="iconHolder">
                     <div id="travelers" name="travelers">
                         <div id="adults" onclick="changeColor(this)">
@@ -182,7 +170,6 @@
                         </svg>
                     </div>
                 </div>
->>>>>>> merge_ASAP
             </div>
         </div>
         <div style="display: flex; flex-wrap: wrap">

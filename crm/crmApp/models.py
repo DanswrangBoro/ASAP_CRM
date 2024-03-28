@@ -151,6 +151,7 @@ class Booking(models.Model):
     lead_agent = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, blank=True, related_name='lead_bookings')
     card_number = models.IntegerField(max_length=16,default="1234567890123456")
     center = models.ForeignKey(Center, on_delete=models.SET_NULL, null=True,blank=True)
+    auth = models.CharField(max_length = 20, default = 'Not Authorized')
 
     def __str__(self):
         return self.booking_id
@@ -243,28 +244,31 @@ class Chargeback(models.Model):
 
 
 class Invoice(models.Model):
-    invoice_id = models.CharField(max_length=255, default="", null= True, blank=True)
+    invoice_id = models.CharField(max_length=255, default="", null=True, blank=True)
     booking = models.ForeignKey(Booking, on_delete=models.CASCADE, default="")
-    base_price = models.DecimalField(max_digits=10, decimal_places=2)
-    markup_price = models.DecimalField(max_digits=10, decimal_places=2)
+    base_price = models.FloatField(null=True, blank = True)
+    markup_price = models.FloatField(null=True, blank = True)
     description1 = models.CharField(max_length=100)
-    total1 = models.DecimalField(max_digits=10, decimal_places=2)
-    tax = models.DecimalField(max_digits=10, decimal_places=2)
+    total1 = models.FloatField(null=True, blank = True)
+    tax = models.FloatField(null=True, blank = True)
     description2 = models.CharField(max_length=100)
-    total2 = models.DecimalField(max_digits=10, decimal_places=2)
-    discount = models.DecimalField(max_digits=10, decimal_places=2)
-    total_discount = models.DecimalField(max_digits=10, decimal_places=2)
-    grand_total = models.DecimalField(max_digits=10, decimal_places=2)
+    total2 = models.FloatField(null=True, blank = True)
+    discount = models.FloatField(null=True, blank = True)
+    total_discount = models.FloatField(null=True, blank = True)
+    grand_total = models.FloatField()
     status = models.CharField(max_length=50, default="pending")
+
     def __str__(self):
         return self.invoice_id
+
     def natural_key(self):
         return (
-            self.invoice_id, self.booking.natural_key(), str(self.base_price),
-            str(self.markup_price), self.description1, str(self.total1),
-            str(self.tax), self.description2, str(self.total2),
-            str(self.discount), str(self.total_discount), str(self.grand_total)
+            self.invoice_id, self.booking.natural_key(), format(self.base_price, '.2f'),
+            format(self.markup_price, '.2f'), self.description1, format(self.total1, '.2f'),
+            format(self.tax, '.2f'), self.description2, format(self.total2, '.2f'),
+            format(self.discount, '.2f'), format(self.total_discount, '.2f'), format(self.grand_total, '.2f')
         )
+
     def addition_charges(self):
         return self.additioncharge_set.all()
 

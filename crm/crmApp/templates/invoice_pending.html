@@ -25,7 +25,7 @@
         <tbody>
           {% for invoice in invoices %}
           <tr  style="font-size: 0.7rem">
-            <td class="invoice-id" data-invoice-id="{{ invoice.invoice_id }}" style="font-weight: bolder; cursor: pointer; background: grey; color: white">{{ invoice.invoice_id }}</td>
+            <td class="invoice-id" style="font-weight: bolder; cursor: pointer; background: grey; color: white"><a href= "{% url 'crmApp:view_invoice' pk=invoice.pk %}">{{ invoice.invoice_id }}</a></td>
             <td>{{ invoice.base_price }}</td>
             <td>{{ invoice.markup_price }}</td>
             <td>{{ invoice.description1 }}</td>
@@ -48,138 +48,7 @@
 
     </div>
   </div>
-    <section id="invoice" style="max-width: 900px; height: auto; margin: auto; margin-top: 10px; padding: 10px 10px 0 10px; background-color: #f8f9fa;display: none">
-        <table style="padding: 20px; width: 100%; font-size: 0.7rem; margin-top: 10px">
-            <tr>
-                <td style="width: 50%; vertical-align: top;">
-                    <h4 style="font-size: 0.7rem">From</h4>
-                </td>
-                <td style="width: 50%; text-align: right; vertical-align: top;">
-                    <h4 style="font-size: 0.7rem">To</h4>
-                </td>
-            </tr>
-            <tr>
-                <td style="vertical-align: top;">
-                    <strong>Flight Booking Travel Agency</strong><br>
-                    Email: booking@example.com<br>
-                    Phone: +1234567890
-                </td>
-                <td style="text-align: right; vertical-align: top;">
-                    <strong>John Doe</strong><br>
-                    johndoe@example.com<br>
-                    +9876543210
-                </td>
-            </tr>
-        </table>
-        <hr>
-        <div class="row">
-            <div class="col">
-                <h4 style="font-size: 0.8rem">Passenger Details</h4>
-                <table class="table" style="width: 100%; border-style: dashed; border-color: black; border-width: 0.5px; border-collapse: collapse; padding: 10px;">
-                    <tr style="border-style: dashed; border-width: 1px; font-size: 0.6rem">
-                        <th style="width: 20%; padding: 5px; text-align: center;">Name</th>
-                        <th style="width: 20%; padding: 5px; text-align: center;">Email</th>
-                        <th style="width: 20%; padding: 5px; text-align: center;">Phone</th>
-                        <th style="width: 20%; padding: 5px; text-align: center;">Type</th>
-                        <th style="width: 20%; padding: 5px; text-align: center;">DOB</th>
-                        <th style="width: 20%; text-align: center;padding: 5px;">Sex</th>
-                    </tr>
-                    <tr style="border-style: dashed;border-width: 1px;font-size: 0.6rem">
-                        <td style="width: 20%; padding: 5px; text-align: center; border-right: 1px dashed;">John Doe</td>
-                        <td style="width: 20%; padding: 5px; text-align: center; border-right: 1px dashed;">john@example.com</td>
-                        <td style="width: 20%; padding: 5px; text-align: center; border-right: 1px dashed;">1234567890</td>
-                        <td style="width: 20%; padding: 5px; text-align: center; border-right: 1px dashed;">Adult</td>
-                        <td style="width: 20%; padding: 5px; text-align: center; border-right: 1px dashed;">25/02/1996</td>
-                        <td style="width: 20%; text-align: center; padding: 5px;">Male</td>
-                    </tr>
-                </table>                
-            </div>
-        </div>
-        <div class="row">
-            <h4 style="font-size: 0.8rem">Itinerary Details</h4>
-            <table class="table" style="width: 97.5%; font-size:0.6rem; border-style: dashed; margin:auto;border-color: black; border-width: 0.5px; border-collapse: collapse; padding: 10px;">
-                <thead style="font-size: 0.6rem; text-align: center">
-                    <tr style="border-style: dashed; border-width: 1px;">
-                        <th>Airline</th>
-                        <th>Depart City</th>
-                        <th>Arrival City</th>
-                        <th>Depart Airport</th>
-                        <th>Arrival Airport</th>
-                        <th>Departure Time</th>
-                        <th>Arrival Time</th>
-                        <th>Class</th>
-                        <th>Baggage Info</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr style="font-size: 0.6rem; text-align: center;">
-                        <td style="text-align: left;padding: 5px; border-right: 1px dashed;">
-                            <img class="airline-logo" src="airline_logo.jpg" alt="Airline Logo">
-                            <div class="info-value">Spice Jet</div>
-                            <div class="info-value">SG123</div>
-                        </td>
-                        <td style="text-align: center;padding: 5px; border-right: 1px dashed;">
-                            Delhi
-                        </td>
-                        <td style="text-align: center;padding: 5px; border-right: 1px dashed;">
-                            Guwahati
-                        </td>
-                        <td style="text-align: center;padding: 5px; border-right: 1px dashed;">
-                            Indira Gandhi International Airport
-                        </td>
-                        <td style="text-align: center;padding: 5px; border-right: 1px dashed;">
-                            Lokhpriya Gopinath Bordoloi International Airport
-                        </td>
-                        <td style="text-align: center;padding: 5px; border-right: 1px dashed;">
-                            19:20
-                        </td>
-                        <td style="text-align: center;padding: 5px; border-right: 1px dashed;">
-                            20:24
-                        </td>
-                        <td style="text-align: center;padding: 5px; border-right: 1px dashed;">
-                            Premium Economy
-                        </td>
-                        <td style="text-align: center;padding: 5px; border-right: 1px dashed;">
-                            1Kg
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <table style="width: 50%; text-align: left; border-collapse: collapse; margin-top: 20px; font-size: 0.6rem;">
-            <tr>
-                <th style="width: 50%; padding: 5px; font-weight: bold;">Airfare Charges</th>
-                <td style="width: 50%; padding: 5px; text-align: right; font-size: 0.6rem;" id="airfarecharges"></td>
-            </tr>
-            <tr>
-                <th style="width: 50%; padding: 5px; font-weight: bold;">Agency Fees</th>
-                <td style="width: 50%; padding: 5px; text-align: right; font-size: 0.6rem;">$100</td>
-            </tr>
-            <tr>
-                <th style="width: 50%; padding: 5px; font-weight: bold;">Miscellaneous Fees</th>
-                <td id="additionChargesTotal" style="width: 50%; padding: 5px; text-align: right; font-size: 0.6rem;">$0</td>
-            </tr>
-            <tr>
-                <th style="width: 50%; padding: 5px; font-weight: bold;">Tax</th>
-                <td id="taxAmount" style="width: 50%; padding: 5px; text-align: right; font-size: 0.6rem;">$0</td>
-            </tr>
-            <tr>
-                <th style="width: 50%; padding: 5px; font-weight: bold;">Discount</th>
-                <td id="discountAmount" style="width: 50%; padding: 5px; text-align: right; font-size: 0.6rem;">$0</td>
-            </tr>
-            <tr style="border-top: 1px solid grey">
-                <th style="width: 50%; padding: 5px; font-weight: bold;"><b>Total Charge</b></th>
-                <td id="totalPriceAfterDiscount" style="width: 50%; padding: 5px; text-align: right; font-size: 0.6rem;"><b>$0</b></td>
-            </tr>
-        </table>
-        <form id="this_form" method='POST' action="{% url 'crmApp:send_email'  %}">
-            {% csrf_token %}
-            <input type="hidden"  name="invoice_id"  id="id_to_pass"/>
-        </form>
-        <button type="submit" id="submit_the_form" style="background-color: BLUE; padding: 5px; margin-top: 10px; width: 100px; border: none; cursor: pointer; color: white"> send mail</button>
-
-    </section>  
-
+   
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             // Retrieve the JSON data from the template context
@@ -242,7 +111,6 @@
                     // Display total price after discount in HTML
                     var totalPriceAfterDiscountElement = document.getElementById("totalPriceAfterDiscount");
                     totalPriceAfterDiscountElement.innerHTML = '<b>$' + totalPriceAfterDiscount.toFixed(2) + '</b>';
-    
                     // Display corresponding whole data in console
                     console.log("Clicked Invoice Data:", clickedInvoice);
                     section.style.display = 'block';

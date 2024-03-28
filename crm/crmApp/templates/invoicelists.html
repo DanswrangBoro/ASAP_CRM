@@ -78,8 +78,8 @@
 
 <!-- Table -->
 <div class="table-responsive mt-3" id="bookingTable">
-    <table class="table">
-        <thead style="font-size: 0.8rem; text-align: center">
+    <table class="table" style="width: 200%; font-size: 0.7rem">
+        <thead style=" text-align: center">
             <tr>
                 <th>Booking ID</th>
                 <th>Passenger Name</th>
@@ -99,6 +99,7 @@
                 <th>Lead Agent</th>
                 <th>Status</th>
                 <th>Confirmation Mail</th>
+                <th>Auth</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -123,6 +124,7 @@
                 <td>{{ booking.lead_agent }}</td>
                 <td>{{ booking.status }}</td>
                 <td>{{ booking.confirmation_mail }}</td>
+                <td>{{ booking.auth }}</td>
                 <td>
                     <button class="btn btn-primary" onclick="submitAuthorization(`{{ booking.booking_id }}`);" style="width: 9rem; padding:5%;font-size: 0.9rem">Authorize payment</button>
                 </td>

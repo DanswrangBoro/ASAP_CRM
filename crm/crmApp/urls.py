@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import ack_agree, assign_plan, centersList, pending_invoices, relatedBooking, send_signature_request, subscription_plans, update_booking_status
+from .views import ack_agree, assign_plan, centersList, customer_authorization, pending_invoices, relatedBooking, send_signature_request, subscription_plans, update_booking_status
 from .views import fetch_passenger_data,submit_refund_form,update_refund_status
 from django.contrib.auth.views import LoginView
 from .views import reassign_lead_agent
@@ -82,6 +82,9 @@ urlpatterns = [
     path('standard-plan/', views.standard_plan, name='standard_plan'),
     path('premium-plan/', views.premium_plan, name='premium_plan'),
     path('assign_plan/', assign_plan, name='assign_plan'),
+    path('customer_authorization/<int:pk>/', customer_authorization, name='customer_authorization'),
+    path('view_invoice/<str:pk>/', views.view_invoice, name = "view_invoice"),
+
 ]
 
 
