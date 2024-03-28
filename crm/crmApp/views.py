@@ -2200,7 +2200,46 @@ def requestCounter(center,term):
 def view_invoice(request, pk):
     print(pk)
     invoice = get_object_or_404(Invoice, pk = pk)
-    context={
-        "invoice":invoice
-    }
-    return render(request,'view_invoice.html', context)
+    flight_id = invoice.booking.booking_id
+    try:
+        response = amadeus.booking.flight_order(flight_id).get().data
+        print(response)
+        file_path = "ordertemp.txt"
+        with open(file_path,'w') as file:
+            json.dump(response,file, indent=4)
+        # response = {}
+        # with open(file_path,'r') as file:
+        #     response = json.load(file)
+        validating_airline_codes_set = set()
+        for data in response["flightOffers"]:
+            for dats in data["itineraries"]:
+                for segment in dats["segments"]:
+                    # print(segment["carrierCode"])
+                    validating_airline_codes_set.add(segment["carrierCode"])
+
+        # Convert the set to a list if needed
+        validating_airline_codes_list = list(validating_airline_codes_set)
+        airline_codes_string = ','.join(validating_airline_codes_list)
+        airlines = amadeus.reference_data.airlines.get(airlineCodes=airline_codes_string).data
+        # print(airlines)
+        result_dict = {item['iataCode']: item["businessName"] for item in airlines}
+        result_dict2 = {item['iataCode']: item.get('icaoCode', item['iataCode']) for item in airlines}
+        additionCharge = AdditionCharge.objects.filter(invoice = invoice)
+        miscellaneous = 0
+        for data in additionCharge:
+            print(data.price)
+            miscellaneous = miscellaneous + data.price
+        context={
+            "invoice":invoice,
+            "order":response,
+            "airlines": result_dict,
+            "airlines" : result_dict2,
+            "miscellaneous" : miscellaneous,
+            "tax" : invoice.total2,
+            "discount" : invoice.total_discount,
+            "airlinefare" : invoice.total1
+        }
+        return render(request,'view_invoice.html', context)
+    except ResponseError as e:
+        return render(request, "error.html", {"error": e.response.result["errors"]})
+    
