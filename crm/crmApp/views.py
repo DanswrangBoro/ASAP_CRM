@@ -1494,9 +1494,9 @@ def submit_cutomer(request):
             # Add more fields from the response as needed
             return redirect('crmApp:booking')
         except ResponseError as e:
-            print(e.response.result["errors"][0]["detail"])
+            print(e.response.result["errors"])
             print(f"catch Error: {type(e)}")
-            return HttpResponse(e.response.result["errors"][0]["detail"])
+            return HttpResponse(e.response.result["errors"])
         
 
     return HttpResponse("success")
