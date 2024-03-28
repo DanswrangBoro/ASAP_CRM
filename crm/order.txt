@@ -1,12 +1,12 @@
 {
     "data": {
         "type": "flight-order",
-        "id": "eJzTd9cP8HHxcLUEAAs4Akw%3D",
+        "id": "eJzTd9cPCAx0cw0CAAuYAnU%3D",
         "queuingOfficeId": "NCE4D31SB",
         "associatedRecords": [
             {
-                "reference": "PLDHE9",
-                "creationDate": "2024-03-27T10:44:00.000",
+                "reference": "PQQFER",
+                "creationDate": "2024-03-28T09:17:00.000",
                 "originSystemCode": "GDS",
                 "flightOfferId": "1"
             }
@@ -17,19 +17,19 @@
                 "id": "1",
                 "source": "GDS",
                 "nonHomogeneous": false,
-                "lastTicketingDate": "2024-03-27",
+                "lastTicketingDate": "2024-03-28",
                 "itineraries": [
                     {
                         "segments": [
                             {
                                 "departure": {
                                     "iataCode": "GAU",
-                                    "at": "2024-03-29T18:15:00"
+                                    "at": "2024-03-30T18:15:00"
                                 },
                                 "arrival": {
                                     "iataCode": "DEL",
                                     "terminal": "3",
-                                    "at": "2024-03-29T20:45:00"
+                                    "at": "2024-03-30T20:45:00"
                                 },
                                 "carrierCode": "UK",
                                 "number": "722",
@@ -37,7 +37,7 @@
                                     "code": "320"
                                 },
                                 "duration": "PT2H30M",
-                                "id": "20",
+                                "id": "58",
                                 "numberOfStops": 0,
                                 "co2Emissions": [
                                     {
@@ -51,9 +51,9 @@
                     }
                 ],
                 "price": {
-                    "currency": "EUR",
-                    "total": "81.06",
-                    "base": "72.00",
+                    "currency": "USD",
+                    "total": "87.80",
+                    "base": "78.00",
                     "fees": [
                         {
                             "amount": "0.00",
@@ -68,8 +68,8 @@
                             "type": "FORM_OF_PAYMENT"
                         }
                     ],
-                    "grandTotal": "81.06",
-                    "billingCurrency": "EUR"
+                    "grandTotal": "87.80",
+                    "billingCurrency": "USD"
                 },
                 "pricingOptions": {
                     "fareType": [
@@ -86,28 +86,28 @@
                         "fareOption": "STANDARD",
                         "travelerType": "ADULT",
                         "price": {
-                            "currency": "EUR",
-                            "total": "81.06",
-                            "base": "72.00",
+                            "currency": "USD",
+                            "total": "87.80",
+                            "base": "78.00",
                             "taxes": [
                                 {
-                                    "amount": "5.56",
+                                    "amount": "6.00",
                                     "code": "IN"
                                 },
                                 {
-                                    "amount": "2.61",
+                                    "amount": "2.80",
                                     "code": "P2"
                                 },
                                 {
-                                    "amount": "0.89",
+                                    "amount": "1.00",
                                     "code": "YR"
                                 }
                             ],
-                            "refundableTaxes": "9.06"
+                            "refundableTaxes": "9.80"
                         },
                         "fareDetailsBySegment": [
                             {
-                                "segmentId": "20",
+                                "segmentId": "58",
                                 "cabin": "ECONOMY",
                                 "fareBasis": "V0GRPRYS",
                                 "brandedFare": "ECOYS",
@@ -125,11 +125,11 @@
         "travelers": [
             {
                 "id": "1",
-                "dateOfBirth": "1995-08-19",
+                "dateOfBirth": "1994-06-08",
                 "gender": "MALE",
                 "name": {
-                    "firstName": "BAIBHAV",
-                    "lastName": "IU"
+                    "firstName": "THIMPU",
+                    "lastName": "SENGYUNG"
                 },
                 "contact": {
                     "purpose": "STANDARD",
@@ -137,10 +137,10 @@
                         {
                             "deviceType": "MOBILE",
                             "countryCallingCode": "44",
-                            "number": "9089768675"
+                            "number": "9101359626"
                         }
                     ],
-                    "emailAddress": "www.swrang.123@gmail.com"
+                    "emailAddress": "thmtymthm@gmail.com"
                 }
             }
         ],
