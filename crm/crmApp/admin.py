@@ -7,7 +7,7 @@ from .models import Invoice
 
 @admin.register(Booking)
 class BookingAdmin(admin.ModelAdmin):
-    list_display = ['id','booking_id', 'passenger_name', 'departure_date', 'arrival_date', 'price','phone_number','email','change_date']
+    list_display = ['id','booking_id', 'passenger_name', 'departure_date', 'arrival_date', 'price','phone_number','email','change_date','auth']
     search_fields = ['booking_id', 'passenger_name']
     list_filter = ['departure_date', 'arrival_date']
 

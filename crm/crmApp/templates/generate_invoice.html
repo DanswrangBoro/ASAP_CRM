@@ -25,7 +25,7 @@
         <tbody>
           {% for invoice in invoices %}
           <tr  style="font-size: 0.7rem">
-            <td class="invoice-id" data-invoice-id="{{ invoice.invoice_id }}" style="font-weight: bolder; cursor: pointer; background: grey; color: white">{{ invoice.invoice_id }}</td>
+            <td class="invoice-id" style="font-weight: bolder; cursor: pointer; background: grey; color: white"><a href= "{% url 'crmApp:view_invoice' pk=invoice.pk %}">{{ invoice.invoice_id }}</a></td>
             <td>{{ invoice.base_price }}</td>
             <td>{{ invoice.markup_price }}</td>
             <td>{{ invoice.description1 }}</td>

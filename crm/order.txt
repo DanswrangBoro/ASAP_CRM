@@ -1,12 +1,12 @@
 {
     "data": {
         "type": "flight-order",
-        "id": "eJzTd9cPCAx0cw0CAAuYAnU%3D",
+        "id": "eJzTd9cPCAj1tXACAAuOAmI%3D",
         "queuingOfficeId": "NCE4D31SB",
         "associatedRecords": [
             {
-                "reference": "PQQFER",
-                "creationDate": "2024-03-28T09:17:00.000",
+                "reference": "PPUM8B",
+                "creationDate": "2024-03-28T05:47:00.000",
                 "originSystemCode": "GDS",
                 "flightOfferId": "1"
             }
@@ -17,31 +17,30 @@
                 "id": "1",
                 "source": "GDS",
                 "nonHomogeneous": false,
-                "lastTicketingDate": "2024-03-28",
+                "lastTicketingDate": "2024-03-30",
                 "itineraries": [
                     {
                         "segments": [
                             {
                                 "departure": {
                                     "iataCode": "GAU",
-                                    "at": "2024-03-30T18:15:00"
+                                    "at": "2024-03-30T07:45:00"
                                 },
                                 "arrival": {
-                                    "iataCode": "DEL",
-                                    "terminal": "3",
-                                    "at": "2024-03-30T20:45:00"
+                                    "iataCode": "CCU",
+                                    "at": "2024-03-30T09:15:00"
                                 },
-                                "carrierCode": "UK",
-                                "number": "722",
+                                "carrierCode": "AI",
+                                "number": "728",
                                 "aircraft": {
-                                    "code": "320"
+                                    "code": "319"
                                 },
-                                "duration": "PT2H30M",
-                                "id": "58",
+                                "duration": "PT1H30M",
+                                "id": "75",
                                 "numberOfStops": 0,
                                 "co2Emissions": [
                                     {
-                                        "weight": 112,
+                                        "weight": 53,
                                         "weightUnit": "KG",
                                         "cabin": "ECONOMY"
                                     }
@@ -51,9 +50,9 @@
                     }
                 ],
                 "price": {
-                    "currency": "USD",
-                    "total": "87.80",
-                    "base": "78.00",
+                    "currency": "EUR",
+                    "total": "59.28",
+                    "base": "50.00",
                     "fees": [
                         {
                             "amount": "0.00",
@@ -68,8 +67,8 @@
                             "type": "FORM_OF_PAYMENT"
                         }
                     ],
-                    "grandTotal": "87.80",
-                    "billingCurrency": "USD"
+                    "grandTotal": "59.28",
+                    "billingCurrency": "EUR"
                 },
                 "pricingOptions": {
                     "fareType": [
@@ -78,7 +77,7 @@
                     "includedCheckedBagsOnly": true
                 },
                 "validatingAirlineCodes": [
-                    "UK"
+                    "AI"
                 ],
                 "travelerPricings": [
                     {
@@ -86,9 +85,9 @@
                         "fareOption": "STANDARD",
                         "travelerType": "ADULT",
                         "price": {
-                            "currency": "USD",
-                            "total": "87.80",
-                            "base": "78.00",
+                            "currency": "EUR",
+                            "total": "59.28",
+                            "base": "50.00",
                             "taxes": [
                                 {
                                     "amount": "6.00",
@@ -99,21 +98,20 @@
                                     "code": "P2"
                                 },
                                 {
-                                    "amount": "1.00",
+                                    "amount": "1.11",
                                     "code": "YR"
                                 }
                             ],
-                            "refundableTaxes": "9.80"
+                            "refundableTaxes": "20.28"
                         },
                         "fareDetailsBySegment": [
                             {
-                                "segmentId": "58",
+                                "segmentId": "75",
                                 "cabin": "ECONOMY",
-                                "fareBasis": "V0GRPRYS",
-                                "brandedFare": "ECOYS",
-                                "class": "V",
+                                "fareBasis": "GIP",
+                                "class": "G",
                                 "includedCheckedBags": {
-                                    "weight": 15,
+                                    "weight": 25,
                                     "weightUnit": "KG"
                                 }
                             }
@@ -125,22 +123,22 @@
         "travelers": [
             {
                 "id": "1",
-                "dateOfBirth": "1994-06-08",
+                "dateOfBirth": "1995-07-01",
                 "gender": "MALE",
                 "name": {
                     "firstName": "THIMPU",
-                    "lastName": "SENGYUNG"
+                    "lastName": "SEN"
                 },
                 "contact": {
                     "purpose": "STANDARD",
                     "phones": [
                         {
                             "deviceType": "MOBILE",
-                            "countryCallingCode": "44",
-                            "number": "9101359626"
+                            "countryCallingCode": "91",
+                            "number": "9087675436"
                         }
                     ],
-                    "emailAddress": "thmtymthm@gmail.com"
+                    "emailAddress": "thimpu@adventurecode.io"
                 }
             }
         ],
