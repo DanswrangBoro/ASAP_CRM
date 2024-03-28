@@ -2,6 +2,7 @@
 {% load static %}
 {% block content %}
 {% load custom_filters %}
+{% load time_tags %}
 <style>
     .text-right {
         text-align: right !important; /* Ensure text alignment is set to right */
@@ -148,8 +149,8 @@
                                         <div>{{ itinary.arrival.iataCode }}</div>
                                     </div>
                                     <div class="flight-info">
-                                        <div class="info-value">{{ itinary.departure.at }}</div>
-                                        <div class="info-value">{{ itinary.arrival.at }}</div>
+                                        <div class="info-value">{{ itinary.departure.at | format_time }}</div>
+                                        <div class="info-value">{{ itinary.arrival.at |format_time }}</div>
                                     </div>
                                 </div>
                                 <div class="itinerary-class">{{ itinary.co2Emissions.0.cabin }}</div>
